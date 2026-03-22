@@ -122,5 +122,45 @@
     "Tratar texto bonito como evidência suficiente.",
     "Misturar pesquisa exploratoria com acao irreversivel sem log e approval.",
     "Criar pipeline de RAG proprio cedo demais quando long context ou NotebookLM resolveriam."
-  ]
+  ],
+  "decision_workspace": {
+    "eyebrow": "Decision desk",
+    "title": "Escolha a camada de conhecimento pela operacao, nao pela buzzword.",
+    "description": "A pergunta certa nao e se voce precisa de RAG, e sim quem consulta a base, com que frequencia, com qual risco e qual nivel de citacao precisa aparecer na resposta.",
+    "pills": [
+      "Citacao antes de conclusao",
+      "Long context quando basta",
+      "RAG proprio quando compensa"
+    ],
+    "accent": {
+      "label": "Pergunta central",
+      "value": "Quem atualiza a base e com qual frequencia esse conhecimento precisa ser reusado?",
+      "note": "Volume, taxa de mudanca e auditabilidade costumam decidir melhor que o modismo do momento."
+    },
+    "study_order_title": "Ritual de selecao",
+    "study_order": [
+      "Defina se o problema e de leitura pontual, pesquisa guiada, memoria contextual ou pipeline reutilizavel.",
+      "Escolha o modo certo antes de pensar em ferramenta.",
+      "Abra uma evidencia real do projeto para ver como a origem aparece na pratica.",
+      "So depois decida se vale subir para vector RAG ou ficar em long context e NotebookLM."
+    ],
+    "watchouts_title": "Erros que inflam a arquitetura",
+    "watchouts": [
+      "Construir RAG proprio para um corpus pequeno e estavel que cabe em contexto.",
+      "Tratar resposta elegante como se fosse resposta comprovada.",
+      "Misturar pesquisa exploratoria com acao operacional sem fallback e sem gate."
+    ],
+    "buttons": [
+      {
+        "label": "Abrir playbook",
+        "href": "/artifacts/files/playbook_long_context_vs_notebooklm_vs_projects_vs_vector_rag.md",
+        "variant": "primary"
+      },
+      {
+        "label": "Abrir knowledge index",
+        "href": "/artifacts/files/knowledge_index.json",
+        "variant": "secondary"
+      }
+    ]
+  }
 }

@@ -157,5 +157,45 @@
     "Quando houver impacto em CRM ou fluxo de homologacao, approval humano e obrigatorio.",
     "O run precisa apontar proxima acao; se nao aponta, ainda nao esta pronto para operar.",
     "Sempre que um finding parecer sensivel, abrir o JSON correspondente antes de decidir."
-  ]
+  ],
+  "decision_workspace": {
+    "eyebrow": "Decision desk",
+    "title": "Workflow bom nao e automacao bonita: e rotina governada com risco, evidencias e ownership.",
+    "description": "A leitura correta desta rota e sempre operacional: o que entra, o que o sistema verifica, o que sai estruturado e qual gatilho exige revisao humana antes de qualquer mudanca de verdade.",
+    "pills": [
+      "Gate humano obrigatorio",
+      "Schema antes de acao",
+      "Logs viram evidencias"
+    ],
+    "accent": {
+      "label": "Pergunta central",
+      "value": "Se este run influenciar CRM ou homologacao, quem assume a decisao final?",
+      "note": "Approval existe para transformar automacao em governanca, e nao para atrapalhar velocidade."
+    },
+    "study_order_title": "Como estudar esta rota",
+    "study_order": [
+      "Leia a anatomia inteira antes de abrir os runs.",
+      "Compare os dois workflows pelo risco da acao e nao pelo texto do resumo.",
+      "Abra pelo menos um JSON real para ver como finding, risco e proxima acao se conectam.",
+      "Use a escada de risco para decidir quando o gate humano e inegociavel."
+    ],
+    "watchouts_title": "Erros que enfraquecem a operacao",
+    "watchouts": [
+      "Tratar run concluido como permissao para executar mudanca irreversivel.",
+      "Consumir apenas o resumo e ignorar a evidencia quando o achado e sensivel.",
+      "Confundir automacao de leitura com automacao de escrita em sistemas reais."
+    ],
+    "buttons": [
+      {
+        "label": "Abrir run de auditoria",
+        "href": "/artifacts/files/live_openai_auditoria_leads.json",
+        "variant": "primary"
+      },
+      {
+        "label": "Abrir run de requisitos",
+        "href": "/artifacts/files/live_openai_validacao_requisitos.json",
+        "variant": "secondary"
+      }
+    ]
+  }
 }

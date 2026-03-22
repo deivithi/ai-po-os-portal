@@ -63,6 +63,10 @@
     {
       "title": "Sessao de hoje inteligente",
       "description": "Sempre que o usuario entrar para estudar, a plataforma precisa sugerir um bloco diario claro, com tempo, meta, evidencia e fechamento, sem obrigar a montar a sessao do zero."
+    },
+    {
+      "title": "Rotas tecnicas premium estabilizadas",
+      "description": "Sempre que Matriz, Workflows, RAG e Roadmap forem tratadas como espinha dorsal tecnica, cada uma precisa deixar claro o racional de estudo, a decisao certa e a fronteira entre leitura conceitual, operacao e proxima acao."
     }
   ],
   "qa_targets": [
@@ -92,6 +96,9 @@
     "/data/vendor_updates.json",
     "/data/domain_map.json",
     "/data/radar_health.json",
+    "/data/matrix_page.json",
+    "/data/workflows_page.json",
+    "/data/rag_page.json",
     "/data/study_units.json",
     "/data/learning_path_templates.json",
     "/data/adaptive_path_rules.json",

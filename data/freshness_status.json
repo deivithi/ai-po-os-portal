@@ -19,23 +19,23 @@
       {
         "badge": "Paginas fortes",
         "status_class": "status-done",
-        "title": "11 rotas verificadas",
-        "value": "Home, Guia, Jornada, Trilha, Progresso, Labs, Analytics, Lancamentos, Prompts, Senior e Artefatos",
-        "note": "Essas paginas ja podem ser tratadas como espinha dorsal de uso, estudo, pratica e consolidacao do sistema."
+        "title": "16 rotas verificadas",
+        "value": "Home, Hoje, Guia, Jornada, Trilha, Progresso, Labs, Analytics, Lancamentos, Prompts, Matriz, Workflows, RAG, Senior, Roadmap e Artefatos",
+        "note": "A espinha dorsal inteira do portal agora foi revista e pode ser tratada como sistema de estudo, pratica, decisao e consolidacao."
       },
       {
         "badge": "Fila editorial",
-        "status_class": "status-in-progress",
+        "status_class": "status-next",
         "title": "Nova frente ativa",
-        "value": "Fechamento premium e launchboard",
-        "note": "Com a nova rota publicada, o portal passa a mostrar o que ja esta launch-ready e o que entra na proxima onda."
+        "value": "Capstone demonstravel e packs de produto",
+        "note": "Com as rotas tecnicas estabilizadas, o foco agora sobe para demo final, onboarding e empacotamento vendavel."
       }
     ]
   },
   "strip": {
     "eyebrow": "Radar Vivo",
-    "title": "Mercado atual conferido; sistema operacional claramente sinalizado",
-    "summary": "Use esta barra para saber se a pagina esta verificada, em revisao ou apenas em radar. Assim voce nao estuda um snapshot antigo como se fosse mercado atual.",
+    "title": "Mercado atual conferido; espinha dorsal tecnica estabilizada",
+    "summary": "Use esta barra para distinguir mercado atual, snapshot operacional e rotas verificadas. Agora as paginas centrais do sistema ja saem da fila de revisao e entram como referencia forte de estudo.",
     "metrics": [
       {
         "label": "Mercado",
@@ -47,7 +47,7 @@
       },
       {
         "label": "Rotas fortes",
-        "value": "11"
+        "value": "16"
       }
     ],
     "buttons": [
@@ -103,6 +103,17 @@
       "note": "Boa porta de entrada para entender o estado atual do sistema.",
       "action_href": "/",
       "action_label": "Voltar para a Home"
+    },
+    {
+      "id": "hoje",
+      "title": "Hoje",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "summary": "A sessao inteligente do dia agora conversa melhor com o fechamento tecnico do portal e segue como a entrada mais pratica para comecar sem friccao.",
+      "note": "Boa pagina para transformar o estado do sistema em acao diaria com tempo, meta e fechamento claros.",
+      "action_href": "/hoje/",
+      "action_label": "Abrir Hoje"
     },
     {
       "id": "guia",
@@ -206,44 +217,44 @@
     {
       "id": "matriz",
       "title": "Matriz",
-      "status_label": "Em revisao",
-      "status_class": "status-in-progress",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
       "checked_on": "2026-03-22",
-      "summary": "A logica da matriz segue forte, mas o harness operacional ainda esta em snapshot de 2026-03-21 para alguns vendors.",
-      "note": "Leia com criterio: mercado atual nao e o mesmo que score recalibrado.",
+      "summary": "A matriz agora ensina melhor como sair do ranking vazio e decidir entre caso de uso, rubrica, risco e fronteira entre snapshot e mercado atual.",
+      "note": "Boa pagina para escolher modelos com criterio e saber quando o radar pede rerun do harness.",
       "action_href": "/matriz/",
       "action_label": "Abrir Matriz"
     },
     {
       "id": "workflows",
       "title": "Workflows",
-      "status_label": "Em revisao",
-      "status_class": "status-in-progress",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
       "checked_on": "2026-03-22",
-      "summary": "A camada operacional esta funcional, mas ainda pode ganhar refresh de providers, memoria e observabilidade.",
-      "note": "Boa pagina para aprender operacao, mas ainda em evolucao editorial.",
+      "summary": "A rota agora deixa explicito como estudar contratos, gates, runs e ownership para transformar automacao em operacao governada.",
+      "note": "Boa pagina para aprender a decidir com logs, approval e risco sem romantizar automacao.",
       "action_href": "/workflows/",
       "action_label": "Abrir Workflows"
     },
     {
       "id": "rag",
       "title": "RAG",
-      "status_label": "Em revisao",
-      "status_class": "status-in-progress",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
       "checked_on": "2026-03-22",
-      "summary": "A base de RAG esta forte, mas retrieval mais avancado, rerankers e evals formais ainda entram em fases futuras.",
-      "note": "Otima base conceitual, ainda com espaco de aprofundamento tecnico.",
+      "summary": "A rota agora traduz melhor quando usar long context, NotebookLM, Projects ou vector RAG com base em citacao, frequencia de mudanca e reuso operacional.",
+      "note": "Boa pagina para parar de chamar tudo de RAG e escolher a camada de conhecimento certa.",
       "action_href": "/rag/",
       "action_label": "Abrir RAG"
     },
     {
       "id": "roadmap",
       "title": "Roadmap",
-      "status_label": "Em revisao",
-      "status_class": "status-in-progress",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
       "checked_on": "2026-03-22",
-      "summary": "O roadmap esta vivo, mas agora passa a refletir a nova macrofrente de Radar Vivo e Trilha Adaptativa.",
-      "note": "Boa rota para ver o plano inteiro e as proximas macrofases.",
+      "summary": "O roadmap agora deixa mais claro o que acabou de fechar, qual release prova isso e o que realmente entra na fila curta depois do refresh tecnico.",
+      "note": "Boa rota para entender foco, disciplina de release e a proxima alavanca do produto.",
       "action_href": "/roadmap/",
       "action_label": "Abrir Roadmap"
     },

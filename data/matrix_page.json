@@ -107,5 +107,45 @@
     "Radar de mercado acompanha lancamentos e familias promissoras, mas isso nao equivale a aprovacao operacional.",
     "Claims de benchmark dos fornecedores devem ser lidos como claims atribuidos a fonte oficial.",
     "Quando um modelo parece muito forte no mercado, o proximo passo correto e testar no seu caso de uso."
-  ]
+  ],
+  "decision_workspace": {
+    "eyebrow": "Decision desk",
+    "title": "Use esta pagina para decidir com criterio, nao para colecionar benchmark.",
+    "description": "Escolha primeiro o caso de uso, depois leia a rubrica, compare a abertura entre lider e runner-up e so promova um modelo quando o harness fizer sentido no seu contexto operacional.",
+    "pills": [
+      "Caso de uso antes do ranking",
+      "Radar nao libera operacao",
+      "Controle e risco vencem hype"
+    ],
+    "accent": {
+      "label": "Pergunta central",
+      "value": "Se este modelo errar, qual retrabalho real aparece no seu fluxo?",
+      "note": "A resposta dessa pergunta costuma pesar mais que o benchmark medio do fornecedor."
+    },
+    "study_order_title": "Ritual de leitura",
+    "study_order": [
+      "Abra o caso de uso que mais se parece com a sua tarefa.",
+      "Leia o gap entre lider e runner-up antes de olhar o score medio.",
+      "Revise a fronteira entre matriz operacional e radar de mercado.",
+      "So depois abra as fontes oficiais e decida se vale rerun do harness."
+    ],
+    "watchouts_title": "Erros que sabotam a leitura",
+    "watchouts": [
+      "Usar score medio como piloto automatico em decisao de alto risco.",
+      "Misturar modelo atual de mercado com score historico do snapshot operacional.",
+      "Promover um modelo novo sem testar no seu proprio caso de uso."
+    ],
+    "buttons": [
+      {
+        "label": "Abrir resumo da matriz",
+        "href": "/artifacts/files/model_matrix_2026-03-21.md",
+        "variant": "primary"
+      },
+      {
+        "label": "Ver radar de mercado",
+        "href": "/artefatos/#llm-landscape",
+        "variant": "secondary"
+      }
+    ]
+  }
 }

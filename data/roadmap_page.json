@@ -3,23 +3,23 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "27 ciclos publicados",
-      "body": "Portal completo com Radar Vivo, Trilha, camada senior, Progresso, Guia, Labs, Analytics, Lancamentos, retomada persistente, Mission Control educacional e Sessao de hoje publicados",
+      "title": "28 ciclos publicados",
+      "body": "Portal completo com Radar Vivo, Trilha, camada senior, Progresso, Guia, Labs, Analytics, Lancamentos, retomada persistente, Mission Control educacional, Sessao de hoje e refresh tecnico premium publicados",
       "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint, leitura de uso real, missao diaria, fechamento premium, retomada real, fila de revisao e aprofundamento senior sem depender de estudo passivo."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Refino T concluido",
-      "body": "Sessao de hoje inteligente publicada",
-      "note": "A plataforma agora monta a melhor sessao do dia com base em trilha, progresso, labs, analytics e revisao aberta, reduzindo atrito para comecar e fechar o estudo."
+      "title": "Refino U concluido",
+      "body": "Refresh tecnico premium de Matriz, Workflows, RAG e Roadmap publicado",
+      "note": "As quatro rotas centrais agora ganharam cockpit de decisao, leitura mais guiada e saem da fila editorial de revisao."
     },
     {
       "badge": "Plano de 30 dias",
       "status_class": "status-done",
       "title": "Base funcional, adaptativa, ativada, pratica e observavel",
-      "body": "30D-A, 30D-B, Radar Vivo, Trilha, Senior, Progresso, Guia, Labs, Analytics, Lancamentos e retomada persistente ja conversam entre si",
-      "note": "A partir daqui o trabalho migra para sessao de hoje inteligente, refresh tecnico das rotas em revisao, capstone demonstravel e productizacao mais avancada."
+      "body": "30D-A, 30D-B, Radar Vivo, Trilha, Senior, Progresso, Guia, Labs, Analytics, Lancamentos, Sessao de hoje e refresh tecnico premium ja conversam entre si",
+      "note": "A partir daqui o trabalho migra para capstone demonstravel, onboarding mais vendavel e productizacao mais avancada."
     },
     {
       "badge": "Regra",
@@ -221,6 +221,12 @@
       "focus": "Sessao de hoje inteligente e recomendacao diaria",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino U",
+      "focus": "Refresh tecnico premium das rotas em revisao",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }
   ],
   "phase_rules": [
@@ -228,5 +234,45 @@
     "Preview e producao devem ser registradas no projeto.",
     "A pagina deve ensinar o racional, nao apenas exibir dados.",
     "Se a UX de uma fase gera retrabalho cognitivo, a fase ainda nao esta pronta."
-  ]
+  ],
+  "execution_workspace": {
+    "eyebrow": "Execution desk",
+    "title": "Leia o roadmap como sistema vivo: o que fecha, o que sobe e o que ainda e fila curta.",
+    "description": "O valor desta rota nao esta em decorar fases passadas, mas em enxergar qual alavanca foi fechada, qual prova de validacao ela deixou e o que realmente entra depois sem quebrar a disciplina do produto.",
+    "pills": [
+      "Uma fase por vez",
+      "Release com prova",
+      "Roadmap como criterio de foco"
+    ],
+    "accent": {
+      "label": "Agora",
+      "value": "Refino tecnico premium das rotas em revisao",
+      "note": "Com Matriz, Workflows, RAG e Roadmap estabilizados, a proxima frente natural vira capstone demonstravel e productizacao final."
+    },
+    "study_order_title": "Como usar esta rota",
+    "study_order": [
+      "Comece pela orientacao para entender qual release acabou de fechar.",
+      "Leia a linha do tempo das fases para relembrar o racional arquitetural.",
+      "Cruze os blocos de 30 dias com o que ja esta publicado no portal.",
+      "Feche a leitura escolhendo a proxima acao entre Hoje, Lancamentos e a rota em foco."
+    ],
+    "watchouts_title": "Erros de leitura",
+    "watchouts": [
+      "Ver release concluido e assumir que nao existe refinamento fino pendente.",
+      "Misturar fase de estudo com fase de productizacao sem respeitar a ordem do portal.",
+      "Pular feedback real do uso antes de abrir novas frentes grandes."
+    ],
+    "buttons": [
+      {
+        "label": "Abrir Sessao de hoje",
+        "href": "/hoje/",
+        "variant": "primary"
+      },
+      {
+        "label": "Abrir Lancamentos",
+        "href": "/lancamentos/",
+        "variant": "secondary"
+      }
+    ]
+  }
 }

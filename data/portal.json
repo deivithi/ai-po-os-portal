@@ -3,11 +3,11 @@
     "title": "AI Operating System do PO Salesforce",
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
-    "phase_label": "Refinamento ativo",
-    "phase_focus": "Sessao de hoje inteligente e recomendacao diaria",
-    "phase_summary": "O portal agora abre uma camada diaria de estudo para transformar trilha, progresso, labs e analytics em uma sessao executavel com meta, evidencia e fechamento claros.",
-    "next_phase": "Refresh tecnico das rotas em revisao e capstone demonstravel",
-    "next_phase_summary": "Depois da sessao de hoje inteligente, a proxima frente natural e reforcar Matriz, Workflows, RAG e Roadmap com refresh tecnico continuo e subir o capstone demonstravel do produto.",
+    "phase_label": "Refinamento premium",
+    "phase_focus": "Refresh tecnico premium das rotas em revisao",
+    "phase_summary": "Matriz, Workflows, RAG e Roadmap agora recebem cockpit de decisao, leitura mais guiada e sincronizacao editorial para fechar a espinha dorsal tecnica do portal com mais clareza e confianca.",
+    "next_phase": "Capstone demonstravel e packs de produto",
+    "next_phase_summary": "Com as rotas tecnicas estabilizadas, a proxima frente natural e montar o capstone demonstravel do produto, refinar onboarding comercial e preparar packs mais vendaveis sem perder a didatica.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
@@ -82,7 +82,7 @@
     "matriz": {
       "title": "Matriz",
       "nav_label": "Matriz",
-      "summary": "Sala de aula da matriz: leitura tecnica, didatica e comparativa dos modelos e scorecards.",
+      "summary": "Sala de aula da matriz com cockpit de decisao, leitura tecnica, fronteira clara entre radar e snapshot operacional e criterio real para promover modelos.",
       "questions": [
         {
           "kicker": "Pergunta 1",
@@ -104,7 +104,7 @@
     "workflows": {
       "title": "Workflows",
       "nav_label": "Workflows",
-      "summary": "Laboratorio demonstravel de workflows, com risco, approval e leitura operacional.",
+      "summary": "Laboratorio demonstravel de workflows com cockpit operacional, risco, approval, ownership e evidencias auditaveis.",
       "catalog": [
         {
           "title": "Auditoria de leads",
@@ -133,7 +133,7 @@
     "rag": {
       "title": "RAG",
       "nav_label": "RAG",
-      "summary": "Atlas do RAG: decisao de contexto, grounding, confiabilidade e evidencias do projeto."
+      "summary": "Atlas do RAG com cockpit de selecao, grounding, confiabilidade, fallback e evidencias do projeto."
     },
     "senior": {
       "title": "Senior",
@@ -143,7 +143,7 @@
     "roadmap": {
       "title": "Roadmap",
       "nav_label": "Roadmap",
-      "summary": "Roadmap vivo: progresso dos 30 dias, releases do portal, radar vivo e proximas alavancas."
+      "summary": "Roadmap vivo com cockpit de execucao, progresso dos 30 dias, releases do portal, radar vivo e proximas alavancas."
     },
     "artefatos": {
       "title": "Artefatos",

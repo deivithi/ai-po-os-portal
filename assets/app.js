@@ -1852,6 +1852,79 @@ function renderTagList(tags) {
   `;
 }
 
+function renderRouteWorkspace(targetId, workspace) {
+  const target = document.getElementById(targetId);
+  if (!target || !workspace) {
+    return;
+  }
+
+  const metricCards = (workspace.metrics || [])
+    .map(
+      (metric) => `
+        <article class="route-workspace-metric">
+          <span class="label">${escapeHtml(metric.label)}</span>
+          <strong>${escapeHtml(metric.value)}</strong>
+          <p class="metric-note">${escapeHtml(metric.note)}</p>
+        </article>
+      `,
+    )
+    .join("");
+
+  const studyOrder = (workspace.study_order || [])
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
+
+  const watchouts = (workspace.watchouts || [])
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
+
+  target.innerHTML = `
+    <div class="route-workspace-shell">
+      <div class="route-workspace-main">
+        <span class="eyebrow">${escapeHtml(workspace.eyebrow || "Decision desk")}</span>
+        <h2>${escapeHtml(workspace.title || "")}</h2>
+        <p class="lead">${escapeHtml(workspace.description || "")}</p>
+        ${renderTagList(workspace.pills || [])}
+        <div class="route-workspace-metric-grid">${metricCards}</div>
+        ${renderButtonList(workspace.buttons || [])}
+      </div>
+      <aside class="route-workspace-side">
+        ${
+          workspace.accent
+            ? `
+              <div class="route-workspace-card route-workspace-accent">
+                <span class="label">${escapeHtml(workspace.accent.label || "Ponto-chave")}</span>
+                <strong>${escapeHtml(workspace.accent.value || "")}</strong>
+                <p>${escapeHtml(workspace.accent.note || "")}</p>
+              </div>
+            `
+            : ""
+        }
+        ${
+          studyOrder
+            ? `
+              <div class="route-workspace-card">
+                <span class="label">${escapeHtml(workspace.study_order_title || "Como usar")}</span>
+                <ol class="step-list">${studyOrder}</ol>
+              </div>
+            `
+            : ""
+        }
+        ${
+          watchouts
+            ? `
+              <div class="route-workspace-card">
+                <span class="label">${escapeHtml(workspace.watchouts_title || "Atencao")}</span>
+                <ul class="resource-list">${watchouts}</ul>
+              </div>
+            `
+            : ""
+        }
+      </aside>
+    </div>
+  `;
+}
+
 function renderMissionControlSurface(prefix, snapshot) {
   const panel = document.getElementById(`${prefix}-mission-panel`);
   const badges = document.getElementById(`${prefix}-mission-badges`);
@@ -2331,6 +2404,33 @@ function renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates,
 
 function renderMatrix(portal, overview, artifacts, matrixGuide, matrixArtifact) {
   const insights = buildMatrixInsights(matrixArtifact, matrixGuide, overview);
+  renderRouteWorkspace("matrix-decision-workspace", {
+    ...(matrixGuide.decision_workspace || {}),
+    metrics: [
+      {
+        label: "Modelos calibrados",
+        value: String(insights.modelProfiles.length),
+        note: "Cobertura seed pronta para leitura comparativa.",
+      },
+      {
+        label: "Casos reais",
+        value: String(insights.useCases.length),
+        note: "Tarefas operacionais usadas para sair do ranking vazio.",
+      },
+      {
+        label: "Maior gap",
+        value: insights.biggestGap ? formatNumber(insights.biggestGap.gap) : "0.000",
+        note: insights.biggestGap
+          ? insights.biggestGap.title
+          : "Sem abertura dominante entre os modelos atuais.",
+      },
+      {
+        label: "Snapshot",
+        value: "21/03",
+        note: "Mercado atual e score operacional precisam continuar separados.",
+      },
+    ],
+  });
 
   renderCards(
     "matrix-orientation",
@@ -2542,6 +2642,36 @@ function renderMatrix(portal, overview, artifacts, matrixGuide, matrixArtifact) 
 }
 
 function renderWorkflows(portal, overview, workflowsGuide) {
+  const pendingApprovals = overview.runs.filter(
+    (item) => item.approval_status === "pending",
+  ).length;
+
+  renderRouteWorkspace("workflow-decision-workspace", {
+    ...(workflowsGuide.decision_workspace || {}),
+    metrics: [
+      {
+        label: "Workflows ativos",
+        value: String((portal.pages.workflows.catalog || []).length),
+        note: "Saneamento operacional e prontidao de homologacao.",
+      },
+      {
+        label: "Runs auditaveis",
+        value: String((overview.runs || []).length),
+        note: "Cada execucao gera evidencia, resumo e proxima acao.",
+      },
+      {
+        label: "Approval pendente",
+        value: String(pendingApprovals),
+        note: "Mudancas sensiveis continuam presas ao gate humano.",
+      },
+      {
+        label: "Artefatos abertos",
+        value: String((workflowsGuide.run_commentary || []).length),
+        note: "Runs comentados prontos para estudo e operacao.",
+      },
+    ],
+  });
+
   renderCards(
     "workflow-orientation",
     workflowsGuide.orientation || [],
@@ -2659,6 +2789,32 @@ function renderWorkflows(portal, overview, workflowsGuide) {
 }
 
 function renderRag(portal, ragGuide) {
+  renderRouteWorkspace("rag-decision-workspace", {
+    ...(ragGuide.decision_workspace || {}),
+    metrics: [
+      {
+        label: "Chunks indexados",
+        value: "15",
+        note: "Base local pronta para citacao por arquivo e linha.",
+      },
+      {
+        label: "Modos ativos",
+        value: String((portal.rag_modes || []).length),
+        note: "Long context, NotebookLM, Projects e vector RAG.",
+      },
+      {
+        label: "Camadas reais",
+        value: String((ragGuide.system_views || []).length),
+        note: "Evidencias abertas para manifesto, indice e playbook.",
+      },
+      {
+        label: "Regra",
+        value: "Citar primeiro",
+        note: "Resposta elegante so entra quando origem e limite ficam visiveis.",
+      },
+    ],
+  });
+
   renderCards(
     "rag-orientation",
     ragGuide.orientation || [],
@@ -9225,6 +9381,32 @@ function renderPrompts(
 }
 
 function renderRoadmap(portal, roadmapGuide, releaseManifest) {
+  renderRouteWorkspace("roadmap-execution-workspace", {
+    ...(roadmapGuide.execution_workspace || {}),
+    metrics: [
+      {
+        label: "Ciclos publicados",
+        value: String((roadmapGuide.portal_release_history || []).length),
+        note: "Linha do tempo completa, do shell inicial ao refino atual.",
+      },
+      {
+        label: "Fases base",
+        value: String((portal.roadmap_phases || []).length),
+        note: "Portal principal fechado em sete fases estruturais.",
+      },
+      {
+        label: "Alvos de QA",
+        value: String((releaseManifest.qa_targets || []).length),
+        note: "Rotas e contratos obrigatorios para cada release confiavel.",
+      },
+      {
+        label: "Proxima frente",
+        value: "Capstone",
+        note: "Depois do refresh tecnico, o foco sobe para demonstracao final e packs de produto.",
+      },
+    ],
+  });
+
   renderCards(
     "roadmap-orientation",
     roadmapGuide.orientation || [],
