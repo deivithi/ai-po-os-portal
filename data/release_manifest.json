@@ -35,10 +35,15 @@
     {
       "title": "Progresso sincronizado com a Trilha",
       "description": "Sempre que o portal marcar progresso, a pagina precisa manter status por unidade, checkpoints claros e replanejamento do restante sem apagar o que ja foi dominado."
+    },
+    {
+      "title": "Ativacao clara da plataforma",
+      "description": "Sempre que o portal crescer em conteudo, a camada Guia precisa manter claro por onde entrar, que rota abrir por objetivo e como fechar cada sessao com uma entrega."
     }
   ],
   "qa_targets": [
     "/",
+    "/guia/",
     "/jornada/",
     "/trilha/",
     "/progresso/",
@@ -63,6 +68,7 @@
     "/data/adaptive_path_rules.json",
     "/data/trilha_page.json",
     "/data/senior_page.json",
-    "/data/progress_page.json"
+    "/data/progress_page.json",
+    "/data/guide_page.json"
   ]
 }

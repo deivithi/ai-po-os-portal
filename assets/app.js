@@ -14,6 +14,7 @@ const DATA_PATHS = {
   promptProductization: "/data/prompt_productization.json",
   matrixGuide: "/data/matrix_page.json",
   matrixArtifact: "/artifacts/files/model_matrix.json",
+  guideGuide: "/data/guide_page.json",
   journeyGuide: "/data/journey_page.json",
   trilhaGuide: "/data/trilha_page.json",
   progressGuide: "/data/progress_page.json",
@@ -29,6 +30,7 @@ const DATA_PATHS = {
 
 const PAGE_DATA_KEYS = {
   home: ["overview", "artifacts", "freshnessStatus", "vendorSources", "vendorUpdates", "domainMap"],
+  guia: ["guideGuide", "vendorSources", "freshnessStatus"],
   jornada: ["journeyGuide", "freshnessStatus"],
   trilha: ["trilhaGuide", "studyUnits", "learningPathTemplates", "adaptivePathRules", "vendorSources", "freshnessStatus"],
   progresso: ["progressGuide", "studyUnits", "learningPathTemplates", "adaptivePathRules", "vendorSources", "freshnessStatus"],
@@ -42,7 +44,8 @@ const PAGE_DATA_KEYS = {
 };
 
 const PREFETCH_ROUTE_MAP = {
-  home: ["/trilha/", "/jornada/", "/prompts/"],
+  home: ["/guia/", "/trilha/", "/jornada/"],
+  guia: ["/trilha/", "/jornada/", "/progresso/"],
   trilha: ["/progresso/", "/jornada/", "/prompts/"],
   progresso: ["/trilha/", "/roadmap/", "/senior/"],
   jornada: ["/prompts/", "/matriz/", "/rag/"],
@@ -51,7 +54,7 @@ const PREFETCH_ROUTE_MAP = {
   rag: ["/workflows/", "/senior/", "/roadmap/"],
   workflows: ["/senior/", "/roadmap/", "/artefatos/"],
   senior: ["/roadmap/", "/artefatos/", "/trilha/"],
-  roadmap: ["/trilha/", "/progresso/", "/senior/"],
+  roadmap: ["/guia/", "/trilha/", "/progresso/"],
   artefatos: ["/trilha/", "/prompts/", "/matriz/"],
 };
 
@@ -1612,6 +1615,158 @@ function renderJourney(journeyGuide) {
       .map((item) => `<li>${escapeHtml(item)}</li>`)
       .join("");
   }
+}
+
+function renderGuide(guideGuide, vendorSources) {
+  const sourceLookup = buildSourceLookup(vendorSources);
+
+  renderCards(
+    "guide-orientation",
+    guideGuide.orientation || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  const studySteps = document.getElementById("guide-study-steps");
+  if (studySteps) {
+    studySteps.innerHTML = (guideGuide.study_steps || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  renderCards(
+    "guide-entry-modes",
+    guideGuide.entry_modes || [],
+    (item) => `
+      <article class="study-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <p class="metric-note"><strong>Resultado:</strong> ${escapeHtml(item.outcome)}</p>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  const checklist = document.getElementById("guide-checklist");
+  if (checklist) {
+    checklist.innerHTML = (guideGuide.quick_start_checklist || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  renderCards(
+    "guide-timeboxes-grid",
+    guideGuide.timeboxes || [],
+    (item) => `
+      <article class="workflow-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <ul class="summary-list">
+          ${(item.recipe || []).map((step) => `<li>${escapeHtml(step)}</li>`).join("")}
+        </ul>
+        <p class="metric-note"><strong>Entrega:</strong> ${escapeHtml(item.outcome)}</p>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  renderCards(
+    "guide-route-playbooks",
+    guideGuide.route_playbooks || [],
+    (item) => {
+      const buttons = [
+        ...(item.buttons || []),
+        ...buildSourceButtons(sourceLookup, item.source_ids, 2),
+      ];
+
+      return `
+        <article class="artifact-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.description)}</p>
+          <ul class="summary-list">
+            <li><strong>Melhor para:</strong> ${escapeHtml(item.best_for)}</li>
+            <li><strong>Saida esperada:</strong> ${escapeHtml(item.output)}</li>
+            <li><strong>Erro comum:</strong> ${escapeHtml(item.common_trap)}</li>
+          </ul>
+          ${renderTagList(item.tags || [])}
+          ${renderButtonList(buttons)}
+        </article>
+      `;
+    },
+  );
+
+  renderCards(
+    "guide-rituals",
+    guideGuide.rituals || [],
+    (item) => `
+      <article class="study-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <ul class="summary-list">
+          ${(item.steps || []).map((step) => `<li>${escapeHtml(step)}</li>`).join("")}
+        </ul>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  renderCards(
+    "guide-anti-patterns",
+    guideGuide.anti_patterns || [],
+    (item) => `
+      <article class="study-card compact-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <ul class="summary-list">
+          ${(item.points || []).map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+        </ul>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "guide-official-support",
+    guideGuide.official_support || [],
+    (item) => {
+      const buttons = [
+        ...(item.buttons || []),
+        ...buildSourceButtons(sourceLookup, item.source_ids, 3),
+      ];
+
+      return `
+        <article class="artifact-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.summary)}</p>
+          ${renderButtonList(buttons)}
+        </article>
+      `;
+    },
+  );
+
+  renderCards(
+    "guide-quick-actions",
+    guideGuide.quick_actions || [],
+    (item) => `
+      <article class="study-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
 }
 
 function renderSenior(seniorGuide) {
@@ -5732,6 +5887,7 @@ async function init() {
       promptProductization,
       matrixGuide,
       matrixArtifact,
+      guideGuide,
       journeyGuide,
       trilhaGuide,
       progressGuide,
@@ -5749,6 +5905,7 @@ async function init() {
 
     const renderers = {
       home: () => renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap),
+      guia: () => renderGuide(guideGuide, vendorSources),
       jornada: () => renderJourney(journeyGuide),
       trilha: () => renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),
       progresso: () => renderProgress(progressGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),

@@ -3,23 +3,23 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "20 ciclos publicados",
-      "body": "Portal completo com Radar Vivo, Trilha formativa, camada senior e Progresso publicados",
-      "note": "O sistema fechou o ciclo base do portal, consolidou o Prompt Studio, abriu o Radar Vivo, migrou o publish para Actions, publicou a Trilha formativa, a camada senior e agora fecha o loop com progresso e checkpoints."
+      "title": "21 ciclos publicados",
+      "body": "Portal completo com Radar Vivo, Trilha formativa, camada senior, Progresso e Guia publicados",
+      "note": "O sistema fechou o ciclo base e agora tambem ensina explicitamente como deve ser usado, reduzindo atrito entre conteudo, trilha e pratica."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Macrofase 6 concluida",
-      "body": "Progresso, checkpoints e replanejamento publicados",
-      "note": "A plataforma agora conecta trilha, dominio por unidade e replanejamento semanal numa camada propria, leve e sincronizada."
+      "title": "Refino N concluido",
+      "body": "Guia de uso e extracao de valor publicado",
+      "note": "A plataforma agora orienta entrada, sessao, ritual, escolha de rota e resultado esperado de forma explicita."
     },
     {
       "badge": "Plano de 30 dias",
       "status_class": "status-done",
-      "title": "Base funcional, adaptativa e acompanhada pronta",
-      "body": "30D-A, 30D-B, Radar Vivo, Trilha, Senior e Progresso ja conversam entre si",
-      "note": "A partir daqui o trabalho migra para refinamento guiado por uso real, melhoria de UX e aprofundamento dos laboratorios."
+      "title": "Base funcional, adaptativa e ativada pronta",
+      "body": "30D-A, 30D-B, Radar Vivo, Trilha, Senior, Progresso e Guia ja conversam entre si",
+      "note": "A partir daqui o trabalho migra para labs de uso real, melhoria de UX e aprofundamento de provas praticas."
     },
     {
       "badge": "Regra",
@@ -56,7 +56,7 @@
       "title": "Capstone e productizacao",
       "status_label": "Em evolucao",
       "status_class": "status-in-progress",
-      "description": "Portal publico, narrativa executiva, ativos de autoridade e governanca de release."
+      "description": "Portal publico, narrativa executiva, onboarding/ativacao, ativos de autoridade e governanca de release."
     }
   ],
   "portal_release_history": [
@@ -178,6 +178,12 @@
       "phase": "Refino M",
       "focus": "Progresso, checkpoints e replanejamento",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/commit/d16663c",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino N",
+      "focus": "Guia de uso e extracao de valor",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }
   ],

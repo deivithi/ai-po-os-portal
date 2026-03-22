@@ -4,14 +4,15 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "Progresso, checkpoints e replanejamento",
-    "phase_summary": "O portal agora fecha o loop de estudo com uma camada propria para marcar dominio por unidade, revisar pendencias e recalcular a trilha pelo ritmo real.",
-    "next_phase": "Refino guiado por uso real",
-    "next_phase_summary": "Com progresso e checkpoints publicados, a proxima frente e refinar a plataforma por uso real, aprofundar laboratorios e preparar a camada futura de productizacao.",
+    "phase_focus": "Guia de uso e extracao de valor",
+    "phase_summary": "O portal agora ensina explicitamente como ser usado: por onde entrar, quanto tempo investir, que rota abrir em cada situacao e como transformar navegacao em pratica.",
+    "next_phase": "Labs e desafios praticos",
+    "next_phase_summary": "Com a camada de ativacao publicada, a proxima frente natural e criar labs orientados por uso real, desafios e provas praticas para acelerar dominio senior.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
     { "id": "home", "label": "Home", "description": "Mapa de estudo e visao executiva", "href": "/" },
+    { "id": "guia", "label": "Guia", "description": "Como extrair o melhor da plataforma", "href": "/guia/" },
     { "id": "jornada", "label": "Jornada", "description": "Como usar o portal em 30 dias", "href": "/jornada/" },
     { "id": "trilha", "label": "Trilha", "description": "Plano adaptativo por horas, foco e objetivo", "href": "/trilha/" },
     { "id": "progresso", "label": "Progresso", "description": "Checkpoints, dominio e replanejamento", "href": "/progresso/" },
@@ -28,6 +29,11 @@
       "title": "Home",
       "nav_label": "Home",
       "summary": "Visao geral do sistema, trilha de estudo, radar vivo e status executivo."
+    },
+    "guia": {
+      "title": "Guia",
+      "nav_label": "Guia",
+      "summary": "Camada de ativacao: como usar a plataforma, por onde entrar, quanto tempo investir e que rota abrir em cada situacao."
     },
     "jornada": {
       "title": "Jornada",
@@ -139,6 +145,13 @@
     }
   ],
   "study_tracks": [
+    {
+      "title": "Comecar pelo Guia",
+      "description": "Abra Guia quando quiser decidir rapidamente como usar a plataforma hoje, que rota abrir em seguida e como fechar a sessao com uma entrega real.",
+      "href": "/guia/",
+      "badge": "Ativacao recomendada",
+      "status_class": "status-done"
+    },
     {
       "title": "Montar a trilha adaptativa",
       "description": "Abra Trilha para transformar sua disponibilidade real de horas em um plano com semanas, materiais, unidade em foco e proximo bloco.",

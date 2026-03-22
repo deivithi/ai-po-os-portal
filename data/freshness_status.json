@@ -19,16 +19,16 @@
       {
         "badge": "Paginas fortes",
         "status_class": "status-done",
-        "title": "7 rotas verificadas",
-        "value": "Home, Jornada, Trilha, Progresso, Prompts, Senior e Artefatos",
-        "note": "Essas paginas ja podem ser tratadas como ponto de estudo principal sem misturar snapshot, mercado, trilha e checkpoints."
+        "title": "8 rotas verificadas",
+        "value": "Home, Guia, Jornada, Trilha, Progresso, Prompts, Senior e Artefatos",
+        "note": "Essas paginas ja podem ser tratadas como espinha dorsal de uso, estudo e consolidacao do sistema."
       },
       {
         "badge": "Fila editorial",
         "status_class": "status-next",
         "title": "Proxima macrofrente",
-        "value": "Refino guiado por uso real",
-        "note": "Com a camada de progresso publicada, o proximo passo e observar uso real, apertar a UX e aprofundar laboratorios."
+        "value": "Labs e desafios praticos",
+        "note": "Com Guia, Trilha e Progresso publicados, o proximo passo e aprofundar pratica real, desafios e provas de dominio."
       }
     ]
   },
@@ -47,18 +47,18 @@
       },
       {
         "label": "Rotas fortes",
-        "value": "7"
+        "value": "8"
       }
     ],
     "buttons": [
       {
-        "label": "Abrir radar oficial",
-        "href": "/#home-vendor-updates",
+        "label": "Abrir Guia",
+        "href": "/guia/",
         "variant": "secondary"
       },
       {
-        "label": "Abrir progresso",
-        "href": "/progresso/",
+        "label": "Abrir radar oficial",
+        "href": "/#home-vendor-updates",
         "variant": "secondary"
       },
       {
@@ -93,6 +93,17 @@
       "note": "Boa porta de entrada para entender o estado atual do sistema.",
       "action_href": "/",
       "action_label": "Voltar para a Home"
+    },
+    {
+      "id": "guia",
+      "title": "Guia",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "summary": "A rota nova organiza por onde entrar, qual bloco de tempo usar e como transformar o portal em sistema de estudo e pratica, nao em biblioteca passiva.",
+      "note": "Boa pagina para destravar uso diario e reduzir dispersao entre as abas.",
+      "action_href": "/guia/",
+      "action_label": "Abrir Guia"
     },
     {
       "id": "jornada",

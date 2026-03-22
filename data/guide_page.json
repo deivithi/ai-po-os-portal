@@ -1,0 +1,635 @@
+{
+  "study_steps": [
+    "Comece por esta rota para decidir o formato da sessao e a meta do dia antes de abrir qualquer outra aba.",
+    "Abra a rota certa pelo objetivo de estudo ou operacao, nao pela curiosidade do momento.",
+    "Feche toda sessao com um artefato visivel: nota, comparativo, run, checkpoint ou plano da proxima acao."
+  ],
+  "orientation": [
+    {
+      "badge": "Papel da rota",
+      "status_class": "status-done",
+      "title": "A plataforma agora ensina a si mesma",
+      "body": "Menos atrito para entrar, estudar e consolidar",
+      "note": "Guia existe para reduzir dispersao: ele diz por onde comecar, o que abrir hoje e o que entregar ao fim de cada bloco."
+    },
+    {
+      "badge": "Regra central",
+      "status_class": "status-done",
+      "title": "Nao estudar no escuro",
+      "body": "Tempo, objetivo e proxima acao precisam estar claros",
+      "note": "Se a sessao nao tem destino, a plataforma vira biblioteca. Se tem destino, ela vira sistema de formacao."
+    },
+    {
+      "badge": "Resultado esperado",
+      "status_class": "status-done",
+      "title": "Extrair valor maximo por rota",
+      "body": "Cada aba tem papel claro, erro comum e entregavel esperado",
+      "note": "Isso evita abrir cinco paginas no mesmo dia sem transformar nada em criterio, evidencia ou execucao."
+    },
+    {
+      "badge": "Progresso ideal",
+      "status_class": "status-next",
+      "title": "Estudo que termina em pratica",
+      "body": "Toda semana precisa fechar com comparativo, checkpoint ou run real",
+      "note": "O portal fica muito mais forte quando Guia, Trilha e Progresso funcionam juntos."
+    }
+  ],
+  "entry_modes": [
+    {
+      "badge": "Modo 1",
+      "status_class": "status-done",
+      "title": "Estou chegando agora",
+      "description": "Use este modo quando voce ainda nao sabe como a plataforma esta organizada e precisa de uma entrada segura.",
+      "outcome": "Sair com mapa mental, rota inicial e primeira sessao definida.",
+      "buttons": [
+        {
+          "label": "Abrir Trilha",
+          "href": "/trilha/",
+          "variant": "primary"
+        },
+        {
+          "label": "Abrir Jornada",
+          "href": "/jornada/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Modo 2",
+      "status_class": "status-done",
+      "title": "Tenho pouco tempo hoje",
+      "description": "Ideal para dias apertados em que voce nao quer perder continuidade nem abrir uma aba errada.",
+      "outcome": "Sair com uma micro sessao objetiva e uma entrega pequena, mas real.",
+      "buttons": [
+        {
+          "label": "Ir para bloco de tempo",
+          "href": "/guia/#guide-timeboxes",
+          "variant": "primary"
+        },
+        {
+          "label": "Abrir Progresso",
+          "href": "/progresso/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Modo 3",
+      "status_class": "status-done",
+      "title": "Quero resolver um problema real",
+      "description": "Use quando a sessao precisa gerar criterio aplicavel, comparativo ou melhoria em um fluxo concreto.",
+      "outcome": "Sair com uma decisao mais forte, um experimento ou um run comentado.",
+      "buttons": [
+        {
+          "label": "Abrir Workflows",
+          "href": "/workflows/",
+          "variant": "primary"
+        },
+        {
+          "label": "Abrir Matriz",
+          "href": "/matriz/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Modo 4",
+      "status_class": "status-in-progress",
+      "title": "Quero subir para senior",
+      "description": "Use quando o objetivo do dia e atravessar a camada aplicada e entrar em evals, memoria, agents, producao e governanca.",
+      "outcome": "Sair com uma unidade senior em foco e um criterio de dominio verificavel.",
+      "buttons": [
+        {
+          "label": "Abrir Senior",
+          "href": "/senior/",
+          "variant": "primary"
+        },
+        {
+          "label": "Abrir Trilha",
+          "href": "/trilha/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "quick_start_checklist": [
+    "Decida o objetivo da sessao antes de escolher a aba.",
+    "Escolha um bloco de tempo realista para hoje.",
+    "Abra no maximo duas rotas principais por sessao.",
+    "Feche sempre com evidencias: nota, comparativo, checkpoint ou run.",
+    "Use Progresso no fim da semana para recalibrar o plano."
+  ],
+  "timeboxes": [
+    {
+      "badge": "20 min",
+      "status_class": "status-next",
+      "title": "Sessao de manutencao",
+      "description": "Boa para nao quebrar consistencia quando o dia apertou muito.",
+      "recipe": [
+        "3 min para revisar o objetivo da semana.",
+        "10 min para estudar uma secao pequena em Prompts, Guia ou Roadmap.",
+        "5 min para registrar um aprendizado e uma proxima acao.",
+        "2 min para decidir a rota da proxima sessao maior."
+      ],
+      "outcome": "Manter o sistema vivo sem cair em leitura aleatoria.",
+      "buttons": [
+        {
+          "label": "Abrir Roadmap",
+          "href": "/roadmap/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "60 min",
+      "status_class": "status-done",
+      "title": "Sessao de criterio",
+      "description": "Ideal para aprender um conceito e sair com uma decisao mais forte.",
+      "recipe": [
+        "10 min para revisar a meta do dia.",
+        "25 min para estudar uma rota principal.",
+        "20 min para comparar, resumir ou anotar trade-offs.",
+        "5 min para decidir a aplicacao seguinte."
+      ],
+      "outcome": "Transformar leitura em criterio documentado.",
+      "buttons": [
+        {
+          "label": "Abrir Matriz",
+          "href": "/matriz/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir Prompts",
+          "href": "/prompts/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "120 min",
+      "status_class": "status-done",
+      "title": "Sessao de consolidacao",
+      "description": "Boa para teoria + pratica curta no mesmo bloco.",
+      "recipe": [
+        "15 min para meta e fontes.",
+        "35 min para estudo guiado em uma rota principal.",
+        "50 min para experimento, comparativo ou checkpoint.",
+        "20 min para registrar aprendizados, falhas e proxima acao."
+      ],
+      "outcome": "Fechar um bloco com evidencia suficiente para alimentar Progresso.",
+      "buttons": [
+        {
+          "label": "Abrir RAG",
+          "href": "/rag/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir Progresso",
+          "href": "/progresso/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "180+ min",
+      "status_class": "status-in-progress",
+      "title": "Sessao de imersao",
+      "description": "Formato ideal para avancar forte na trilha ou fechar um mini capstone.",
+      "recipe": [
+        "20 min para alinhar objetivo, rota e criterio de aceite.",
+        "50 min para estudo em profundidade.",
+        "80 min para experimento, run, avaliacao ou comparativo real.",
+        "30 min para documentar o que muda no seu criterio operacional."
+      ],
+      "outcome": "Sair com uma entrega realmente palpavel dentro do sistema.",
+      "buttons": [
+        {
+          "label": "Abrir Trilha",
+          "href": "/trilha/",
+          "variant": "primary"
+        },
+        {
+          "label": "Abrir Senior",
+          "href": "/senior/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "route_playbooks": [
+    {
+      "badge": "Entrada",
+      "status_class": "status-done",
+      "title": "Home",
+      "description": "Use a Home para entender o estado do portal, a fase atual, a cobertura dos dominios e onde o sistema esta mais forte hoje.",
+      "best_for": "Comecar o dia sem se perder ou revisar o panorama atual.",
+      "output": "Mapa mental do que estudar agora.",
+      "common_trap": "Confundir Home com rota de profundidade; ela orienta, nao substitui as paginas especializadas.",
+      "tags": ["Panorama", "Radar", "Prioridade"],
+      "buttons": [
+        {
+          "label": "Abrir Home",
+          "href": "/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "badge": "Ativacao",
+      "status_class": "status-done",
+      "title": "Guia",
+      "description": "Use esta rota para escolher o melhor caminho do dia e alinhar tempo, objetivo, ritual e resultado esperado.",
+      "best_for": "Dias corridos, retomadas e momentos em que a plataforma parece grande demais.",
+      "output": "Sessao montada e proxima rota definida.",
+      "common_trap": "Ler o Guia como texto bonito e nao clicar na rota seguinte.",
+      "tags": ["Onboarding", "Uso diario", "Ritual"],
+      "buttons": [
+        {
+          "label": "Esta rota",
+          "href": "/guia/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "badge": "Metodo",
+      "status_class": "status-done",
+      "title": "Jornada",
+      "description": "Use Jornada quando quiser olhar a disciplina dos 30 dias, a carga horaria das semanas e os entregaveis do ciclo inteiro.",
+      "best_for": "Planejamento semanal e revisao do plano global.",
+      "output": "Semana organizada e expectativa de entrega clara.",
+      "common_trap": "Usar Jornada para decidir o que fazer agora sem antes olhar Trilha ou Progresso.",
+      "tags": ["30 dias", "Planejamento", "Semana"],
+      "buttons": [
+        {
+          "label": "Abrir Jornada",
+          "href": "/jornada/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "badge": "Motor",
+      "status_class": "status-done",
+      "title": "Trilha",
+      "description": "Use Trilha para transformar disponibilidade real em plano acionavel por horas, foco, nivel e objetivo.",
+      "best_for": "Montar o plano de estudo e descobrir qual unidade merece foco agora.",
+      "output": "Plano adaptativo com semanas, sessoes e unidade em foco.",
+      "common_trap": "Gerar a trilha e nao voltar para ela ao longo da semana.",
+      "tags": ["Plano adaptativo", "Horas", "Objetivo"],
+      "buttons": [
+        {
+          "label": "Abrir Trilha",
+          "href": "/trilha/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "badge": "Controle",
+      "status_class": "status-done",
+      "title": "Progresso",
+      "description": "Use Progresso para marcar o que virou dominio, o que esta em checkpoint e o que pede replanejamento.",
+      "best_for": "Fim da semana, ajuste de ritmo e retro curta.",
+      "output": "Estado verificavel do estudo e plano restante recalculado.",
+      "common_trap": "Marcar como dominado algo que ainda nao virou evidencia concreta.",
+      "tags": ["Checkpoint", "Retro", "Ritmo real"],
+      "buttons": [
+        {
+          "label": "Abrir Progresso",
+          "href": "/progresso/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "badge": "Comando",
+      "status_class": "status-done",
+      "title": "Prompts",
+      "description": "Use Prompt Studio para aprender anatomia de prompt, overlays por fornecedor, qualidade e quando escalar para schema, RAG ou tools.",
+      "best_for": "Dias em que a lacuna principal e estruturar melhor a interacao com o modelo.",
+      "output": "Prompt revisado, mais controlado e com criterio melhor.",
+      "common_trap": "Achar que prompt sozinho resolve problemas de contexto, memoria ou retrieval.",
+      "tags": ["Prompting", "Structured output", "Qualidade"],
+      "source_ids": ["openai-resources", "anthropic-prompting", "google-prompt-design"],
+      "buttons": [
+        {
+          "label": "Abrir Prompts",
+          "href": "/prompts/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "badge": "Criterio",
+      "status_class": "status-done",
+      "title": "Matriz",
+      "description": "Use a Matriz para comparar modelos e familias sem cair em benchmark vazio, usando custo, controle, risco e adequacao por caso de uso.",
+      "best_for": "Escolha de provider, familia ou modo de uso.",
+      "output": "Decisao de modelo mais defensavel.",
+      "common_trap": "Ler score como verdade absoluta e ignorar o contexto do seu problema.",
+      "tags": ["Modelos", "Trade-offs", "Escolha"],
+      "source_ids": ["openai-models", "anthropic-models", "google-models", "xai-models"],
+      "buttons": [
+        {
+          "label": "Abrir Matriz",
+          "href": "/matriz/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "badge": "Conhecimento",
+      "status_class": "status-done",
+      "title": "RAG",
+      "description": "Use RAG para decidir entre long context, grounding, NotebookLM, Projects e vector RAG com mais confianca.",
+      "best_for": "Dias focados em contexto, citacao, memoria de trabalho e retrieval.",
+      "output": "Tabela de decisao e perguntas grounded.",
+      "common_trap": "Tratar todo problema de conhecimento como se a resposta fosse sempre vector RAG.",
+      "tags": ["Grounding", "Citacao", "Contexto"],
+      "source_ids": ["google-long-context", "google-grounding", "notebooklm-sources"],
+      "buttons": [
+        {
+          "label": "Abrir RAG",
+          "href": "/rag/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "badge": "Operacao",
+      "status_class": "status-done",
+      "title": "Workflows",
+      "description": "Use Workflows para enxergar como IA deixa de ser conversa e vira processo auditavel com schema, risco, approval e proxima acao.",
+      "best_for": "Resolver problemas reais e estudar operacao segura.",
+      "output": "Run comentado ou checklist operacional mais forte.",
+      "common_trap": "Querer construir fluxo sem antes definir entradas, criterios de aceite e pontos de aprovacao.",
+      "tags": ["Approval", "Risco", "Execucao"],
+      "buttons": [
+        {
+          "label": "Abrir Workflows",
+          "href": "/workflows/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "badge": "Senior",
+      "status_class": "status-in-progress",
+      "title": "Senior",
+      "description": "Use Senior quando o estudo ja precisa incluir evals, memoria persistente, agents/MCP e producao como camadas de engenharia aplicada.",
+      "best_for": "Subir de nivel e preparar criterio de producao.",
+      "output": "Unidade senior em foco e lista de gaps para fechar.",
+      "common_trap": "Pular para agents e MCP sem dominio suficiente de prompt, contexto e criterio operacional.",
+      "tags": ["Evals", "Memoria", "Agents"],
+      "source_ids": ["openai-evals", "openai-conversation-state", "mcp-architecture"],
+      "buttons": [
+        {
+          "label": "Abrir Senior",
+          "href": "/senior/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "badge": "Biblioteca",
+      "status_class": "status-done",
+      "title": "Artefatos e Roadmap",
+      "description": "Use Artefatos para aprofundar estudo com materiais publicos e use Roadmap para entender o que ja entrou, o que falta e o que vem depois.",
+      "best_for": "Revisar, consolidar e fechar ciclos.",
+      "output": "Retro curta e selecao melhor de materiais de apoio.",
+      "common_trap": "Usar artefato como substituto da rota principal em vez de material de consolidacao.",
+      "tags": ["Revisao", "Biblioteca", "Retro"],
+      "buttons": [
+        {
+          "label": "Abrir Artefatos",
+          "href": "/artefatos/",
+          "variant": "primary"
+        },
+        {
+          "label": "Abrir Roadmap",
+          "href": "/roadmap/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "rituals": [
+    {
+      "badge": "Diario",
+      "status_class": "status-done",
+      "title": "Ritual de sessao",
+      "description": "Comece com meta e termine com evidencia. Isso deixa a plataforma operando como sistema, nao como biblioteca.",
+      "steps": [
+        "Definir a pergunta do dia.",
+        "Escolher no maximo duas rotas para a sessao.",
+        "Executar um comparativo, um checklist ou uma nota de criterio.",
+        "Registrar a proxima acao no fim."
+      ],
+      "buttons": [
+        {
+          "label": "Abrir Trilha",
+          "href": "/trilha/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Semanal",
+      "status_class": "status-done",
+      "title": "Ritual de checkpoint",
+      "description": "Uma vez por semana, feche a leitura do que andou, do que travou e do que precisa de replanejamento.",
+      "steps": [
+        "Marcar unidades em Progresso.",
+        "Replanejar a trilha se o ritmo mudou.",
+        "Escolher um gap para aprofundar na semana seguinte.",
+        "Conferir o Roadmap para manter visao de maturidade."
+      ],
+      "buttons": [
+        {
+          "label": "Abrir Progresso",
+          "href": "/progresso/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir Roadmap",
+          "href": "/roadmap/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Fechamento",
+      "status_class": "status-in-progress",
+      "title": "Ritual de consolidacao",
+      "description": "Use quando quiser transformar estudo em criterio mais senior ou em material reaproveitavel.",
+      "steps": [
+        "Escolher o melhor aprendizado da semana.",
+        "Voltar a fonte oficial que sustentou a mudanca de criterio.",
+        "Registrar comparativo, resumo ou mini playbook.",
+        "Decidir se o proximo passo e RAG, Senior ou Workflows."
+      ],
+      "buttons": [
+        {
+          "label": "Abrir Senior",
+          "href": "/senior/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "anti_patterns": [
+    {
+      "badge": "Erro comum",
+      "status_class": "status-next",
+      "title": "Abrir muitas abas sem sair com uma entrega",
+      "description": "Quanto mais rotas voce abre sem produzir nada, mais a plataforma parece pesada e menos ela ensina.",
+      "points": [
+        "Limite duas rotas principais por sessao.",
+        "Se abriu uma terceira rota, ela deve ser apenas material de apoio.",
+        "Sempre feche com comparativo, nota, run ou checkpoint."
+      ]
+    },
+    {
+      "badge": "Erro comum",
+      "status_class": "status-next",
+      "title": "Estudar so o tema que parece mais interessante",
+      "description": "Especializacao senior nao vem de afinidade isolada; vem de continuidade e combinacao correta das camadas.",
+      "points": [
+        "Prompts sem RAG vira controle superficial.",
+        "RAG sem evals vira confianca fraca.",
+        "Workflows sem criterio operacional viram automacao perigosa."
+      ]
+    },
+    {
+      "badge": "Erro comum",
+      "status_class": "status-next",
+      "title": "Confundir fonte oficial com dominio pratico",
+      "description": "Documentacao boa acelera entendimento, mas o salto real vem quando voce testa, compara e registra o que mudou no seu criterio.",
+      "points": [
+        "Toda doc precisa virar experimento ou nota aplicada.",
+        "Toda nota aplicada precisa voltar para Progresso ou Trilha.",
+        "Toda comparacao precisa terminar em decisao melhor."
+      ]
+    }
+  ],
+  "official_support": [
+    {
+      "badge": "OpenAI",
+      "status_class": "status-done",
+      "title": "Estruture melhor saida, estado e avaliacao",
+      "summary": "Use estes materiais quando a sessao pedir controle maior de resposta, memoria de conversa ou comparacao estruturada.",
+      "source_ids": ["openai-resources", "openai-models", "openai-evals"],
+      "buttons": [
+        {
+          "label": "Aplicar em Prompts",
+          "href": "/prompts/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Anthropic",
+      "status_class": "status-done",
+      "title": "Refine prompting, testes e caching",
+      "summary": "Bom conjunto para sessao focada em estrutura de prompt, qualidade e economia de contexto.",
+      "source_ids": ["anthropic-models", "anthropic-prompting", "anthropic-develop-tests"],
+      "buttons": [
+        {
+          "label": "Aplicar em Prompts",
+          "href": "/prompts/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Google",
+      "status_class": "status-done",
+      "title": "Long context, grounding e rota de conhecimento",
+      "summary": "Ideal para dias de estudo em contexto, RAG e respostas ancoradas em fonte.",
+      "source_ids": ["google-models", "google-long-context", "google-grounding"],
+      "buttons": [
+        {
+          "label": "Aplicar em RAG",
+          "href": "/rag/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "NotebookLM e MCP",
+      "status_class": "status-done",
+      "title": "Estudo grounded e sistemas com tools",
+      "summary": "Use esta dupla quando a sessao exigir corpus guiado, citacao, tools e entendimento de arquitetura composta.",
+      "source_ids": ["notebooklm-sources", "mcp-architecture", "xai-remote-mcp"],
+      "buttons": [
+        {
+          "label": "Aplicar em Senior",
+          "href": "/senior/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "quick_actions": [
+    {
+      "badge": "Atalho",
+      "status_class": "status-done",
+      "title": "Montar a sessao de hoje",
+      "description": "Abra Trilha se voce quer definir foco e unidade. Abra Progresso se o objetivo e corrigir ritmo ou destravar a semana.",
+      "buttons": [
+        {
+          "label": "Abrir Trilha",
+          "href": "/trilha/",
+          "variant": "primary"
+        },
+        {
+          "label": "Abrir Progresso",
+          "href": "/progresso/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Atalho",
+      "status_class": "status-done",
+      "title": "Aprender com criterio hoje",
+      "description": "Se a lacuna for escolha de modelo, abra Matriz. Se a lacuna for estrutura da interacao, abra Prompts. Se a lacuna for conhecimento, abra RAG.",
+      "buttons": [
+        {
+          "label": "Abrir Matriz",
+          "href": "/matriz/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir Prompts",
+          "href": "/prompts/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir RAG",
+          "href": "/rag/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Atalho",
+      "status_class": "status-in-progress",
+      "title": "Subir de nivel e fechar ciclo",
+      "description": "Quando a base aplicada estiver forte, use Senior para aprofundar e Roadmap para decidir a proxima alavanca do sistema.",
+      "buttons": [
+        {
+          "label": "Abrir Senior",
+          "href": "/senior/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir Roadmap",
+          "href": "/roadmap/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ]
+}

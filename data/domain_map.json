@@ -2,6 +2,16 @@
   "checked_on": "2026-03-22",
   "domains": [
     {
+      "domain": "Ativacao e metodo de uso",
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "A nova rota Guia explica como navegar no portal por objetivo, tempo disponivel, ritual e resultado esperado sem duplicar Jornada ou Trilha.",
+      "route_label": "Guia",
+      "href": "/guia/",
+      "action_label": "Abrir Guia",
+      "next_step": "Subir de ativacao para labs praticos e desafios que provem dominio por caso de uso."
+    },
+    {
       "domain": "Modelos e lineup",
       "coverage_label": "Coberto forte",
       "status_class": "status-done",
