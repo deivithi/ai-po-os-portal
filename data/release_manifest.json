@@ -37,6 +37,7 @@
     "/data/freshness_status.json",
     "/data/vendor_sources.json",
     "/data/vendor_updates.json",
-    "/data/domain_map.json"
+    "/data/domain_map.json",
+    "/data/radar_health.json"
   ]
 }

@@ -5,7 +5,9 @@ Repositorio de deploy do portal estatico `AI Operating System do PO Salesforce`.
 ## Publicacao
 
 - Hosting: GitHub Pages
-- Deploy automatico: GitHub Pages a partir da branch `main`
+- Deploy automatico: GitHub Pages via GitHub Actions
+- Publicacao principal: workflow `Deploy GitHub Pages`
+- Refresh agendado do radar: workflow `Refresh Radar Vivo`
 - Raiz publicada: `.`
 
 ## Estrutura
@@ -21,5 +23,6 @@ Repositorio de deploy do portal estatico `AI Operating System do PO Salesforce`.
 ## Observacoes
 
 - O portal foi ajustado para funcionar tanto em dominio raiz quanto em subpath de repositorio no GitHub Pages.
-- O deploy acontece automaticamente a cada push na branch `main`.
+- O deploy acontece automaticamente a cada push na branch `main` pelo workflow dedicado do Pages.
+- O workflow `Refresh Radar Vivo` roda manualmente e por agenda, gera `data/radar_health.json`, faz commit se houver diferenca e publica o portal na mesma execucao.
 - A rota `prompts/` agora inclui fundamentos, biblioteca, builder orientado por contexto e overlays por fornecedor.

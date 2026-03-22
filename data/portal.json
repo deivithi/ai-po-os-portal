@@ -4,10 +4,10 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "Radar Vivo fase 1",
-    "phase_summary": "O portal agora ganhou uma camada editorial de frescor para separar mercado revisado, snapshot operacional e radar monitorado, com leitura por pagina e ponte direta para as fontes oficiais.",
-    "next_phase": "GitHub Pages via Actions + Trilha Adaptativa",
-    "next_phase_summary": "O proximo salto profissional e automatizar a atualizacao recorrente via GitHub Actions e, em seguida, montar a Trilha Adaptativa que distribui dias, horas e materiais conforme o ritmo do usuario.",
+    "phase_focus": "GitHub Pages via Actions",
+    "phase_summary": "O portal agora troca o publish legado por uma esteira profissional com GitHub Actions, deploy dedicado do Pages e refresh agendado do Radar Vivo sem depender de branch publishing.",
+    "next_phase": "Trilha Adaptativa MVP",
+    "next_phase_summary": "Com a automacao do publish pronta, o proximo salto e abrir a rota Trilha para montar um plano personalizado por horas por dia, foco, nivel e objetivo final.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [

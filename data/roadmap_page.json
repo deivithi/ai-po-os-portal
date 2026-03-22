@@ -3,16 +3,16 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "15 ciclos publicados",
-      "body": "Portal completo e agora com Radar Vivo ativo",
-      "note": "O sistema fechou o ciclo base do portal, consolidou o Prompt Studio e agora passa a expor frescor editorial por rota, dominio e fornecedor."
+      "title": "16 ciclos publicados",
+      "body": "Portal completo com Radar Vivo e automacao de publish",
+      "note": "O sistema fechou o ciclo base do portal, consolidou o Prompt Studio, abriu o Radar Vivo e agora passa a usar GitHub Actions como trilho oficial de deploy."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Radar Vivo fase 1",
-      "body": "Camada editorial de frescor publicada",
-      "note": "A Home e o shell agora deixam claro o que esta verificado hoje, o que esta em revisao e o que ainda esta apenas em radar monitorado."
+      "title": "Macrofase 2 em execucao",
+      "body": "Pages via Actions e refresh agendado do radar",
+      "note": "A plataforma agora passa a separar deploy estatico, monitoramento de fontes e proxima trilha adaptativa com uma base de automacao versionada."
     },
     {
       "badge": "Plano de 30 dias",
@@ -148,6 +148,12 @@
       "phase": "Refino H",
       "focus": "Radar Vivo fase 1",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino I",
+      "focus": "GitHub Pages via Actions",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }
   ],

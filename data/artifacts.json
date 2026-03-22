@@ -114,6 +114,26 @@
           "variant": "secondary"
         }
       ]
+    },
+    {
+      "id": "radar-health",
+      "title": "Saude automatica do Radar Vivo",
+      "category": "Automacao",
+      "summary": "Artefato tecnico gerado pela nova esteira de monitoramento, com disponibilidade das fontes oficiais, hints de mudanca e separacao clara entre monitoramento tecnico e revisao editorial.",
+      "study_tip": "Use este JSON para entender o que a automacao realmente monitora sem confundir disponibilidade de fonte com atualizacao semantica do conteudo.",
+      "tags": ["GitHub Actions", "Radar Vivo", "Health"],
+      "buttons": [
+        {
+          "label": "Abrir radar health",
+          "href": "/data/radar_health.json",
+          "variant": "primary"
+        },
+        {
+          "label": "Abrir roadmap",
+          "href": "/roadmap/",
+          "variant": "secondary"
+        }
+      ]
     }
   ],
   "llm_watchlist": [

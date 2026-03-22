@@ -100,10 +100,10 @@
     {
       "id": "notebooklm-sources",
       "vendor": "NotebookLM",
-      "title": "NotebookLM source types",
+      "title": "Create a notebook in NotebookLM",
       "short_label": "Sources",
-      "url": "https://support.google.com/notebooklm/answer/16215270?hl=en",
-      "scope": "Tipos de fonte e cobertura da ferramenta"
+      "url": "https://support.google.com/notebooklm/answer/16206563",
+      "scope": "Fluxo oficial de notebook e adicao de fontes"
     },
     {
       "id": "mcp-architecture",

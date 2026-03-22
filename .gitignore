@@ -1,1 +1,2 @@
 .playwright-cli/
+scripts/__pycache__/
