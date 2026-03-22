@@ -3,23 +3,23 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "14 ciclos publicados",
-      "body": "Portal completo e em expansao didatica",
-      "note": "O sistema fechou o ciclo base do portal e agora expande o Prompt Studio com disciplina de release, trilhas versionadas e base para productizacao futura."
+      "title": "15 ciclos publicados",
+      "body": "Portal completo e agora com Radar Vivo ativo",
+      "note": "O sistema fechou o ciclo base do portal, consolidou o Prompt Studio e agora passa a expor frescor editorial por rota, dominio e fornecedor."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Prompt Studio fase 6",
-      "body": "Builder + qualidade + colecoes future-ready publicados",
-      "note": "O portal agora combina fundamentos, biblioteca, builder orientado por contexto, camada didatica por fornecedor, laboratorio de qualidade, trilhas, favoritos locais e arquitetura pronta para packs futuros."
+      "title": "Radar Vivo fase 1",
+      "body": "Camada editorial de frescor publicada",
+      "note": "A Home e o shell agora deixam claro o que esta verificado hoje, o que esta em revisao e o que ainda esta apenas em radar monitorado."
     },
     {
       "badge": "Plano de 30 dias",
       "status_class": "status-done",
       "title": "Base funcional pronta",
-      "body": "30D-A e 30D-B consolidados",
-      "note": "A partir daqui o trabalho e productizar, ensinar e governar o sistema."
+      "body": "30D-A, 30D-B e camada de frescor consolidados",
+      "note": "A partir daqui o trabalho e automatizar atualizacao, personalizar trilha e aprofundar as camadas senior que ainda faltam."
     },
     {
       "badge": "Regra",
@@ -142,6 +142,12 @@
       "phase": "Refino G",
       "focus": "Prompt Studio fase 6",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/commit/6c78b777e1e6b28949528a4913dc9975de557d4f",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino H",
+      "focus": "Radar Vivo fase 1",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }
   ],

@@ -1,0 +1,85 @@
+{
+  "checked_on": "2026-03-22",
+  "domains": [
+    {
+      "domain": "Modelos e lineup",
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "O portal ja separa familias atuais, snapshot operacional e radar de mercado com boa clareza visual.",
+      "route_label": "Matriz",
+      "href": "/matriz/",
+      "action_label": "Abrir Matriz",
+      "next_step": "Rerodar o harness com os nomes mais novos e manter a comparacao semanal."
+    },
+    {
+      "domain": "Prompting moderno",
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "A camada de prompts ja cobre fundamentos, builder, overlays por fornecedor, qualidade e workspace pessoal.",
+      "route_label": "Prompts",
+      "href": "/prompts/",
+      "action_label": "Abrir Prompts",
+      "next_step": "Entrar em pratica real com templates, logs e comparacoes entre providers."
+    },
+    {
+      "domain": "RAG e grounding",
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "Long context, NotebookLM, Projects e vector RAG ja estao bem explicados e conectados ao sistema.",
+      "route_label": "RAG",
+      "href": "/rag/",
+      "action_label": "Abrir RAG",
+      "next_step": "Subir para retrieval mais avancado, rerankers e avaliacao formal."
+    },
+    {
+      "domain": "Memoria persistente",
+      "coverage_label": "Parcial",
+      "status_class": "status-in-progress",
+      "summary": "O portal toca em conversation state, contexto e Projects, mas ainda nao abriu uma camada dedicada de memoria persistente.",
+      "route_label": "Roadmap",
+      "href": "/roadmap/",
+      "action_label": "Ver Roadmap",
+      "next_step": "Entrar como frente propria com estado de conversa, memoria de trabalho e memoria de longo prazo."
+    },
+    {
+      "domain": "Agents, tools e MCP",
+      "coverage_label": "Parcial",
+      "status_class": "status-in-progress",
+      "summary": "A base conceitual ja existe, mas a experiencia ainda nao virou uma trilha dedicada com exemplos de tools, guardrails e handoff.",
+      "route_label": "Roadmap",
+      "href": "/roadmap/",
+      "action_label": "Acompanhar plano",
+      "next_step": "Construir uma unidade propria com agents, MCP, human-in-the-loop e observabilidade."
+    },
+    {
+      "domain": "Evals e graders",
+      "coverage_label": "Fila editorial",
+      "status_class": "status-next",
+      "summary": "A necessidade ja foi diagnosticada, mas o portal ainda nao tem a camada didatica de evals, regressao e comparacao continua.",
+      "route_label": "Roadmap",
+      "href": "/roadmap/",
+      "action_label": "Ver proxima fase",
+      "next_step": "Entrar apos Trilha Adaptativa como bloco para nivel senior raro."
+    },
+    {
+      "domain": "Custo, latencia e rollout",
+      "coverage_label": "Parcial",
+      "status_class": "status-in-progress",
+      "summary": "A linguagem do portal ja fala de risco e operacao, mas ainda nao abriu um modulo proprio de custo, rollout e observabilidade.",
+      "route_label": "Workflows",
+      "href": "/workflows/",
+      "action_label": "Abrir Workflows",
+      "next_step": "Conectar runs, logs, trade-offs e disciplina de producao."
+    },
+    {
+      "domain": "Estudo grounded com NotebookLM",
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "NotebookLM ja aparece como camada forte de estudo, pesquisa guiada e consolidacao de fontes no portal.",
+      "route_label": "Artefatos",
+      "href": "/artefatos/",
+      "action_label": "Abrir Artefatos",
+      "next_step": "Usar sempre junto com a pagina RAG para nao misturar estudo e pipeline operacional."
+    }
+  ]
+}

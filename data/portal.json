@@ -4,10 +4,10 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "Prompt Studio fase 6",
-    "phase_summary": "O portal agora evoluiu o Prompt Studio para uma camada future-ready de produto, com builder orientado por contexto, overlays, laboratorio de qualidade, trilhas, favoritos locais e separacao entre nucleo livre e expansao futura.",
-    "next_phase": "Expansao continua do Prompt Studio",
-    "next_phase_summary": "O proximo passo mais valioso agora e expandir packs por nicho, favoritos sincronizados, casos proprietarios e trilhas premium sobre a arquitetura ja pronta.",
+    "phase_focus": "Radar Vivo fase 1",
+    "phase_summary": "O portal agora ganhou uma camada editorial de frescor para separar mercado revisado, snapshot operacional e radar monitorado, com leitura por pagina e ponte direta para as fontes oficiais.",
+    "next_phase": "GitHub Pages via Actions + Trilha Adaptativa",
+    "next_phase_summary": "O proximo salto profissional e automatizar a atualizacao recorrente via GitHub Actions e, em seguida, montar a Trilha Adaptativa que distribui dias, horas e materiais conforme o ritmo do usuario.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
@@ -24,7 +24,7 @@
     "home": {
       "title": "Home",
       "nav_label": "Home",
-      "summary": "Visao geral do sistema, trilha de estudo e status executivo."
+      "summary": "Visao geral do sistema, trilha de estudo, radar vivo e status executivo."
     },
     "jornada": {
       "title": "Jornada",
@@ -95,12 +95,12 @@
     "roadmap": {
       "title": "Roadmap",
       "nav_label": "Roadmap",
-      "summary": "Roadmap vivo: progresso dos 30 dias, releases do portal e proximas alavancas."
+      "summary": "Roadmap vivo: progresso dos 30 dias, releases do portal, radar vivo e proximas alavancas."
     },
     "artefatos": {
       "title": "Artefatos",
       "nav_label": "Artefatos",
-      "summary": "Hub publico dos ativos do projeto e curadoria de modelos para estudo."
+      "summary": "Hub publico dos ativos do projeto, radar de modelos e fontes para estudo."
     }
   },
   "study_principles": [

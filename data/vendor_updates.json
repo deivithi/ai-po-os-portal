@@ -1,0 +1,109 @@
+{
+  "checked_on": "2026-03-22",
+  "updates": [
+    {
+      "vendor": "OpenAI",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "headline": "A familia GPT-5 continua sendo a leitura central para uso geral, agents e memoria de conversa.",
+      "summary": "As docs atuais deixam clara a importancia de Models, Resources e Conversation state para manter o estudo de LLMs, memory e operacao alinhado.",
+      "study_now": "Estude GPT-5.4 como flagship, GPT-5 mini para custo e conversation state para memoria de conversa.",
+      "portal_hook": "Use Prompts para estrutura; use Matriz para snapshot x mercado.",
+      "route_href": "/prompts/",
+      "route_label": "Estudar em Prompts",
+      "source_ids": ["openai-models", "openai-resources", "openai-conversation-state"]
+    },
+    {
+      "vendor": "Anthropic",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "headline": "Claude 4.6 segue como referencia forte para estudo de prompting, contexto de trabalho e tarefas profundas.",
+      "summary": "O portal ja esta bem alinhado com a leitura oficial da Anthropic para prompting, pensamento guiado e escolha entre Sonnet e Opus.",
+      "study_now": "Estude Sonnet 4.6 para fluxo diario e Opus 4.6 para tarefas mais densas.",
+      "portal_hook": "Prompt Studio e a melhor porta para absorver os padroes da Anthropic.",
+      "route_href": "/prompts/",
+      "route_label": "Abrir Prompt Studio",
+      "source_ids": ["anthropic-models", "anthropic-prompting"]
+    },
+    {
+      "vendor": "Google",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "headline": "Gemini 3.1 Pro, Gemini 3 Pro e a linha de long context continuam centrais para grounding e ecossistema Google.",
+      "summary": "O catalogo e as release notes do Google seguem sendo a melhor ancora para acompanhar lineup, contexto longo e open models publicados no Vertex.",
+      "study_now": "Estude lineup atual do Vertex, long context e como isso conversa com RAG e grounding.",
+      "portal_hook": "RAG e Matriz sao as rotas mais conectadas a esse vendor.",
+      "route_href": "/rag/",
+      "route_label": "Estudar em RAG",
+      "source_ids": ["google-models", "google-release-notes", "google-long-context"]
+    },
+    {
+      "vendor": "xAI / Grok",
+      "status_label": "Em radar forte",
+      "status_class": "status-in-progress",
+      "checked_on": "2026-03-22",
+      "headline": "Grok merece acompanhamento ativo por causa de tool use, contexto extenso e structured outputs.",
+      "summary": "A documentacao oficial ja sustenta o estudo, mas o portal ainda nao transformou Grok em trilha operacional profunda nem em rerun do harness.",
+      "study_now": "Acompanhe lineup, capacidades e saidas estruturadas antes de colocar Grok como escolha operacional do sistema.",
+      "portal_hook": "Use Artefatos para radar e Matriz para comparar criterio, sem confundir com score recalibrado.",
+      "route_href": "/artefatos/",
+      "route_label": "Abrir Artefatos",
+      "source_ids": ["xai-models", "xai-structured-outputs"]
+    },
+    {
+      "vendor": "Qwen",
+      "status_label": "Radar",
+      "status_class": "status-next",
+      "checked_on": "2026-03-22",
+      "headline": "Qwen segue como familia importante para acompanhar no bloco de open e ecossistema chines.",
+      "summary": "A base oficial consultada por enquanto e a propria documentacao, o que mantem Qwen no radar com boa visibilidade, mas ainda sem trilha propria no portal.",
+      "study_now": "Observe os docs oficiais e compare com a curadoria do hub de artefatos antes de promover para estudo profundo.",
+      "portal_hook": "Artefatos e Home sao as rotas certas para acompanhar esse radar sem ruido.",
+      "route_href": "/artefatos/",
+      "route_label": "Ver radar",
+      "source_ids": ["qwen-docs"]
+    },
+    {
+      "vendor": "DeepSeek",
+      "status_label": "Radar",
+      "status_class": "status-next",
+      "checked_on": "2026-03-22",
+      "headline": "DeepSeek continua relevante como open model de mercado, mas ainda esta em observacao editorial no portal.",
+      "summary": "A documentacao oficial foi conferida e o tema segue no radar de mercado, aguardando operacionalizacao futura com mais criterio e evals.",
+      "study_now": "Mantenha DeepSeek no radar do mercado, nao como verdade operacional do portal.",
+      "portal_hook": "Use Artefatos para leitura de mercado e Roadmap para ver quando esse bloco entra em profundidade.",
+      "route_href": "/roadmap/",
+      "route_label": "Ver Roadmap",
+      "source_ids": ["deepseek-docs"]
+    },
+    {
+      "vendor": "NotebookLM",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "headline": "NotebookLM continua como a camada mais forte do portal para estudo guiado, leitura grounded e consolidacao de fontes.",
+      "summary": "As paginas oficiais de fontes sustentam a permanencia do NotebookLM como ferramenta central de estudo e pesquisa assistida.",
+      "study_now": "Use NotebookLM para estudo, citacao e consolidacao; nao trate como substituto automatico do pipeline RAG operacional.",
+      "portal_hook": "A pagina RAG e o hub de artefatos mostram melhor esse encaixe.",
+      "route_href": "/rag/",
+      "route_label": "Abrir RAG",
+      "source_ids": ["notebooklm-sources"]
+    },
+    {
+      "vendor": "MCP",
+      "status_label": "Em revisao",
+      "status_class": "status-in-progress",
+      "checked_on": "2026-03-22",
+      "headline": "MCP segue sendo um pilar para tools e agents, mas o portal ainda vai aprofundar isso em uma camada propria.",
+      "summary": "A base conceitual ja esta ancorada na arquitetura oficial, mas ainda falta a trilha pratica de agents, tools, memoria e observabilidade.",
+      "study_now": "Entenda a arquitetura agora; aguarde a fase dedicada para operar isso com a profundidade certa.",
+      "portal_hook": "Roadmap e Home deixam visivel quando esse bloco sobe de prioridade.",
+      "route_href": "/roadmap/",
+      "route_label": "Acompanhar no Roadmap",
+      "source_ids": ["mcp-architecture"]
+    }
+  ]
+}

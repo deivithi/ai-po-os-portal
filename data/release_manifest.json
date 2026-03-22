@@ -15,10 +15,15 @@
     {
       "title": "Release discipline",
       "description": "Cada deploy deve deixar rastros claros em preview, producao e documentacao do projeto."
+    },
+    {
+      "title": "Freshness e proveniencia",
+      "description": "Sempre que um bloco falar de mercado atual, a pagina precisa mostrar data de conferencia, status editorial e ponte para fonte oficial."
     }
   ],
   "qa_targets": [
     "/",
+    "/jornada/",
     "/prompts/",
     "/matriz/",
     "/workflows/",
@@ -28,6 +33,10 @@
     "/data/overview.json",
     "/data/portal.json",
     "/data/artifacts.json",
-    "/data/prompt_productization.json"
+    "/data/prompt_productization.json",
+    "/data/freshness_status.json",
+    "/data/vendor_sources.json",
+    "/data/vendor_updates.json",
+    "/data/domain_map.json"
   ]
 }

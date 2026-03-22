@@ -2,6 +2,10 @@ const DATA_PATHS = {
   overview: "/data/overview.json",
   portal: "/data/portal.json",
   artifacts: "/data/artifacts.json",
+  freshnessStatus: "/data/freshness_status.json",
+  vendorSources: "/data/vendor_sources.json",
+  vendorUpdates: "/data/vendor_updates.json",
+  domainMap: "/data/domain_map.json",
   promptsGuide: "/data/prompts_page.json",
   promptLibrary: "/data/prompt_library.json",
   promptBuilder: "/data/prompt_builder.json",
@@ -18,14 +22,14 @@ const DATA_PATHS = {
 };
 
 const PAGE_DATA_KEYS = {
-  home: ["overview", "artifacts"],
-  jornada: ["journeyGuide"],
-  prompts: ["promptsGuide", "promptLibrary", "promptBuilder", "promptProviderOverlays", "promptQualityLab", "promptProductization"],
-  matriz: ["overview", "artifacts", "matrixGuide", "matrixArtifact"],
-  workflows: ["overview", "workflowsGuide"],
-  rag: ["ragGuide"],
-  roadmap: ["roadmapGuide", "releaseManifest"],
-  artefatos: ["artifacts"],
+  home: ["overview", "artifacts", "freshnessStatus", "vendorSources", "vendorUpdates", "domainMap"],
+  jornada: ["journeyGuide", "freshnessStatus"],
+  prompts: ["promptsGuide", "promptLibrary", "promptBuilder", "promptProviderOverlays", "promptQualityLab", "promptProductization", "freshnessStatus"],
+  matriz: ["overview", "artifacts", "matrixGuide", "matrixArtifact", "freshnessStatus"],
+  workflows: ["overview", "workflowsGuide", "freshnessStatus"],
+  rag: ["ragGuide", "freshnessStatus"],
+  roadmap: ["roadmapGuide", "releaseManifest", "freshnessStatus"],
+  artefatos: ["artifacts", "freshnessStatus"],
 };
 
 const PREFETCH_ROUTE_MAP = {
@@ -446,11 +450,13 @@ async function loadPageData() {
   return data;
 }
 
-function renderShell(portal) {
+function renderShell(portal, freshnessStatus) {
   const page = portal.pages[pageId] || portal.pages.home;
   const sidebar = document.getElementById("sidebar");
   const topbar = document.getElementById("topbar");
   const footer = document.getElementById("portal-footer");
+  const pageFreshness = findFreshnessPage(freshnessStatus);
+  const stripMeta = freshnessStatus?.strip || null;
 
   if (sidebar) {
     sidebar.innerHTML = `
@@ -493,10 +499,60 @@ function renderShell(portal) {
         <p class="topbar-summary">${escapeHtml(page.summary)}</p>
       </div>
       <div class="topbar-actions">
+        ${
+          pageFreshness
+            ? `<span class="status-badge ${escapeHtml(pageFreshness.status_class)}">${escapeHtml(pageFreshness.status_label)}</span>`
+            : ""
+        }
         <button class="mobile-nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">
           Menu
         </button>
         <a class="button ghost" href="${resolveUrl(portal.site.deploy_url)}">Producao</a>
+      </div>
+    `;
+  }
+
+  if (topbar?.parentElement && stripMeta) {
+    let strip = document.getElementById("freshness-strip");
+    if (!strip) {
+      strip = document.createElement("section");
+      strip.id = "freshness-strip";
+      strip.className = "freshness-strip";
+      topbar.insertAdjacentElement("afterend", strip);
+    }
+
+    strip.innerHTML = `
+      <div class="freshness-strip-copy">
+        <span class="eyebrow">${escapeHtml(stripMeta.eyebrow || "Radar Vivo")}</span>
+        <div class="freshness-strip-header">
+          <h3>${escapeHtml(stripMeta.title || "Mercado monitorado")}</h3>
+          ${
+            pageFreshness
+              ? `<span class="status-badge ${escapeHtml(pageFreshness.status_class)}">${escapeHtml(pageFreshness.title || page.title)}</span>`
+              : ""
+          }
+        </div>
+        <p class="freshness-strip-summary">${escapeHtml(stripMeta.summary || "")}</p>
+        ${
+          pageFreshness
+            ? `<p class="freshness-strip-page">Nesta rota: <strong>${escapeHtml(pageFreshness.status_label)}</strong> - ${escapeHtml(pageFreshness.summary)}</p>`
+            : ""
+        }
+      </div>
+      <div class="freshness-strip-actions">
+        <div class="freshness-strip-metrics">
+          ${(stripMeta.metrics || [])
+            .map(
+              (item) => `
+                <article class="freshness-metric">
+                  <span class="label">${escapeHtml(item.label)}</span>
+                  <strong>${escapeHtml(item.value)}</strong>
+                </article>
+              `,
+            )
+            .join("")}
+        </div>
+        ${renderButtonList(stripMeta.buttons || [])}
       </div>
     `;
   }
@@ -551,6 +607,27 @@ function renderButtonList(buttons) {
         .join("")}
     </div>
   `;
+}
+
+function findFreshnessPage(freshnessStatus, targetPageId = pageId) {
+  return (freshnessStatus?.pages || []).find((item) => item.id === targetPageId) || null;
+}
+
+function buildSourceLookup(vendorSources) {
+  const entries = Array.isArray(vendorSources?.sources) ? vendorSources.sources : [];
+  return new Map(entries.map((item) => [item.id, item]));
+}
+
+function buildSourceButtons(sourceLookup, sourceIds, limit = 2) {
+  return (sourceIds || [])
+    .map((sourceId) => sourceLookup.get(sourceId))
+    .filter(Boolean)
+    .slice(0, limit)
+    .map((source) => ({
+      label: source.short_label || source.title || "Fonte oficial",
+      href: source.url,
+      variant: "secondary",
+    }));
 }
 
 function renderTagList(tags) {
@@ -672,9 +749,10 @@ function buildMatrixInsights(matrixArtifact, matrixGuide, overview) {
   };
 }
 
-function renderHome(portal, overview, artifacts) {
+function renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap) {
   const phaseFocus = document.getElementById("phase-focus");
   const phaseSummary = document.getElementById("phase-summary");
+  const sourceLookup = buildSourceLookup(vendorSources);
 
   if (phaseFocus) {
     phaseFocus.textContent = `${portal.site.phase_label} - ${portal.site.phase_focus}`;
@@ -718,6 +796,48 @@ function renderHome(portal, overview, artifacts) {
   );
 
   renderCards(
+    "home-freshness-overview",
+    freshnessStatus?.global?.cards || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.value)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  const freshnessPolicy = document.getElementById("freshness-policy");
+  if (freshnessPolicy) {
+    freshnessPolicy.innerHTML = (freshnessStatus?.policy || [])
+      .map(
+        (item) => `
+          <li>
+            <strong>${escapeHtml(item.label)}.</strong> ${escapeHtml(item.description)}
+          </li>
+        `,
+      )
+      .join("");
+  }
+
+  renderCards(
+    "home-page-freshness",
+    freshnessStatus?.pages || [],
+    (item) => `
+      <article class="study-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.status_label)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.summary)}</p>
+        <p class="metric-note">Ultima leitura: ${escapeHtml(item.checked_on)}. ${escapeHtml(item.note || "")}</p>
+        <div class="button-group">
+          <a class="button secondary" href="${resolveUrl(item.action_href)}">${escapeHtml(item.action_label || "Abrir rota")}</a>
+        </div>
+      </article>
+    `,
+  );
+
+  renderCards(
     "study-principles",
     portal.study_principles,
     (item) => `
@@ -755,6 +875,53 @@ function renderHome(portal, overview, artifacts) {
         <ul class="summary-list">
           ${(item.points || []).map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
         </ul>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "home-vendor-updates",
+    vendorUpdates?.updates || [],
+    (item) => {
+      const buttons = [
+        ...buildSourceButtons(sourceLookup, item.source_ids, 2),
+        item.route_href
+          ? {
+              label: item.route_label || "Abrir rota",
+              href: item.route_href,
+              variant: "primary",
+            }
+          : null,
+      ].filter(Boolean);
+
+      return `
+        <article class="artifact-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.status_label)}</span>
+          <h3>${escapeHtml(item.vendor)}</h3>
+          <p class="card-copy">${escapeHtml(item.headline)}</p>
+          <p class="metric-note">Conferido em ${escapeHtml(item.checked_on)}. ${escapeHtml(item.summary)}</p>
+          <ul class="summary-list">
+            <li><strong>Estudar agora:</strong> ${escapeHtml(item.study_now)}</li>
+            <li><strong>No portal:</strong> ${escapeHtml(item.portal_hook)}</li>
+          </ul>
+          ${renderButtonList(buttons)}
+        </article>
+      `;
+    },
+  );
+
+  renderCards(
+    "home-domain-map",
+    domainMap?.domains || [],
+    (item) => `
+      <article class="study-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.coverage_label)}</span>
+        <h3>${escapeHtml(item.domain)}</h3>
+        <p class="card-copy">${escapeHtml(item.summary)}</p>
+        <p class="metric-note">Melhor porta de entrada: ${escapeHtml(item.route_label)}. ${escapeHtml(item.next_step)}</p>
+        <div class="button-group">
+          <a class="button secondary" href="${resolveUrl(item.href)}">${escapeHtml(item.action_label || "Abrir estudo")}</a>
+        </div>
       </article>
     `,
   );
@@ -3766,6 +3933,10 @@ async function init() {
       portal,
       overview,
       artifacts,
+      freshnessStatus,
+      vendorSources,
+      vendorUpdates,
+      domainMap,
       promptsGuide,
       promptLibrary,
       promptBuilder,
@@ -3781,10 +3952,10 @@ async function init() {
       releaseManifest,
     } = data;
 
-    renderShell(portal);
+    renderShell(portal, freshnessStatus);
 
     const renderers = {
-      home: () => renderHome(portal, overview, artifacts),
+      home: () => renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap),
       jornada: () => renderJourney(journeyGuide),
       prompts: () =>
         renderPrompts(

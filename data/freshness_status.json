@@ -1,0 +1,170 @@
+{
+  "checked_on": "2026-03-22",
+  "global": {
+    "cards": [
+      {
+        "badge": "Mercado revisado",
+        "status_class": "status-done",
+        "title": "Ultima conferencia oficial",
+        "value": "2026-03-22",
+        "note": "OpenAI, Anthropic, Google, xAI, Qwen, DeepSeek, NotebookLM e MCP foram revisitados em fontes oficiais."
+      },
+      {
+        "badge": "Snapshot operacional",
+        "status_class": "status-in-progress",
+        "title": "Harness calibrado",
+        "value": "2026-03-21",
+        "note": "A matriz operacional continua util, mas alguns nomes de mercado ja pedem rerun ou upgrade do harness."
+      },
+      {
+        "badge": "Paginas fortes",
+        "status_class": "status-done",
+        "title": "4 rotas verificadas",
+        "value": "Home, Jornada, Prompts e Artefatos",
+        "note": "Essas paginas ja podem ser tratadas como ponto de estudo principal sem misturar snapshot e mercado."
+      },
+      {
+        "badge": "Fila editorial",
+        "status_class": "status-next",
+        "title": "Proxima macrofrente",
+        "value": "Trilha Adaptativa",
+        "note": "Depois do Radar Vivo, a plataforma passa a montar a trilha por dias, horas e objetivo do usuario."
+      }
+    ]
+  },
+  "strip": {
+    "eyebrow": "Radar Vivo",
+    "title": "Mercado atual conferido; sistema operacional claramente sinalizado",
+    "summary": "Use esta barra para saber se a pagina esta verificada, em revisao ou apenas em radar. Assim voce nao estuda um snapshot antigo como se fosse mercado atual.",
+    "metrics": [
+      {
+        "label": "Mercado",
+        "value": "22/03"
+      },
+      {
+        "label": "Snapshot",
+        "value": "21/03"
+      },
+      {
+        "label": "Rotas fortes",
+        "value": "4"
+      }
+    ],
+    "buttons": [
+      {
+        "label": "Abrir radar oficial",
+        "href": "/#home-vendor-updates",
+        "variant": "secondary"
+      },
+      {
+        "label": "Ver roadmap",
+        "href": "/roadmap/",
+        "variant": "secondary"
+      }
+    ]
+  },
+  "policy": [
+    {
+      "label": "Verificado",
+      "description": "A pagina ou dominio foi revisto hoje em fontes oficiais e a linguagem do portal ja foi alinhada a esse estado."
+    },
+    {
+      "label": "Em revisao",
+      "description": "O racional segue valido, mas a pagina ainda depende de rerun, enrich editorial ou upgrade de evidencias antes de virar referencia final."
+    },
+    {
+      "label": "Radar",
+      "description": "O tema esta monitorado e citado com fonte, mas ainda nao foi operacionalizado em profundidade dentro do sistema."
+    }
+  ],
+  "pages": [
+    {
+      "id": "home",
+      "title": "Home",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "summary": "A Home agora distingue mercado atual, snapshot operacional e cobertura do portal sem confundir um com o outro.",
+      "note": "Boa porta de entrada para entender o estado atual do sistema.",
+      "action_href": "/",
+      "action_label": "Voltar para a Home"
+    },
+    {
+      "id": "jornada",
+      "title": "Jornada",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "summary": "A rota continua valida como metodo de estudo em 30 dias, agora ancorada na camada de frescor do portal.",
+      "note": "Boa pagina para converter conteudo em rotina de estudo.",
+      "action_href": "/jornada/",
+      "action_label": "Abrir Jornada"
+    },
+    {
+      "id": "prompts",
+      "title": "Prompt Studio",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "summary": "A trilha de prompting segue atual e bem alinhada com OpenAI, Anthropic, Google e xAI.",
+      "note": "Ja e rota forte para estudo profundo de prompting moderno.",
+      "action_href": "/prompts/",
+      "action_label": "Abrir Prompts"
+    },
+    {
+      "id": "matriz",
+      "title": "Matriz",
+      "status_label": "Em revisao",
+      "status_class": "status-in-progress",
+      "checked_on": "2026-03-22",
+      "summary": "A logica da matriz segue forte, mas o harness operacional ainda esta em snapshot de 2026-03-21 para alguns vendors.",
+      "note": "Leia com criterio: mercado atual nao e o mesmo que score recalibrado.",
+      "action_href": "/matriz/",
+      "action_label": "Abrir Matriz"
+    },
+    {
+      "id": "workflows",
+      "title": "Workflows",
+      "status_label": "Em revisao",
+      "status_class": "status-in-progress",
+      "checked_on": "2026-03-22",
+      "summary": "A camada operacional esta funcional, mas ainda pode ganhar refresh de providers, memoria e observabilidade.",
+      "note": "Boa pagina para aprender operacao, mas ainda em evolucao editorial.",
+      "action_href": "/workflows/",
+      "action_label": "Abrir Workflows"
+    },
+    {
+      "id": "rag",
+      "title": "RAG",
+      "status_label": "Em revisao",
+      "status_class": "status-in-progress",
+      "checked_on": "2026-03-22",
+      "summary": "A base de RAG esta forte, mas retrieval mais avancado, rerankers e evals formais ainda entram em fases futuras.",
+      "note": "Otima base conceitual, ainda com espaco de aprofundamento tecnico.",
+      "action_href": "/rag/",
+      "action_label": "Abrir RAG"
+    },
+    {
+      "id": "roadmap",
+      "title": "Roadmap",
+      "status_label": "Em revisao",
+      "status_class": "status-in-progress",
+      "checked_on": "2026-03-22",
+      "summary": "O roadmap esta vivo, mas agora passa a refletir a nova macrofrente de Radar Vivo e Trilha Adaptativa.",
+      "note": "Boa rota para ver o plano inteiro e as proximas macrofases.",
+      "action_href": "/roadmap/",
+      "action_label": "Abrir Roadmap"
+    },
+    {
+      "id": "artefatos",
+      "title": "Artefatos",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "summary": "O hub de artefatos continua sendo a biblioteca publica mais atual do portal para estudar o que ja esta espelhado.",
+      "note": "Boa pagina para abrir documentos e comparar mercado x sistema.",
+      "action_href": "/artefatos/",
+      "action_label": "Abrir Artefatos"
+    }
+  ]
+}

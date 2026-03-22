@@ -1,0 +1,117 @@
+{
+  "checked_on": "2026-03-22",
+  "sources": [
+    {
+      "id": "openai-models",
+      "vendor": "OpenAI",
+      "title": "OpenAI Models",
+      "short_label": "Models",
+      "url": "https://developers.openai.com/api/docs/models",
+      "scope": "Model lineup e familias atuais"
+    },
+    {
+      "id": "openai-resources",
+      "vendor": "OpenAI",
+      "title": "OpenAI Resources",
+      "short_label": "Resources",
+      "url": "https://developers.openai.com/resources/",
+      "scope": "Guias, patterns e materiais oficiais"
+    },
+    {
+      "id": "openai-conversation-state",
+      "vendor": "OpenAI",
+      "title": "Conversation state",
+      "short_label": "State",
+      "url": "https://developers.openai.com/api/docs/guides/conversation-state",
+      "scope": "Memoria de conversa e estado"
+    },
+    {
+      "id": "anthropic-models",
+      "vendor": "Anthropic",
+      "title": "Claude models overview",
+      "short_label": "Models",
+      "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+      "scope": "Lineup atual e diferenca entre Sonnet e Opus"
+    },
+    {
+      "id": "anthropic-prompting",
+      "vendor": "Anthropic",
+      "title": "Prompt engineering overview",
+      "short_label": "Prompting",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview",
+      "scope": "Prompting, contexto e testes"
+    },
+    {
+      "id": "google-models",
+      "vendor": "Google",
+      "title": "Vertex AI models",
+      "short_label": "Models",
+      "url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models",
+      "scope": "Gemini, open models e lineup atual"
+    },
+    {
+      "id": "google-release-notes",
+      "vendor": "Google",
+      "title": "Vertex AI release notes",
+      "short_label": "Release notes",
+      "url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/release-notes",
+      "scope": "Mudancas recentes no ecossistema Google"
+    },
+    {
+      "id": "google-long-context",
+      "vendor": "Google",
+      "title": "Long context guide",
+      "short_label": "Long context",
+      "url": "https://ai.google.dev/gemini-api/docs/long-context",
+      "scope": "Context window e leitura de documentos grandes"
+    },
+    {
+      "id": "xai-models",
+      "vendor": "xAI",
+      "title": "xAI models",
+      "short_label": "Models",
+      "url": "https://docs.x.ai/docs/models",
+      "scope": "Grok, lineup e capacidades"
+    },
+    {
+      "id": "xai-structured-outputs",
+      "vendor": "xAI",
+      "title": "Structured outputs",
+      "short_label": "Structured",
+      "url": "https://docs.x.ai/developers/model-capabilities/text/structured-outputs",
+      "scope": "Saidas estruturadas e controle"
+    },
+    {
+      "id": "qwen-docs",
+      "vendor": "Qwen",
+      "title": "Qwen documentation",
+      "short_label": "Docs",
+      "url": "https://qwen.readthedocs.io/en/stable/",
+      "scope": "Documentacao oficial da familia Qwen"
+    },
+    {
+      "id": "deepseek-docs",
+      "vendor": "DeepSeek",
+      "title": "DeepSeek documentation",
+      "short_label": "Docs",
+      "url": "https://api-docs.deepseek.com/",
+      "scope": "API docs e noticias oficiais"
+    },
+    {
+      "id": "notebooklm-sources",
+      "vendor": "NotebookLM",
+      "title": "NotebookLM source types",
+      "short_label": "Sources",
+      "url": "https://support.google.com/notebooklm/answer/16215270?hl=en",
+      "scope": "Tipos de fonte e cobertura da ferramenta"
+    },
+    {
+      "id": "mcp-architecture",
+      "vendor": "MCP",
+      "title": "MCP architecture",
+      "short_label": "Architecture",
+      "url": "https://modelcontextprotocol.io/docs/learn/architecture",
+      "scope": "Arquitetura base para tools e integrações"
+    }
+  ]
+}
