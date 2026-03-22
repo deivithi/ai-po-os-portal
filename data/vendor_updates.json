@@ -8,7 +8,7 @@
       "checked_on": "2026-03-22",
       "headline": "A familia GPT-5 continua sendo a leitura central para uso geral, agents e memoria de conversa.",
       "summary": "As docs atuais deixam clara a importancia de Models, Resources e Conversation state para manter o estudo de LLMs, memory e operacao alinhado.",
-      "study_now": "Estude GPT-5.4 como flagship, GPT-5 mini para custo e conversation state para memoria de conversa.",
+      "study_now": "Estude GPT-5.4 como flagship, GPT-5.4-mini ou GPT-5.4-nano para custo e conversation state para memoria de conversa.",
       "portal_hook": "Use Prompts para estrutura; use Matriz para snapshot x mercado.",
       "route_href": "/prompts/",
       "route_label": "Estudar em Prompts",
@@ -32,7 +32,7 @@
       "status_label": "Verificado hoje",
       "status_class": "status-done",
       "checked_on": "2026-03-22",
-      "headline": "Gemini 3.1 Pro, Gemini 3 Pro e a linha de long context continuam centrais para grounding e ecossistema Google.",
+      "headline": "Gemini 3.1 Pro, Gemini 3 Pro e Gemini 2.5 Pro continuam centrais para grounding e ecossistema Google.",
       "summary": "O catalogo e as release notes do Google seguem sendo a melhor ancora para acompanhar lineup, contexto longo e open models publicados no Vertex.",
       "study_now": "Estude lineup atual do Vertex, long context e como isso conversa com RAG e grounding.",
       "portal_hook": "RAG e Matriz sao as rotas mais conectadas a esse vendor.",
@@ -52,6 +52,19 @@
       "route_href": "/artefatos/",
       "route_label": "Abrir Artefatos",
       "source_ids": ["xai-models", "xai-structured-outputs"]
+    },
+    {
+      "vendor": "MiniMax",
+      "status_label": "Em radar forte",
+      "status_class": "status-in-progress",
+      "checked_on": "2026-03-22",
+      "headline": "MiniMax M2.7 entrou no radar forte do portal como frente atual de produtividade, coding e agentic tool use.",
+      "summary": "O catalogo oficial da MiniMax destaca M2.7 como modelo novo da linha de texto, e a propria documentacao oficial da API ja referencia M2.7 no hub atual. Isso transforma MiniMax em bloco real de estudo no radar internacional do portal.",
+      "study_now": "Acompanhe MiniMax M2.7 como frente atual do vendor e compare sua proposta de produtividade, coding e tool use com os outros players de mercado.",
+      "portal_hook": "Use Artefatos para radar de mercado e Prompts para manter criterio sem confundir novidade com camada operacional.",
+      "route_href": "/artefatos/",
+      "route_label": "Abrir Artefatos",
+      "source_ids": ["minimax-models", "minimax-api-docs"]
     },
     {
       "vendor": "Qwen",

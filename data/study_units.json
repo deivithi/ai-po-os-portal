@@ -197,7 +197,7 @@
       "sequence": 60,
       "domain": "radar",
       "title": "Open models, modelos chineses e radar internacional",
-      "summary": "Leia o radar de mercado para entender onde Qwen, DeepSeek, Gemma e outros entram por custo, privacidade ou especializacao.",
+      "summary": "Leia o radar de mercado para entender onde Qwen, DeepSeek, MiniMax, Gemma e outros entram por custo, privacidade ou especializacao.",
       "base_hours": 6,
       "portal_href": "/artefatos/",
       "portal_label": "Abrir Artefatos",
@@ -210,14 +210,14 @@
         "Anotacao clara do que e radar e do que ja e operacional."
       ],
       "completion_criteria": [
-        "Voce sabe por que Qwen, DeepSeek ou Gemma entrariam no seu radar.",
+        "Voce sabe por que Qwen, DeepSeek, MiniMax ou Gemma entrariam no seu radar.",
         "Voce nao confunde benchmark de marketing com decisao de sistema.",
         "Voce registra quando vale continuar apenas observando."
       ],
       "next_unit_id": "context-grounding-foundations",
       "focus_tags": ["llms", "operacao_producao"],
       "goal_tags": ["specialist_general", "specialist_product_ops"],
-      "official_resource_ids": ["google-models", "qwen-docs", "deepseek-docs"]
+      "official_resource_ids": ["google-models", "qwen-docs", "deepseek-docs", "minimax-models"]
     },
     {
       "id": "context-grounding-foundations",

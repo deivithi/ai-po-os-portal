@@ -42,7 +42,7 @@
       "model_id": "gpt_5_1",
       "vendor": "OpenAI",
       "model": "GPT-5.1",
-      "market_family": "GPT-5.4 / GPT-5.4 pro",
+      "market_family": "GPT-5.4 / GPT-5.4-mini / GPT-5.4-nano",
       "snapshot_model": "GPT-5.1",
       "average_total": 4.282,
       "source_urls": [
@@ -51,8 +51,8 @@
       ],
       "notes": "Otimo equilibrio para tarefas agentic e forte controle via stack da API.",
       "snapshot_note": "Score ainda baseado no seed GPT-5.1 do projeto.",
-      "market_note": "As docs atuais da OpenAI recomendam gpt-5.4 como flagship e gpt-5-mini quando a prioridade e custo e latencia.",
-      "study_now": "Estude gpt-5.4 como flagship e gpt-5-mini para trade-off de custo e latencia.",
+      "market_note": "As docs atuais da OpenAI recomendam gpt-5.4 como flagship e gpt-5.4-mini ou gpt-5.4-nano quando a prioridade e custo e latencia.",
+      "study_now": "Estude gpt-5.4 como flagship e gpt-5.4-mini ou gpt-5.4-nano para trade-off de custo e latencia.",
       "market_source_url": "https://developers.openai.com/api/docs/models",
       "market_source_label": "OpenAI models"
     },
@@ -60,7 +60,7 @@
       "model_id": "gemini_2_5_pro",
       "vendor": "Google",
       "model": "Gemini 2.5 Pro",
-      "market_family": "Gemini 3.1 Pro / Gemini 3 Pro",
+      "market_family": "Gemini 3.1 Pro / Gemini 3 Pro / Gemini 2.5 Pro",
       "snapshot_model": "Gemini 2.5 Pro",
       "average_total": 4.276,
       "source_urls": [
@@ -69,8 +69,8 @@
       ],
       "notes": "Muito forte em long context, grounding e integracao com ecossistema Google.",
       "snapshot_note": "Score ainda baseado no seed Gemini 2.5 Pro do projeto.",
-      "market_note": "O catalogo atual do Vertex destaca Gemini 3.1 Pro como reasoning-first e Gemini 3 Pro como familia de ponta para agentic e multimodal.",
-      "study_now": "Estude Gemini 3.1 Pro e Gemini 3 Pro; use Gemini 2.5 Pro como referencia de continuidade operacional.",
+      "market_note": "O catalogo atual do Vertex lista Gemini 3.1 Pro e Gemini 3 Pro na camada mais nova, mantendo Gemini 2.5 Pro como referencia estavel importante para continuidade operacional.",
+      "study_now": "Estude Gemini 3.1 Pro e Gemini 3 Pro como linha nova; use Gemini 2.5 Pro como referencia estavel de continuidade.",
       "market_source_url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models",
       "market_source_label": "Google models"
     },

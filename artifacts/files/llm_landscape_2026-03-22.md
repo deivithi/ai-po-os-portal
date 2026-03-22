@@ -9,7 +9,7 @@ Ele **nao substitui** a matriz operacional do projeto. O objetivo aqui e acompan
 ### OpenAI - GPT-5 family
 
 - A documentacao oficial da API destaca `Latest: GPT-5.4` na navegacao de modelos.
-- A lista atual de modelos mostra `GPT-5.4`, `GPT-5.4 pro`, `GPT-5.4 mini` e `GPT-5.4 nano`, enquanto `GPT-5.1` e `GPT-5.2` aparecem como geracoes anteriores.
+- A lista atual de modelos mostra `GPT-5.4`, `GPT-5.4-mini` e `GPT-5.4-nano`, enquanto `GPT-5.1` e `GPT-5.2` aparecem como geracoes anteriores.
 - Leitura pratica: acompanhar a familia GPT-5 como referencia fechada para uso geral, agents, Codex e workflows de producao, com `GPT-5.4` como foco principal de estudo.
 
 Fonte oficial:
@@ -23,9 +23,9 @@ Fonte oficial:
 Fonte oficial:
 - https://docs.anthropic.com/en/docs/about-claude/models/all-models
 
-### Google - Gemini 3.1 / 3 / 2.5
+### Google - Gemini 3.1 Pro / Gemini 3 Pro / Gemini 2.5 Pro
 
-- O Vertex AI coloca `Gemini 3.1 Pro` como leitura atual de reasoning-first e `Gemini 3 Pro` como linha avancada para agentic, multimodalidade e long context.
+- O catalogo atual do Vertex AI lista `Gemini 3.1 Pro` e `Gemini 3 Pro` na camada mais nova, enquanto `Gemini 2.5 Pro` segue como referencia estavel importante.
 - Leitura pratica: linha forte para multimodalidade, ecossistema Google, grounding e integracao com Vertex.
 
 Fonte oficial:
@@ -48,6 +48,16 @@ Fonte oficial:
 
 Fonte oficial:
 - https://docs.x.ai/docs/models
+
+### MiniMax - MiniMax M2.7
+
+- O catalogo oficial de modelos da MiniMax marca `MiniMax M2.7` como `NEW`.
+- O hub oficial da API tambem ja referencia `M2.7`, o que torna MiniMax um bloco real de acompanhamento no radar internacional do portal.
+- Leitura pratica: acompanhar `MiniMax M2.7` para produtividade, coding, tool use e experimentos de agentic workflow.
+
+Fonte oficial:
+- https://www.minimax.io/models/text/m27
+- https://platform.minimax.io/docs/faq/about-apis
 
 ### Alibaba - Qwen3 family
 

@@ -19,7 +19,7 @@
       "status_class": "status-in-progress",
       "title": "Fonte oficial acima de narrativa de mercado",
       "body": "As diferencas desta secao foram ancoradas nas docs atuais",
-      "note": "Qwen, DeepSeek e outros labs continuam em radar de estudo. O overlay principal fica nos fornecedores com documentacao mais madura e mais util para a trilha do portal."
+      "note": "Qwen, DeepSeek, MiniMax e outros labs continuam em radar de estudo. O overlay principal fica nos fornecedores com documentacao mais madura e mais util para a trilha do portal."
     }
   ],
   "providers": [
@@ -160,7 +160,7 @@
     {
       "id": "google",
       "label": "Google",
-      "model_label": "Gemini 3.1 Pro",
+      "model_label": "Gemini 3.1 Pro / 3 Pro",
       "status_class": "status-in-progress",
       "summary": "Melhor encaixe quando voce quer combinar system instructions, contexto longo, grounding, structured output e uma resposta direta que nao sacrifique controle.",
       "principles": [
@@ -192,8 +192,8 @@
       ],
       "official_buttons": [
         {
-          "label": "Gemini 3 Pro",
-          "href": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-pro",
+          "label": "Vertex AI models",
+          "href": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models",
           "variant": "primary"
         },
         {
@@ -315,6 +315,19 @@
         {
           "label": "DeepSeek docs",
           "href": "https://api-docs.deepseek.com/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Radar forte",
+      "status_class": "status-in-progress",
+      "title": "MiniMax",
+      "description": "MiniMax M2.7 ja merece acompanhamento ativo no radar do portal por produtividade, coding e tool use, mas ainda sem substituir os fornecedores centrais da trilha principal.",
+      "buttons": [
+        {
+          "label": "MiniMax M2.7",
+          "href": "https://www.minimax.io/models/text/m27",
           "variant": "secondary"
         }
       ]

@@ -217,7 +217,7 @@
     },
     {
       "category": "Radar",
-      "title": "Qwen e DeepSeek como acompanhamento",
+      "title": "Qwen, DeepSeek e MiniMax como acompanhamento",
       "summary": "Esses labs entram como radar de estudo. So devem virar recomendacao forte no portal quando a documentacao oficial sustentar o mesmo nivel de clareza que exigimos dos fornecedores principais.",
       "buttons": [
         {
@@ -228,6 +228,11 @@
         {
           "label": "DeepSeek docs",
           "href": "https://api-docs.deepseek.com/",
+          "variant": "secondary"
+        },
+        {
+          "label": "MiniMax M2.7",
+          "href": "https://www.minimax.io/models/text/m27",
           "variant": "secondary"
         }
       ]

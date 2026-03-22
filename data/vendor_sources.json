@@ -146,6 +146,22 @@
       "scope": "Conexao remota de MCP tools no ecossistema xAI"
     },
     {
+      "id": "minimax-models",
+      "vendor": "MiniMax",
+      "title": "MiniMax M2.7 model page",
+      "short_label": "M2.7",
+      "url": "https://www.minimax.io/models/text/m27",
+      "scope": "Catalogo atual e posicionamento oficial do MiniMax M2.7"
+    },
+    {
+      "id": "minimax-api-docs",
+      "vendor": "MiniMax",
+      "title": "MiniMax API docs",
+      "short_label": "API docs",
+      "url": "https://platform.minimax.io/docs/faq/about-apis",
+      "scope": "Hub oficial da API com referencia atual a M2.7"
+    },
+    {
       "id": "qwen-docs",
       "vendor": "Qwen",
       "title": "Qwen documentation",
