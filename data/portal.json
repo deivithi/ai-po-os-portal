@@ -4,15 +4,16 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "GitHub Pages via Actions",
-    "phase_summary": "O portal agora troca o publish legado por uma esteira profissional com GitHub Actions, deploy dedicado do Pages e refresh agendado do Radar Vivo sem depender de branch publishing.",
-    "next_phase": "Trilha Adaptativa MVP",
-    "next_phase_summary": "Com a automacao do publish pronta, o proximo salto e abrir a rota Trilha para montar um plano personalizado por horas por dia, foco, nivel e objetivo final.",
+    "phase_focus": "Trilha Adaptativa MVP",
+    "phase_summary": "O portal agora monta um plano real por horas por dia, dias por semana, foco, nivel e objetivo, transformando o sistema em uma plataforma de estudo muito mais guiada.",
+    "next_phase": "Unidades didaticas e criterio de dominio",
+    "next_phase_summary": "Com a Trilha no ar, o proximo salto e enriquecer cada unidade com conceito, exercicio, evidencias e criterio claro de conclusao.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
     { "id": "home", "label": "Home", "description": "Mapa de estudo e visao executiva", "href": "/" },
     { "id": "jornada", "label": "Jornada", "description": "Como usar o portal em 30 dias", "href": "/jornada/" },
+    { "id": "trilha", "label": "Trilha", "description": "Plano adaptativo por horas, foco e objetivo", "href": "/trilha/" },
     { "id": "prompts", "label": "Prompts", "description": "Prompt Studio e anatomia de prompt", "href": "/prompts/" },
     { "id": "matriz", "label": "Matriz", "description": "Comparacao de modelos e scorecards", "href": "/matriz/" },
     { "id": "workflows", "label": "Workflows", "description": "Operacao, risco e aprovacao humana", "href": "/workflows/" },
@@ -30,6 +31,11 @@
       "title": "Jornada",
       "nav_label": "Jornada",
       "summary": "Metodo de uso do portal: ordem, horas, entregaveis e materiais de apoio para 30 dias."
+    },
+    "trilha": {
+      "title": "Trilha",
+      "nav_label": "Trilha",
+      "summary": "Adaptive Study Path: geracao de trilha por horas por dia, dias por semana, foco, nivel e objetivo final."
     },
     "prompts": {
       "title": "Prompt Studio",
@@ -122,10 +128,17 @@
   ],
   "study_tracks": [
     {
-      "title": "Comecar pela Jornada 30D",
-      "description": "Abra a nova aba Jornada para entender a ordem ideal, a carga horaria e o que produzir a cada semana.",
+      "title": "Montar a trilha adaptativa",
+      "description": "Abra Trilha para transformar sua disponibilidade real de horas em um plano com semanas, materiais e proximo bloco.",
+      "href": "/trilha/",
+      "badge": "Nova porta de entrada",
+      "status_class": "status-done"
+    },
+    {
+      "title": "Usar Jornada como metodo",
+      "description": "Depois da trilha, use Jornada para revisar o ritual das semanas e o que precisa ser produzido em cada ciclo.",
       "href": "/jornada/",
-      "badge": "Porta de entrada",
+      "badge": "Metodo de execucao",
       "status_class": "status-done"
     },
     {
@@ -136,17 +149,17 @@
       "status_class": "status-done"
     },
     {
-      "title": "Entender fundamentos de conhecimento",
-      "description": "Use a pagina RAG para ganhar seguranca sobre contexto, grounding, citacao e escolha de estrategia.",
-      "href": "/rag/",
-      "badge": "Base conceitual",
-      "status_class": "status-done"
-    },
-    {
       "title": "Comparar modelos com criterio",
       "description": "A pagina Matriz traduz scorecards em decisao pratica, evitando leitura superficial de benchmark.",
       "href": "/matriz/",
       "badge": "Analise comparativa",
+      "status_class": "status-done"
+    },
+    {
+      "title": "Entender fundamentos de conhecimento",
+      "description": "Use a pagina RAG para ganhar seguranca sobre contexto, grounding, citacao e escolha de estrategia.",
+      "href": "/rag/",
+      "badge": "Base conceitual",
       "status_class": "status-done"
     },
     {

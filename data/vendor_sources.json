@@ -26,6 +26,30 @@
       "scope": "Memoria de conversa e estado"
     },
     {
+      "id": "openai-prompt-caching",
+      "vendor": "OpenAI",
+      "title": "Prompt caching",
+      "short_label": "Caching",
+      "url": "https://developers.openai.com/api/docs/guides/prompt-caching",
+      "scope": "Cache de contexto e reducao de custo/latencia"
+    },
+    {
+      "id": "openai-evals",
+      "vendor": "OpenAI",
+      "title": "Working with evals",
+      "short_label": "Evals",
+      "url": "https://developers.openai.com/api/docs/guides/evals",
+      "scope": "Comparacao, regressao e avaliacao estruturada"
+    },
+    {
+      "id": "openai-graders",
+      "vendor": "OpenAI",
+      "title": "Graders",
+      "short_label": "Graders",
+      "url": "https://developers.openai.com/api/docs/guides/graders",
+      "scope": "Critica automatica e avaliacao orientada por rubrica"
+    },
+    {
       "id": "anthropic-models",
       "vendor": "Anthropic",
       "title": "Claude models overview",
@@ -40,6 +64,22 @@
       "short_label": "Prompting",
       "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview",
       "scope": "Prompting, contexto e testes"
+    },
+    {
+      "id": "anthropic-develop-tests",
+      "vendor": "Anthropic",
+      "title": "Develop tests",
+      "short_label": "Tests",
+      "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+      "scope": "Testes, avaliacoes e desenvolvimento orientado a comparacao"
+    },
+    {
+      "id": "anthropic-prompt-caching",
+      "vendor": "Anthropic",
+      "title": "Prompt caching",
+      "short_label": "Caching",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+      "scope": "Cache de prompt e reaproveitamento de contexto"
     },
     {
       "id": "google-models",
@@ -58,12 +98,28 @@
       "scope": "Mudancas recentes no ecossistema Google"
     },
     {
+      "id": "google-prompt-design",
+      "vendor": "Google",
+      "title": "Prompt design introduction",
+      "short_label": "Prompt design",
+      "url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/introduction-prompt-design",
+      "scope": "Estruturacao de prompt no ecossistema Google"
+    },
+    {
       "id": "google-long-context",
       "vendor": "Google",
       "title": "Long context guide",
       "short_label": "Long context",
       "url": "https://ai.google.dev/gemini-api/docs/long-context",
       "scope": "Context window e leitura de documentos grandes"
+    },
+    {
+      "id": "google-grounding",
+      "vendor": "Google",
+      "title": "Grounding guide",
+      "short_label": "Grounding",
+      "url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/model-reference/grounding",
+      "scope": "Grounding, citacao e resposta ancorada em fonte"
     },
     {
       "id": "xai-models",
@@ -80,6 +136,14 @@
       "short_label": "Structured",
       "url": "https://docs.x.ai/developers/model-capabilities/text/structured-outputs",
       "scope": "Saidas estruturadas e controle"
+    },
+    {
+      "id": "xai-remote-mcp",
+      "vendor": "xAI",
+      "title": "Remote MCP tools",
+      "short_label": "Remote MCP",
+      "url": "https://docs.x.ai/developers/tools/remote-mcp",
+      "scope": "Conexao remota de MCP tools no ecossistema xAI"
     },
     {
       "id": "qwen-docs",

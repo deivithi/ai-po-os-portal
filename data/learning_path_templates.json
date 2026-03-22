@@ -1,0 +1,292 @@
+{
+  "templates": [
+    {
+      "id": "specialist_general",
+      "label": "Especialista geral",
+      "summary": "Cobertura equilibrada de modelos, prompting, RAG, memoria, workflows e consolidacao.",
+      "target_hours": 90,
+      "required_unit_ids": [
+        "portal-map",
+        "journey-plan",
+        "prompt-foundations",
+        "provider-prompt-patterns",
+        "model-selection-rubric",
+        "open-model-radar",
+        "context-grounding-foundations",
+        "notebooklm-long-context",
+        "memory-vs-rag",
+        "workflow-governance",
+        "agents-mcp-primer",
+        "artifact-review-loop",
+        "roadmap-retro",
+        "capstone-systems-sprint"
+      ],
+      "stretch_unit_ids": [],
+      "domain_weights": {
+        "orientation": 0.08,
+        "prompting": 0.18,
+        "llm_landscape": 0.16,
+        "rag": 0.2,
+        "memory": 0.1,
+        "agents_mcp": 0.08,
+        "workflows": 0.12,
+        "consolidation": 0.05,
+        "radar": 0.03
+      },
+      "outcomes": [
+        "Escolher modelos com criterio para casos reais.",
+        "Subir de prompting para contexto, memoria e operacao com clareza.",
+        "Fechar um mini capstone com sistema, risco e proxima acao."
+      ]
+    },
+    {
+      "id": "specialist_rag",
+      "label": "Especialista em RAG",
+      "summary": "Foco profundo em contexto, grounding, NotebookLM, memoria e retrieval com citacao.",
+      "target_hours": 84,
+      "required_unit_ids": [
+        "portal-map",
+        "journey-plan",
+        "prompt-foundations",
+        "model-selection-rubric",
+        "context-grounding-foundations",
+        "notebooklm-long-context",
+        "memory-vs-rag",
+        "artifact-review-loop",
+        "roadmap-retro",
+        "capstone-systems-sprint"
+      ],
+      "stretch_unit_ids": [
+        "provider-prompt-patterns",
+        "workflow-governance"
+      ],
+      "domain_weights": {
+        "orientation": 0.08,
+        "prompting": 0.14,
+        "llm_landscape": 0.12,
+        "rag": 0.28,
+        "memory": 0.18,
+        "agents_mcp": 0.05,
+        "workflows": 0.07,
+        "consolidation": 0.05,
+        "radar": 0.03
+      },
+      "outcomes": [
+        "Escolher entre long context, NotebookLM, grounding e vector RAG com criterio.",
+        "Separar memoria de retrieval sem confundir as camadas.",
+        "Criar uma tabela de decisao forte para desenho de contexto."
+      ]
+    },
+    {
+      "id": "specialist_agents",
+      "label": "Especialista em agentes",
+      "summary": "Foco em tools, MCP, prompting orientado a operacao e governanca de workflow.",
+      "target_hours": 96,
+      "required_unit_ids": [
+        "portal-map",
+        "journey-plan",
+        "prompt-foundations",
+        "provider-prompt-patterns",
+        "model-selection-rubric",
+        "workflow-governance",
+        "agents-mcp-primer",
+        "memory-vs-rag",
+        "artifact-review-loop",
+        "roadmap-retro",
+        "capstone-systems-sprint"
+      ],
+      "stretch_unit_ids": [
+        "context-grounding-foundations",
+        "open-model-radar"
+      ],
+      "domain_weights": {
+        "orientation": 0.07,
+        "prompting": 0.18,
+        "llm_landscape": 0.14,
+        "rag": 0.08,
+        "memory": 0.12,
+        "agents_mcp": 0.2,
+        "workflows": 0.14,
+        "consolidation": 0.05,
+        "radar": 0.02
+      },
+      "outcomes": [
+        "Entender quando usar workflow, quando usar agente e quando manter a solucao simples.",
+        "Desenhar tools e MCP com contratos claros.",
+        "Amarrar agente, memoria e approval em um caso de uso auditavel."
+      ]
+    },
+    {
+      "id": "specialist_product_ops",
+      "label": "Especialista em produto e operacao",
+      "summary": "Foco em criterio, governanca, fluxo auditavel e decisao aplicada a negocio.",
+      "target_hours": 88,
+      "required_unit_ids": [
+        "portal-map",
+        "journey-plan",
+        "prompt-foundations",
+        "provider-prompt-patterns",
+        "model-selection-rubric",
+        "context-grounding-foundations",
+        "workflow-governance",
+        "artifact-review-loop",
+        "roadmap-retro",
+        "capstone-systems-sprint"
+      ],
+      "stretch_unit_ids": [
+        "notebooklm-long-context",
+        "agents-mcp-primer"
+      ],
+      "domain_weights": {
+        "orientation": 0.09,
+        "prompting": 0.16,
+        "llm_landscape": 0.18,
+        "rag": 0.15,
+        "memory": 0.07,
+        "agents_mcp": 0.08,
+        "workflows": 0.18,
+        "consolidation": 0.06,
+        "radar": 0.03
+      },
+      "outcomes": [
+        "Decidir melhor entre modelo, contexto e fluxo para operacao real.",
+        "Transformar IA em processo governado, nao em experimento solto.",
+        "Fechar um capstone com risco, approval, criterio e foco em negocio."
+      ]
+    }
+  ],
+  "focus_profiles": [
+    {
+      "id": "llms",
+      "label": "LLMs",
+      "summary": "Quer reforcar lineup, rubrica e leitura de mercado atual.",
+      "hours_delta": 4,
+      "priority_domains": {
+        "llm_landscape": 0.14,
+        "radar": 0.08,
+        "consolidation": 0.02
+      },
+      "highlight_unit_ids": [
+        "model-selection-rubric",
+        "open-model-radar",
+        "artifact-review-loop"
+      ]
+    },
+    {
+      "id": "prompting",
+      "label": "Prompting",
+      "summary": "Quer dominar estrutura, overlays por fornecedor e qualidade de prompt.",
+      "hours_delta": 4,
+      "priority_domains": {
+        "prompting": 0.16
+      },
+      "highlight_unit_ids": [
+        "prompt-foundations",
+        "provider-prompt-patterns"
+      ]
+    },
+    {
+      "id": "rag",
+      "label": "RAG",
+      "summary": "Quer aprofundar contexto, grounding, NotebookLM e retrieval confiavel.",
+      "hours_delta": 6,
+      "priority_domains": {
+        "rag": 0.16,
+        "memory": 0.08
+      },
+      "highlight_unit_ids": [
+        "context-grounding-foundations",
+        "notebooklm-long-context",
+        "memory-vs-rag"
+      ]
+    },
+    {
+      "id": "memoria",
+      "label": "Memoria",
+      "summary": "Quer separar estado, cache, retrieval e memoria persistente com clareza.",
+      "hours_delta": 6,
+      "priority_domains": {
+        "memory": 0.18,
+        "rag": 0.08
+      },
+      "highlight_unit_ids": [
+        "memory-vs-rag",
+        "notebooklm-long-context",
+        "context-grounding-foundations"
+      ]
+    },
+    {
+      "id": "agents_mcp",
+      "label": "Agents e MCP",
+      "summary": "Quer focar em tools, contratos e desenho de sistemas conectados.",
+      "hours_delta": 8,
+      "priority_domains": {
+        "agents_mcp": 0.18,
+        "workflows": 0.06
+      },
+      "highlight_unit_ids": [
+        "agents-mcp-primer",
+        "workflow-governance",
+        "provider-prompt-patterns"
+      ]
+    },
+    {
+      "id": "operacao_producao",
+      "label": "Operacao e producao",
+      "summary": "Quer privilegio para risco, approval, rollout e capstone aplicado.",
+      "hours_delta": 6,
+      "priority_domains": {
+        "workflows": 0.16,
+        "consolidation": 0.05,
+        "llm_landscape": 0.03
+      },
+      "highlight_unit_ids": [
+        "workflow-governance",
+        "capstone-systems-sprint",
+        "roadmap-retro"
+      ]
+    }
+  ],
+  "level_profiles": [
+    {
+      "id": "beginner",
+      "label": "Iniciante",
+      "summary": "Mais orientacao, mais fundamento e menos salto entre blocos.",
+      "hours_multiplier": 1.15,
+      "prepend_unit_ids": [
+        "portal-map",
+        "journey-plan"
+      ],
+      "priority_domains": {
+        "orientation": 0.08,
+        "prompting": 0.05,
+        "rag": 0.03
+      }
+    },
+    {
+      "id": "intermediate",
+      "label": "Intermediario",
+      "summary": "Equilibrio entre consolidacao de criterio e aceleracao pratica.",
+      "hours_multiplier": 1,
+      "prepend_unit_ids": [
+        "journey-plan"
+      ],
+      "priority_domains": {
+        "prompting": 0.02,
+        "workflows": 0.02
+      }
+    },
+    {
+      "id": "advanced",
+      "label": "Avancado",
+      "summary": "Menos onboarding, mais comparativo, mais capstone e mais operacao.",
+      "hours_multiplier": 0.9,
+      "prepend_unit_ids": [],
+      "priority_domains": {
+        "llm_landscape": 0.03,
+        "agents_mcp": 0.03,
+        "workflows": 0.04
+      }
+    }
+  ]
+}

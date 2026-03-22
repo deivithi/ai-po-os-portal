@@ -610,7 +610,9 @@ a {
   font-weight: 700;
 }
 
-.builder-field textarea {
+.builder-field textarea,
+.adaptive-field select,
+.adaptive-field input {
   width: 100%;
   resize: vertical;
   min-height: 96px;
@@ -623,7 +625,14 @@ a {
   line-height: 1.6;
 }
 
-.builder-field textarea::placeholder {
+.adaptive-field select,
+.adaptive-field input {
+  min-height: 54px;
+  appearance: none;
+}
+
+.builder-field textarea::placeholder,
+.adaptive-field input::placeholder {
   color: rgba(150, 173, 192, 0.72);
 }
 
@@ -687,6 +696,79 @@ a {
 
 .builder-escalation-card {
   padding: 16px 18px;
+}
+
+.adaptive-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  gap: 20px;
+}
+
+.adaptive-form,
+.adaptive-summary-panel,
+.adaptive-domain-panel,
+.adaptive-story-card {
+  min-height: 100%;
+}
+
+.adaptive-summary-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.adaptive-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.adaptive-field {
+  display: grid;
+  gap: 10px;
+}
+
+.adaptive-field-full {
+  grid-column: 1 / -1;
+}
+
+.adaptive-domain-bars {
+  display: grid;
+  gap: 18px;
+}
+
+.adaptive-domain-row {
+  display: grid;
+  gap: 10px;
+}
+
+.adaptive-domain-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.adaptive-domain-header strong {
+  font-size: 1rem;
+}
+
+.adaptive-domain-track {
+  position: relative;
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(158, 197, 222, 0.12);
+}
+
+.adaptive-domain-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(98, 208, 179, 0.94), rgba(45, 167, 255, 0.92));
+}
+
+.adaptive-continuation-card {
+  opacity: 0.96;
 }
 
 .provider-overlay-shell {
@@ -1188,6 +1270,7 @@ a {
   .page-hero,
   .freshness-strip,
   .split-section,
+  .adaptive-shell,
   .builder-workbench,
   .provider-overlay-shell,
   .productization-shell,
@@ -1262,6 +1345,10 @@ a {
   }
 
   .builder-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .adaptive-form-grid {
     grid-template-columns: 1fr;
   }
 

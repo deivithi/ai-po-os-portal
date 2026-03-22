@@ -3,23 +3,23 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "16 ciclos publicados",
-      "body": "Portal completo com Radar Vivo e automacao de publish",
-      "note": "O sistema fechou o ciclo base do portal, consolidou o Prompt Studio, abriu o Radar Vivo e agora passa a usar GitHub Actions como trilho oficial de deploy."
+      "title": "17 ciclos publicados",
+      "body": "Portal completo com Radar Vivo, publish automatizado e Trilha ativa",
+      "note": "O sistema fechou o ciclo base do portal, consolidou o Prompt Studio, abriu o Radar Vivo, migrou o publish para Actions e agora adiciona a Trilha Adaptativa."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Macrofase 2 em execucao",
-      "body": "Pages via Actions e refresh agendado do radar",
-      "note": "A plataforma agora passa a separar deploy estatico, monitoramento de fontes e proxima trilha adaptativa com uma base de automacao versionada."
+      "title": "Macrofase 3 concluida",
+      "body": "Trilha Adaptativa MVP publicada",
+      "note": "A plataforma agora transforma horas por dia, foco, nivel e objetivo em uma rota acionavel com semanas, blocos e materiais oficiais."
     },
     {
       "badge": "Plano de 30 dias",
       "status_class": "status-done",
-      "title": "Base funcional pronta",
-      "body": "30D-A, 30D-B e camada de frescor consolidados",
-      "note": "A partir daqui o trabalho e automatizar atualizacao, personalizar trilha e aprofundar as camadas senior que ainda faltam."
+      "title": "Base funcional e adaptativa pronta",
+      "body": "30D-A, 30D-B, Radar Vivo e Trilha ja conversam entre si",
+      "note": "A partir daqui o trabalho e enriquecer as unidades, adicionar criterio de dominio e aprofundar as camadas senior que ainda faltam."
     },
     {
       "badge": "Regra",
@@ -153,6 +153,12 @@
     {
       "phase": "Refino I",
       "focus": "GitHub Pages via Actions",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino J",
+      "focus": "Trilha Adaptativa MVP",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }

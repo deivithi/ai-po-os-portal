@@ -19,11 +19,16 @@
     {
       "title": "Freshness e proveniencia",
       "description": "Sempre que um bloco falar de mercado atual, a pagina precisa mostrar data de conferencia, status editorial e ponte para fonte oficial."
+    },
+    {
+      "title": "Plano personalizado",
+      "description": "Sempre que a trilha montar um plano, a pagina precisa explicar ritmo, horizonte, prioridades e proximo bloco sem esconder trade-offs."
     }
   ],
   "qa_targets": [
     "/",
     "/jornada/",
+    "/trilha/",
     "/prompts/",
     "/matriz/",
     "/workflows/",
@@ -38,6 +43,10 @@
     "/data/vendor_sources.json",
     "/data/vendor_updates.json",
     "/data/domain_map.json",
-    "/data/radar_health.json"
+    "/data/radar_health.json",
+    "/data/study_units.json",
+    "/data/learning_path_templates.json",
+    "/data/adaptive_path_rules.json",
+    "/data/trilha_page.json"
   ]
 }

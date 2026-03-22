@@ -1,0 +1,83 @@
+{
+  "defaults": {
+    "hours_per_day": 3,
+    "days_per_week": 5,
+    "level": "intermediate",
+    "focus": "rag",
+    "goal": "specialist_general"
+  },
+  "hours_per_day_options": [
+    { "value": 1, "label": "1h por dia" },
+    { "value": 2, "label": "2h por dia" },
+    { "value": 3, "label": "3h por dia" },
+    { "value": 4, "label": "4h por dia" },
+    { "value": 5, "label": "5h por dia" }
+  ],
+  "days_per_week_options": [
+    { "value": 3, "label": "3 dias por semana" },
+    { "value": 4, "label": "4 dias por semana" },
+    { "value": 5, "label": "5 dias por semana" },
+    { "value": 6, "label": "6 dias por semana" },
+    { "value": 7, "label": "7 dias por semana" }
+  ],
+  "session_profiles": [
+    {
+      "id": "compacta",
+      "label": "Sessao compacta",
+      "max_hours_per_day": 1.5,
+      "summary": "Boa para manter consistencia quando o ritmo diario esta apertado.",
+      "study_split": "15 min de revisao, 45 min de leitura aplicada e 30 min de experimento."
+    },
+    {
+      "id": "padrao",
+      "label": "Sessao padrao",
+      "max_hours_per_day": 3.5,
+      "summary": "Melhor equilibrio para estudar, testar e registrar achados no mesmo dia.",
+      "study_split": "30 min de revisao, 90 min de estudo profundo e 60 min de experimento."
+    },
+    {
+      "id": "intensiva",
+      "label": "Sessao intensiva",
+      "max_hours_per_day": 8,
+      "summary": "Boa para acelerar capstone, comparativos e laboratorios mais densos.",
+      "study_split": "45 min de aquecimento, 2 blocos profundos e 1 bloco de consolidacao."
+    }
+  ],
+  "pace_messages": [
+    {
+      "id": "within-target",
+      "status_class": "status-done",
+      "max_calendar_days": 30,
+      "title": "Fecha dentro da meta de 30 dias",
+      "summary": "Neste ritmo, voce consegue concluir a trilha dentro da janela classica do portal."
+    },
+    {
+      "id": "slightly-extended",
+      "status_class": "status-in-progress",
+      "max_calendar_days": 45,
+      "title": "Fecha com extensao controlada",
+      "summary": "O plano continua forte, mas vai ultrapassar 30 dias. Mantenha consistencia e use a trilha como sprint estendida."
+    },
+    {
+      "id": "long-horizon",
+      "status_class": "status-next",
+      "max_calendar_days": 999,
+      "title": "Horizonte longo",
+      "summary": "A trilha fica viavel, mas o ritmo atual alonga bastante a conclusao. Vale subir carga horaria ou estreitar foco."
+    }
+  ],
+  "generation_rules": {
+    "calendar_target_days": 30,
+    "minimum_unit_hours": 1.5,
+    "max_visible_weeks": 8,
+    "max_visible_sessions": 12,
+    "resource_limit": 8,
+    "domain_weight_floor": 0.02
+  },
+  "execution_rules": [
+    "Nao estude duas semanas seguidas sem fechar pelo menos um entregavel verificavel.",
+    "Toda semana precisa ter comparacao, anotacao de falha e ajuste de estrategia.",
+    "Se a trilha passar de 30 dias, prefira cortar escopo antes de abandonar a cadencia.",
+    "Use a Trilha como orquestrador e as outras paginas como salas especializadas."
+  ]
+}

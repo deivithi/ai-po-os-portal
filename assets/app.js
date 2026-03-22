@@ -15,6 +15,10 @@ const DATA_PATHS = {
   matrixGuide: "/data/matrix_page.json",
   matrixArtifact: "/artifacts/files/model_matrix.json",
   journeyGuide: "/data/journey_page.json",
+  trilhaGuide: "/data/trilha_page.json",
+  studyUnits: "/data/study_units.json",
+  learningPathTemplates: "/data/learning_path_templates.json",
+  adaptivePathRules: "/data/adaptive_path_rules.json",
   workflowsGuide: "/data/workflows_page.json",
   ragGuide: "/data/rag_page.json",
   roadmapGuide: "/data/roadmap_page.json",
@@ -24,6 +28,7 @@ const DATA_PATHS = {
 const PAGE_DATA_KEYS = {
   home: ["overview", "artifacts", "freshnessStatus", "vendorSources", "vendorUpdates", "domainMap"],
   jornada: ["journeyGuide", "freshnessStatus"],
+  trilha: ["trilhaGuide", "studyUnits", "learningPathTemplates", "adaptivePathRules", "vendorSources", "freshnessStatus"],
   prompts: ["promptsGuide", "promptLibrary", "promptBuilder", "promptProviderOverlays", "promptQualityLab", "promptProductization", "freshnessStatus"],
   matriz: ["overview", "artifacts", "matrixGuide", "matrixArtifact", "freshnessStatus"],
   workflows: ["overview", "workflowsGuide", "freshnessStatus"],
@@ -33,19 +38,21 @@ const PAGE_DATA_KEYS = {
 };
 
 const PREFETCH_ROUTE_MAP = {
-  home: ["/jornada/", "/prompts/", "/matriz/"],
+  home: ["/trilha/", "/jornada/", "/prompts/"],
+  trilha: ["/jornada/", "/prompts/", "/rag/"],
   jornada: ["/prompts/", "/matriz/", "/rag/"],
   prompts: ["/matriz/", "/rag/", "/artefatos/"],
   matriz: ["/prompts/", "/rag/", "/workflows/"],
   rag: ["/workflows/", "/artefatos/", "/roadmap/"],
   workflows: ["/roadmap/", "/artefatos/", "/matriz/"],
-  roadmap: ["/jornada/", "/prompts/", "/artefatos/"],
-  artefatos: ["/prompts/", "/matriz/", "/jornada/"],
+  roadmap: ["/trilha/", "/jornada/", "/artefatos/"],
+  artefatos: ["/trilha/", "/prompts/", "/matriz/"],
 };
 
 const SESSION_CACHE_PREFIX = "ai-po-os::";
 const SESSION_CACHE_TTL_MS = 1000 * 60 * 15;
 const FAVORITES_STORAGE_KEY = "ai-po-os::prompt-favorites::v1";
+const ADAPTIVE_PATH_STORAGE_KEY = "ai-po-os::adaptive-path::v1";
 const memoryCache = new Map();
 const prefetchedRoutes = new Set();
 const SITE_BASE_PATH = detectSiteBasePath();
@@ -305,6 +312,35 @@ function togglePromptFavorite(kind, id) {
   };
   persistPromptFavorites(nextFavorites);
   return nextFavorites;
+}
+
+function uniqueValues(values) {
+  return Array.from(new Set((values || []).filter(Boolean)));
+}
+
+function loadAdaptivePathPreferences(defaults = {}) {
+  try {
+    const raw = window.localStorage.getItem(ADAPTIVE_PATH_STORAGE_KEY);
+    if (!raw) {
+      return { ...defaults };
+    }
+
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaults,
+      ...(parsed && typeof parsed === "object" ? parsed : {}),
+    };
+  } catch (_error) {
+    return { ...defaults };
+  }
+}
+
+function persistAdaptivePathPreferences(preferences) {
+  try {
+    window.localStorage.setItem(ADAPTIVE_PATH_STORAGE_KEY, JSON.stringify(preferences));
+  } catch (_error) {
+    // Keep runtime-only state if storage is unavailable.
+  }
 }
 
 function setQueryParam(name, value) {
@@ -1505,6 +1541,643 @@ function renderJourney(journeyGuide) {
       .map((item) => `<li>${escapeHtml(item)}</li>`)
       .join("");
   }
+}
+
+function roundToHalf(value) {
+  return Math.round(Number(value) * 2) / 2;
+}
+
+function normalizeWeightMap(weightMap, floor = 0) {
+  const entries = Object.entries(weightMap || {}).map(([key, value]) => [
+    key,
+    Math.max(Number(value) || 0, floor),
+  ]);
+
+  const total = entries.reduce((sum, [, value]) => sum + value, 0);
+  if (!total) {
+    return Object.fromEntries(entries.map(([key]) => [key, 0]));
+  }
+
+  return Object.fromEntries(entries.map(([key, value]) => [key, value / total]));
+}
+
+function resolveSessionProfile(hoursPerDay, adaptivePathRules) {
+  const profiles = Array.isArray(adaptivePathRules?.session_profiles) ? adaptivePathRules.session_profiles : [];
+  return (
+    profiles.find((item) => Number(hoursPerDay) <= Number(item.max_hours_per_day)) ||
+    profiles[profiles.length - 1] ||
+    null
+  );
+}
+
+function resolvePaceMessage(calendarDays, adaptivePathRules) {
+  const messages = Array.isArray(adaptivePathRules?.pace_messages) ? adaptivePathRules.pace_messages : [];
+  return (
+    messages.find((item) => Number(calendarDays) <= Number(item.max_calendar_days)) ||
+    messages[messages.length - 1] ||
+    null
+  );
+}
+
+function buildAdaptivePlan(studyUnits, learningPathTemplates, adaptivePathRules, vendorSources, preferences) {
+  const unitCatalog = Array.isArray(studyUnits?.units) ? studyUnits.units : [];
+  const unitMap = new Map(unitCatalog.map((unit) => [unit.id, unit]));
+  const templates = Array.isArray(learningPathTemplates?.templates) ? learningPathTemplates.templates : [];
+  const focusProfiles = Array.isArray(learningPathTemplates?.focus_profiles)
+    ? learningPathTemplates.focus_profiles
+    : [];
+  const levelProfiles = Array.isArray(learningPathTemplates?.level_profiles)
+    ? learningPathTemplates.level_profiles
+    : [];
+  const domains = Array.isArray(studyUnits?.domains) ? studyUnits.domains : [];
+  const sourceLookup = buildSourceLookup(vendorSources);
+  const generationRules = adaptivePathRules?.generation_rules || {};
+
+  const template =
+    templates.find((item) => item.id === preferences.goal) ||
+    templates[0] ||
+    {
+      id: "fallback",
+      label: "Trilha base",
+      summary: "Plano base",
+      target_hours: 60,
+      required_unit_ids: unitCatalog.map((unit) => unit.id),
+      stretch_unit_ids: [],
+      domain_weights: {},
+      outcomes: [],
+    };
+  const focusProfile =
+    focusProfiles.find((item) => item.id === preferences.focus) ||
+    focusProfiles[0] ||
+    {
+      id: "fallback-focus",
+      label: "Foco base",
+      summary: "",
+      hours_delta: 0,
+      priority_domains: {},
+      highlight_unit_ids: [],
+    };
+  const levelProfile =
+    levelProfiles.find((item) => item.id === preferences.level) ||
+    levelProfiles[0] ||
+    {
+      id: "fallback-level",
+      label: "Intermediario",
+      summary: "",
+      hours_multiplier: 1,
+      prepend_unit_ids: [],
+      priority_domains: {},
+    };
+
+  const orderedUnitIds = uniqueValues([
+    ...(levelProfile.prepend_unit_ids || []),
+    ...(template.required_unit_ids || []),
+    ...(focusProfile.highlight_unit_ids || []),
+    ...(template.stretch_unit_ids || []),
+  ]).filter((unitId) => unitMap.has(unitId));
+
+  const selectedUnits = orderedUnitIds
+    .map((unitId) => unitMap.get(unitId))
+    .filter(Boolean)
+    .sort((left, right) => Number(left.sequence) - Number(right.sequence));
+
+  const baseDomainWeights = domains.reduce((accumulator, domain) => {
+    accumulator[domain.id] = Number(template.domain_weights?.[domain.id] || 0);
+    return accumulator;
+  }, {});
+
+  Object.entries(focusProfile.priority_domains || {}).forEach(([domainId, value]) => {
+    baseDomainWeights[domainId] = Number(baseDomainWeights[domainId] || 0) + Number(value || 0);
+  });
+
+  Object.entries(levelProfile.priority_domains || {}).forEach(([domainId, value]) => {
+    baseDomainWeights[domainId] = Number(baseDomainWeights[domainId] || 0) + Number(value || 0);
+  });
+
+  const domainWeights = normalizeWeightMap(
+    baseDomainWeights,
+    Number(generationRules.domain_weight_floor || 0.02),
+  );
+
+  const targetHours = Math.max(
+    24,
+    Math.round((Number(template.target_hours || 60) + Number(focusProfile.hours_delta || 0)) * Number(levelProfile.hours_multiplier || 1)),
+  );
+
+  const minimumUnitHours = Number(generationRules.minimum_unit_hours || 1.5);
+  const weightedUnits = selectedUnits.map((unit) => {
+    const domainWeight = Number(domainWeights[unit.domain] || 0);
+    const focusBoost = (unit.focus_tags || []).includes(focusProfile.id) ? 0.18 : 0;
+    const goalBoost = (unit.goal_tags || []).includes(template.id) ? 0.08 : 0;
+    const weightedBase = Number(unit.base_hours || 1) * (1 + domainWeight * 1.8 + focusBoost + goalBoost);
+
+    return {
+      ...unit,
+      weighted_base_hours: weightedBase,
+    };
+  });
+
+  const weightedBaseTotal = weightedUnits.reduce((sum, unit) => sum + Number(unit.weighted_base_hours || 0), 0) || 1;
+  const scaledUnits = weightedUnits.map((unit) => ({
+    ...unit,
+    allocated_hours: Math.max(
+      minimumUnitHours,
+      roundToHalf((Number(unit.weighted_base_hours || 0) / weightedBaseTotal) * targetHours),
+    ),
+  }));
+
+  const totalHours = roundToHalf(
+    scaledUnits.reduce((sum, unit) => sum + Number(unit.allocated_hours || 0), 0),
+  );
+  const hoursPerDay = Math.max(1, Number(preferences.hours_per_day || adaptivePathRules?.defaults?.hours_per_day || 3));
+  const daysPerWeek = Math.max(1, Number(preferences.days_per_week || adaptivePathRules?.defaults?.days_per_week || 5));
+  const weeklyHours = roundToHalf(hoursPerDay * daysPerWeek);
+  const sessionProfile = resolveSessionProfile(hoursPerDay, adaptivePathRules);
+
+  const sessions = [];
+  scaledUnits.forEach((unit) => {
+    let remainingHours = Number(unit.allocated_hours || 0);
+    let part = 1;
+
+    while (remainingHours > 0.01) {
+      const plannedHours = Math.min(hoursPerDay, remainingHours);
+      const roundedHours = Math.min(remainingHours, Math.max(0.5, roundToHalf(plannedHours)));
+      sessions.push({
+        unit_id: unit.id,
+        unit_title: unit.title,
+        portal_href: unit.portal_href,
+        portal_label: unit.portal_label,
+        hours: roundToHalf(roundedHours),
+        sequence: unit.sequence,
+        deliverable: unit.deliverable,
+        exercise: unit.exercise,
+        mastery: unit.mastery,
+        official_resource_ids: unit.official_resource_ids || [],
+        part,
+      });
+
+      remainingHours = roundToHalf(remainingHours - roundedHours);
+      part += 1;
+    }
+  });
+
+  sessions.forEach((session, index) => {
+    const weekNumber = Math.floor(index / daysPerWeek) + 1;
+    const dayOfWeek = index % daysPerWeek;
+    const calendarDay = (weekNumber - 1) * 7 + dayOfWeek + 1;
+    session.study_session = index + 1;
+    session.week_number = weekNumber;
+    session.calendar_day = calendarDay;
+  });
+
+  const totalStudySessions = sessions.length;
+  const fullWeeks = Math.floor((Math.max(totalStudySessions, 1) - 1) / daysPerWeek);
+  const trailingStudyDays = (Math.max(totalStudySessions, 1) - 1) % daysPerWeek;
+  const totalCalendarDays = fullWeeks * 7 + trailingStudyDays + 1;
+  const totalWeeks = Math.max(1, Math.ceil(totalStudySessions / daysPerWeek));
+  const paceMessage = resolvePaceMessage(totalCalendarDays, adaptivePathRules);
+
+  const weeks = Array.from({ length: totalWeeks }, (_, index) => index + 1).map((weekNumber) => {
+    const weekSessions = sessions.filter((session) => session.week_number === weekNumber);
+    const firstSession = weekSessions[0];
+    const lastSession = weekSessions[weekSessions.length - 1];
+    const resourceIds = uniqueValues(weekSessions.flatMap((session) => session.official_resource_ids || []));
+
+    return {
+      week_number: weekNumber,
+      calendar_label: `Dias ${firstSession?.calendar_day || 1} a ${lastSession?.calendar_day || 1}`,
+      hours: roundToHalf(weekSessions.reduce((sum, session) => sum + Number(session.hours || 0), 0)),
+      session_count: weekSessions.length,
+      units: uniqueValues(weekSessions.map((session) => session.unit_title)),
+      deliverables: uniqueValues(weekSessions.map((session) => session.deliverable)).slice(0, 3),
+      primary_href: firstSession?.portal_href || "/",
+      primary_label: firstSession?.portal_label || "Abrir rota",
+      source_buttons: buildSourceButtons(sourceLookup, resourceIds, 2),
+    };
+  });
+
+  const firstSession = sessions[0] || null;
+  const nextDistinctSession =
+    sessions.find((session) => session.unit_id !== firstSession?.unit_id) || sessions[1] || null;
+  const domainMix = domains
+    .map((domain) => ({
+      ...domain,
+      weight: Number(domainWeights[domain.id] || 0),
+    }))
+    .sort((left, right) => right.weight - left.weight);
+
+  const materialCards = uniqueValues(
+    scaledUnits.flatMap((unit) => unit.official_resource_ids || []),
+  )
+    .map((sourceId) => sourceLookup.get(sourceId))
+    .filter(Boolean)
+    .slice(0, Number(generationRules.resource_limit || 8))
+    .map((source) => ({
+      vendor: source.vendor,
+      title: source.title,
+      summary: source.scope,
+      buttons: [
+        {
+          label: source.short_label || "Fonte oficial",
+          href: source.url,
+          variant: "secondary",
+        },
+      ],
+    }));
+
+  return {
+    preferences,
+    template,
+    focusProfile,
+    levelProfile,
+    targetHours,
+    totalHours,
+    weeklyHours,
+    totalStudySessions,
+    totalWeeks,
+    totalCalendarDays,
+    sessionProfile,
+    paceMessage,
+    domainMix,
+    scaledUnits,
+    sessions,
+    weeks,
+    firstSession,
+    nextDistinctSession,
+    materialCards,
+  };
+}
+
+function renderAdaptiveDomainMix(plan) {
+  const container = document.getElementById("trilha-domain-mix");
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = (plan.domainMix || [])
+    .map(
+      (domain) => `
+        <article class="adaptive-domain-row">
+          <div class="adaptive-domain-header">
+            <div>
+              <strong>${escapeHtml(domain.label)}</strong>
+              <p class="metric-note">${escapeHtml(domain.summary)}</p>
+            </div>
+            <span>${formatPercent(domain.weight)}</span>
+          </div>
+          <div class="adaptive-domain-track">
+            <span class="adaptive-domain-fill" style="width:${Math.max(6, Math.round(domain.weight * 100))}%"></span>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources) {
+  renderCards(
+    "trilha-orientation",
+    trilhaGuide.orientation || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  const configurationTips = document.getElementById("trilha-configuration-tips");
+  if (configurationTips) {
+    configurationTips.innerHTML = (trilhaGuide.configuration_tips || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  const planChecks = document.getElementById("trilha-plan-checks");
+  if (planChecks) {
+    planChecks.innerHTML = (trilhaGuide.plan_checks || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  renderCards(
+    "trilha-route-roles",
+    trilhaGuide.route_roles || [],
+    (item) => `
+      <article class="artifact-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  const executionRules = document.getElementById("trilha-execution-rules");
+  if (executionRules) {
+    executionRules.innerHTML = (adaptivePathRules.execution_rules || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  const form = document.getElementById("trilha-form");
+  if (!form) {
+    return;
+  }
+
+  const defaults = adaptivePathRules.defaults || {};
+  const persistedPreferences = loadAdaptivePathPreferences(defaults);
+  const hoursPerDay = document.getElementById("trilha-hours-per-day");
+  const daysPerWeek = document.getElementById("trilha-days-per-week");
+  const level = document.getElementById("trilha-level");
+  const focus = document.getElementById("trilha-focus");
+  const goal = document.getElementById("trilha-goal");
+  const feedback = document.getElementById("trilha-feedback");
+
+  function fillSelectOptions(element, options, valueKey = "value", labelKey = "label") {
+    if (!element) {
+      return;
+    }
+
+    element.innerHTML = (options || [])
+      .map(
+        (option) => `
+          <option value="${escapeHtml(option[valueKey])}">${escapeHtml(option[labelKey])}</option>
+        `,
+      )
+      .join("");
+  }
+
+  fillSelectOptions(hoursPerDay, adaptivePathRules.hours_per_day_options || []);
+  fillSelectOptions(daysPerWeek, adaptivePathRules.days_per_week_options || []);
+  fillSelectOptions(level, learningPathTemplates.level_profiles || [], "id", "label");
+  fillSelectOptions(focus, learningPathTemplates.focus_profiles || [], "id", "label");
+  fillSelectOptions(goal, learningPathTemplates.templates || [], "id", "label");
+
+  function readPreferences() {
+    return {
+      hours_per_day: Number(hoursPerDay?.value || defaults.hours_per_day || 3),
+      days_per_week: Number(daysPerWeek?.value || defaults.days_per_week || 5),
+      level: level?.value || defaults.level || "intermediate",
+      focus: focus?.value || defaults.focus || "rag",
+      goal: goal?.value || defaults.goal || "specialist_general",
+    };
+  }
+
+  function applyPreferences(preferences) {
+    if (hoursPerDay) {
+      hoursPerDay.value = String(preferences.hours_per_day || defaults.hours_per_day || 3);
+    }
+    if (daysPerWeek) {
+      daysPerWeek.value = String(preferences.days_per_week || defaults.days_per_week || 5);
+    }
+    if (level) {
+      level.value = preferences.level || defaults.level || "intermediate";
+    }
+    if (focus) {
+      focus.value = preferences.focus || defaults.focus || "rag";
+    }
+    if (goal) {
+      goal.value = preferences.goal || defaults.goal || "specialist_general";
+    }
+  }
+
+  function renderPlan(plan, message = "") {
+    renderCards(
+      "trilha-plan-summary",
+      [
+        {
+          badge: "Ritmo semanal",
+          status_class: "status-done",
+          title: `${formatNumber(plan.weeklyHours, 1)}h por semana`,
+          body: plan.sessionProfile?.label || "Sessao padrao",
+          note: plan.sessionProfile?.study_split || "",
+        },
+        {
+          badge: "Horizonte",
+          status_class: plan.paceMessage?.status_class || "status-done",
+          title: `${plan.totalCalendarDays} dias corridos`,
+          body: `${plan.totalWeeks} semanas / ${plan.totalStudySessions} sessoes`,
+          note: plan.paceMessage?.summary || "",
+        },
+        {
+          badge: "Carga total",
+          status_class: "status-done",
+          title: `${formatNumber(plan.totalHours, 1)}h planejadas`,
+          body: plan.template.label,
+          note: plan.focusProfile.summary,
+        },
+        {
+          badge: "Nivel",
+          status_class: "status-done",
+          title: plan.levelProfile.label,
+          body: plan.focusProfile.label,
+          note: plan.template.outcomes?.[0] || "",
+        },
+      ],
+      (item) => `
+        <article class="metric-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="metric-value">${escapeHtml(item.body)}</p>
+          <p class="metric-note">${escapeHtml(item.note)}</p>
+        </article>
+      `,
+    );
+
+    const planTitle = document.getElementById("trilha-plan-title");
+    if (planTitle) {
+      planTitle.textContent = plan.paceMessage?.title || "Trilha gerada";
+    }
+
+    const planStory = document.getElementById("trilha-plan-story");
+    if (planStory) {
+      planStory.textContent =
+        `Com ${plan.preferences.hours_per_day}h por dia em ${plan.preferences.days_per_week} dias por semana, ` +
+        `a trilha prioriza ${plan.focusProfile.label.toLowerCase()} dentro do objetivo ${plan.template.label.toLowerCase()} ` +
+        `e fecha em ${plan.totalCalendarDays} dias corridos. ${plan.levelProfile.summary}`;
+    }
+
+    renderCards(
+      "trilha-next-actions",
+      [
+        plan.firstSession
+          ? {
+              badge: "Estudar agora",
+              status_class: "status-done",
+              title: plan.firstSession.unit_title,
+              description: `Dia ${plan.firstSession.calendar_day} | ${formatNumber(plan.firstSession.hours, 1)}h`,
+              note: plan.firstSession.exercise,
+              buttons: [
+                {
+                  label: plan.firstSession.portal_label || "Abrir rota",
+                  href: plan.firstSession.portal_href || "/",
+                },
+                ...buildSourceButtons(buildSourceLookup(vendorSources), plan.firstSession.official_resource_ids, 1),
+              ],
+            }
+          : null,
+        plan.nextDistinctSession
+          ? {
+              badge: "Proximo bloco",
+              status_class: "status-in-progress",
+              title: plan.nextDistinctSession.unit_title,
+              description: `Semana ${plan.nextDistinctSession.week_number} | Dia ${plan.nextDistinctSession.calendar_day}`,
+              note: plan.nextDistinctSession.deliverable,
+              buttons: [
+                {
+                  label: plan.nextDistinctSession.portal_label || "Abrir rota",
+                  href: plan.nextDistinctSession.portal_href || "/",
+                  variant: "secondary",
+                },
+                ...buildSourceButtons(buildSourceLookup(vendorSources), plan.nextDistinctSession.official_resource_ids, 1),
+              ],
+            }
+          : null,
+      ].filter(Boolean),
+      (item) => `
+        <article class="workflow-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.description)}</p>
+          <p class="metric-note">${escapeHtml(item.note)}</p>
+          ${renderButtonList(item.buttons || [])}
+        </article>
+      `,
+    );
+
+    const visibleWeeks = (plan.weeks || []).slice(0, adaptivePathRules.generation_rules?.max_visible_weeks || 8);
+    const hasHiddenWeeks = (plan.weeks || []).length > visibleWeeks.length;
+    renderCards(
+      "trilha-week-plan",
+      [
+        ...visibleWeeks,
+        ...(hasHiddenWeeks
+          ? [
+              {
+                week_number: `+${plan.weeks.length - visibleWeeks.length}`,
+                calendar_label: "Continuidade",
+                hours: 0,
+                session_count: 0,
+                units: ["A trilha continua com as semanas restantes no mesmo racional."],
+                deliverables: ["Mantenha a retro semanal e siga pelo proximo bloco visivel."],
+                source_buttons: [],
+                primary_href: "/roadmap/",
+                primary_label: "Fechar ciclo no Roadmap",
+                continuation: true,
+              },
+            ]
+          : []),
+      ],
+      (week) => `
+        <article class="phase-card ${week.continuation ? "adaptive-continuation-card" : ""}">
+          <span class="status-badge ${week.continuation ? "status-next" : "status-done"}">${escapeHtml(
+            week.continuation ? "Continuacao" : `Semana ${week.week_number}`,
+          )}</span>
+          <p class="timeline-kicker">${escapeHtml(week.calendar_label)}</p>
+          <h3>${escapeHtml(week.units?.[0] || "Semana planejada")}</h3>
+          <p class="timeline-copy">${week.continuation ? "A fila completa ja foi calculada; este card evita poluir a leitura visual." : `${formatNumber(week.hours, 1)}h em ${week.session_count} sessoes`}</p>
+          <ul class="summary-list">
+            ${(week.deliverables || []).map((deliverable) => `<li>${escapeHtml(deliverable)}</li>`).join("")}
+          </ul>
+          ${renderButtonList(
+            week.continuation
+              ? [
+                  {
+                    label: week.primary_label,
+                    href: week.primary_href,
+                    variant: "secondary",
+                  },
+                ]
+              : [
+                  {
+                    label: week.primary_label,
+                    href: week.primary_href,
+                    variant: "secondary",
+                  },
+                  ...(week.source_buttons || []),
+                ],
+          )}
+        </article>
+      `,
+    );
+
+    const visibleSessions = (plan.sessions || []).slice(0, adaptivePathRules.generation_rules?.max_visible_sessions || 12);
+    renderCards(
+      "trilha-session-queue",
+      visibleSessions,
+      (session) => `
+        <article class="study-card compact-card">
+          <span class="status-badge status-done">Dia ${escapeHtml(session.calendar_day)}</span>
+          <h3>${escapeHtml(session.unit_title)}</h3>
+          <p class="card-copy">Semana ${escapeHtml(session.week_number)} | Sessao ${escapeHtml(session.study_session)} | ${escapeHtml(formatNumber(session.hours, 1))}h</p>
+          <p class="metric-note">${escapeHtml(session.exercise)}</p>
+          ${renderButtonList([
+            {
+              label: session.portal_label || "Abrir rota",
+              href: session.portal_href || "/",
+              variant: "secondary",
+            },
+          ])}
+        </article>
+      `,
+    );
+
+    renderAdaptiveDomainMix(plan);
+
+    renderCards(
+      "trilha-materials",
+      plan.materialCards || [],
+      (item) => `
+        <article class="artifact-card compact-card">
+          <span class="label">${escapeHtml(item.vendor)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.summary)}</p>
+          ${renderButtonList(item.buttons || [])}
+        </article>
+      `,
+    );
+
+    if (feedback) {
+      feedback.textContent = message;
+      if (message) {
+        window.clearTimeout(window.__adaptivePathFeedbackTimer);
+        window.__adaptivePathFeedbackTimer = window.setTimeout(() => {
+          feedback.textContent = "";
+        }, 2200);
+      }
+    }
+  }
+
+  function syncPlan(message = "") {
+    const nextPreferences = readPreferences();
+    persistAdaptivePathPreferences(nextPreferences);
+    renderPlan(
+      buildAdaptivePlan(studyUnits, learningPathTemplates, adaptivePathRules, vendorSources, nextPreferences),
+      message,
+    );
+  }
+
+  applyPreferences(persistedPreferences);
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    syncPlan("Trilha atualizada.");
+  });
+
+  [hoursPerDay, daysPerWeek, level, focus, goal].forEach((element) => {
+    element?.addEventListener("change", () => syncPlan("Configuracao atualizada."));
+  });
+
+  const resetButton = document.getElementById("trilha-reset");
+  resetButton?.addEventListener("click", () => {
+    applyPreferences(defaults);
+    syncPlan("Configuracao restaurada.");
+  });
+
+  syncPlan();
 }
 
 function renderPromptLibrary(containerId, examples, options = {}) {
@@ -3946,6 +4619,10 @@ async function init() {
       matrixGuide,
       matrixArtifact,
       journeyGuide,
+      trilhaGuide,
+      studyUnits,
+      learningPathTemplates,
+      adaptivePathRules,
       workflowsGuide,
       ragGuide,
       roadmapGuide,
@@ -3957,6 +4634,7 @@ async function init() {
     const renderers = {
       home: () => renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap),
       jornada: () => renderJourney(journeyGuide),
+      trilha: () => renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),
       prompts: () =>
         renderPrompts(
           promptsGuide,

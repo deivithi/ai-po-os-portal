@@ -1,0 +1,150 @@
+{
+  "orientation": [
+    {
+      "badge": "Entrada nova",
+      "status_class": "status-done",
+      "title": "A trilha agora monta o plano por voce",
+      "body": "Horas, foco, nivel e objetivo viram um cronograma de verdade",
+      "note": "Em vez de navegar por intuicao, voce passa a seguir uma rota pensada para o seu ritmo real."
+    },
+    {
+      "badge": "Regra central",
+      "status_class": "status-done",
+      "title": "Uma configuracao, varias semanas claras",
+      "body": "A pagina devolve proximo bloco, semanas, materiais e entregaveis",
+      "note": "A Trilha precisa ser a pagina que te impede de estudar de forma fragmentada."
+    },
+    {
+      "badge": "Honestidade",
+      "status_class": "status-in-progress",
+      "title": "Se 30 dias nao fecharem, o portal mostra",
+      "body": "A duracao responde ao ritmo que voce realmente tem",
+      "note": "Se a carga diaria ficar baixa, a trilha continua boa, mas mostra que o horizonte se alonga."
+    },
+    {
+      "badge": "Resultado esperado",
+      "status_class": "status-next",
+      "title": "Menos leitura solta, mais dominio operacional",
+      "body": "Cada bloco aponta para uma pagina, uma fonte oficial e um entregavel",
+      "note": "A meta aqui e aproximar o estudo de um sistema de treinamento profissional."
+    }
+  ],
+  "configuration_tips": [
+    "Se voce ainda esta consolidando a base, comece com objetivo Especialista geral.",
+    "Se tiver 3h por dia ou mais, preserve o capstone e os comparativos semanais.",
+    "Se tiver menos de 2h por dia, reduza foco antes de tentar cobrir tudo ao mesmo tempo.",
+    "Toda rota da trilha deve terminar com experimento, evidencias e retro curta."
+  ],
+  "plan_checks": [
+    "No fim da semana 1, voce ja precisa saber estruturar prompts e comparar modelos sem usar ranking vazio.",
+    "No fim da semana 2, contexto, grounding, NotebookLM e memoria precisam estar separados na sua cabeca.",
+    "No fim da semana 3, approval humano, schema, risco e proxima acao precisam aparecer no seu caderno de operacao.",
+    "No fechamento, voce deve conseguir demonstrar um mini sistema com modelo, contexto, risco e decisao."
+  ],
+  "route_roles": [
+    {
+      "badge": "Mapa",
+      "status_class": "status-done",
+      "title": "Home",
+      "description": "Mostra estado atual, frescor editorial e cobertura do portal antes de qualquer aprofundamento.",
+      "buttons": [
+        {
+          "label": "Abrir Home",
+          "href": "/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Metodo",
+      "status_class": "status-done",
+      "title": "Jornada",
+      "description": "Define o ritual de estudo, os blocos semanais e a disciplina de producao minima.",
+      "buttons": [
+        {
+          "label": "Abrir Jornada",
+          "href": "/jornada/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Comando",
+      "status_class": "status-done",
+      "title": "Prompts",
+      "description": "Refina a qualidade de comando e a adaptacao por fornecedor para melhorar cada experimento da trilha.",
+      "buttons": [
+        {
+          "label": "Abrir Prompts",
+          "href": "/prompts/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Criterio",
+      "status_class": "status-done",
+      "title": "Matriz",
+      "description": "Ensina a decidir por rubrica e ajuda a justificar a escolha de modelos em vez de usar hype.",
+      "buttons": [
+        {
+          "label": "Abrir Matriz",
+          "href": "/matriz/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Contexto",
+      "status_class": "status-done",
+      "title": "RAG",
+      "description": "Centraliza contexto, grounding, NotebookLM, memoria e decisao de retrieval.",
+      "buttons": [
+        {
+          "label": "Abrir RAG",
+          "href": "/rag/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Operacao",
+      "status_class": "status-done",
+      "title": "Workflows",
+      "description": "Mostra como o sistema vira rotina auditavel, com schema, approval e escada de risco.",
+      "buttons": [
+        {
+          "label": "Abrir Workflows",
+          "href": "/workflows/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Biblioteca",
+      "status_class": "status-done",
+      "title": "Artefatos",
+      "description": "Serve de apoio para revisar documentos, radar, scorecards e exemplos reais sem recomecar do zero.",
+      "buttons": [
+        {
+          "label": "Abrir Artefatos",
+          "href": "/artefatos/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Retro",
+      "status_class": "status-done",
+      "title": "Roadmap",
+      "description": "Fecha o ciclo da semana, registra maturidade e diz qual proxima alavanca estudar.",
+      "buttons": [
+        {
+          "label": "Abrir Roadmap",
+          "href": "/roadmap/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ]
+}

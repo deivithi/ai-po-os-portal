@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trilha | AI Operating System do PO Salesforce</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body data-page="trilha">
+    <a class="skip-link" href="#content">Pular para o conteudo</a>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar"></aside>
+      <div class="content-shell">
+        <header class="topbar" id="topbar"></header>
+        <main class="page" id="content">
+          <section class="page-hero compact">
+            <div class="hero-copy">
+              <span class="eyebrow">Adaptive Study Path</span>
+              <h1>Monte a trilha certa para o tempo que voce realmente tem.</h1>
+              <p class="lead">
+                Esta pagina transforma horas por dia, dias por semana, foco,
+                nivel e objetivo em uma trilha guiada com semanas, materiais
+                oficiais, proximos blocos e entregaveis claros.
+              </p>
+            </div>
+            <aside class="callout-panel">
+              <span class="eyebrow">Regra de ouro</span>
+              <p>
+                A melhor trilha nao e a mais ambiciosa. E a que voce consegue
+                sustentar sem perder profundidade, experimento e criterio.
+              </p>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="metric-grid" id="trilha-orientation"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Configurador</span>
+                <h2>Defina seu ritmo e gere a trilha</h2>
+                <p>
+                  Ajuste o tempo disponivel e o eixo principal de estudo. O
+                  portal redistribui as unidades e te devolve um plano
+                  navegavel.
+                </p>
+              </div>
+              <div class="adaptive-shell">
+                <form class="data-panel adaptive-form" id="trilha-form">
+                  <div class="adaptive-form-grid">
+                    <label class="adaptive-field">
+                      <span class="builder-field-label">Horas por dia</span>
+                      <select id="trilha-hours-per-day"></select>
+                    </label>
+                    <label class="adaptive-field">
+                      <span class="builder-field-label">Dias por semana</span>
+                      <select id="trilha-days-per-week"></select>
+                    </label>
+                    <label class="adaptive-field">
+                      <span class="builder-field-label">Nivel atual</span>
+                      <select id="trilha-level"></select>
+                    </label>
+                    <label class="adaptive-field">
+                      <span class="builder-field-label">Foco principal</span>
+                      <select id="trilha-focus"></select>
+                    </label>
+                    <label class="adaptive-field adaptive-field-full">
+                      <span class="builder-field-label">Objetivo final</span>
+                      <select id="trilha-goal"></select>
+                    </label>
+                  </div>
+                  <div class="builder-controls">
+                    <button class="button" id="trilha-apply" type="submit">Gerar trilha</button>
+                    <button class="button secondary" id="trilha-reset" type="button">Voltar ao padrao</button>
+                    <p class="builder-copy-feedback" id="trilha-feedback"></p>
+                  </div>
+                </form>
+                <div class="adaptive-summary-panel">
+                  <div class="metric-grid" id="trilha-plan-summary"></div>
+                  <article class="callout-panel adaptive-story-card">
+                    <span class="eyebrow">Leitura do ritmo</span>
+                    <h3 id="trilha-plan-title">Gerando a melhor rota para voce...</h3>
+                    <p id="trilha-plan-story">
+                      A trilha vai explicar como seu ritmo atual altera a
+                      duracao, a intensidade e a prioridade dos blocos.
+                    </p>
+                  </article>
+                </div>
+              </div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Dicas de configuracao</span>
+              <ul class="resource-list" id="trilha-configuration-tips"></ul>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Plano imediato</span>
+              <h2>O que estudar agora e o que vem em seguida</h2>
+              <p>
+                O primeiro bloco precisa ser acionavel. O segundo bloco serve
+                para impedir que a trilha morra depois do primeiro estudo.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-2" id="trilha-next-actions"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Plano semanal</span>
+              <h2>Semanas geradas para o seu ritmo</h2>
+              <p>
+                A timeline abaixo respeita dias de estudo por semana e deixa
+                claro o que precisa ser entregue em cada bloco.
+              </p>
+            </div>
+            <div class="timeline-grid" id="trilha-week-plan"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Fila de sessoes</span>
+                <h2>Primeiras sessoes para destravar a execucao</h2>
+                <p>
+                  Em vez de mostrar uma lista infinita, a fila abaixo deixa
+                  visiveis as sessoes mais proximas e a virada para a semana
+                  seguinte.
+                </p>
+              </div>
+              <div class="cards-grid cards-grid-2" id="trilha-session-queue"></div>
+            </div>
+            <aside class="callout-panel">
+              <span class="eyebrow">Checks da trilha</span>
+              <ul class="summary-list" id="trilha-plan-checks"></ul>
+            </aside>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Mistura de dominio</span>
+                <h2>Como a trilha distribui esforco entre os eixos</h2>
+                <p>
+                  Os pesos abaixo mostram o que recebe mais energia no plano
+                  final. Isso evita estudar tudo ao mesmo tempo sem prioridade.
+                </p>
+              </div>
+              <div class="data-panel adaptive-domain-panel">
+                <div class="adaptive-domain-bars" id="trilha-domain-mix"></div>
+              </div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Material oficial</span>
+              <div class="cards-grid cards-grid-1" id="trilha-materials"></div>
+            </aside>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Mapa do portal</span>
+                <h2>Qual pagina entra em cada momento da trilha</h2>
+              </div>
+              <div class="cards-grid cards-grid-2" id="trilha-route-roles"></div>
+            </div>
+            <aside class="callout-panel">
+              <span class="eyebrow">Compromisso minimo</span>
+              <ul class="summary-list" id="trilha-execution-rules"></ul>
+            </aside>
+          </section>
+        </main>
+        <footer class="footer" id="portal-footer"></footer>
+      </div>
+    </div>
+    <script src="../assets/app.js"></script>
+  </body>
+</html>
