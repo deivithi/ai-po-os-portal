@@ -334,6 +334,12 @@ a {
   border-color: var(--border);
 }
 
+.button.ghost.flag-toggle.active {
+  border-color: rgba(244, 184, 96, 0.34);
+  background: linear-gradient(135deg, rgba(244, 184, 96, 0.18), rgba(244, 184, 96, 0.08));
+  color: #fff5dc;
+}
+
 .button.secondary:hover,
 .button.secondary:focus-visible,
 .button.ghost:hover,
@@ -448,6 +454,10 @@ a {
 
 .cards-grid-2 {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.cards-grid-1 {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .cards-grid-3 {
@@ -578,6 +588,168 @@ a {
   display: grid;
   grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.9fr);
   gap: 18px;
+}
+
+.mission-control-panel,
+.mission-control-panel.data-panel {
+  position: relative;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top right, rgba(98, 208, 179, 0.18), transparent 36%),
+    radial-gradient(circle at bottom left, rgba(45, 167, 255, 0.12), transparent 38%),
+    linear-gradient(180deg, rgba(13, 34, 47, 0.98), rgba(7, 19, 28, 0.98));
+  border-color: rgba(98, 208, 179, 0.16);
+}
+
+.mission-control-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.06), transparent 28%, transparent 72%, rgba(98, 208, 179, 0.08)),
+    linear-gradient(180deg, rgba(98, 208, 179, 0.05), transparent 42%);
+  pointer-events: none;
+}
+
+.mission-control-shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 22px;
+  padding: 24px;
+}
+
+.mission-visual-cluster {
+  display: grid;
+  grid-template-columns: minmax(120px, 148px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: center;
+}
+
+.mission-progress-ring {
+  --progress: 0;
+  position: relative;
+  width: clamp(120px, 16vw, 148px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, rgba(6, 19, 30, 0.98) 0 58%, transparent 59%),
+    conic-gradient(
+      from -90deg,
+      rgba(98, 208, 179, 0.98) 0 calc(var(--progress) * 1%),
+      rgba(45, 167, 255, 0.94) calc(var(--progress) * 1%) calc(min((var(--progress) + 10), 100) * 1%),
+      rgba(158, 197, 222, 0.12) calc(min((var(--progress) + 10), 100) * 1%) 100%
+    );
+  box-shadow:
+    inset 0 0 0 1px rgba(158, 197, 222, 0.08),
+    0 18px 42px rgba(0, 0, 0, 0.3);
+}
+
+.mission-progress-ring::after {
+  content: "";
+  position: absolute;
+  inset: 13px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 55%),
+    linear-gradient(180deg, rgba(7, 19, 28, 0.98), rgba(9, 23, 34, 0.96));
+  box-shadow:
+    inset 0 0 0 1px rgba(158, 197, 222, 0.08),
+    inset 0 18px 24px rgba(255, 255, 255, 0.02);
+}
+
+.mission-progress-ring strong,
+.mission-progress-ring span {
+  position: relative;
+  z-index: 1;
+}
+
+.mission-progress-ring strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+  line-height: 1;
+}
+
+.mission-progress-ring span {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.mission-visual-copy {
+  display: grid;
+  gap: 10px;
+}
+
+.mission-visual-copy h3 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2vw, 1.8rem);
+  font-family: var(--font-display);
+}
+
+.mission-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mission-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(98, 208, 179, 0.18);
+  background: rgba(12, 29, 41, 0.72);
+  color: #dff6ef;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.mission-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+}
+
+.mission-metric-card {
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(158, 197, 222, 0.11);
+  background:
+    linear-gradient(180deg, rgba(9, 24, 35, 0.88), rgba(8, 22, 31, 0.8)),
+    linear-gradient(135deg, rgba(98, 208, 179, 0.05), transparent);
+}
+
+.mission-metric-card strong {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-size: 1.28rem;
+}
+
+.flag-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.flag-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: linear-gradient(180deg, rgba(244, 184, 96, 0.96), rgba(242, 139, 130, 0.72));
+}
+
+.flag-card .button-group {
+  margin-top: 8px;
 }
 
 .data-panel {
@@ -1634,7 +1806,7 @@ a {
     animation-delay: 210ms;
   }
 
-  :where(.metric-card, .study-card, .workflow-card, .artifact-card, .phase-card, .hero-panel-card) {
+  :where(.metric-card, .study-card, .workflow-card, .artifact-card, .phase-card, .hero-panel-card, .mission-metric-card) {
     transition:
       transform var(--motion-fast) var(--ease-emphatic),
       border-color var(--motion-fast) ease,
@@ -1642,7 +1814,7 @@ a {
       background var(--motion-fast) ease;
   }
 
-  :where(.metric-card, .study-card, .workflow-card, .artifact-card, .phase-card, .hero-panel-card):hover {
+  :where(.metric-card, .study-card, .workflow-card, .artifact-card, .phase-card, .hero-panel-card, .mission-metric-card):hover {
     transform: translateY(-2px);
     border-color: rgba(98, 208, 179, 0.18);
     box-shadow: 0 28px 64px rgba(4, 10, 15, 0.32);
@@ -1694,6 +1866,7 @@ a {
   .page-hero,
   .freshness-strip,
   .split-section,
+  .mission-visual-cluster,
   .adaptive-shell,
   .adaptive-unit-grid,
   .builder-workbench,
@@ -1714,6 +1887,10 @@ a {
     position: static;
     top: auto;
   }
+
+  .mission-progress-ring {
+    width: 124px;
+  }
 }
 
 @media (max-width: 720px) {
@@ -1729,6 +1906,18 @@ a {
   .page {
     width: min(calc(100% - 24px), var(--content-width));
     padding: 20px 0 32px;
+  }
+
+  .mission-control-shell {
+    padding: 20px;
+  }
+
+  .mission-visual-cluster {
+    gap: 16px;
+  }
+
+  .mission-progress-ring {
+    width: 112px;
   }
 
   .page-hero,

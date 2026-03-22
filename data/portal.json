@@ -4,10 +4,10 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "Fluidez visual e retomada persistente",
-    "phase_summary": "O portal agora combina microinteracoes leves, navegacao mais fluida e continuidade real de estudo para retomar trilha e progresso exatamente do ponto salvo.",
+    "phase_focus": "Mission Control educacional, flags e jornada guiada",
+    "phase_summary": "O portal agora adiciona uma camada visual de missao, badges, flags de revisao e indicadores de progresso para tornar a jornada de 30 dias mais prazerosa, fluida e motivadora sem perder leveza.",
     "next_phase": "Sessao de hoje inteligente e refresh tecnico das rotas em revisao",
-    "next_phase_summary": "Depois da fluidez e da retomada persistente, a proxima frente natural e sugerir a sessao diaria ideal e reforcar Matriz, Workflows, RAG e Roadmap com refresh tecnico continuo.",
+    "next_phase_summary": "Depois da camada de missao e da fila de revisao, a proxima frente natural e montar a sessao diaria ideal automaticamente e reforcar Matriz, Workflows, RAG e Roadmap com refresh tecnico continuo.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [

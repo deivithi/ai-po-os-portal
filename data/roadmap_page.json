@@ -3,16 +3,16 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "25 ciclos publicados",
-      "body": "Portal completo com Radar Vivo, Trilha, camada senior, Progresso, Guia, Labs, Analytics, Lancamentos e retomada persistente publicados",
-      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint, leitura de uso real, fechamento premium, retomada real e aprofundamento senior sem depender de estudo passivo."
+      "title": "26 ciclos publicados",
+      "body": "Portal completo com Radar Vivo, Trilha, camada senior, Progresso, Guia, Labs, Analytics, Lancamentos, retomada persistente e Mission Control educacional publicados",
+      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint, leitura de uso real, fechamento premium, retomada real, fila de revisao e aprofundamento senior sem depender de estudo passivo."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Refino R concluido",
-      "body": "Fluidez visual e retomada persistente publicadas",
-      "note": "A plataforma agora responde melhor ao uso recorrente, lembra o ponto exato de estudo e deixa a navegacao mais tecnologica sem perder leveza."
+      "title": "Refino S concluido",
+      "body": "Mission Control educacional, gamificacao leve e flags de revisao publicados",
+      "note": "A plataforma agora guia melhor o aluno com barras visuais de dominio, streak, XP, badges e fila clara de revisao para manter a jornada de 30 dias mais prazerosa e consistente."
     },
     {
       "badge": "Plano de 30 dias",
@@ -207,6 +207,12 @@
     {
       "phase": "Refino R",
       "focus": "Fluidez visual e retomada persistente",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino S",
+      "focus": "Mission Control educacional, flags e gamificacao leve",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }

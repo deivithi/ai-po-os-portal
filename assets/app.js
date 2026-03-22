@@ -33,7 +33,7 @@
 };
 
 const PAGE_DATA_KEYS = {
-  home: ["overview", "artifacts", "freshnessStatus", "vendorSources", "vendorUpdates", "domainMap"],
+  home: ["overview", "artifacts", "freshnessStatus", "vendorSources", "vendorUpdates", "domainMap", "studyUnits"],
   guia: ["guideGuide", "vendorSources", "freshnessStatus"],
   labs: ["labsGuide", "vendorSources", "freshnessStatus"],
   analytics: [
@@ -94,6 +94,7 @@ const SESSION_CACHE_TTL_MS = 1000 * 60 * 15;
 const FAVORITES_STORAGE_KEY = "ai-po-os::prompt-favorites::v1";
 const ADAPTIVE_PATH_STORAGE_KEY = "ai-po-os::adaptive-path::v1";
 const STUDY_PROGRESS_STORAGE_KEY = "ai-po-os::study-progress::v1";
+const STUDY_FLAGS_STORAGE_KEY = "ai-po-os::study-flags::v1";
 const LABS_FILTER_STORAGE_KEY = "ai-po-os::labs-filters::v1";
 const STUDY_ANALYTICS_STORAGE_KEY = "ai-po-os::study-analytics::v1";
 const RESUME_STATE_STORAGE_KEY = "ai-po-os::resume-state::v1";
@@ -536,6 +537,105 @@ function persistStudyProgressState(state) {
   }
 }
 
+function createDefaultStudyFlagsState() {
+  return {
+    version: 1,
+    updated_at: null,
+    items: {},
+  };
+}
+
+function loadStudyFlagsState() {
+  const defaultState = createDefaultStudyFlagsState();
+
+  try {
+    const raw = window.localStorage.getItem(STUDY_FLAGS_STORAGE_KEY);
+    if (!raw) {
+      return defaultState;
+    }
+
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaultState,
+      ...(parsed && typeof parsed === "object" ? parsed : {}),
+      items: parsed?.items && typeof parsed.items === "object" ? parsed.items : {},
+    };
+  } catch (_error) {
+    return defaultState;
+  }
+}
+
+function persistStudyFlagsState(state) {
+  try {
+    window.localStorage.setItem(STUDY_FLAGS_STORAGE_KEY, JSON.stringify(state));
+  } catch (_error) {
+    // Keep runtime-only state if storage is unavailable.
+  }
+
+  document.dispatchEvent(
+    new CustomEvent("study-flags:updated", {
+      detail: state,
+    }),
+  );
+}
+
+function buildStudyFlagKey(kind, id) {
+  return `${kind}:${id}`;
+}
+
+function isStudyFlagged(kind, id, state = loadStudyFlagsState()) {
+  if (!kind || !id) {
+    return false;
+  }
+
+  return Boolean(state.items?.[buildStudyFlagKey(kind, id)]);
+}
+
+function toggleStudyFlag(kind, payload = {}) {
+  const state = loadStudyFlagsState();
+  const key = buildStudyFlagKey(kind, payload.id);
+  const nowIso = new Date().toISOString();
+  const items = {
+    ...(state.items || {}),
+  };
+
+  if (items[key]) {
+    delete items[key];
+    const nextState = {
+      ...state,
+      updated_at: nowIso,
+      items,
+    };
+    persistStudyFlagsState(nextState);
+    return {
+      state: nextState,
+      active: false,
+    };
+  }
+
+  items[key] = {
+    kind,
+    id: payload.id || "",
+    title: payload.title || "",
+    summary: payload.summary || "",
+    href: payload.href || "/",
+    route_label: payload.route_label || titleCase(kind),
+    domain: payload.domain || "",
+    updated_at: nowIso,
+  };
+
+  const nextState = {
+    ...state,
+    updated_at: nowIso,
+    items,
+  };
+  persistStudyFlagsState(nextState);
+  return {
+    state: nextState,
+    active: true,
+  };
+}
+
 function createDefaultResumeState() {
   return {
     version: 1,
@@ -676,6 +776,240 @@ function getPrimaryResumeTarget(portal) {
       candidate.cue ||
       merged.summary ||
       "A plataforma manteve o ultimo ponto de estudo para voce retomar sem recomecar.",
+  };
+}
+
+function normalizeIsoDateKey(value) {
+  if (!value) {
+    return null;
+  }
+
+  try {
+    return new Date(value).toISOString().slice(0, 10);
+  } catch (_error) {
+    return null;
+  }
+}
+
+function buildStudyActivityDateKeys(analyticsState) {
+  const keys = new Set();
+
+  const pushKey = (value) => {
+    const key = normalizeIsoDateKey(value);
+    if (key) {
+      keys.add(key);
+    }
+  };
+
+  pushKey(analyticsState?.last_activity_at);
+  pushKey(analyticsState?.updated_on);
+
+  (analyticsState?.recent_events || []).forEach((event) => {
+    pushKey(event?.occurred_at);
+  });
+
+  return Array.from(keys).sort();
+}
+
+function computeStudyStreakDays(analyticsState) {
+  const activityDateKeys = buildStudyActivityDateKeys(analyticsState);
+  if (activityDateKeys.length === 0) {
+    return 0;
+  }
+
+  const activitySet = new Set(activityDateKeys);
+  let cursor = todayIsoDate();
+  let streak = 0;
+
+  while (activitySet.has(cursor)) {
+    streak += 1;
+    const previousDate = new Date(`${cursor}T00:00:00`);
+    previousDate.setDate(previousDate.getDate() - 1);
+    cursor = previousDate.toISOString().slice(0, 10);
+  }
+
+  return streak;
+}
+
+function computeJourneyXp(progressState, analyticsState, flagsState) {
+  const units = Object.values(progressState?.units || {});
+  const statusCounts = units.reduce(
+    (accumulator, record) => {
+      accumulator[record.status_id] = Number(accumulator[record.status_id] || 0) + 1;
+      return accumulator;
+    },
+    {
+      mastered: 0,
+      in_progress: 0,
+      checkpoint: 0,
+      blocked: 0,
+    },
+  );
+
+  const routeCount = Object.values(analyticsState?.page_views || {}).reduce(
+    (total, value) => total + Number(value || 0),
+    0,
+  );
+  const interactionCount = Object.values(analyticsState?.route_interactions || {}).reduce(
+    (total, value) => total + Number(value || 0),
+    0,
+  );
+  const openFlags = Object.keys(flagsState?.items || {}).length;
+
+  return (
+    statusCounts.mastered * 180 +
+    statusCounts.in_progress * 70 +
+    statusCounts.checkpoint * 45 +
+    Math.min(routeCount * 12, 180) +
+    Math.min(interactionCount * 6, 180) -
+    Math.min(openFlags * 10, 80)
+  );
+}
+
+function computeJourneyLevel(xpTotal) {
+  if (xpTotal >= 1100) {
+    return {
+      label: "Senior Applied",
+      summary: "Voce ja opera com sinais fortes de criterio, execucao e consistencia.",
+    };
+  }
+
+  if (xpTotal >= 760) {
+    return {
+      label: "System Operator",
+      summary: "A base ja saiu do estudo passivo e entrou em pratica com repeticao real.",
+    };
+  }
+
+  if (xpTotal >= 420) {
+    return {
+      label: "Builder",
+      summary: "O estudo ja se traduz em blocos concluidos, labs e checkpoints mais disciplinados.",
+    };
+  }
+
+  return {
+    label: "Explorer",
+    summary: "A jornada ainda esta consolidando ritmo, mapa mental e primeiras evidencias.",
+  };
+}
+
+function buildJourneyBadges(snapshot, analyticsState) {
+  const distinctRoutes = Object.keys(analyticsState?.page_views || {}).filter(
+    (key) => Number(analyticsState.page_views[key] || 0) > 0,
+  );
+  const badges = [
+    {
+      id: "streak",
+      title: "Ritmo ligado",
+      summary: "Mantem o estudo vivo por varios dias seguidos.",
+      unlocked: snapshot.streakDays >= 3,
+      progress: Math.min(1, snapshot.streakDays / 3),
+      kicker: `${snapshot.streakDays} dias de streak`,
+    },
+    {
+      id: "proof",
+      title: "Primeiras evidencias",
+      summary: "Ja existe massa critica de unidades dominadas.",
+      unlocked: snapshot.masteredCount >= 3,
+      progress: Math.min(1, snapshot.masteredCount / 3),
+      kicker: `${snapshot.masteredCount}/${Math.max(3, snapshot.masteredCount)} unidades dominadas`,
+    },
+    {
+      id: "map",
+      title: "Mapa do sistema",
+      summary: "Voce ja abriu varias camadas-chave do portal.",
+      unlocked: distinctRoutes.length >= 6,
+      progress: Math.min(1, distinctRoutes.length / 6),
+      kicker: `${distinctRoutes.length} rotas exploradas`,
+    },
+    {
+      id: "senior",
+      title: "Camada senior aberta",
+      summary: "Ja existe contato real com evals, memoria, agents ou producao.",
+      unlocked: Number(analyticsState?.page_views?.senior || 0) > 0,
+      progress: Number(analyticsState?.page_views?.senior || 0) > 0 ? 1 : 0,
+      kicker: Number(analyticsState?.page_views?.senior || 0) > 0 ? "Senior visitado" : "Senior ainda nao aberto",
+    },
+  ];
+
+  return badges;
+}
+
+function buildFlagToggleButton(kind, payload = {}) {
+  const flagged = isStudyFlagged(kind, payload.id);
+  return `
+    <button
+      class="button ghost flag-toggle ${flagged ? "active" : ""}"
+      type="button"
+      data-flag-toggle="${escapeHtml(kind)}"
+      data-flag-id="${escapeHtml(payload.id || "")}"
+      data-flag-title="${escapeHtml(payload.title || "")}"
+      data-flag-summary="${escapeHtml(payload.summary || "")}"
+      data-flag-href="${escapeHtml(payload.href || "/")}"
+      data-flag-route-label="${escapeHtml(payload.route_label || titleCase(kind))}"
+      data-flag-domain="${escapeHtml(payload.domain || "")}"
+    >
+      ${escapeHtml(flagged ? "Remover flag" : "Marcar flag")}
+    </button>
+  `;
+}
+
+function buildLearningMissionSnapshot(portal, studyUnits = []) {
+  const progressState = loadStudyProgressState();
+  const analyticsState = loadStudyAnalyticsState();
+  const flagsState = loadStudyFlagsState();
+  const resumeTarget = getPrimaryResumeTarget(portal);
+  const studyUnitList = Array.isArray(studyUnits)
+    ? studyUnits
+    : Array.isArray(studyUnits?.units)
+      ? studyUnits.units
+      : [];
+  const totalUnits = Math.max(1, studyUnitList.length || Object.keys(progressState.units || {}).length || 1);
+  const unitRecords = Object.values(progressState.units || {});
+  const masteredCount = unitRecords.filter((item) => item.status_id === "mastered").length;
+  const inProgressCount = unitRecords.filter((item) => item.status_id === "in_progress").length;
+  const checkpointCount = unitRecords.filter((item) => item.status_id === "checkpoint").length;
+  const blockedCount = unitRecords.filter((item) => item.status_id === "blocked").length;
+  const flaggedItems = Object.values(flagsState.items || {})
+    .sort((left, right) => String(right.updated_at || "").localeCompare(String(left.updated_at || "")))
+    .slice(0, 4);
+  const streakDays = computeStudyStreakDays(analyticsState);
+  const elapsedDays = Math.max(1, diffCalendarDays(progressState.started_on) + 1);
+  const dayIndex = Math.min(30, elapsedDays);
+  const progressPercent = Math.max(0, Math.min(100, Math.round((masteredCount / totalUnits) * 100)));
+  const xpTotal = Math.max(0, computeJourneyXp(progressState, analyticsState, flagsState));
+  const level = computeJourneyLevel(xpTotal);
+  const badges = buildJourneyBadges(
+    {
+      streakDays,
+      masteredCount,
+    },
+    analyticsState,
+  );
+
+  return {
+    totalUnits,
+    masteredCount,
+    inProgressCount,
+    checkpointCount,
+    blockedCount,
+    flaggedItems,
+    streakDays,
+    elapsedDays,
+    dayIndex,
+    progressPercent,
+    xpTotal,
+    level,
+    resumeTarget,
+    badges,
+    nextActionLabel: flaggedItems.length
+      ? "Resolver a fila de revisao"
+      : resumeTarget?.title || "Montar a trilha",
+    nextActionSummary: flaggedItems.length
+      ? `Existem ${flaggedItems.length} flags abertas pedindo revisao antes do proximo salto.`
+      : resumeTarget?.description || "Comece montando a trilha para o portal passar a trabalhar a seu favor.",
+    startedOn: progressState.started_on,
   };
 }
 
@@ -903,6 +1237,10 @@ function trackStudyAnalyticsEvent(type, payload = {}) {
         domain: payload.domain || "",
         occurred_at: occurredAt,
       };
+      break;
+    }
+    case "flag_toggle": {
+      incrementCounter(state.route_interactions, payload.page_id || pageId);
       break;
     }
     case "progress_status": {
@@ -1384,6 +1722,117 @@ function renderTagList(tags) {
   `;
 }
 
+function renderMissionControlSurface(prefix, snapshot) {
+  const panel = document.getElementById(`${prefix}-mission-panel`);
+  const badges = document.getElementById(`${prefix}-mission-badges`);
+  const flagQueue = document.getElementById(`${prefix}-flag-queue`);
+
+  if (panel) {
+    panel.innerHTML = `
+      <div class="mission-control-shell">
+        <div class="mission-visual-cluster">
+          <div class="mission-progress-ring" style="--progress:${escapeHtml(String(snapshot.progressPercent))}">
+            <strong>${escapeHtml(String(snapshot.progressPercent))}%</strong>
+            <span>dominio</span>
+          </div>
+          <div class="mission-visual-copy">
+            <span class="eyebrow">Dia ${escapeHtml(String(snapshot.dayIndex))} de 30</span>
+            <h3>${escapeHtml(snapshot.nextActionLabel)}</h3>
+            <p class="card-copy">${escapeHtml(snapshot.nextActionSummary)}</p>
+            <div class="mission-pill-row">
+              <span class="mission-pill">Streak ${escapeHtml(String(snapshot.streakDays))}d</span>
+              <span class="mission-pill">XP ${escapeHtml(String(snapshot.xpTotal))}</span>
+              <span class="mission-pill">${escapeHtml(snapshot.level.label)}</span>
+            </div>
+          </div>
+        </div>
+        <div class="mission-metric-grid">
+          <article class="mission-metric-card">
+            <span class="label">Unidades dominadas</span>
+            <strong>${escapeHtml(String(snapshot.masteredCount))}/${escapeHtml(String(snapshot.totalUnits))}</strong>
+            <p class="metric-note">A trilha fica forte quando dominio e evidencia andam juntos.</p>
+          </article>
+          <article class="mission-metric-card">
+            <span class="label">Em progresso</span>
+            <strong>${escapeHtml(String(snapshot.inProgressCount))}</strong>
+            <p class="metric-note">Blocos que pedem repeticao antes de serem promovidos para dominio.</p>
+          </article>
+          <article class="mission-metric-card">
+            <span class="label">Flags abertas</span>
+            <strong>${escapeHtml(String(snapshot.flaggedItems.length))}</strong>
+            <p class="metric-note">Fila visual de revisao para nao deixar pontos importantes escaparem.</p>
+          </article>
+          <article class="mission-metric-card">
+            <span class="label">Nivel atual</span>
+            <strong>${escapeHtml(snapshot.level.label)}</strong>
+            <p class="metric-note">${escapeHtml(snapshot.level.summary)}</p>
+          </article>
+        </div>
+        <div class="button-group">
+          <a class="button" href="${resolveUrl(snapshot.resumeTarget?.href || "/trilha/")}">${escapeHtml(
+            snapshot.resumeTarget?.action_label || "Montar trilha",
+          )}</a>
+          <a class="button secondary" href="${resolveUrl(snapshot.flaggedItems.length ? "/progresso/" : "/analytics/")}">${escapeHtml(
+            snapshot.flaggedItems.length ? "Resolver flags no Progresso" : "Ler proxima missao no Analytics",
+          )}</a>
+        </div>
+      </div>
+    `;
+  }
+
+  if (badges) {
+    renderCards(
+      `${prefix}-mission-badges`,
+      snapshot.badges || [],
+      (item) => `
+        <article class="study-card compact-card ${item.unlocked ? "recommended" : ""}">
+          <span class="status-badge ${item.unlocked ? "status-done" : "status-next"}">${escapeHtml(
+            item.unlocked ? "Badge ativo" : "A caminho",
+          )}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.summary)}</p>
+          <p class="metric-note">${escapeHtml(item.kicker)}</p>
+          <div class="quality-score-rail">
+            <span class="quality-score-fill ${item.unlocked ? "status-done" : "status-in-progress"}" style="width:${escapeHtml(
+              `${Math.round((item.progress || 0) * 100)}%`,
+            )}"></span>
+          </div>
+        </article>
+      `,
+    );
+  }
+
+  if (flagQueue) {
+    renderCards(
+      `${prefix}-flag-queue`,
+      snapshot.flaggedItems.length
+        ? snapshot.flaggedItems
+        : [
+            {
+              title: "Nenhuma flag aberta",
+              summary: "Quando algum ponto pedir revisao, ele aparecera aqui para voce nao perder o fio da jornada.",
+              route_label: "Fluxo limpo",
+              href: "/trilha/",
+            },
+          ],
+      (item) => `
+        <article class="workflow-card flag-card">
+          <span class="status-badge ${snapshot.flaggedItems.length ? "status-in-progress" : "status-done"}">${escapeHtml(
+            item.route_label || "Fluxo limpo",
+          )}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.summary)}</p>
+          <div class="button-group">
+            <a class="button secondary" href="${resolveUrl(item.href || "/trilha/")}">${escapeHtml(
+              snapshot.flaggedItems.length ? "Abrir ponto marcado" : "Voltar para a Trilha",
+            )}</a>
+          </div>
+        </article>
+      `,
+    );
+  }
+}
+
 function buildMatrixInsights(matrixArtifact, matrixGuide, overview) {
   const rows = Array.isArray(matrixArtifact?.rows) ? matrixArtifact.rows : [];
   const weights = matrixArtifact?.weights || {};
@@ -1491,7 +1940,7 @@ function buildMatrixInsights(matrixArtifact, matrixGuide, overview) {
   };
 }
 
-function renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap) {
+function renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap, studyUnits) {
   const phaseFocus = document.getElementById("phase-focus");
   const phaseSummary = document.getElementById("phase-summary");
   const resumeTitle = document.getElementById("resume-title");
@@ -1523,6 +1972,8 @@ function renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates,
       ? `<a class="button" href="${resolveUrl(resumeTarget.href)}">${escapeHtml(resumeTarget.action_label)}</a>`
       : `<a class="button" href="${resolveUrl("/trilha/")}">Montar trilha agora</a>`;
   }
+
+  renderMissionControlSurface("home", buildLearningMissionSnapshot(portal, studyUnits));
 
   renderCards(
     "home-overview",
@@ -2426,6 +2877,8 @@ function renderLabs(labsGuide, vendorSources) {
   const labs = Array.isArray(labsGuide?.labs) ? labsGuide.labs : [];
   const filterMeta = labsGuide?.filters || {};
 
+  renderMissionControlSurface("labs", buildLearningMissionSnapshot(null, []));
+
   renderCards(
     "labs-orientation",
     labsGuide.orientation || [],
@@ -2643,6 +3096,17 @@ function renderLabs(labsGuide, vendorSources) {
 
     activeLabId = currentLab.id;
     setQueryParam("lab", activeLabId);
+    persistResumePatch({
+      study: {
+        page_id: "labs",
+        href: `/labs/?domain=${encodeURIComponent(currentLab.domain)}&lab=${encodeURIComponent(currentLab.id)}`,
+        label: "Labs",
+        summary: currentLab.summary,
+        unit_id: currentLab.id,
+        unit_title: currentLab.title,
+        cue: `Execute o lab ${currentLab.title} e volte com evidencia concreta antes de abrir outro tema.`,
+      },
+    });
 
     const buttons = [
       ...(currentLab.buttons || []),
@@ -2700,10 +3164,21 @@ function renderLabs(labsGuide, vendorSources) {
         </ul>
       </section>
       ${renderTagList(currentLab.tags || [])}
+      <div class="button-group">
+        ${buildFlagToggleButton("lab", {
+          id: currentLab.id,
+          title: currentLab.title,
+          summary: currentLab.summary,
+          href: `/labs/?domain=${encodeURIComponent(currentLab.domain)}&lab=${encodeURIComponent(currentLab.id)}`,
+          route_label: "Labs",
+          domain: currentLab.domain,
+        })}
+      </div>
       ${renderButtonList(buttons)}
     `;
 
     renderPacks(currentLab);
+    renderMissionControlSurface("labs", buildLearningMissionSnapshot(null, []));
   }
 
   function syncLabs(message = "") {
@@ -2739,6 +3214,24 @@ function renderLabs(labsGuide, vendorSources) {
 
   if (pageContent && pageContent.dataset.labsBound !== "true") {
     pageContent.addEventListener("click", (event) => {
+      const flagButton = event.target.closest("[data-flag-toggle]");
+      if (flagButton) {
+        const result = toggleStudyFlag(flagButton.getAttribute("data-flag-toggle"), {
+          id: flagButton.getAttribute("data-flag-id"),
+          title: flagButton.getAttribute("data-flag-title"),
+          summary: flagButton.getAttribute("data-flag-summary"),
+          href: flagButton.getAttribute("data-flag-href"),
+          route_label: flagButton.getAttribute("data-flag-route-label"),
+          domain: flagButton.getAttribute("data-flag-domain"),
+        });
+        trackStudyAnalyticsEvent("flag_toggle", {
+          page_id: "labs",
+          state: result.active ? "open" : "closed",
+        });
+        syncLabs(result.active ? "Flag adicionada ao lab." : "Flag removida do lab.");
+        return;
+      }
+
       const target = event.target.closest("[data-lab-focus]");
       if (!target) {
         return;
@@ -4805,6 +5298,8 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
   let activeUnitId = resumeState?.trilha?.active_unit_id || resumeState?.study?.unit_id || null;
   let currentPlan = null;
 
+  renderMissionControlSurface("trilha", buildLearningMissionSnapshot(null, studyUnits));
+
   fillSelectOptions(hoursPerDay, adaptivePathRules.hours_per_day_options || []);
   fillSelectOptions(daysPerWeek, adaptivePathRules.days_per_week_options || []);
   fillSelectOptions(level, learningPathTemplates.level_profiles || [], "id", "label");
@@ -4962,6 +5457,14 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
             ? `<button class="button secondary" type="button" data-unit-focus="${escapeHtml(nextUnit.id)}">Focar proximo bloco</button>`
             : `<a class="button secondary" href="${resolveUrl("/roadmap/")}">Fechar trilha no Roadmap</a>`
         }
+        ${buildFlagToggleButton("unit", {
+          id: currentUnit.id,
+          title: currentUnit.title,
+          summary: currentUnit.summary,
+          href: "/trilha/",
+          route_label: "Trilha",
+          domain: currentUnit.domain,
+        })}
         ${buildSourceButtons(sourceLookup, currentUnit.official_resource_ids, 2)
           .map(
             (button) => `
@@ -5213,6 +5716,8 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
         }, 2200);
       }
     }
+
+    renderMissionControlSurface("trilha", buildLearningMissionSnapshot(null, studyUnits));
   }
 
   function syncPlan(message = "") {
@@ -5232,6 +5737,27 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
 
   if (pageContent && pageContent.dataset.unitFocusBound !== "true") {
     pageContent.addEventListener("click", (event) => {
+      const flagButton = event.target.closest("[data-flag-toggle]");
+      if (flagButton) {
+        const result = toggleStudyFlag(flagButton.getAttribute("data-flag-toggle"), {
+          id: flagButton.getAttribute("data-flag-id"),
+          title: flagButton.getAttribute("data-flag-title"),
+          summary: flagButton.getAttribute("data-flag-summary"),
+          href: flagButton.getAttribute("data-flag-href"),
+          route_label: flagButton.getAttribute("data-flag-route-label"),
+          domain: flagButton.getAttribute("data-flag-domain"),
+        });
+        trackStudyAnalyticsEvent("flag_toggle", {
+          page_id: "trilha",
+          state: result.active ? "open" : "closed",
+        });
+        if (currentPlan) {
+          renderUnitExplorer(currentPlan);
+          renderMissionControlSurface("trilha", buildLearningMissionSnapshot(null, studyUnits));
+        }
+        return;
+      }
+
       const button = event.target.closest("[data-unit-focus]");
       if (!button || !currentPlan) {
         return;
@@ -5350,6 +5876,8 @@ function renderProgress(progressGuide, studyUnits, learningPathTemplates, adapti
   const pageContent = document.getElementById("content");
   const sourceLookup = buildSourceLookup(vendorSources);
   const statusLookup = buildProgressStatusLookup(progressGuide);
+
+  renderMissionControlSurface("progresso", buildLearningMissionSnapshot(null, studyUnits));
 
   fillSelectOptions(hoursPerDay, adaptivePathRules.hours_per_day_options || []);
   fillSelectOptions(daysPerWeek, adaptivePathRules.days_per_week_options || []);
@@ -5534,6 +6062,14 @@ function renderProgress(progressGuide, studyUnits, learningPathTemplates, adapti
             ? `<button class="button secondary" type="button" data-progress-unit-focus="${escapeHtml(nextUnit.id)}">Focar proximo pendente</button>`
             : `<a class="button secondary" href="${resolveUrl("/roadmap/")}">Fechar ciclo no Roadmap</a>`
         }
+        ${buildFlagToggleButton("unit", {
+          id: currentUnit.id,
+          title: currentUnit.title,
+          summary: currentUnit.summary,
+          href: "/progresso/",
+          route_label: "Progresso",
+          domain: currentUnit.domain,
+        })}
         ${buildSourceButtons(sourceLookup, currentUnit.official_resource_ids, 2)
           .map(
             (button) => `
@@ -5765,6 +6301,7 @@ function renderProgress(progressGuide, studyUnits, learningPathTemplates, adapti
     renderProgressUnit(snapshot);
     renderMilestones(snapshot);
     renderRemainingPlan(snapshot);
+    renderMissionControlSurface("progresso", buildLearningMissionSnapshot(null, studyUnits));
 
     if (feedback) {
       feedback.textContent = message;
@@ -5802,6 +6339,26 @@ function renderProgress(progressGuide, studyUnits, learningPathTemplates, adapti
 
   if (pageContent && pageContent.dataset.progressBound !== "true") {
     pageContent.addEventListener("click", (event) => {
+      const flagButton = event.target.closest("[data-flag-toggle]");
+      if (flagButton) {
+        const result = toggleStudyFlag(flagButton.getAttribute("data-flag-toggle"), {
+          id: flagButton.getAttribute("data-flag-id"),
+          title: flagButton.getAttribute("data-flag-title"),
+          summary: flagButton.getAttribute("data-flag-summary"),
+          href: flagButton.getAttribute("data-flag-href"),
+          route_label: flagButton.getAttribute("data-flag-route-label"),
+          domain: flagButton.getAttribute("data-flag-domain"),
+        });
+        trackStudyAnalyticsEvent("flag_toggle", {
+          page_id: "progresso",
+          state: result.active ? "open" : "closed",
+        });
+        if (currentSnapshot) {
+          renderSnapshot(currentSnapshot, result.active ? "Flag adicionada." : "Flag removida.");
+        }
+        return;
+      }
+
       const focusButton = event.target.closest("[data-progress-unit-focus]");
       if (focusButton) {
         activeUnitId = focusButton.getAttribute("data-progress-unit-focus");
@@ -8329,7 +8886,8 @@ async function init() {
     setupStudyAnalytics();
 
     const renderers = {
-      home: () => renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap),
+      home: () =>
+        renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap, studyUnits),
       guia: () => renderGuide(guideGuide, vendorSources),
       labs: () => renderLabs(labsGuide, vendorSources),
       analytics: () =>

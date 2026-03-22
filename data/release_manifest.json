@@ -55,6 +55,10 @@
     {
       "title": "Fluidez visual e retomada persistente",
       "description": "Sempre que o usuario voltar ao portal, a plataforma precisa manter o ponto de retomada da trilha e do progresso e aplicar motion leve, responsivo e compativel com prefers-reduced-motion."
+    },
+    {
+      "title": "Mission Control educacional e flags de revisao",
+      "description": "Sempre que a jornada crescer em complexidade, a plataforma precisa traduzir progresso em missao visual, badges, fila de revisao e proxima acao clara sem aumentar friccao cognitiva."
     }
   ],
   "qa_targets": [
