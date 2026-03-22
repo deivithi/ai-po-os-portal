@@ -1,0 +1,106 @@
+{
+  "orientation": [
+    {
+      "badge": "Nova camada",
+      "status_class": "status-done",
+      "title": "O portal agora abre no modo acao",
+      "body": "Voce entra e ja recebe a melhor sessao para hoje",
+      "note": "A proposta desta rota e reduzir atrito: menos tempo decidindo, mais tempo estudando e provando criterio."
+    },
+    {
+      "badge": "Regra central",
+      "status_class": "status-done",
+      "title": "Uma sessao, uma missao, uma evidencia",
+      "body": "Cada abertura precisa fechar com output verificavel",
+      "note": "Se a sessao nao gera evidencia, comparativo, checkpoint ou lab, ela ainda esta frouxa."
+    },
+    {
+      "badge": "Leitura correta",
+      "status_class": "status-done",
+      "title": "O sistema recomenda, mas nao pensa no seu lugar",
+      "body": "A recomendacao usa sinais locais e precisa ser lida com criterio",
+      "note": "Use esta rota para reduzir dispersao, nao para terceirizar julgamento."
+    },
+    {
+      "badge": "Meta final",
+      "status_class": "status-done",
+      "title": "Transformar 30 dias em ganho acumulado real",
+      "body": "Ritmo, repeticao e fechamento forte sao mais importantes do que volume cego",
+      "note": "A sessao de hoje existe para sustentar a jornada senior dia apos dia."
+    }
+  ],
+  "reading_rules": [
+    "Abra esta rota quando quiser estudar agora e nao quiser gastar energia montando a sessao do zero.",
+    "Use a missao do dia como norte, mas ajuste o modo de sessao conforme seu tempo real.",
+    "Feche sempre no Progresso, no Analytics ou com uma flag clara para o proximo retorno."
+  ],
+  "ritual_rules": [
+    "Comece abrindo a rota principal e declarando qual evidencia vai sair da sessao.",
+    "Nao abra duas frentes novas ao mesmo tempo; feche a missao atual primeiro.",
+    "Se travar, reduza o escopo da evidencia em vez de abandonar a sessao.",
+    "Ao terminar, registre ganho, pendencia ou checkpoint antes de sair da plataforma."
+  ],
+  "completion_checklist": [
+    {
+      "id": "goal-locked",
+      "title": "Objetivo fechado",
+      "summary": "Voce sabe o que precisa sair desta sessao antes de abrir o primeiro conteudo."
+    },
+    {
+      "id": "route-opened",
+      "title": "Rota certa aberta",
+      "summary": "A sessao foi iniciada na rota principal recomendada pelo sistema."
+    },
+    {
+      "id": "evidence-produced",
+      "title": "Evidencia produzida",
+      "summary": "A sessao terminou com comparativo, checkpoint, lab, nota de criterio ou entregavel pequeno."
+    },
+    {
+      "id": "closeout-logged",
+      "title": "Fechamento registrado",
+      "summary": "Voce voltou para Progresso, Analytics ou deixou uma flag clara para o proximo retorno."
+    }
+  ],
+  "support_cards": [
+    {
+      "badge": "Se travar",
+      "status_class": "status-in-progress",
+      "title": "Volte para Progresso",
+      "description": "Quando a sessao ficar difusa, o melhor caminho e reabrir checkpoints e ver o que esta bloqueando a trilha.",
+      "buttons": [
+        {
+          "label": "Abrir Progresso",
+          "href": "/progresso/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Se ficar teorico",
+      "status_class": "status-done",
+      "title": "Suba para Labs",
+      "description": "Quando houver muita leitura e pouca prova, use um lab para transformar criterio em evidencia.",
+      "buttons": [
+        {
+          "label": "Abrir Labs",
+          "href": "/labs/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Se quiser recalibrar",
+      "status_class": "status-done",
+      "title": "Leia o Analytics",
+      "description": "Quando a sensacao do estudo nao bater com o ritmo real, volte ao Analytics para recalcular a recomendacao.",
+      "buttons": [
+        {
+          "label": "Abrir Analytics",
+          "href": "/analytics/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ]
+}

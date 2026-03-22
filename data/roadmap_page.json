@@ -3,16 +3,16 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "26 ciclos publicados",
-      "body": "Portal completo com Radar Vivo, Trilha, camada senior, Progresso, Guia, Labs, Analytics, Lancamentos, retomada persistente e Mission Control educacional publicados",
-      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint, leitura de uso real, fechamento premium, retomada real, fila de revisao e aprofundamento senior sem depender de estudo passivo."
+      "title": "27 ciclos publicados",
+      "body": "Portal completo com Radar Vivo, Trilha, camada senior, Progresso, Guia, Labs, Analytics, Lancamentos, retomada persistente, Mission Control educacional e Sessao de hoje publicados",
+      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint, leitura de uso real, missao diaria, fechamento premium, retomada real, fila de revisao e aprofundamento senior sem depender de estudo passivo."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Refino S concluido",
-      "body": "Mission Control educacional, gamificacao leve e flags de revisao publicados",
-      "note": "A plataforma agora guia melhor o aluno com barras visuais de dominio, streak, XP, badges e fila clara de revisao para manter a jornada de 30 dias mais prazerosa e consistente."
+      "title": "Refino T concluido",
+      "body": "Sessao de hoje inteligente publicada",
+      "note": "A plataforma agora monta a melhor sessao do dia com base em trilha, progresso, labs, analytics e revisao aberta, reduzindo atrito para comecar e fechar o estudo."
     },
     {
       "badge": "Plano de 30 dias",
@@ -213,6 +213,12 @@
     {
       "phase": "Refino S",
       "focus": "Mission Control educacional, flags e gamificacao leve",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino T",
+      "focus": "Sessao de hoje inteligente e recomendacao diaria",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }

@@ -15,6 +15,7 @@
   matrixGuide: "/data/matrix_page.json",
   matrixArtifact: "/artifacts/files/model_matrix.json",
   guideGuide: "/data/guide_page.json",
+  todayGuide: "/data/today_page.json",
   labsGuide: "/data/labs_page.json",
   analyticsGuide: "/data/analytics_page.json",
   analyticsRules: "/data/analytics_rules.json",
@@ -34,6 +35,18 @@
 
 const PAGE_DATA_KEYS = {
   home: ["overview", "artifacts", "freshnessStatus", "vendorSources", "vendorUpdates", "domainMap", "studyUnits"],
+  hoje: [
+    "todayGuide",
+    "analyticsGuide",
+    "analyticsRules",
+    "studyUnits",
+    "learningPathTemplates",
+    "adaptivePathRules",
+    "labsGuide",
+    "progressGuide",
+    "vendorSources",
+    "freshnessStatus",
+  ],
   guia: ["guideGuide", "vendorSources", "freshnessStatus"],
   labs: ["labsGuide", "vendorSources", "freshnessStatus"],
   analytics: [
@@ -72,7 +85,8 @@ const PAGE_DATA_KEYS = {
 };
 
 const PREFETCH_ROUTE_MAP = {
-  home: ["/guia/", "/trilha/", "/analytics/"],
+  home: ["/hoje/", "/trilha/", "/analytics/"],
+  hoje: ["/trilha/", "/progresso/", "/labs/"],
   guia: ["/trilha/", "/analytics/", "/labs/"],
   labs: ["/analytics/", "/progresso/", "/senior/"],
   analytics: ["/lancamentos/", "/trilha/", "/progresso/"],
@@ -95,6 +109,7 @@ const FAVORITES_STORAGE_KEY = "ai-po-os::prompt-favorites::v1";
 const ADAPTIVE_PATH_STORAGE_KEY = "ai-po-os::adaptive-path::v1";
 const STUDY_PROGRESS_STORAGE_KEY = "ai-po-os::study-progress::v1";
 const STUDY_FLAGS_STORAGE_KEY = "ai-po-os::study-flags::v1";
+const TODAY_SESSION_STORAGE_KEY = "ai-po-os::today-session::v1";
 const LABS_FILTER_STORAGE_KEY = "ai-po-os::labs-filters::v1";
 const STUDY_ANALYTICS_STORAGE_KEY = "ai-po-os::study-analytics::v1";
 const RESUME_STATE_STORAGE_KEY = "ai-po-os::resume-state::v1";
@@ -106,6 +121,7 @@ let resumeStateRuntime = null;
 
 const STUDY_ROUTE_IDS = new Set([
   "guia",
+  "hoje",
   "jornada",
   "trilha",
   "progresso",
@@ -576,6 +592,120 @@ function persistStudyFlagsState(state) {
     new CustomEvent("study-flags:updated", {
       detail: state,
     }),
+  );
+}
+
+function createDefaultTodaySessionState() {
+  return {
+    version: 1,
+    updated_at: null,
+    day_records: {},
+  };
+}
+
+function loadTodaySessionState() {
+  const defaultState = createDefaultTodaySessionState();
+
+  try {
+    const raw = window.localStorage.getItem(TODAY_SESSION_STORAGE_KEY);
+    if (!raw) {
+      return defaultState;
+    }
+
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaultState,
+      ...(parsed && typeof parsed === "object" ? parsed : {}),
+      day_records: parsed?.day_records && typeof parsed.day_records === "object" ? parsed.day_records : {},
+    };
+  } catch (_error) {
+    return defaultState;
+  }
+}
+
+function persistTodaySessionState(state) {
+  try {
+    window.localStorage.setItem(TODAY_SESSION_STORAGE_KEY, JSON.stringify(state));
+  } catch (_error) {
+    // Keep runtime-only state if storage is unavailable.
+  }
+
+  document.dispatchEvent(
+    new CustomEvent("today-session:updated", {
+      detail: state,
+    }),
+  );
+}
+
+function getTodaySessionRecord(state = loadTodaySessionState(), dayKey = todayIsoDate()) {
+  return state.day_records?.[dayKey] && typeof state.day_records[dayKey] === "object"
+    ? state.day_records[dayKey]
+    : {
+        mode_id: null,
+        completed_step_ids: [],
+      };
+}
+
+function updateTodaySessionRecord(mutator, dayKey = todayIsoDate()) {
+  const state = loadTodaySessionState();
+  const currentRecord = getTodaySessionRecord(state, dayKey);
+  const nextRecord =
+    typeof mutator === "function"
+      ? mutator({
+          ...currentRecord,
+          completed_step_ids: Array.isArray(currentRecord.completed_step_ids) ? currentRecord.completed_step_ids : [],
+        })
+      : currentRecord;
+
+  const nextState = {
+    ...state,
+    updated_at: new Date().toISOString(),
+    day_records: {
+      ...(state.day_records || {}),
+      [dayKey]: {
+        ...currentRecord,
+        ...(nextRecord && typeof nextRecord === "object" ? nextRecord : {}),
+        completed_step_ids: Array.isArray(nextRecord?.completed_step_ids) ? nextRecord.completed_step_ids : [],
+      },
+    },
+  };
+
+  persistTodaySessionState(nextState);
+  return nextState;
+}
+
+function setTodaySessionMode(modeId, dayKey = todayIsoDate()) {
+  return updateTodaySessionRecord(
+    (record) => ({
+      ...record,
+      mode_id: modeId,
+    }),
+    dayKey,
+  );
+}
+
+function toggleTodaySessionChecklistStep(stepId, dayKey = todayIsoDate()) {
+  return updateTodaySessionRecord(
+    (record) => {
+      const current = Array.isArray(record.completed_step_ids) ? record.completed_step_ids : [];
+      return {
+        ...record,
+        completed_step_ids: current.includes(stepId)
+          ? current.filter((item) => item !== stepId)
+          : [...current, stepId],
+      };
+    },
+    dayKey,
+  );
+}
+
+function resetTodaySession(dayKey = todayIsoDate()) {
+  return updateTodaySessionRecord(
+    () => ({
+      mode_id: null,
+      completed_step_ids: [],
+    }),
+    dayKey,
   );
 }
 
@@ -4539,8 +4669,396 @@ function buildAnalyticsSessionCards(analyticsGuide, snapshot) {
       ...preset,
       blocks,
       button: action,
-    };
-  });
+      };
+    });
+}
+
+function resolveTodayModeId(todayRecord, analyticsGuide, preferences) {
+  const presets = Array.isArray(analyticsGuide?.session_presets) ? analyticsGuide.session_presets : [];
+  const availableIds = new Set(presets.map((item) => item.id));
+  if (todayRecord?.mode_id && availableIds.has(todayRecord.mode_id)) {
+    return todayRecord.mode_id;
+  }
+
+  const hoursPerDay = Number(preferences?.hours_per_day || 0);
+  if (hoursPerDay <= 1.5 && availableIds.has("quick")) {
+    return "quick";
+  }
+  if (hoursPerDay >= 4 && availableIds.has("deep")) {
+    return "deep";
+  }
+  if (availableIds.has("standard")) {
+    return "standard";
+  }
+
+  return presets[0]?.id || null;
+}
+
+function buildTodaySessionSnapshot(
+  todayGuide,
+  analyticsGuide,
+  analyticsRules,
+  studyUnits,
+  learningPathTemplates,
+  adaptivePathRules,
+  labsGuide,
+  progressGuide,
+  vendorSources,
+) {
+  const snapshot = buildAnalyticsSnapshot(
+    analyticsRules,
+    studyUnits,
+    learningPathTemplates,
+    adaptivePathRules,
+    labsGuide,
+    progressGuide,
+    vendorSources,
+  );
+  const sourceLookup = buildSourceLookup(vendorSources);
+  const todayState = loadTodaySessionState();
+  const todayRecord = getTodaySessionRecord(todayState);
+  const modes = buildAnalyticsSessionCards(analyticsGuide, snapshot);
+  const selectedModeId = resolveTodayModeId(todayRecord, analyticsGuide, snapshot.preferences);
+  const selectedMode = modes.find((item) => item.id === selectedModeId) || modes[0] || null;
+  const checklistTemplate = Array.isArray(todayGuide?.completion_checklist) ? todayGuide.completion_checklist : [];
+  const completedIds = Array.isArray(todayRecord.completed_step_ids) ? todayRecord.completed_step_ids : [];
+  const checklist = checklistTemplate.map((item) => ({
+    ...item,
+    done: completedIds.includes(item.id),
+  }));
+  const focusSources = uniqueBy(
+    [
+      ...buildSourceButtons(sourceLookup, snapshot.mission.focus_unit?.official_resource_ids, 2),
+      ...buildSourceButtons(sourceLookup, snapshot.mission.recommended_lab?.source_ids, 2),
+    ],
+    (item) => `${item.href}:${item.label}`,
+  );
+  const flags = Object.values(loadStudyFlagsState().items || {})
+    .sort((left, right) => String(right.updated_at || "").localeCompare(String(left.updated_at || "")))
+    .slice(0, 4);
+  const completionRatio = checklist.length
+    ? checklist.filter((item) => item.done).length / checklist.length
+    : 0;
+
+  return {
+    ...snapshot,
+    today_state: todayState,
+    today_record: todayRecord,
+    modes,
+    selected_mode_id: selectedModeId,
+    selected_mode: selectedMode,
+    checklist,
+    completion_ratio: completionRatio,
+    focus_sources: focusSources,
+    flagged_items: flags,
+    day_label: formatShortDate(todayIsoDate()),
+  };
+}
+
+function renderToday(
+  todayGuide,
+  analyticsGuide,
+  analyticsRules,
+  studyUnits,
+  learningPathTemplates,
+  adaptivePathRules,
+  labsGuide,
+  progressGuide,
+  vendorSources,
+) {
+  renderCards(
+    "today-orientation",
+    todayGuide.orientation || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  const readingRules = document.getElementById("today-reading-rules");
+  if (readingRules) {
+    readingRules.innerHTML = (todayGuide.reading_rules || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  const ritualRules = document.getElementById("today-ritual-rules");
+  if (ritualRules) {
+    ritualRules.innerHTML = (todayGuide.ritual_rules || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  const pageContent = document.getElementById("content");
+  const feedback = document.getElementById("today-feedback");
+
+  function renderSnapshot(message = "") {
+    flushStudyAnalyticsActivity("today_refresh");
+    const snapshot = buildTodaySessionSnapshot(
+      todayGuide,
+      analyticsGuide,
+      analyticsRules,
+      studyUnits,
+      learningPathTemplates,
+      adaptivePathRules,
+      labsGuide,
+      progressGuide,
+      vendorSources,
+    );
+    const missionPanel = document.getElementById("today-focus-panel");
+    if (missionPanel) {
+      missionPanel.innerHTML = `
+        <div class="adaptive-unit-header">
+          <div>
+            <span class="status-badge status-done">${escapeHtml(snapshot.mission.badge)}</span>
+            <h3>${escapeHtml(snapshot.mission.title)}</h3>
+            <p class="card-copy">${escapeHtml(snapshot.mission.summary)}</p>
+          </div>
+          <div class="adaptive-unit-metrics">
+            <article>
+              <span class="label">Data</span>
+              <strong>${escapeHtml(snapshot.day_label)}</strong>
+            </article>
+            <article>
+              <span class="label">Modo</span>
+              <strong>${escapeHtml(snapshot.selected_mode?.title || "Sessao do dia")}</strong>
+            </article>
+            <article>
+              <span class="label">Checklist</span>
+              <strong>${escapeHtml(formatPercent(snapshot.completion_ratio))}</strong>
+            </article>
+          </div>
+        </div>
+        <div class="adaptive-unit-grid">
+          <section class="adaptive-unit-section">
+            <span class="eyebrow">Por que hoje</span>
+            <ul class="summary-list">
+              ${snapshot.mission.why_now.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+            </ul>
+          </section>
+          <section class="adaptive-unit-section">
+            <span class="eyebrow">Unidade em foco</span>
+            <p>${escapeHtml(snapshot.mission.focus_unit?.title || "Sem unidade explicita neste momento.")}</p>
+          </section>
+          <section class="adaptive-unit-section">
+            <span class="eyebrow">Evidencia de saida</span>
+            <p>${escapeHtml(snapshot.mission.success)}</p>
+          </section>
+          <section class="adaptive-unit-section">
+            <span class="eyebrow">Lab alinhado</span>
+            <p>${escapeHtml(snapshot.mission.recommended_lab?.title || "Sem lab obrigatorio para esta sessao.")}</p>
+          </section>
+        </div>
+        <div class="button-group adaptive-unit-actions">
+          <a class="button" href="${resolveUrl(snapshot.mission.primary_button.href)}">${escapeHtml(snapshot.mission.primary_button.label)}</a>
+          <a class="button secondary" href="${resolveUrl(snapshot.mission.secondary_button.href)}">${escapeHtml(snapshot.mission.secondary_button.label)}</a>
+          <button class="button ghost" id="today-reset" type="button">Resetar sessao de hoje</button>
+        </div>
+      `;
+    }
+
+    renderCards(
+      "today-mode-cards",
+      snapshot.modes,
+      (item) => `
+        <article class="workflow-card today-mode-card ${item.id === snapshot.selected_mode_id ? "recommended" : ""}">
+          <span class="status-badge ${item.id === snapshot.selected_mode_id ? "status-done" : "status-next"}">${escapeHtml(
+            item.id === snapshot.selected_mode_id ? "Modo ativo" : item.badge,
+          )}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.description)}</p>
+          <ul class="summary-list">
+            ${(item.blocks || []).map((block) => `<li>${escapeHtml(block)}</li>`).join("")}
+          </ul>
+          <div class="button-group">
+            <button class="button ${item.id === snapshot.selected_mode_id ? "" : "secondary"}" type="button" data-today-mode="${escapeHtml(item.id)}">
+              ${escapeHtml(item.id === snapshot.selected_mode_id ? "Modo atual" : "Usar este modo")}
+            </button>
+            ${
+              item.button
+                ? `<a class="button ghost" href="${resolveUrl(item.button.href)}">${escapeHtml(item.button.label)}</a>`
+                : ""
+            }
+          </div>
+        </article>
+      `,
+    );
+
+    const sessionPlan = document.getElementById("today-session-plan");
+    if (sessionPlan) {
+      sessionPlan.innerHTML = `
+        <div class="adaptive-unit-header">
+          <div>
+            <span class="eyebrow">Plano executavel</span>
+            <h3>${escapeHtml(snapshot.selected_mode?.title || "Sessao do dia")}</h3>
+            <p class="card-copy">${escapeHtml(snapshot.selected_mode?.description || "O sistema nao conseguiu montar o plano de hoje.")}</p>
+          </div>
+          <div class="adaptive-unit-metrics">
+            <article>
+              <span class="label">Duracao</span>
+              <strong>${escapeHtml(snapshot.selected_mode?.badge || snapshot.mission.suggested_duration)}</strong>
+            </article>
+            <article>
+              <span class="label">Foco</span>
+              <strong>${escapeHtml(titleCase(snapshot.preferences.focus || "foco"))}</strong>
+            </article>
+            <article>
+              <span class="label">Flags abertas</span>
+              <strong>${escapeHtml(String(snapshot.flagged_items.length))}</strong>
+            </article>
+          </div>
+        </div>
+        <div class="adaptive-unit-grid">
+          <section class="adaptive-unit-section">
+            <span class="eyebrow">Abrir</span>
+            <p>${escapeHtml(snapshot.mission.primary_button.label)}</p>
+          </section>
+          <section class="adaptive-unit-section">
+            <span class="eyebrow">Executar</span>
+            <ul class="summary-list">
+              ${(snapshot.selected_mode?.blocks || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+            </ul>
+          </section>
+          <section class="adaptive-unit-section">
+            <span class="eyebrow">Provar</span>
+            <p>${escapeHtml(snapshot.mission.success)}</p>
+          </section>
+          <section class="adaptive-unit-section">
+            <span class="eyebrow">Fechar</span>
+            <p>Volte para Progresso ou Analytics no fim da sessao para consolidar o ganho real do dia.</p>
+          </section>
+        </div>
+        <div class="button-group adaptive-unit-actions">
+          <a class="button" href="${resolveUrl(snapshot.mission.primary_button.href)}">Comecar agora</a>
+          <a class="button secondary" href="${resolveUrl("/progresso/")}">Fechar no Progresso</a>
+          <a class="button ghost" href="${resolveUrl("/analytics/")}">Revisar sinal no Analytics</a>
+        </div>
+      `;
+    }
+
+    renderCards(
+      "today-checklist",
+      snapshot.checklist,
+      (item) => `
+        <article class="study-card compact-card today-checklist-card ${item.done ? "recommended done" : ""}">
+          <span class="status-badge ${item.done ? "status-done" : "status-next"}">${escapeHtml(
+            item.done ? "Concluido" : "Pendente",
+          )}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.summary)}</p>
+          <div class="button-group">
+            <button class="button ghost ${item.done ? "flag-toggle active" : ""}" type="button" data-today-check="${escapeHtml(item.id)}">
+              ${escapeHtml(item.done ? "Marcar como pendente" : "Marcar como feito")}
+            </button>
+          </div>
+        </article>
+      `,
+    );
+
+    renderCards(
+      "today-flag-queue",
+      snapshot.flagged_items.length
+        ? snapshot.flagged_items
+        : [
+            {
+              title: "Sem pendencia de revisao agora",
+              summary: "Quando uma unidade ou lab precisar voltar para sua mesa, ela aparecera aqui.",
+              route_label: "Fluxo limpo",
+              href: "/trilha/",
+            },
+          ],
+      (item) => `
+        <article class="workflow-card flag-card">
+          <span class="status-badge ${snapshot.flagged_items.length ? "status-in-progress" : "status-done"}">${escapeHtml(
+            item.route_label || "Fluxo limpo",
+          )}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.summary)}</p>
+          ${renderButtonList([
+            {
+              label: snapshot.flagged_items.length ? "Abrir ponto marcado" : "Voltar para a trilha",
+              href: item.href || "/trilha/",
+              variant: "secondary",
+            },
+          ])}
+        </article>
+      `,
+    );
+
+    renderCards(
+      "today-support-cards",
+      [
+        ...(todayGuide.support_cards || []),
+        ...snapshot.focus_sources.map((button) => ({
+          badge: "Fonte oficial",
+          status_class: "status-done",
+          title: button.label,
+          description: "Documento oficial alinhado ao foco desta sessao.",
+          buttons: [button],
+        })),
+      ],
+      (item) => `
+        <article class="artifact-card compact-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.description)}</p>
+          ${renderButtonList(item.buttons || [])}
+        </article>
+      `,
+    );
+
+    if (feedback) {
+      feedback.textContent = message;
+      if (message) {
+        window.clearTimeout(window.__todayFeedbackTimer);
+        window.__todayFeedbackTimer = window.setTimeout(() => {
+          feedback.textContent = "";
+        }, 2200);
+      }
+    }
+  }
+
+  if (pageContent && pageContent.dataset.todayBound !== "true") {
+    pageContent.addEventListener("click", (event) => {
+      const modeButton = event.target.closest("[data-today-mode]");
+      if (modeButton) {
+        const modeId = modeButton.getAttribute("data-today-mode");
+        setTodaySessionMode(modeId);
+        trackStudyAnalyticsEvent("route_interaction", {
+          page_id: "hoje",
+          label: `today_mode_${modeId}`,
+        });
+        renderSnapshot("Modo de sessao atualizado para hoje.");
+        return;
+      }
+
+      const checklistButton = event.target.closest("[data-today-check]");
+      if (checklistButton) {
+        const stepId = checklistButton.getAttribute("data-today-check");
+        toggleTodaySessionChecklistStep(stepId);
+        trackStudyAnalyticsEvent("route_interaction", {
+          page_id: "hoje",
+          label: `today_check_${stepId}`,
+        });
+        renderSnapshot("Checklist do dia atualizado.");
+        return;
+      }
+
+      const resetButton = event.target.closest("#today-reset");
+      if (resetButton) {
+        resetTodaySession();
+        trackStudyAnalyticsEvent("route_interaction", {
+          page_id: "hoje",
+          label: "today_reset",
+        });
+        renderSnapshot("Sessao de hoje reiniciada.");
+      }
+    });
+
+    pageContent.dataset.todayBound = "true";
+  }
+
+  renderSnapshot();
 }
 
 function resolveLaunchCandidate(launchGuide, progressSnapshot, analyticsSnapshot, freshnessStatus, favorites) {
@@ -8862,11 +9380,12 @@ async function init() {
       promptProviderOverlays,
       promptQualityLab,
       promptProductization,
-      matrixGuide,
-      matrixArtifact,
-      guideGuide,
-      labsGuide,
-      analyticsGuide,
+        matrixGuide,
+        matrixArtifact,
+        guideGuide,
+        todayGuide,
+        labsGuide,
+        analyticsGuide,
       analyticsRules,
       launchGuide,
       journeyGuide,
@@ -8885,10 +9404,22 @@ async function init() {
     renderShell(portal, freshnessStatus);
     setupStudyAnalytics();
 
-    const renderers = {
-      home: () =>
-        renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap, studyUnits),
-      guia: () => renderGuide(guideGuide, vendorSources),
+      const renderers = {
+        home: () =>
+          renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap, studyUnits),
+        hoje: () =>
+          renderToday(
+            todayGuide,
+            analyticsGuide,
+            analyticsRules,
+            studyUnits,
+            learningPathTemplates,
+            adaptivePathRules,
+            labsGuide,
+            progressGuide,
+            vendorSources,
+          ),
+        guia: () => renderGuide(guideGuide, vendorSources),
       labs: () => renderLabs(labsGuide, vendorSources),
       analytics: () =>
         renderAnalytics(

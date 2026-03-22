@@ -4,14 +4,15 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "Mission Control educacional, flags e jornada guiada",
-    "phase_summary": "O portal agora adiciona uma camada visual de missao, badges, flags de revisao e indicadores de progresso para tornar a jornada de 30 dias mais prazerosa, fluida e motivadora sem perder leveza.",
-    "next_phase": "Sessao de hoje inteligente e refresh tecnico das rotas em revisao",
-    "next_phase_summary": "Depois da camada de missao e da fila de revisao, a proxima frente natural e montar a sessao diaria ideal automaticamente e reforcar Matriz, Workflows, RAG e Roadmap com refresh tecnico continuo.",
+    "phase_focus": "Sessao de hoje inteligente e recomendacao diaria",
+    "phase_summary": "O portal agora abre uma camada diaria de estudo para transformar trilha, progresso, labs e analytics em uma sessao executavel com meta, evidencia e fechamento claros.",
+    "next_phase": "Refresh tecnico das rotas em revisao e capstone demonstravel",
+    "next_phase_summary": "Depois da sessao de hoje inteligente, a proxima frente natural e reforcar Matriz, Workflows, RAG e Roadmap com refresh tecnico continuo e subir o capstone demonstravel do produto.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
     { "id": "home", "label": "Home", "description": "Mapa de estudo e visao executiva", "href": "/" },
+    { "id": "hoje", "label": "Hoje", "description": "Sessao inteligente com a melhor acao do dia", "href": "/hoje/" },
     { "id": "guia", "label": "Guia", "description": "Como extrair o melhor da plataforma", "href": "/guia/" },
     { "id": "jornada", "label": "Jornada", "description": "Como usar o portal em 30 dias", "href": "/jornada/" },
     { "id": "trilha", "label": "Trilha", "description": "Plano adaptativo por horas, foco e objetivo", "href": "/trilha/" },
@@ -32,6 +33,11 @@
       "title": "Home",
       "nav_label": "Home",
       "summary": "Visao geral do sistema, trilha de estudo, radar vivo e status executivo."
+    },
+    "hoje": {
+      "title": "Hoje",
+      "nav_label": "Hoje",
+      "summary": "Sessao inteligente do dia: o melhor bloco para estudar agora com base em trilha, progresso, labs, analytics e fila de revisao."
     },
     "guia": {
       "title": "Guia",
@@ -163,6 +169,13 @@
     }
   ],
   "study_tracks": [
+    {
+      "title": "Executar a sessao de hoje",
+      "description": "Abra Hoje quando quiser entrar e ja receber a melhor missao do dia, com tempo, evidencia e fechamento claros.",
+      "href": "/hoje/",
+      "badge": "Acao imediata",
+      "status_class": "status-done"
+    },
     {
       "title": "Comecar pelo Guia",
       "description": "Abra Guia quando quiser decidir rapidamente como usar a plataforma hoje, que rota abrir em seguida e como fechar a sessao com uma entrega real.",

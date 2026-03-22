@@ -752,6 +752,17 @@ a {
   margin-top: 8px;
 }
 
+.today-mode-card.recommended,
+.today-checklist-card.done {
+  border-color: rgba(98, 208, 179, 0.3);
+  box-shadow: 0 18px 38px rgba(4, 10, 15, 0.28);
+}
+
+.today-checklist-card .button-group,
+.today-mode-card .button-group {
+  margin-top: 10px;
+}
+
 .data-panel {
   overflow: hidden;
 }

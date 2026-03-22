@@ -59,10 +59,15 @@
     {
       "title": "Mission Control educacional e flags de revisao",
       "description": "Sempre que a jornada crescer em complexidade, a plataforma precisa traduzir progresso em missao visual, badges, fila de revisao e proxima acao clara sem aumentar friccao cognitiva."
+    },
+    {
+      "title": "Sessao de hoje inteligente",
+      "description": "Sempre que o usuario entrar para estudar, a plataforma precisa sugerir um bloco diario claro, com tempo, meta, evidencia e fechamento, sem obrigar a montar a sessao do zero."
     }
   ],
   "qa_targets": [
     "/",
+    "/hoje/",
     "/guia/",
     "/labs/",
     "/analytics/",
@@ -79,6 +84,7 @@
     "/artefatos/",
     "/data/overview.json",
     "/data/portal.json",
+    "/data/today_page.json",
     "/data/artifacts.json",
     "/data/prompt_productization.json",
     "/data/freshness_status.json",
