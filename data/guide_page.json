@@ -429,6 +429,23 @@
           "variant": "secondary"
         }
       ]
+    },
+    {
+      "badge": "Leitura adaptativa",
+      "status_class": "status-done",
+      "title": "Analytics",
+      "description": "Use Analytics quando quiser entender quais rotas e labs estao realmente movendo seu estudo e qual e a melhor proxima missao agora.",
+      "best_for": "Fechamento de semana, retomada inteligente e escolha da proxima sessao sem chute.",
+      "output": "Diagnostico local do estudo com proxima acao automatica.",
+      "common_trap": "Tratar o sinal local como causalidade perfeita em vez de usar a pagina como camada de orientacao pratica.",
+      "tags": ["Leitura", "Proxima missao", "Replanejamento fino"],
+      "buttons": [
+        {
+          "label": "Abrir Analytics",
+          "href": "/analytics/",
+          "variant": "primary"
+        }
+      ]
     }
   ],
   "rituals": [

@@ -1,0 +1,170 @@
+{
+  "engagement_thresholds": {
+    "cold_minutes": 4,
+    "warming_minutes": 12,
+    "strong_minutes": 28,
+    "high_view_count": 3,
+    "strong_interactions": 4,
+    "recent_lab_window_hours": 72,
+    "recent_event_limit": 60
+  },
+  "route_profiles": [
+    {
+      "id": "home",
+      "label": "Home",
+      "href": "/",
+      "domains": ["orientation"],
+      "summary": "Panorama do sistema, fase atual e mapa de cobertura."
+    },
+    {
+      "id": "guia",
+      "label": "Guia",
+      "href": "/guia/",
+      "domains": ["orientation"],
+      "summary": "Camada de ativacao e escolha da rota certa para a sessao."
+    },
+    {
+      "id": "jornada",
+      "label": "Jornada",
+      "href": "/jornada/",
+      "domains": ["orientation", "consolidation"],
+      "summary": "Metodo de 30 dias e disciplina de estudo."
+    },
+    {
+      "id": "trilha",
+      "label": "Trilha",
+      "href": "/trilha/",
+      "domains": ["orientation", "consolidation"],
+      "summary": "Plano adaptativo por horas, foco, objetivo e unidade em foco."
+    },
+    {
+      "id": "progresso",
+      "label": "Progresso",
+      "href": "/progresso/",
+      "domains": ["consolidation"],
+      "summary": "Checkpoint, dominio e replanejamento do estudo."
+    },
+    {
+      "id": "labs",
+      "label": "Labs",
+      "href": "/labs/",
+      "domains": ["consolidation", "workflows"],
+      "summary": "Desafios praticos com evidencia, criterio e execucao."
+    },
+    {
+      "id": "analytics",
+      "label": "Analytics",
+      "href": "/analytics/",
+      "domains": ["consolidation", "orientation"],
+      "summary": "Leitura de comportamento, tracao e proxima missao."
+    },
+    {
+      "id": "prompts",
+      "label": "Prompts",
+      "href": "/prompts/",
+      "domains": ["prompting"],
+      "summary": "Prompt Studio, overlays e controle de saida."
+    },
+    {
+      "id": "matriz",
+      "label": "Matriz",
+      "href": "/matriz/",
+      "domains": ["llm_landscape", "radar"],
+      "summary": "Comparacao de modelos e leitura de lineup."
+    },
+    {
+      "id": "rag",
+      "label": "RAG",
+      "href": "/rag/",
+      "domains": ["rag", "memory"],
+      "summary": "Contexto, grounding, NotebookLM e citacao."
+    },
+    {
+      "id": "workflows",
+      "label": "Workflows",
+      "href": "/workflows/",
+      "domains": ["workflows", "production"],
+      "summary": "Risco, approval e operacao auditavel."
+    },
+    {
+      "id": "senior",
+      "label": "Senior",
+      "href": "/senior/",
+      "domains": ["memory", "evals_quality", "agents_mcp", "production"],
+      "summary": "Evals, memoria persistente, agents/MCP e producao."
+    },
+    {
+      "id": "roadmap",
+      "label": "Roadmap",
+      "href": "/roadmap/",
+      "domains": ["consolidation", "orientation"],
+      "summary": "Fases, releases e macroproximos passos."
+    },
+    {
+      "id": "artefatos",
+      "label": "Artefatos",
+      "href": "/artefatos/",
+      "domains": ["radar", "llm_landscape"],
+      "summary": "Biblioteca publica e fontes para estudo."
+    }
+  ],
+  "focus_domain_map": {
+    "llms": ["llm_landscape", "radar"],
+    "prompting": ["prompting"],
+    "rag": ["rag", "memory", "evals_quality"],
+    "memoria": ["memory", "rag"],
+    "agents_mcp": ["agents_mcp", "workflows", "production"],
+    "operacao_producao": ["workflows", "production", "evals_quality"]
+  },
+  "unit_domain_to_lab_domain": {
+    "orientation": "prompting",
+    "prompting": "prompting",
+    "llm_landscape": "models",
+    "rag": "rag",
+    "memory": "senior",
+    "evals_quality": "senior",
+    "agents_mcp": "senior",
+    "workflows": "workflows",
+    "production": "senior",
+    "consolidation": "capstone",
+    "radar": "models"
+  },
+  "mission_templates": {
+    "baseline": {
+      "badge": "Baseline",
+      "title": "Construir o baseline do seu sistema de estudo",
+      "summary": "Ainda ha poucos sinais locais de uso. O melhor proximo passo e salvar um plano forte e abrir pelo menos um lab alinhado ao foco atual.",
+      "success": "Fechar com Trilha salva, um lab em foco e a primeira leitura de progresso criada."
+    },
+    "checkpoint_recovery": {
+      "badge": "Checkpoint",
+      "title": "Destravar o que esta segurando o ritmo",
+      "summary": "Existem checkpoints ou bloqueios suficientes para justificar primeiro uma sessao de correcao antes de abrir mais conteudo.",
+      "success": "Atualizar status da unidade travada, ajustar o plano restante e sair com uma proxima acao clara."
+    },
+    "prove_with_lab": {
+      "badge": "Pratica",
+      "title": "Converter estudo em prova pratica",
+      "summary": "O sistema percebe teoria suficiente para justificar um lab alinhado ao foco, com evidencia visivel e criterio de conclusao.",
+      "success": "Executar um lab, registrar a evidencia e voltar para a plataforma com criterio mais forte."
+    },
+    "focus_rebalance": {
+      "badge": "Rebalancear",
+      "title": "Puxar o foco principal de volta para o centro",
+      "summary": "Seu foco salvo ainda nao aparece com tracao suficiente nas rotas e unidades mais importantes. Vale recentrar o estudo agora.",
+      "success": "Abrir a rota principal do foco, estudar a unidade certa e deixar o plano coerente com o objetivo declarado."
+    },
+    "senior_escalation": {
+      "badge": "Escalada",
+      "title": "Subir o nivel para a camada senior",
+      "summary": "Ritmo e cobertura ja permitem puxar temas de evals, memoria, agents/MCP e producao sem pular etapas demais.",
+      "success": "Concluir uma unidade senior ou um lab senior com evidencias de criterio operacional."
+    },
+    "continuity": {
+      "badge": "Continuidade",
+      "title": "Sustentar o proximo bloco mais relevante",
+      "summary": "O sistema ja tem sinais suficientes para escolher a proxima missao com base em progresso, foco e tracao recente.",
+      "success": "Fechar a proxima sessao com evidencia concreta e atualizar o checkpoint ao final."
+    }
+  }
+}

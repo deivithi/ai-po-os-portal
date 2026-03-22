@@ -19,7 +19,17 @@
       "route_label": "Labs",
       "href": "/labs/",
       "action_label": "Abrir Labs",
-      "next_step": "Passar de labs estaticos para recomendacao inteligente por uso real, progresso e dificuldade."
+      "next_step": "Usar Analytics para entender quais labs realmente estao convertendo em avanco e qual proxima missao puxar."
+    },
+    {
+      "domain": "Analytics e recomendacao adaptativa",
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "A nova rota Analytics mede uso real localmente, cruza Trilha, Progresso e Labs e recomenda a proxima missao automaticamente.",
+      "route_label": "Analytics",
+      "href": "/analytics/",
+      "action_label": "Abrir Analytics",
+      "next_step": "Refinar as heuristicas por uso real e preparar product metrics sem perder a camada didatica."
     },
     {
       "domain": "Modelos e lineup",

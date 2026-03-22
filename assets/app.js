@@ -1,4 +1,4 @@
-const DATA_PATHS = {
+﻿const DATA_PATHS = {
   overview: "/data/overview.json",
   portal: "/data/portal.json",
   artifacts: "/data/artifacts.json",
@@ -16,6 +16,8 @@ const DATA_PATHS = {
   matrixArtifact: "/artifacts/files/model_matrix.json",
   guideGuide: "/data/guide_page.json",
   labsGuide: "/data/labs_page.json",
+  analyticsGuide: "/data/analytics_page.json",
+  analyticsRules: "/data/analytics_rules.json",
   journeyGuide: "/data/journey_page.json",
   trilhaGuide: "/data/trilha_page.json",
   progressGuide: "/data/progress_page.json",
@@ -33,6 +35,17 @@ const PAGE_DATA_KEYS = {
   home: ["overview", "artifacts", "freshnessStatus", "vendorSources", "vendorUpdates", "domainMap"],
   guia: ["guideGuide", "vendorSources", "freshnessStatus"],
   labs: ["labsGuide", "vendorSources", "freshnessStatus"],
+  analytics: [
+    "analyticsGuide",
+    "analyticsRules",
+    "labsGuide",
+    "progressGuide",
+    "studyUnits",
+    "learningPathTemplates",
+    "adaptivePathRules",
+    "vendorSources",
+    "freshnessStatus",
+  ],
   jornada: ["journeyGuide", "freshnessStatus"],
   trilha: ["trilhaGuide", "studyUnits", "learningPathTemplates", "adaptivePathRules", "vendorSources", "freshnessStatus"],
   progresso: ["progressGuide", "studyUnits", "learningPathTemplates", "adaptivePathRules", "vendorSources", "freshnessStatus"],
@@ -46,11 +59,12 @@ const PAGE_DATA_KEYS = {
 };
 
 const PREFETCH_ROUTE_MAP = {
-  home: ["/guia/", "/trilha/", "/labs/"],
-  guia: ["/labs/", "/trilha/", "/jornada/"],
-  labs: ["/progresso/", "/senior/", "/roadmap/"],
-  trilha: ["/progresso/", "/jornada/", "/prompts/"],
-  progresso: ["/trilha/", "/roadmap/", "/senior/"],
+  home: ["/guia/", "/trilha/", "/analytics/"],
+  guia: ["/trilha/", "/analytics/", "/labs/"],
+  labs: ["/analytics/", "/progresso/", "/senior/"],
+  analytics: ["/trilha/", "/progresso/", "/labs/"],
+  trilha: ["/analytics/", "/progresso/", "/prompts/"],
+  progresso: ["/analytics/", "/trilha/", "/roadmap/"],
   jornada: ["/prompts/", "/matriz/", "/rag/"],
   prompts: ["/matriz/", "/rag/", "/artefatos/"],
   matriz: ["/prompts/", "/rag/", "/workflows/"],
@@ -67,9 +81,11 @@ const FAVORITES_STORAGE_KEY = "ai-po-os::prompt-favorites::v1";
 const ADAPTIVE_PATH_STORAGE_KEY = "ai-po-os::adaptive-path::v1";
 const STUDY_PROGRESS_STORAGE_KEY = "ai-po-os::study-progress::v1";
 const LABS_FILTER_STORAGE_KEY = "ai-po-os::labs-filters::v1";
+const STUDY_ANALYTICS_STORAGE_KEY = "ai-po-os::study-analytics::v1";
 const memoryCache = new Map();
 const prefetchedRoutes = new Set();
 const SITE_BASE_PATH = detectSiteBasePath();
+let studyAnalyticsRuntime = null;
 
 const pageId = document.body.dataset.page || "home";
 const MATRIX_METRIC_ORDER = [
@@ -452,6 +468,354 @@ function persistStudyProgressState(state) {
   } catch (_error) {
     // Keep runtime-only state if storage is unavailable.
   }
+}
+
+function createDefaultStudyAnalyticsState() {
+  const nowIso = new Date().toISOString();
+  return {
+    version: 1,
+    started_on: todayIsoDate(),
+    updated_on: nowIso,
+    last_activity_at: nowIso,
+    page_views: {},
+    active_ms_by_page: {},
+    route_interactions: {},
+    cta_targets: {},
+    cta_edges: {},
+    latest_adaptive_preferences: {},
+    latest_labs_preferences: {},
+    labs: {
+      filter_updates: 0,
+      focus_counts: {},
+      domain_counts: {},
+      last_focus: null,
+    },
+    units: {
+      focus_counts: {},
+      domain_counts: {},
+      last_focus: null,
+    },
+    progress: {
+      status_counts: {},
+      unit_updates: {},
+      attributed_labs: {},
+      attributed_domains: {},
+    },
+    recent_events: [],
+  };
+}
+
+function loadStudyAnalyticsState() {
+  const defaultState = createDefaultStudyAnalyticsState();
+
+  try {
+    const raw = window.localStorage.getItem(STUDY_ANALYTICS_STORAGE_KEY);
+    if (!raw) {
+      return defaultState;
+    }
+
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaultState,
+      ...(parsed && typeof parsed === "object" ? parsed : {}),
+      page_views: parsed?.page_views && typeof parsed.page_views === "object" ? parsed.page_views : {},
+      active_ms_by_page:
+        parsed?.active_ms_by_page && typeof parsed.active_ms_by_page === "object" ? parsed.active_ms_by_page : {},
+      route_interactions:
+        parsed?.route_interactions && typeof parsed.route_interactions === "object" ? parsed.route_interactions : {},
+      cta_targets: parsed?.cta_targets && typeof parsed.cta_targets === "object" ? parsed.cta_targets : {},
+      cta_edges: parsed?.cta_edges && typeof parsed.cta_edges === "object" ? parsed.cta_edges : {},
+      latest_adaptive_preferences:
+        parsed?.latest_adaptive_preferences && typeof parsed.latest_adaptive_preferences === "object"
+          ? parsed.latest_adaptive_preferences
+          : {},
+      latest_labs_preferences:
+        parsed?.latest_labs_preferences && typeof parsed.latest_labs_preferences === "object"
+          ? parsed.latest_labs_preferences
+          : {},
+      labs:
+        parsed?.labs && typeof parsed.labs === "object"
+          ? {
+              ...defaultState.labs,
+              ...parsed.labs,
+              focus_counts:
+                parsed.labs?.focus_counts && typeof parsed.labs.focus_counts === "object"
+                  ? parsed.labs.focus_counts
+                  : {},
+              domain_counts:
+                parsed.labs?.domain_counts && typeof parsed.labs.domain_counts === "object"
+                  ? parsed.labs.domain_counts
+                  : {},
+            }
+          : defaultState.labs,
+      units:
+        parsed?.units && typeof parsed.units === "object"
+          ? {
+              ...defaultState.units,
+              ...parsed.units,
+              focus_counts:
+                parsed.units?.focus_counts && typeof parsed.units.focus_counts === "object"
+                  ? parsed.units.focus_counts
+                  : {},
+              domain_counts:
+                parsed.units?.domain_counts && typeof parsed.units.domain_counts === "object"
+                  ? parsed.units.domain_counts
+                  : {},
+            }
+          : defaultState.units,
+      progress:
+        parsed?.progress && typeof parsed.progress === "object"
+          ? {
+              ...defaultState.progress,
+              ...parsed.progress,
+              status_counts:
+                parsed.progress?.status_counts && typeof parsed.progress.status_counts === "object"
+                  ? parsed.progress.status_counts
+                  : {},
+              unit_updates:
+                parsed.progress?.unit_updates && typeof parsed.progress.unit_updates === "object"
+                  ? parsed.progress.unit_updates
+                  : {},
+              attributed_labs:
+                parsed.progress?.attributed_labs && typeof parsed.progress.attributed_labs === "object"
+                  ? parsed.progress.attributed_labs
+                  : {},
+              attributed_domains:
+                parsed.progress?.attributed_domains && typeof parsed.progress.attributed_domains === "object"
+                  ? parsed.progress.attributed_domains
+                  : {},
+            }
+          : defaultState.progress,
+      recent_events: Array.isArray(parsed?.recent_events) ? parsed.recent_events : [],
+    };
+  } catch (_error) {
+    return defaultState;
+  }
+}
+
+function persistStudyAnalyticsState(state) {
+  try {
+    window.localStorage.setItem(STUDY_ANALYTICS_STORAGE_KEY, JSON.stringify(state));
+  } catch (_error) {
+    // Keep runtime-only state if storage is unavailable.
+  }
+}
+
+function incrementCounter(bucket, key, amount = 1) {
+  if (!bucket || !key) {
+    return;
+  }
+
+  bucket[key] = Number(bucket[key] || 0) + amount;
+}
+
+function pushAnalyticsEvent(state, event, limit = 60) {
+  const history = Array.isArray(state.recent_events) ? state.recent_events.slice(-(limit - 1)) : [];
+  history.push(event);
+  state.recent_events = history.slice(-limit);
+}
+
+function inferPageIdFromPath(path) {
+  const normalizedPath = normalizeInternalPath(path);
+  if (!normalizedPath) {
+    return null;
+  }
+
+  if (normalizedPath === "/") {
+    return "home";
+  }
+
+  const segment = normalizedPath.split("/").filter(Boolean)[0];
+  return segment || "home";
+}
+
+function trackStudyAnalyticsEvent(type, payload = {}) {
+  const state = loadStudyAnalyticsState();
+  const occurredAt = payload.occurred_at || new Date().toISOString();
+  state.updated_on = occurredAt;
+  state.last_activity_at = occurredAt;
+
+  const recentEventLimit = Number(payload.recent_event_limit || 60);
+
+  switch (type) {
+    case "page_view": {
+      incrementCounter(state.page_views, payload.page_id);
+      break;
+    }
+    case "active_time": {
+      if (!payload.page_id || !payload.milliseconds) {
+        break;
+      }
+
+      incrementCounter(state.active_ms_by_page, payload.page_id, Number(payload.milliseconds || 0));
+      break;
+    }
+    case "route_interaction": {
+      incrementCounter(state.route_interactions, payload.page_id);
+      const targetPageId = inferPageIdFromPath(payload.target_path);
+      if (targetPageId) {
+        incrementCounter(state.cta_targets, targetPageId);
+        incrementCounter(state.cta_edges, `${payload.page_id || "unknown"}->${targetPageId}`);
+      }
+      break;
+    }
+    case "adaptive_path_update": {
+      state.latest_adaptive_preferences =
+        payload.preferences && typeof payload.preferences === "object" ? payload.preferences : {};
+      incrementCounter(state.route_interactions, payload.page_id || "trilha");
+      break;
+    }
+    case "labs_filters": {
+      state.latest_labs_preferences =
+        payload.preferences && typeof payload.preferences === "object" ? payload.preferences : {};
+      state.labs.filter_updates = Number(state.labs.filter_updates || 0) + 1;
+      incrementCounter(state.route_interactions, payload.page_id || "labs");
+      break;
+    }
+    case "lab_focus": {
+      incrementCounter(state.route_interactions, payload.page_id || "labs");
+      incrementCounter(state.labs.focus_counts, payload.lab_id);
+      incrementCounter(state.labs.domain_counts, payload.domain);
+      state.labs.last_focus = {
+        lab_id: payload.lab_id || "",
+        title: payload.title || "",
+        domain: payload.domain || "",
+        occurred_at: occurredAt,
+      };
+      break;
+    }
+    case "unit_focus": {
+      incrementCounter(state.route_interactions, payload.page_id || pageId);
+      incrementCounter(state.units.focus_counts, payload.unit_id);
+      incrementCounter(state.units.domain_counts, payload.domain);
+      state.units.last_focus = {
+        unit_id: payload.unit_id || "",
+        title: payload.title || "",
+        domain: payload.domain || "",
+        occurred_at: occurredAt,
+      };
+      break;
+    }
+    case "progress_status": {
+      incrementCounter(state.route_interactions, payload.page_id || "progresso");
+      incrementCounter(state.progress.status_counts, payload.status_id);
+      incrementCounter(state.progress.unit_updates, payload.unit_id);
+
+      const lastLabFocus = state.labs.last_focus;
+      if (lastLabFocus?.lab_id && lastLabFocus?.occurred_at) {
+        const lastLabTime = new Date(lastLabFocus.occurred_at).getTime();
+        const currentTime = new Date(occurredAt).getTime();
+        const diffHours = Number.isFinite(lastLabTime)
+          ? (currentTime - lastLabTime) / (1000 * 60 * 60)
+          : Number.POSITIVE_INFINITY;
+        const recentWindowHours = Number(payload.recent_lab_window_hours || 72);
+        if (diffHours >= 0 && diffHours <= recentWindowHours) {
+          incrementCounter(state.progress.attributed_labs, lastLabFocus.lab_id);
+          incrementCounter(state.progress.attributed_domains, lastLabFocus.domain);
+        }
+      }
+      break;
+    }
+    default:
+      break;
+  }
+
+  pushAnalyticsEvent(
+    state,
+    {
+      type,
+      page_id: payload.page_id || pageId,
+      label: payload.label || "",
+      target_path: payload.target_path || "",
+      lab_id: payload.lab_id || "",
+      unit_id: payload.unit_id || "",
+      domain: payload.domain || "",
+      status_id: payload.status_id || "",
+      occurred_at: occurredAt,
+    },
+    recentEventLimit,
+  );
+
+  persistStudyAnalyticsState(state);
+  return state;
+}
+
+function flushStudyAnalyticsActivity(reason = "manual") {
+  studyAnalyticsRuntime?.flush?.(reason);
+}
+
+function setupStudyAnalytics() {
+  if (studyAnalyticsRuntime || typeof window === "undefined") {
+    return;
+  }
+
+  trackStudyAnalyticsEvent("page_view", { page_id: pageId, target_path: window.location.pathname });
+
+  const runtime = {
+    visible_since: document.visibilityState === "visible" ? Date.now() : null,
+    interval_id: null,
+    flush(reason = "manual") {
+      if (runtime.visible_since === null) {
+        return;
+      }
+
+      const delta = Date.now() - runtime.visible_since;
+      if (delta >= 1000) {
+        trackStudyAnalyticsEvent("active_time", {
+          page_id: pageId,
+          milliseconds: delta,
+          label: reason,
+        });
+      }
+
+      runtime.visible_since = document.visibilityState === "visible" ? Date.now() : null;
+    },
+  };
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      runtime.flush("visibility_hidden");
+      return;
+    }
+
+    runtime.visible_since = Date.now();
+  });
+
+  window.addEventListener("pagehide", () => runtime.flush("pagehide"));
+  window.addEventListener("beforeunload", () => runtime.flush("beforeunload"));
+
+  runtime.interval_id = window.setInterval(() => {
+    if (document.visibilityState === "visible") {
+      runtime.flush("interval");
+    }
+  }, 30000);
+
+  const content = document.getElementById("content");
+  content?.addEventListener(
+    "click",
+    (event) => {
+      const actionable = event.target.closest("a, button");
+      if (!actionable) {
+        return;
+      }
+
+      const label =
+        actionable.getAttribute("aria-label") ||
+        actionable.getAttribute("data-track-label") ||
+        actionable.textContent?.trim() ||
+        actionable.getAttribute("href") ||
+        "";
+      const href = actionable.getAttribute("href");
+      trackStudyAnalyticsEvent("route_interaction", {
+        page_id: pageId,
+        label,
+        target_path: href || "",
+      });
+    },
+    { capture: true },
+  );
+
+  studyAnalyticsRuntime = runtime;
 }
 
 function setQueryParam(name, value) {
@@ -2094,6 +2458,10 @@ function renderLabs(labsGuide, vendorSources) {
   function syncLabs(message = "") {
     const preferences = readPreferences();
     persistLabsPreferences(preferences);
+    trackStudyAnalyticsEvent("labs_filters", {
+      page_id: "labs",
+      preferences,
+    });
     setQueryParam("domain", preferences.domain);
     setQueryParam("difficulty", preferences.difficulty);
     setQueryParam("timebox", preferences.timebox);
@@ -2126,6 +2494,15 @@ function renderLabs(labsGuide, vendorSources) {
       }
 
       activeLabId = target.getAttribute("data-lab-focus");
+      const trackedLab = labs.find((lab) => lab.id === activeLabId);
+      if (trackedLab) {
+        trackStudyAnalyticsEvent("lab_focus", {
+          page_id: "labs",
+          lab_id: trackedLab.id,
+          title: trackedLab.title,
+          domain: trackedLab.domain,
+        });
+      }
       syncLabs("Lab em foco atualizado.");
     });
 
@@ -2779,6 +3156,997 @@ function buildProgressSnapshot(
   };
 }
 
+function sumNumericValues(object) {
+  return Object.values(object || {}).reduce((sum, value) => sum + Number(value || 0), 0);
+}
+
+function buildStudyDomainLookup(studyUnits) {
+  return new Map(
+    (studyUnits?.domains || []).map((domain) => [
+      domain.id,
+      {
+        id: domain.id,
+        label: domain.label,
+        summary: domain.summary,
+      },
+    ]),
+  );
+}
+
+function buildDomainProgressMap(progressSnapshot, studyUnits) {
+  const lookup = buildStudyDomainLookup(studyUnits);
+  const map = new Map();
+
+  (progressSnapshot?.planUnits || []).forEach((unit) => {
+    const meta = lookup.get(unit.domain) || {
+      id: unit.domain,
+      label: titleCase(unit.domain || "dominio"),
+      summary: "",
+    };
+    const current = map.get(unit.domain) || {
+      id: meta.id,
+      label: meta.label,
+      summary: meta.summary,
+      total_units: 0,
+      mastered_units: 0,
+      in_progress_units: 0,
+      checkpoint_units: 0,
+      blocked_units: 0,
+      allocated_hours: 0,
+      equivalent_hours: 0,
+    };
+
+    current.total_units += 1;
+    current.allocated_hours += Number(unit.allocated_hours || 0);
+    current.equivalent_hours += Number(unit.equivalent_hours || 0);
+
+    if (unit.progress_status?.id === "mastered") {
+      current.mastered_units += 1;
+    }
+    if (unit.progress_status?.id === "in_progress") {
+      current.in_progress_units += 1;
+    }
+    if (unit.progress_status?.id === "checkpoint") {
+      current.checkpoint_units += 1;
+    }
+    if (unit.progress_status?.id === "blocked") {
+      current.blocked_units += 1;
+    }
+
+    map.set(unit.domain, current);
+  });
+
+  return map;
+}
+
+function resolveRouteEngagementStatus(route, thresholds) {
+  if (
+    route.active_minutes >= thresholds.strong_minutes ||
+    route.views >= thresholds.high_view_count ||
+    route.interactions >= thresholds.strong_interactions ||
+    route.traction_score >= 18
+  ) {
+    return {
+      status_class: "status-done",
+      label: "Tracao forte",
+      interpretation: "Esta rota esta realmente puxando o estudo e nao so aparecendo aberta por acaso.",
+    };
+  }
+
+  if (route.active_minutes >= thresholds.warming_minutes || route.views > 0 || route.interactions > 0) {
+    return {
+      status_class: "status-in-progress",
+      label: "Tracao em formacao",
+      interpretation: "Ja existe uso real, mas ainda vale decidir se isso esta virando criterio ou so exploracao.",
+    };
+  }
+
+  return {
+    status_class: "status-next",
+    label: "Tracao fria",
+    interpretation: "Esta rota ainda nao virou habito no seu fluxo local e pode estar faltando para equilibrar o estudo.",
+  };
+}
+
+function buildRouteAnalytics(routeProfiles, analyticsState, progressByDomain, focusDomains) {
+  return (routeProfiles || []).map((route) => {
+    const views = Number(analyticsState.page_views?.[route.id] || 0);
+    const activeMinutes = roundToHalf(Number(analyticsState.active_ms_by_page?.[route.id] || 0) / 60000);
+    const interactions = Number(analyticsState.route_interactions?.[route.id] || 0);
+    const ctaTargets = Number(analyticsState.cta_targets?.[route.id] || 0);
+    const relevantProgressEntries = (route.domains || [])
+      .map((domainId) => progressByDomain.get(domainId))
+      .filter(Boolean);
+    const coverageRatio =
+      relevantProgressEntries.length > 0
+        ? relevantProgressEntries.reduce(
+            (sum, entry) => sum + entry.mastered_units / Math.max(1, entry.total_units),
+            0,
+          ) / relevantProgressEntries.length
+        : 0;
+    const tractionScore = views * 1.9 + activeMinutes * 0.42 + interactions * 1.35 + ctaTargets * 0.9;
+    const advanceSignal = tractionScore * (0.65 + coverageRatio * 1.45);
+    const focusCritical = (route.domains || []).some((domainId) => focusDomains.includes(domainId));
+
+    return {
+      ...route,
+      views,
+      active_minutes: activeMinutes,
+      interactions,
+      cta_targets: ctaTargets,
+      traction_score: Number(tractionScore.toFixed(2)),
+      advance_signal: Number(advanceSignal.toFixed(2)),
+      coverage_ratio: coverageRatio,
+      focus_critical: focusCritical,
+    };
+  });
+}
+
+function buildAnalyticsLabLookup(labsGuide) {
+  return new Map((labsGuide?.labs || []).map((lab) => [lab.id, lab]));
+}
+
+function buildLabDomainReverseMap(analyticsRules) {
+  const reverse = new Map();
+  Object.entries(analyticsRules?.unit_domain_to_lab_domain || {}).forEach(([unitDomain, labDomain]) => {
+    if (!reverse.has(labDomain)) {
+      reverse.set(labDomain, []);
+    }
+    reverse.get(labDomain).push(unitDomain);
+  });
+  return reverse;
+}
+
+function resolveDomainAnalyticsStatus(domainInsight, focusDomains) {
+  if (domainInsight.engagement_score >= 16 && domainInsight.mastery_ratio >= 0.35) {
+    return {
+      status_class: "status-done",
+      label: "Movendo o ponteiro",
+      interpretation: "Leitura, pratica e progresso ja estao andando juntos neste dominio.",
+    };
+  }
+
+  if (domainInsight.engagement_score >= 12 && domainInsight.mastery_ratio < 0.2) {
+    return {
+      status_class: "status-in-progress",
+      label: "Muita tracao, pouca prova",
+      interpretation: "Voce esta investindo energia aqui, mas a conversao em evidencia e dominio ainda pode melhorar.",
+    };
+  }
+
+  if (focusDomains.includes(domainInsight.id) && domainInsight.engagement_score < 8) {
+    return {
+      status_class: "status-next",
+      label: "Subinvestido para o foco atual",
+      interpretation: "Este dominio deveria aparecer mais forte pelo foco salvo da Trilha.",
+    };
+  }
+
+  return {
+    status_class: "status-in-progress",
+    label: "Tracao moderada",
+    interpretation: "Ja existe sinal local, mas ainda cabe reforcar consistencia ou prova pratica.",
+  };
+}
+
+function buildDomainAnalytics(progressSnapshot, studyUnits, analyticsState, analyticsRules, routeInsights, labsGuide, focusDomains) {
+  const progressByDomain = buildDomainProgressMap(progressSnapshot, studyUnits);
+  const labReverseMap = buildLabDomainReverseMap(analyticsRules);
+  const routeGroups = new Map();
+
+  routeInsights.forEach((route) => {
+    (route.domains || []).forEach((domainId) => {
+      if (!routeGroups.has(domainId)) {
+        routeGroups.set(domainId, []);
+      }
+      routeGroups.get(domainId).push(route);
+    });
+  });
+
+  const relevantDomainIds = new Set([...progressByDomain.keys(), ...focusDomains]);
+  return [...relevantDomainIds]
+    .map((domainId) => {
+      const progressEntry =
+        progressByDomain.get(domainId) || {
+          id: domainId,
+          label: titleCase(domainId),
+          summary: "",
+          total_units: 0,
+          mastered_units: 0,
+          in_progress_units: 0,
+          checkpoint_units: 0,
+          blocked_units: 0,
+          allocated_hours: 0,
+          equivalent_hours: 0,
+        };
+      const matchingRoutes = routeGroups.get(domainId) || [];
+      const routeMinutes = matchingRoutes.reduce((sum, route) => sum + Number(route.active_minutes || 0), 0);
+      const routeViews = matchingRoutes.reduce((sum, route) => sum + Number(route.views || 0), 0);
+      const routeInteractions = matchingRoutes.reduce((sum, route) => sum + Number(route.interactions || 0), 0);
+      const mappedLabDomain = analyticsRules?.unit_domain_to_lab_domain?.[domainId] || null;
+      const labFocusCount = Number(
+        mappedLabDomain ? analyticsState.labs?.domain_counts?.[mappedLabDomain] || 0 : 0,
+      );
+      const attributedProgress = Number(
+        mappedLabDomain ? analyticsState.progress?.attributed_domains?.[mappedLabDomain] || 0 : 0,
+      );
+      const unitFocusCount = Number(analyticsState.units?.domain_counts?.[domainId] || 0);
+      const masteryRatio = progressEntry.mastered_units / Math.max(1, progressEntry.total_units || 0);
+      const engagementScore =
+        routeMinutes * 0.45 +
+        routeViews * 1.6 +
+        routeInteractions * 1.2 +
+        labFocusCount * 2.1 +
+        unitFocusCount * 1.4 +
+        attributedProgress * 2.4;
+      const bestRoute =
+        matchingRoutes.slice().sort((left, right) => right.traction_score - left.traction_score)[0] || null;
+      const recommendedLab = (labsGuide?.labs || []).find((lab) => {
+        const mappedDomains = labReverseMap.get(lab.domain) || [];
+        return mappedDomains.includes(domainId);
+      });
+      const insight = {
+        ...progressEntry,
+        route_minutes: routeMinutes,
+        route_views: routeViews,
+        route_interactions: routeInteractions,
+        lab_focus_count: labFocusCount,
+        attributed_progress: attributedProgress,
+        unit_focus_count: unitFocusCount,
+        mastery_ratio: masteryRatio,
+        engagement_score: Number(engagementScore.toFixed(2)),
+        best_route: bestRoute,
+        recommended_lab: recommendedLab,
+      };
+      return {
+        ...insight,
+        status: resolveDomainAnalyticsStatus(insight, focusDomains),
+      };
+    })
+    .sort((left, right) => right.engagement_score - left.engagement_score);
+}
+
+function resolveLabSuggestionTimebox(preferences) {
+  if (Number(preferences?.hours_per_day || 0) <= 1) {
+    return "quick";
+  }
+
+  if (Number(preferences?.hours_per_day || 0) <= 3) {
+    return "session";
+  }
+
+  return "deep";
+}
+
+function selectRecommendedLab(labsGuide, analyticsRules, preferences, progressSnapshot, analyticsState, missionContext = {}) {
+  const focusDomains = analyticsRules?.focus_domain_map?.[preferences.focus] || [];
+  const primaryUnitDomain = missionContext.unit?.domain || progressSnapshot?.nextPriorityUnit?.domain || focusDomains[0];
+  const preferredLabDomain = analyticsRules?.unit_domain_to_lab_domain?.[primaryUnitDomain] || null;
+  const preferredTimebox = resolveLabSuggestionTimebox(preferences);
+  const preferredObjective =
+    missionContext.objective ||
+    (preferredLabDomain === "models"
+      ? "criteria"
+      : preferredLabDomain === "rag"
+        ? "knowledge"
+        : preferredLabDomain === "workflows"
+          ? "operation"
+          : preferredLabDomain === "senior"
+            ? "senior"
+            : "criteria");
+
+  return (labsGuide?.labs || [])
+    .map((lab) => {
+      let score = 0;
+      if (lab.domain === preferredLabDomain) {
+        score += 6;
+      }
+      if (lab.timebox === preferredTimebox) {
+        score += 2.5;
+      }
+      if (lab.objective === preferredObjective) {
+        score += 2;
+      }
+      score += Number(analyticsState.progress?.attributed_labs?.[lab.id] || 0) * 1.5;
+      score += Number(analyticsState.labs?.focus_counts?.[lab.id] || 0) * 0.4;
+      if (missionContext.force_domain && lab.domain === missionContext.force_domain) {
+        score += 3;
+      }
+
+      return {
+        ...lab,
+        recommendation_score: Number(score.toFixed(2)),
+      };
+    })
+    .sort((left, right) => right.recommendation_score - left.recommendation_score)[0] || null;
+}
+
+function buildAnalyticsMission(analyticsRules, preferences, progressSnapshot, routeInsights, domainInsights, labsGuide, analyticsState) {
+  const templates = analyticsRules?.mission_templates || {};
+  const totalViews = sumNumericValues(analyticsState.page_views);
+  const totalActiveMinutes = roundToHalf(sumNumericValues(analyticsState.active_ms_by_page) / 60000);
+  const labsFocusTotal = sumNumericValues(analyticsState.labs?.focus_counts);
+  const focusDomains = analyticsRules?.focus_domain_map?.[preferences.focus] || [];
+  const focusGap = domainInsights.find(
+    (domain) => focusDomains.includes(domain.id) && domain.status.status_class === "status-next",
+  );
+  const strongestDomain = domainInsights[0] || null;
+  const strongestRoute = routeInsights.slice().sort((left, right) => right.advance_signal - left.advance_signal)[0] || null;
+  const checkpointUnit = progressSnapshot.nextCheckpointUnit || progressSnapshot.nextPriorityUnit || null;
+  let templateKey = "continuity";
+
+  if (progressSnapshot.blockedUnits.length > 0 || progressSnapshot.checkpointUnits.length >= 2) {
+    templateKey = "checkpoint_recovery";
+  } else if (totalViews < 5 || totalActiveMinutes < 18) {
+    templateKey = "baseline";
+  } else if (labsFocusTotal < 2) {
+    templateKey = "prove_with_lab";
+  } else if (focusGap) {
+    templateKey = "focus_rebalance";
+  } else if (progressSnapshot.coverageRatio >= 0.42 && progressSnapshot.paceRatio >= 0.9) {
+    templateKey = "senior_escalation";
+  }
+
+  const template = templates[templateKey] || templates.continuity || {
+    badge: "Continuidade",
+    title: "Sustentar o proximo bloco",
+    summary: "",
+    success: "",
+  };
+
+  const recommendedLab = selectRecommendedLab(
+    labsGuide,
+    analyticsRules,
+    preferences,
+    progressSnapshot,
+    analyticsState,
+    {
+      unit: checkpointUnit,
+      force_domain:
+        templateKey === "senior_escalation"
+          ? "senior"
+          : templateKey === "prove_with_lab"
+            ? analyticsRules?.unit_domain_to_lab_domain?.[checkpointUnit?.domain || focusDomains[0]]
+            : "",
+    },
+  );
+
+  const labHref = recommendedLab
+    ? `/labs/?domain=${encodeURIComponent(recommendedLab.domain)}&difficulty=${encodeURIComponent(
+        recommendedLab.difficulty,
+      )}&timebox=${encodeURIComponent(recommendedLab.timebox)}&objective=${encodeURIComponent(
+        recommendedLab.objective,
+      )}&lab=${encodeURIComponent(recommendedLab.id)}`
+    : "/labs/";
+
+  const checkpointHref = checkpointUnit?.portal_href || "/progresso/";
+  const checkpointLabel = checkpointUnit?.portal_label || "Abrir Progresso";
+
+  let primaryButton = {
+    label: "Abrir Trilha",
+    href: "/trilha/",
+    variant: "primary",
+  };
+  let secondaryButton = {
+    label: "Abrir Labs",
+    href: labHref,
+    variant: "secondary",
+  };
+  let whyNow = [];
+
+  switch (templateKey) {
+    case "checkpoint_recovery":
+      primaryButton = {
+        label: "Abrir Progresso",
+        href: "/progresso/",
+        variant: "primary",
+      };
+      secondaryButton = {
+        label: checkpointLabel,
+        href: checkpointHref,
+        variant: "secondary",
+      };
+      whyNow = [
+        `${progressSnapshot.checkpointUnits.length} unidade(s) estao em checkpoint e ${progressSnapshot.blockedUnits.length} bloqueada(s).`,
+        `O proximo gargalo explicito e ${checkpointUnit?.title || "a unidade ativa"}.`,
+        "Abrir mais conteudo agora tende a aumentar dispersao antes de corrigir o essencial.",
+      ];
+      break;
+    case "baseline":
+      primaryButton = {
+        label: "Abrir Trilha",
+        href: "/trilha/",
+        variant: "primary",
+      };
+      secondaryButton = {
+        label: "Abrir Guia",
+        href: "/guia/",
+        variant: "secondary",
+      };
+      whyNow = [
+        `Seu historico local ainda mostra ${totalViews} abertura(s) de rota e ${formatNumber(totalActiveMinutes, 1)} minuto(s) ativos.`,
+        "O melhor retorno agora e consolidar um baseline forte de plano, tempo e proxima sessao.",
+        "Depois disso, a recomendacao consegue ficar mais precisa sem chute.",
+      ];
+      break;
+    case "prove_with_lab":
+      primaryButton = {
+        label: "Abrir lab recomendado",
+        href: labHref,
+        variant: "primary",
+      };
+      secondaryButton = {
+        label: checkpointLabel,
+        href: checkpointHref,
+        variant: "secondary",
+      };
+      whyNow = [
+        `Seu comportamento ja mostra ${formatNumber(totalActiveMinutes, 1)} minuto(s) ativos, mas so ${labsFocusTotal} foco(s) de lab registrados.`,
+        "A plataforma esta pedindo uma prova pratica para converter criterio em evidencia.",
+        `O lab mais alinhado agora e ${recommendedLab?.title || "o proximo lab filtrado"}.`,
+      ];
+      break;
+    case "focus_rebalance": {
+      const focusRoute =
+        routeInsights.find((route) => (route.domains || []).includes(focusGap?.id) && route.href !== "/analytics/") ||
+        strongestRoute;
+      primaryButton = {
+        label: `Abrir ${focusRoute?.label || "rota do foco"}`,
+        href: focusRoute?.href || checkpointHref,
+        variant: "primary",
+      };
+      secondaryButton = {
+        label: "Rever Trilha",
+        href: "/trilha/",
+        variant: "secondary",
+      };
+      whyNow = [
+        `Seu foco salvo continua sendo ${titleCase(preferences.focus || "foco atual")}.`,
+        `${focusGap?.label || "O dominio principal"} esta com tracao abaixo do ideal para este objetivo.`,
+        "Reforcar agora evita que o plano declarado e o estudo real sigam caminhos diferentes.",
+      ];
+      break;
+    }
+    case "senior_escalation":
+      primaryButton = {
+        label: "Abrir Senior",
+        href: "/senior/",
+        variant: "primary",
+      };
+      secondaryButton = {
+        label: recommendedLab?.domain === "senior" ? "Abrir lab senior" : "Abrir Roadmap",
+        href: recommendedLab?.domain === "senior" ? labHref : "/roadmap/",
+        variant: "secondary",
+      };
+      whyNow = [
+        `A cobertura atual ja chegou a ${formatPercent(progressSnapshot.coverageRatio)} de unidades dominadas.`,
+        `O ritmo local esta em ${formatPercent(progressSnapshot.paceRatio)} do esperado para o plano salvo.`,
+        "Este e um bom momento para puxar evals, memoria, agents/MCP e producao sem pular o processo.",
+      ];
+      break;
+    default:
+      primaryButton = {
+        label: checkpointLabel,
+        href: checkpointHref,
+        variant: "primary",
+      };
+      secondaryButton = {
+        label: recommendedLab ? "Abrir lab alinhado" : "Abrir Labs",
+        href: recommendedLab ? labHref : "/labs/",
+        variant: "secondary",
+      };
+      whyNow = [
+        `A rota com mais sinal local agora e ${strongestRoute?.label || "a rota ativa"}.`,
+        `${strongestDomain?.label || "O dominio principal"} aparece com a melhor combinacao de tracao e progresso no momento.`,
+        "A melhor jogada e sustentar o proximo bloco antes de trocar de frente de estudo.",
+      ];
+      break;
+  }
+
+  const suggestedDuration =
+    Number(preferences?.hours_per_day || 0) <= 1
+      ? "30-45 min"
+      : Number(preferences?.hours_per_day || 0) <= 3
+        ? "60-90 min"
+        : "120-180 min";
+
+  return {
+    id: templateKey,
+    ...template,
+    primary_button: primaryButton,
+    secondary_button: secondaryButton,
+    why_now: whyNow,
+    suggested_duration: suggestedDuration,
+    focus_unit: checkpointUnit,
+    recommended_lab: recommendedLab,
+    strongest_route: strongestRoute,
+    strongest_domain: strongestDomain,
+  };
+}
+
+function buildAnalyticsSnapshot(
+  analyticsRules,
+  studyUnits,
+  learningPathTemplates,
+  adaptivePathRules,
+  labsGuide,
+  progressGuide,
+  vendorSources,
+) {
+  const preferences = loadAdaptivePathPreferences(adaptivePathRules.defaults || {});
+  const progressState = loadStudyProgressState();
+  const labsPreferences = loadLabsPreferences(labsGuide.defaults || {});
+  const analyticsState = loadStudyAnalyticsState();
+  const progressSnapshot = buildProgressSnapshot(
+    progressGuide,
+    studyUnits,
+    learningPathTemplates,
+    adaptivePathRules,
+    vendorSources,
+    preferences,
+    progressState,
+  );
+  const focusDomains = analyticsRules?.focus_domain_map?.[preferences.focus] || [];
+  const routeInsights = buildRouteAnalytics(
+    analyticsRules?.route_profiles || [],
+    analyticsState,
+    buildDomainProgressMap(progressSnapshot, studyUnits),
+    focusDomains,
+  ).map((route) => ({
+    ...route,
+    status: resolveRouteEngagementStatus(route, analyticsRules?.engagement_thresholds || {}),
+  }));
+  const domainInsights = buildDomainAnalytics(
+    progressSnapshot,
+    studyUnits,
+    analyticsState,
+    analyticsRules,
+    routeInsights,
+    labsGuide,
+    focusDomains,
+  );
+  const mission = buildAnalyticsMission(
+    analyticsRules,
+    preferences,
+    progressSnapshot,
+    routeInsights,
+    domainInsights,
+    labsGuide,
+    analyticsState,
+  );
+  const labLookup = buildAnalyticsLabLookup(labsGuide);
+  const topLabs = (labsGuide?.labs || [])
+    .map((lab) => {
+      const focusCount = Number(analyticsState.labs?.focus_counts?.[lab.id] || 0);
+      const attributedProgress = Number(analyticsState.progress?.attributed_labs?.[lab.id] || 0);
+      const signalScore = focusCount * 1.4 + attributedProgress * 2.7;
+      return {
+        ...lab,
+        focus_count: focusCount,
+        attributed_progress: attributedProgress,
+        signal_score: Number(signalScore.toFixed(2)),
+      };
+    })
+    .sort((left, right) => right.signal_score - left.signal_score || right.focus_count - left.focus_count)
+    .slice(0, 4);
+
+  return {
+    preferences,
+    labs_preferences: labsPreferences,
+    analytics_state: analyticsState,
+    progress_snapshot: progressSnapshot,
+    route_insights: routeInsights,
+    domain_insights: domainInsights,
+    top_labs: topLabs,
+    mission,
+    totals: {
+      total_views: sumNumericValues(analyticsState.page_views),
+      total_active_minutes: roundToHalf(sumNumericValues(analyticsState.active_ms_by_page) / 60000),
+      total_route_interactions: sumNumericValues(analyticsState.route_interactions),
+      total_labs_focused: sumNumericValues(analyticsState.labs?.focus_counts),
+      total_progress_updates: sumNumericValues(analyticsState.progress?.unit_updates),
+    },
+    lab_lookup: labLookup,
+  };
+}
+
+function buildAnalyticsSessionCards(analyticsGuide, snapshot) {
+  const mission = snapshot.mission;
+  const baseQuickAction = mission.primary_button;
+
+  return (analyticsGuide?.session_presets || []).map((preset) => {
+    let blocks = [];
+    let action = baseQuickAction;
+
+    switch (preset.id) {
+      case "quick":
+        blocks = [
+          `Abrir ${mission.primary_button.label.toLowerCase()} e revisar o objetivo da missao.`,
+          mission.focus_unit
+            ? `Focar ${mission.focus_unit.title} e corrigir o ponto que mais trava o ritmo.`
+            : "Revisar o bloco recomendado e anotar a unica evidencia que precisa sair hoje.",
+          "Fechar a sessao com checkpoint, nota ou comparativo curto.",
+        ];
+        action = mission.primary_button;
+        break;
+      case "standard":
+        blocks = [
+          "Estudar a rota recomendada com o objetivo da missao em mente.",
+          mission.recommended_lab
+            ? `Executar o lab ${mission.recommended_lab.title} ou pelo menos preparar o setup dele.`
+            : "Executar uma evidencia pratica ou checkpoint alinhado ao foco atual.",
+          "Voltar para Progresso ou Analytics para registrar o que mudou.",
+        ];
+        action = mission.secondary_button || mission.primary_button;
+        break;
+      default:
+        blocks = [
+          "Rodar a rota principal em profundidade sem abrir mais de uma frente nova.",
+          mission.recommended_lab
+            ? `Fechar a sessao com a evidencia completa do lab ${mission.recommended_lab.title}.`
+            : "Fechar a sessao com evidencia completa da unidade ou bloco em foco.",
+          "Registrar no Progresso e revisar se a proxima missao mudou.",
+        ];
+        action = mission.secondary_button || mission.primary_button;
+        break;
+    }
+
+    return {
+      ...preset,
+      blocks,
+      button: action,
+    };
+  });
+}
+
+function renderAnalytics(
+  analyticsGuide,
+  analyticsRules,
+  studyUnits,
+  learningPathTemplates,
+  adaptivePathRules,
+  labsGuide,
+  progressGuide,
+  vendorSources,
+) {
+  const sourceLookup = buildSourceLookup(vendorSources);
+
+  renderCards(
+    "analytics-orientation",
+    analyticsGuide.orientation || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  const studySteps = document.getElementById("analytics-study-steps");
+  if (studySteps) {
+    studySteps.innerHTML = (analyticsGuide.study_steps || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  const readingRules = document.getElementById("analytics-reading-rules");
+  if (readingRules) {
+    readingRules.innerHTML = (analyticsGuide.reading_rules || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  const engineRules = document.getElementById("analytics-engine-rules");
+  if (engineRules) {
+    engineRules.innerHTML = (analyticsGuide.engine_rules || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  renderCards(
+    "analytics-route-sequence",
+    analyticsGuide.route_sequence || [],
+    (item) => `
+      <article class="artifact-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  renderCards(
+    "analytics-privacy-cards",
+    analyticsGuide.privacy_cards || [],
+    (item) => `
+      <article class="study-card compact-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+      </article>
+    `,
+  );
+
+  function renderSnapshot(message = "") {
+    flushStudyAnalyticsActivity("analytics_refresh");
+    const snapshot = buildAnalyticsSnapshot(
+      analyticsRules,
+      studyUnits,
+      learningPathTemplates,
+      adaptivePathRules,
+      labsGuide,
+      progressGuide,
+      vendorSources,
+    );
+
+    const topRoute = snapshot.route_insights.slice().sort((left, right) => right.advance_signal - left.advance_signal)[0];
+    const topDomain = snapshot.domain_insights[0];
+    renderCards(
+      "analytics-summary",
+      [
+        {
+          badge: "Tempo ativo local",
+          status_class: "status-done",
+          title: `${formatNumber(snapshot.totals.total_active_minutes, 1)} min`,
+          body: `${snapshot.totals.total_views} abertura(s) de rota`,
+          note: "Tempo ativo usa visibilidade da pagina para evitar inflar leitura com abas esquecidas.",
+        },
+        {
+          badge: "Rota mais forte",
+          status_class: topRoute?.status?.status_class || "status-next",
+          title: topRoute?.label || "Sem rota dominante ainda",
+          body: topRoute ? `${formatNumber(topRoute.active_minutes, 1)} min / ${topRoute.views} views` : "Precisa de mais sessoes reais",
+          note: topRoute?.status?.interpretation || "A rota mais forte vai aparecer depois de algumas sessoes.",
+        },
+        {
+          badge: "Dominio com mais tracao",
+          status_class: topDomain?.status?.status_class || "status-next",
+          title: topDomain?.label || "Sem dominio dominante ainda",
+          body: topDomain ? `${formatPercent(topDomain.mastery_ratio)} de dominio` : "Aguardando progresso local",
+          note: topDomain?.status?.interpretation || "O dominio com mais tracao aparece quando rotas e progresso comecam a convergir.",
+        },
+        {
+          badge: "Missao recomendada",
+          status_class: "status-done",
+          title: snapshot.mission.title,
+          body: snapshot.mission.suggested_duration,
+          note: snapshot.mission.summary,
+        },
+      ],
+      (item) => `
+        <article class="metric-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="metric-value">${escapeHtml(item.body)}</p>
+          <p class="metric-note">${escapeHtml(item.note)}</p>
+        </article>
+      `,
+    );
+
+    const paceTitle = document.getElementById("analytics-pace-title");
+    if (paceTitle) {
+      paceTitle.textContent = snapshot.mission.title;
+    }
+
+    const paceStory = document.getElementById("analytics-pace-story");
+    if (paceStory) {
+      paceStory.textContent =
+        `Voce acumulou ${formatNumber(snapshot.totals.total_active_minutes, 1)} minuto(s) ativos, ` +
+        `${snapshot.totals.total_route_interactions} interacao(oes) e ${snapshot.totals.total_progress_updates} atualizacao(oes) de progresso. ` +
+        `${snapshot.mission.summary}${message ? ` ${message}` : ""}`;
+    }
+
+    renderCards(
+      "analytics-route-board",
+      snapshot.route_insights,
+      (route) => `
+        <article class="workflow-card analytics-signal-card ${route.focus_critical ? "analytics-priority-card" : ""}">
+          <span class="status-badge ${escapeHtml(route.status.status_class)}">${escapeHtml(route.status.label)}</span>
+          <h3>${escapeHtml(route.label)}</h3>
+          <p class="card-copy">${escapeHtml(route.summary)}</p>
+          <div class="analytics-metric-row">
+            <span><strong>${escapeHtml(formatNumber(route.active_minutes, 1))} min</strong> ativos</span>
+            <span>${escapeHtml(String(route.views))} views</span>
+            <span>${escapeHtml(String(route.interactions))} interacoes</span>
+          </div>
+          <div class="adaptive-domain-track">
+            <span class="adaptive-domain-fill" style="width:${Math.max(8, Math.min(100, Math.round(route.advance_signal * 3.4)))}%"></span>
+          </div>
+          <p class="metric-note">${escapeHtml(route.status.interpretation)}</p>
+          <p class="metric-note">Sinal local de avanco: ${escapeHtml(formatNumber(route.advance_signal, 1))}</p>
+          ${renderButtonList([
+            {
+              label: `Abrir ${route.label}`,
+              href: route.href,
+              variant: route.focus_critical ? "primary" : "secondary",
+            },
+          ])}
+        </article>
+      `,
+    );
+
+    renderCards(
+      "analytics-domain-board",
+      snapshot.domain_insights,
+      (domain) => `
+        <article class="phase-card analytics-domain-card">
+          <span class="status-badge ${escapeHtml(domain.status.status_class)}">${escapeHtml(domain.status.label)}</span>
+          <p class="timeline-kicker">${escapeHtml(domain.label)}</p>
+          <h3>${escapeHtml(formatPercent(domain.mastery_ratio))} de dominio</h3>
+          <p class="timeline-copy">${escapeHtml(domain.summary || domain.status.interpretation)}</p>
+          <ul class="summary-list">
+            <li><strong>Unidades:</strong> ${escapeHtml(String(domain.mastered_units))}/${escapeHtml(String(domain.total_units))} dominadas</li>
+            <li><strong>Tempo das rotas:</strong> ${escapeHtml(formatNumber(domain.route_minutes, 1))} min</li>
+            <li><strong>Labs do dominio:</strong> ${escapeHtml(String(domain.lab_focus_count))} foco(s)</li>
+            <li><strong>Checkpoint:</strong> ${escapeHtml(String(domain.checkpoint_units + domain.blocked_units))} pendencia(s)</li>
+          </ul>
+          <div class="adaptive-domain-track">
+            <span class="adaptive-domain-fill" style="width:${Math.max(8, Math.min(100, Math.round(domain.engagement_score * 4.2)))}%"></span>
+          </div>
+          <p class="metric-note">${escapeHtml(domain.status.interpretation)}</p>
+          ${renderButtonList(
+            [
+              domain.best_route
+                ? {
+                    label: `Abrir ${domain.best_route.label}`,
+                    href: domain.best_route.href,
+                    variant: "secondary",
+                  }
+                : null,
+              domain.recommended_lab
+                ? {
+                    label: "Abrir lab alinhado",
+                    href: `/labs/?domain=${encodeURIComponent(domain.recommended_lab.domain)}&lab=${encodeURIComponent(
+                      domain.recommended_lab.id,
+                    )}`,
+                    variant: "ghost",
+                  }
+                : null,
+            ].filter(Boolean),
+          )}
+        </article>
+      `,
+    );
+
+    renderCards(
+      "analytics-lab-board",
+      snapshot.top_labs,
+      (lab) => `
+        <article class="artifact-card analytics-lab-card">
+          <span class="status-badge ${lab.attributed_progress > 0 ? "status-done" : "status-in-progress"}">${escapeHtml(
+            lab.badge,
+          )}</span>
+          <h3>${escapeHtml(lab.title)}</h3>
+          <p class="card-copy">${escapeHtml(lab.summary)}</p>
+          <ul class="summary-list">
+            <li><strong>Foco local:</strong> ${escapeHtml(String(lab.focus_count))} vez(es)</li>
+            <li><strong>Sinal de avanco:</strong> ${escapeHtml(String(lab.attributed_progress))}</li>
+            <li><strong>Tempo:</strong> ${escapeHtml(lab.time_label)}</li>
+          </ul>
+          <p class="metric-note">
+            [Inferencia] O sinal de avanco local considera progresso registrado depois de foco recente em labs.
+          </p>
+          ${renderButtonList([
+            {
+              label: "Abrir lab",
+              href: `/labs/?domain=${encodeURIComponent(lab.domain)}&difficulty=${encodeURIComponent(
+                lab.difficulty,
+              )}&timebox=${encodeURIComponent(lab.timebox)}&objective=${encodeURIComponent(
+                lab.objective,
+              )}&lab=${encodeURIComponent(lab.id)}`,
+              variant: "secondary",
+            },
+          ])}
+        </article>
+      `,
+    );
+
+    const missionPanel = document.getElementById("analytics-mission-focus");
+    if (missionPanel) {
+      const missionSources = [
+        ...buildSourceButtons(sourceLookup, snapshot.mission.focus_unit?.official_resource_ids, 2),
+        ...buildSourceButtons(sourceLookup, snapshot.mission.recommended_lab?.source_ids, 2),
+      ];
+      missionPanel.innerHTML = `
+        <div class="adaptive-unit-header">
+          <div>
+            <span class="status-badge status-done">${escapeHtml(snapshot.mission.badge)}</span>
+            <h3>${escapeHtml(snapshot.mission.title)}</h3>
+            <p class="card-copy">${escapeHtml(snapshot.mission.summary)}</p>
+          </div>
+          <div class="adaptive-unit-metrics">
+            <article>
+              <span class="label">Duracao sugerida</span>
+              <strong>${escapeHtml(snapshot.mission.suggested_duration)}</strong>
+            </article>
+            <article>
+              <span class="label">Foco salvo</span>
+              <strong>${escapeHtml(titleCase(snapshot.preferences.focus || "foco"))}</strong>
+            </article>
+            <article>
+              <span class="label">Ritmo</span>
+              <strong>${escapeHtml(formatPercent(snapshot.progress_snapshot.paceRatio))}</strong>
+            </article>
+          </div>
+        </div>
+        <div class="adaptive-unit-grid">
+          <section class="adaptive-unit-section">
+            <span class="eyebrow">Por que agora</span>
+            <ul class="summary-list">
+              ${snapshot.mission.why_now.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+            </ul>
+          </section>
+          <section class="adaptive-unit-section">
+            <span class="eyebrow">Sinal de sucesso</span>
+            <p>${escapeHtml(snapshot.mission.success)}</p>
+          </section>
+          <section class="adaptive-unit-section">
+            <span class="eyebrow">Unidade em foco</span>
+            <p>${escapeHtml(snapshot.mission.focus_unit?.title || "Sem unidade prioritaria explicita agora.")}</p>
+          </section>
+          <section class="adaptive-unit-section">
+            <span class="eyebrow">Lab recomendado</span>
+            <p>${escapeHtml(snapshot.mission.recommended_lab?.title || "Sem lab obrigatorio neste momento.")}</p>
+          </section>
+        </div>
+        <div class="button-group adaptive-unit-actions">
+          <a class="button" href="${resolveUrl(snapshot.mission.primary_button.href)}">${escapeHtml(
+            snapshot.mission.primary_button.label,
+          )}</a>
+          <a class="button secondary" href="${resolveUrl(snapshot.mission.secondary_button.href)}">${escapeHtml(
+            snapshot.mission.secondary_button.label,
+          )}</a>
+          ${missionSources
+            .map(
+              (button) => `
+                <a class="button ghost" href="${resolveUrl(button.href)}">${escapeHtml(button.label)}</a>
+              `,
+            )
+            .join("")}
+        </div>
+      `;
+    }
+
+    renderCards(
+      "analytics-session-prescriptions",
+      buildAnalyticsSessionCards(analyticsGuide, snapshot),
+      (item) => `
+        <article class="workflow-card">
+          <span class="status-badge status-done">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.description)}</p>
+          <ul class="summary-list">
+            ${(item.blocks || []).map((block) => `<li>${escapeHtml(block)}</li>`).join("")}
+          </ul>
+          ${renderButtonList(
+            item.button
+              ? [
+                  {
+                    label: item.button.label,
+                    href: item.button.href,
+                    variant: item.button.variant || "secondary",
+                  },
+                ]
+              : [],
+          )}
+        </article>
+      `,
+    );
+  }
+
+  document.getElementById("analytics-refresh")?.addEventListener("click", () => {
+    renderSnapshot("Leitura recalculada com o estado local mais recente.");
+  });
+
+  document.getElementById("analytics-reset")?.addEventListener("click", () => {
+    try {
+      window.localStorage.removeItem(STUDY_ANALYTICS_STORAGE_KEY);
+    } catch (_error) {
+      // Ignore storage cleanup failures.
+    }
+    renderSnapshot("Analytics local limpo. O sistema vai recomecar a medir a partir desta sessao.");
+  });
+
+  renderSnapshot();
+}
+
 function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources) {
   renderCards(
     "trilha-orientation",
@@ -3238,6 +4606,10 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
   function syncPlan(message = "") {
     const nextPreferences = readPreferences();
     persistAdaptivePathPreferences(nextPreferences);
+    trackStudyAnalyticsEvent("adaptive_path_update", {
+      page_id: "trilha",
+      preferences: nextPreferences,
+    });
     renderPlan(
       buildAdaptivePlan(studyUnits, learningPathTemplates, adaptivePathRules, vendorSources, nextPreferences),
       message,
@@ -3254,6 +4626,15 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
       }
 
       activeUnitId = button.getAttribute("data-unit-focus");
+      const trackedUnit = resolvePlanUnit(currentPlan, activeUnitId);
+      if (trackedUnit) {
+        trackStudyAnalyticsEvent("unit_focus", {
+          page_id: "trilha",
+          unit_id: trackedUnit.id,
+          title: trackedUnit.title,
+          domain: trackedUnit.domain,
+        });
+      }
       renderUnitExplorer(currentPlan);
     });
     pageContent.dataset.unitFocusBound = "true";
@@ -3766,6 +5147,10 @@ function renderProgress(progressGuide, studyUnits, learningPathTemplates, adapti
   function syncProgress(message = "") {
     const nextPreferences = readPreferences();
     persistAdaptivePathPreferences(nextPreferences);
+    trackStudyAnalyticsEvent("adaptive_path_update", {
+      page_id: "progresso",
+      preferences: nextPreferences,
+    });
     renderSnapshot(
       buildProgressSnapshot(
         progressGuide,
@@ -3787,6 +5172,15 @@ function renderProgress(progressGuide, studyUnits, learningPathTemplates, adapti
       const focusButton = event.target.closest("[data-progress-unit-focus]");
       if (focusButton) {
         activeUnitId = focusButton.getAttribute("data-progress-unit-focus");
+        const trackedUnit = currentSnapshot?.planUnits?.find((unit) => unit.id === activeUnitId);
+        if (trackedUnit) {
+          trackStudyAnalyticsEvent("unit_focus", {
+            page_id: "progresso",
+            unit_id: trackedUnit.id,
+            title: trackedUnit.title,
+            domain: trackedUnit.domain,
+          });
+        }
         if (currentSnapshot) {
           renderSnapshot(currentSnapshot);
         }
@@ -3806,6 +5200,17 @@ function renderProgress(progressGuide, studyUnits, learningPathTemplates, adapti
 
       progressState = updateProgressRecord(progressState, unitId, statusId);
       persistStudyProgressState(progressState);
+      const trackedUnit = currentSnapshot?.planUnits?.find((unit) => unit.id === unitId);
+      if (trackedUnit) {
+        trackStudyAnalyticsEvent("progress_status", {
+          page_id: "progresso",
+          unit_id: trackedUnit.id,
+          title: trackedUnit.title,
+          domain: trackedUnit.domain,
+          status_id: statusId,
+          recent_lab_window_hours: 72,
+        });
+      }
       activeUnitId = unitId;
       syncProgress("Progresso atualizado.");
     });
@@ -3936,7 +5341,7 @@ function formatPromptSection(title, value) {
 
 function formatPromptBulletSection(title, value) {
   const lines = toCleanLines(value).map((line) =>
-    /^[-*•]|\d+\./.test(line) || line.startsWith("{") || line.startsWith("<") ? line : `- ${line}`,
+    /^[-*]|\d+\./.test(line) || line.startsWith("{") || line.startsWith("<") ? line : `- ${line}`,
   );
 
   if (lines.length === 0) {
@@ -4853,7 +6258,7 @@ function computePromptQualityAudit(promptQualityLab, state) {
       value:
         safeState.flags?.requires_schema || hasPromptPattern(safeState.values?.outputFormat, /json|^\s*\{|^\s*\d+\.\s/im)
           ? "Bem encaminhada"
-          : "Atenção",
+          : "Atencao",
       note:
         safeState.flags?.requires_schema
           ? "O prompt ja sinaliza necessidade de contrato. O proximo passo e endurecer schema e validacao."
@@ -6271,6 +7676,8 @@ async function init() {
       matrixArtifact,
       guideGuide,
       labsGuide,
+      analyticsGuide,
+      analyticsRules,
       journeyGuide,
       trilhaGuide,
       progressGuide,
@@ -6285,11 +7692,23 @@ async function init() {
     } = data;
 
     renderShell(portal, freshnessStatus);
+    setupStudyAnalytics();
 
     const renderers = {
       home: () => renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap),
       guia: () => renderGuide(guideGuide, vendorSources),
       labs: () => renderLabs(labsGuide, vendorSources),
+      analytics: () =>
+        renderAnalytics(
+          analyticsGuide,
+          analyticsRules,
+          studyUnits,
+          learningPathTemplates,
+          adaptivePathRules,
+          labsGuide,
+          progressGuide,
+          vendorSources,
+        ),
       jornada: () => renderJourney(journeyGuide),
       trilha: () => renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),
       progresso: () => renderProgress(progressGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),
@@ -6336,3 +7755,4 @@ async function init() {
 }
 
 init();
+

@@ -4,10 +4,10 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "Labs e desafios praticos",
-    "phase_summary": "O portal agora ganha uma camada dedicada para pratica: desafios filtraveis por tema, nivel e tempo, com missao, evidencias e criterio de conclusao.",
-    "next_phase": "Analytics de estudo e recomendacao adaptativa",
-    "next_phase_summary": "Com labs publicados, a proxima frente natural e medir uso real, recomendar proximas missoes com mais inteligencia e apertar a plataforma por dados de comportamento.",
+    "phase_focus": "Analytics de estudo e recomendacao adaptativa",
+    "phase_summary": "O portal agora mede uso real, cruza Trilha, Progresso e Labs e recomenda a proxima missao automaticamente com base em comportamento e progresso.",
+    "next_phase": "Refino guiado por uso real e productizacao",
+    "next_phase_summary": "Com analytics publicado, a proxima frente natural e calibrar recomendacoes por uso real, aprofundar product metrics e preparar camadas premium sem perder a didatica.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
@@ -17,6 +17,7 @@
     { "id": "trilha", "label": "Trilha", "description": "Plano adaptativo por horas, foco e objetivo", "href": "/trilha/" },
     { "id": "progresso", "label": "Progresso", "description": "Checkpoints, dominio e replanejamento", "href": "/progresso/" },
     { "id": "labs", "label": "Labs", "description": "Desafios praticos por tema, tempo e nivel", "href": "/labs/" },
+    { "id": "analytics", "label": "Analytics", "description": "Uso real, tracao e proxima missao automatica", "href": "/analytics/" },
     { "id": "prompts", "label": "Prompts", "description": "Prompt Studio e anatomia de prompt", "href": "/prompts/" },
     { "id": "matriz", "label": "Matriz", "description": "Comparacao de modelos e scorecards", "href": "/matriz/" },
     { "id": "workflows", "label": "Workflows", "description": "Operacao, risco e aprovacao humana", "href": "/workflows/" },
@@ -55,6 +56,11 @@
       "title": "Labs",
       "nav_label": "Labs",
       "summary": "Camada pratica do portal: desafios por tema, tempo e nivel com missao clara, evidencias esperadas e criterio de conclusao."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "nav_label": "Analytics",
+      "summary": "Camada de leitura de uso real: comportamento local, tracao por rota, sinais de avanco e proxima missao recomendada automaticamente."
     },
     "prompts": {
       "title": "Prompt Studio",
@@ -170,6 +176,13 @@
       "description": "Abra Labs quando quiser transformar estudo em prova pratica com missao, entregavel, criterio de conclusao e proxima rota recomendada.",
       "href": "/labs/",
       "badge": "Pratica guiada",
+      "status_class": "status-done"
+    },
+    {
+      "title": "Ler comportamento e pegar a proxima missao",
+      "description": "Use Analytics para medir tempo ativo, rotas fortes, dominios negligenciados e qual e a proxima missao com mais alavanca neste momento.",
+      "href": "/analytics/",
+      "badge": "Camada adaptativa",
       "status_class": "status-done"
     },
     {

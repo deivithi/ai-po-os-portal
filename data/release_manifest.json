@@ -43,12 +43,17 @@
     {
       "title": "Labs com prova de dominio",
       "description": "Sempre que um lab entrar no portal, ele precisa mostrar missao, contexto, evidencias, criterio de conclusao e ponte explicita para a rota ou fonte certa."
+    },
+    {
+      "title": "Analytics local e recomendacao adaptativa",
+      "description": "Sempre que a plataforma sugerir a proxima missao, a pagina precisa deixar claro que sinais foram lidos, como a recomendacao foi montada e como recalcular ou limpar a leitura local."
     }
   ],
   "qa_targets": [
     "/",
     "/guia/",
     "/labs/",
+    "/analytics/",
     "/jornada/",
     "/trilha/",
     "/progresso/",
@@ -75,6 +80,8 @@
     "/data/senior_page.json",
     "/data/progress_page.json",
     "/data/guide_page.json",
-    "/data/labs_page.json"
+    "/data/labs_page.json",
+    "/data/analytics_page.json",
+    "/data/analytics_rules.json"
   ]
 }

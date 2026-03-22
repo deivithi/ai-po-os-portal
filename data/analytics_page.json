@@ -1,0 +1,140 @@
+{
+  "study_steps": [
+    "Use esta rota depois de algumas sessoes reais para entender o que voce de fato abriu, quanto tempo ficou e para onde o estudo esta andando.",
+    "Leia os sinais como diagnostico local, nao como verdade absoluta: a pagina mostra tendencia, gargalo e proxima missao recomendada.",
+    "Feche sempre clicando em uma rota ou lab recomendado; analytics sem acao vira curiosidade, nao evolucao."
+  ],
+  "orientation": [
+    {
+      "badge": "Nova camada",
+      "status_class": "status-done",
+      "title": "O portal agora le comportamento, nao so preferencia",
+      "body": "Uso real, tempo ativo e progresso entram na mesma conversa",
+      "note": "Esta rota fecha o ciclo entre Trilha, Progresso e Labs para sugerir a proxima missao automaticamente."
+    },
+    {
+      "badge": "Regra central",
+      "status_class": "status-done",
+      "title": "Analytics local e privado",
+      "body": "Tudo fica salvo no proprio navegador",
+      "note": "A leitura e construida no client-side: sem backend, sem conta e sem depender de um servidor externo para funcionar."
+    },
+    {
+      "badge": "Leitura correta",
+      "status_class": "status-in-progress",
+      "title": "Sinais locais, nao causalidade absoluta",
+      "body": "Rotas e labs com mais tracao nao sao verdades finais",
+      "note": "O papel desta camada e orientar sua proxima acao com mais inteligencia, nao fingir que substitui julgamento."
+    },
+    {
+      "badge": "Resultado esperado",
+      "status_class": "status-done",
+      "title": "Sempre sair com uma missao clara",
+      "body": "A pagina precisa te mandar para o proximo bloco certo",
+      "note": "Se Analytics nao te direciona para uma rota, um lab ou um checkpoint, ele ainda nao cumpriu seu papel."
+    }
+  ],
+  "reading_rules": [
+    "Rotas fortes combinam frequencia, tempo ativo e interacao util.",
+    "Dominios com tracao alta e dominio baixo indicam estudo que ainda nao virou evidencia.",
+    "Labs com sinal local de avanco servem como indicio de conversao, nao como benchmark definitivo.",
+    "A proxima missao precisa equilibrar ritmo, foco principal e o que ainda esta pendente no progresso."
+  ],
+  "engine_rules": [
+    "O motor considera preferencias salvas da Trilha, estado atual do Progresso e uso real das rotas.",
+    "Quando ha checkpoint ou bloqueio, a recomendacao puxa primeiro para destravar antes de abrir mais conteudo.",
+    "Quando o estudo fica teorico demais, a recomendacao sobe Labs ou Workflows para provar criterio.",
+    "Quando o ritmo e a cobertura ficam fortes, a recomendacao sobe para Senior, capstone ou consolidacao."
+  ],
+  "route_sequence": [
+    {
+      "badge": "Depois do diagnostico",
+      "status_class": "status-done",
+      "title": "Voltar para a rota certa",
+      "description": "Analytics nao e pagina final. Ele existe para te mandar de volta para a aba com mais alavanca naquele momento.",
+      "buttons": [
+        {
+          "label": "Abrir Trilha",
+          "href": "/trilha/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir Progresso",
+          "href": "/progresso/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Quando faltar prova",
+      "status_class": "status-done",
+      "title": "Subir para Labs",
+      "description": "Se o comportamento mostra muita leitura e pouca evidencia, o proximo passo precisa ser pratica guiada.",
+      "buttons": [
+        {
+          "label": "Abrir Labs",
+          "href": "/labs/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Quando o nivel pedir",
+      "status_class": "status-in-progress",
+      "title": "Escalar para a camada senior",
+      "description": "Quando ritmo, cobertura e criterio ja estiverem mais fortes, o sistema passa a puxar memoria, evals, agents e producao.",
+      "buttons": [
+        {
+          "label": "Abrir Senior",
+          "href": "/senior/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir Roadmap",
+          "href": "/roadmap/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "privacy_cards": [
+    {
+      "badge": "Persistencia local",
+      "status_class": "status-done",
+      "title": "Dados ficam neste navegador",
+      "description": "Visitas, tempo ativo, filtros e sinais de progresso sao persistidos localmente para manter a experiencia fluida e privada."
+    },
+    {
+      "badge": "Sem backend",
+      "status_class": "status-done",
+      "title": "Nao depende de servidor para recomendar",
+      "description": "A recomendacao e calculada no client-side usando contratos do portal e estado salvo de estudo."
+    },
+    {
+      "badge": "Controle",
+      "status_class": "status-done",
+      "title": "Voce pode recalcular e limpar a leitura",
+      "description": "A pagina oferece recomputo imediato e limpeza do analytics local quando voce quiser reiniciar a medicao."
+    }
+  ],
+  "session_presets": [
+    {
+      "id": "quick",
+      "badge": "30-45 min",
+      "title": "Sprint tatico",
+      "description": "Bom para corrigir uma pendencia, abrir a rota certa e fechar o dia com uma evidencia pequena."
+    },
+    {
+      "id": "standard",
+      "badge": "60-90 min",
+      "title": "Sessao de conversao",
+      "description": "Boa para estudar, executar um lab ou checkpoint e voltar com criterio melhor para a proxima semana."
+    },
+    {
+      "id": "deep",
+      "badge": "120-180 min",
+      "title": "Sessao de aceleracao",
+      "description": "Boa para mover o ponteiro de verdade em unidades, labs senior ou consolidacao de capstone."
+    }
+  ]
+}

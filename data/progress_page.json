@@ -148,6 +148,11 @@
       "description": "Quando o estudo subir de nivel, feche no Roadmap e use Senior para validar se a maturidade ja virou criterio operacional.",
       "buttons": [
         {
+          "label": "Abrir Analytics",
+          "href": "/analytics/",
+          "variant": "secondary"
+        },
+        {
           "label": "Abrir Roadmap",
           "href": "/roadmap/",
           "variant": "secondary"

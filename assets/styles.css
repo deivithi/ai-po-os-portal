@@ -847,6 +847,47 @@ a {
   background: linear-gradient(90deg, rgba(98, 208, 179, 0.94), rgba(45, 167, 255, 0.92));
 }
 
+.analytics-signal-card,
+.analytics-domain-card,
+.analytics-lab-card,
+.analytics-mission-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.analytics-priority-card {
+  border-color: rgba(98, 208, 179, 0.45);
+  box-shadow: 0 28px 70px rgba(14, 26, 34, 0.42);
+}
+
+.analytics-metric-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 12px 0;
+  color: #dce9f1;
+  font-size: 0.94rem;
+}
+
+.analytics-metric-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(157, 197, 222, 0.08);
+  border: 1px solid rgba(157, 197, 222, 0.1);
+}
+
+.analytics-signal-card .adaptive-domain-track,
+.analytics-domain-card .adaptive-domain-track {
+  margin: 14px 0 10px;
+}
+
+.analytics-mission-panel .button-group {
+  margin-top: 18px;
+}
+
 .adaptive-continuation-card {
   opacity: 0.96;
 }

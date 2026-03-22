@@ -3,23 +3,23 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "22 ciclos publicados",
-      "body": "Portal completo com Radar Vivo, Trilha, camada senior, Progresso, Guia e Labs publicados",
-      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint e aprofundamento senior sem depender de uso passivo."
+      "title": "23 ciclos publicados",
+      "body": "Portal completo com Radar Vivo, Trilha, camada senior, Progresso, Guia, Labs e Analytics publicados",
+      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint, leitura de uso real e aprofundamento senior sem depender de estudo passivo."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Refino O concluido",
-      "body": "Labs e desafios praticos publicados",
-      "note": "A plataforma agora ganhou uma camada propria para provar dominio por missao, evidencias e criterio de conclusao."
+      "title": "Refino P concluido",
+      "body": "Analytics de estudo e recomendacao adaptativa publicado",
+      "note": "A plataforma agora transforma comportamento local e progresso em uma proxima missao automatica e acionavel."
     },
     {
       "badge": "Plano de 30 dias",
       "status_class": "status-done",
-      "title": "Base funcional, adaptativa, ativada e pratica pronta",
-      "body": "30D-A, 30D-B, Radar Vivo, Trilha, Senior, Progresso, Guia e Labs ja conversam entre si",
-      "note": "A partir daqui o trabalho migra para analytics de estudo, recomendacao adaptativa e refinamento guiado por comportamento real."
+      "title": "Base funcional, adaptativa, ativada, pratica e observavel",
+      "body": "30D-A, 30D-B, Radar Vivo, Trilha, Senior, Progresso, Guia, Labs e Analytics ja conversam entre si",
+      "note": "A partir daqui o trabalho migra para refino guiado por uso real, calibragem de recomendacao e productizacao."
     },
     {
       "badge": "Regra",
@@ -189,6 +189,12 @@
     {
       "phase": "Refino O",
       "focus": "Labs e desafios praticos",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino P",
+      "focus": "Analytics de estudo e recomendacao adaptativa",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }
