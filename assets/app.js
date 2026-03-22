@@ -16,6 +16,7 @@ const DATA_PATHS = {
   matrixArtifact: "/artifacts/files/model_matrix.json",
   journeyGuide: "/data/journey_page.json",
   trilhaGuide: "/data/trilha_page.json",
+  progressGuide: "/data/progress_page.json",
   studyUnits: "/data/study_units.json",
   learningPathTemplates: "/data/learning_path_templates.json",
   adaptivePathRules: "/data/adaptive_path_rules.json",
@@ -30,6 +31,7 @@ const PAGE_DATA_KEYS = {
   home: ["overview", "artifacts", "freshnessStatus", "vendorSources", "vendorUpdates", "domainMap"],
   jornada: ["journeyGuide", "freshnessStatus"],
   trilha: ["trilhaGuide", "studyUnits", "learningPathTemplates", "adaptivePathRules", "vendorSources", "freshnessStatus"],
+  progresso: ["progressGuide", "studyUnits", "learningPathTemplates", "adaptivePathRules", "vendorSources", "freshnessStatus"],
   prompts: ["promptsGuide", "promptLibrary", "promptBuilder", "promptProviderOverlays", "promptQualityLab", "promptProductization", "freshnessStatus"],
   matriz: ["overview", "artifacts", "matrixGuide", "matrixArtifact", "freshnessStatus"],
   workflows: ["overview", "workflowsGuide", "freshnessStatus"],
@@ -41,14 +43,15 @@ const PAGE_DATA_KEYS = {
 
 const PREFETCH_ROUTE_MAP = {
   home: ["/trilha/", "/jornada/", "/prompts/"],
-  trilha: ["/jornada/", "/prompts/", "/rag/"],
+  trilha: ["/progresso/", "/jornada/", "/prompts/"],
+  progresso: ["/trilha/", "/roadmap/", "/senior/"],
   jornada: ["/prompts/", "/matriz/", "/rag/"],
   prompts: ["/matriz/", "/rag/", "/artefatos/"],
   matriz: ["/prompts/", "/rag/", "/workflows/"],
   rag: ["/workflows/", "/senior/", "/roadmap/"],
   workflows: ["/senior/", "/roadmap/", "/artefatos/"],
   senior: ["/roadmap/", "/artefatos/", "/trilha/"],
-  roadmap: ["/trilha/", "/jornada/", "/senior/"],
+  roadmap: ["/trilha/", "/progresso/", "/senior/"],
   artefatos: ["/trilha/", "/prompts/", "/matriz/"],
 };
 
@@ -56,6 +59,7 @@ const SESSION_CACHE_PREFIX = "ai-po-os::";
 const SESSION_CACHE_TTL_MS = 1000 * 60 * 15;
 const FAVORITES_STORAGE_KEY = "ai-po-os::prompt-favorites::v1";
 const ADAPTIVE_PATH_STORAGE_KEY = "ai-po-os::adaptive-path::v1";
+const STUDY_PROGRESS_STORAGE_KEY = "ai-po-os::study-progress::v1";
 const memoryCache = new Map();
 const prefetchedRoutes = new Set();
 const SITE_BASE_PATH = detectSiteBasePath();
@@ -151,6 +155,37 @@ function formatNumber(value, digits = 3) {
 function formatPercent(value) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? `${Math.round(parsed * 100)}%` : "n/a";
+}
+
+function formatShortDate(value) {
+  if (!value) {
+    return "n/a";
+  }
+
+  try {
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }).format(new Date(`${value}T00:00:00`));
+  } catch (_error) {
+    return value;
+  }
+}
+
+function todayIsoDate() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function diffCalendarDays(fromDate, toDate = todayIsoDate()) {
+  try {
+    const from = new Date(`${fromDate}T00:00:00`);
+    const to = new Date(`${toDate}T00:00:00`);
+    const diffMs = to.getTime() - from.getTime();
+    return Math.max(0, Math.round(diffMs / (1000 * 60 * 60 * 24)));
+  } catch (_error) {
+    return 0;
+  }
 }
 
 function average(values) {
@@ -341,6 +376,39 @@ function loadAdaptivePathPreferences(defaults = {}) {
 function persistAdaptivePathPreferences(preferences) {
   try {
     window.localStorage.setItem(ADAPTIVE_PATH_STORAGE_KEY, JSON.stringify(preferences));
+  } catch (_error) {
+    // Keep runtime-only state if storage is unavailable.
+  }
+}
+
+function loadStudyProgressState() {
+  const defaultState = {
+    version: 1,
+    started_on: todayIsoDate(),
+    updated_on: todayIsoDate(),
+    units: {},
+  };
+
+  try {
+    const raw = window.localStorage.getItem(STUDY_PROGRESS_STORAGE_KEY);
+    if (!raw) {
+      return defaultState;
+    }
+
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaultState,
+      ...(parsed && typeof parsed === "object" ? parsed : {}),
+      units: parsed?.units && typeof parsed.units === "object" ? parsed.units : {},
+    };
+  } catch (_error) {
+    return defaultState;
+  }
+}
+
+function persistStudyProgressState(state) {
+  try {
+    window.localStorage.setItem(STUDY_PROGRESS_STORAGE_KEY, JSON.stringify(state));
   } catch (_error) {
     // Keep runtime-only state if storage is unavailable.
   }
@@ -1985,7 +2053,193 @@ function renderAdaptiveDomainMix(plan) {
         </article>
       `,
     )
+      .join("");
+}
+
+function fillSelectOptions(element, options, valueKey = "value", labelKey = "label") {
+  if (!element) {
+    return;
+  }
+
+  element.innerHTML = (options || [])
+    .map(
+      (option) => `
+        <option value="${escapeHtml(option[valueKey])}">${escapeHtml(option[labelKey])}</option>
+      `,
+    )
     .join("");
+}
+
+function buildProgressStatusLookup(progressGuide) {
+  const entries = Array.isArray(progressGuide?.status_model) ? progressGuide.status_model : [];
+  return new Map(
+    entries.map((item) => [
+      item.id,
+      {
+        ...item,
+        weight: Number(item.weight || 0),
+      },
+    ]),
+  );
+}
+
+function getProgressRecord(progressState, unitId, fallbackStatus = "not_started") {
+  const record = progressState?.units?.[unitId];
+  return {
+    status: record?.status || fallbackStatus,
+    updated_on: record?.updated_on || progressState?.started_on || todayIsoDate(),
+  };
+}
+
+function updateProgressRecord(progressState, unitId, statusId) {
+  const now = todayIsoDate();
+  return {
+    ...progressState,
+    started_on: progressState?.started_on || now,
+    updated_on: now,
+    units: {
+      ...(progressState?.units || {}),
+      [unitId]: {
+        status: statusId,
+        updated_on: now,
+      },
+    },
+  };
+}
+
+function buildFilteredStudyUnits(studyUnits, includedUnitIds) {
+  const includeSet = new Set(includedUnitIds || []);
+  return {
+    ...studyUnits,
+    units: (studyUnits?.units || []).filter((unit) => includeSet.has(unit.id)),
+  };
+}
+
+function resolveProgressPace(ratio) {
+  if (ratio >= 1.05) {
+    return {
+      status_class: "status-done",
+      title: "Ritmo acima do esperado",
+      summary: "Voce esta adiantado em relacao ao plano atual. Vale puxar comparativos reais, capstone ou camada senior mais cedo.",
+    };
+  }
+
+  if (ratio >= 0.75) {
+    return {
+      status_class: "status-in-progress",
+      title: "Ritmo sustentavel",
+      summary: "O plano continua coerente com a sua disponibilidade. Priorize checkpoints antes de aumentar escopo.",
+    };
+  }
+
+  return {
+    status_class: "status-next",
+    title: "Ritmo abaixo do planejado",
+    summary: "O estudo continua viavel, mas o restante da trilha pede replanejamento, corte de foco ou aumento de consistencia semanal.",
+  };
+}
+
+function buildProgressSnapshot(
+  progressGuide,
+  studyUnits,
+  learningPathTemplates,
+  adaptivePathRules,
+  vendorSources,
+  preferences,
+  progressState,
+) {
+  const basePlan = buildAdaptivePlan(
+    studyUnits,
+    learningPathTemplates,
+    adaptivePathRules,
+    vendorSources,
+    preferences,
+  );
+  const statusLookup = buildProgressStatusLookup(progressGuide);
+  const defaultStatus = statusLookup.get("not_started") || {
+    id: "not_started",
+    label: "Nao iniciado",
+    status_class: "status-next",
+    summary: "",
+    weight: 0,
+  };
+
+  const planUnits = (basePlan.scaledUnits || []).map((unit) => {
+    const record = getProgressRecord(progressState, unit.id, defaultStatus.id);
+    const status = statusLookup.get(record.status) || defaultStatus;
+    const unitSessions = (basePlan.sessions || []).filter((session) => session.unit_id === unit.id);
+    const firstSession = unitSessions[0] || null;
+    const lastSession = unitSessions[unitSessions.length - 1] || null;
+
+    return {
+      ...unit,
+      progress_record: record,
+      progress_status: status,
+      session_count: unitSessions.length,
+      first_session: firstSession,
+      last_session: lastSession,
+      equivalent_hours: roundToHalf(Number(unit.allocated_hours || 0) * Number(status.weight || 0)),
+    };
+  });
+
+  const totalUnits = planUnits.length;
+  const masteredUnits = planUnits.filter((unit) => unit.progress_status.id === "mastered");
+  const checkpointUnits = planUnits.filter((unit) => ["checkpoint", "blocked"].includes(unit.progress_status.id));
+  const inProgressUnits = planUnits.filter((unit) => unit.progress_status.id === "in_progress");
+  const blockedUnits = planUnits.filter((unit) => unit.progress_status.id === "blocked");
+  const remainingUnits = planUnits.filter((unit) => unit.progress_status.id !== "mastered");
+  const completedEquivalentHours = roundToHalf(
+    planUnits.reduce((sum, unit) => sum + Number(unit.equivalent_hours || 0), 0),
+  );
+  const elapsedCalendarDays = diffCalendarDays(progressState?.started_on || todayIsoDate()) + 1;
+  const expectedEquivalentHours = Math.min(
+    Number(basePlan.totalHours || 0),
+    roundToHalf((elapsedCalendarDays / 7) * Number(basePlan.weeklyHours || 0)),
+  );
+  const paceRatio = expectedEquivalentHours > 0 ? completedEquivalentHours / expectedEquivalentHours : 1;
+  const pace = resolveProgressPace(paceRatio);
+  const coverageRatio = totalUnits > 0 ? masteredUnits.length / totalUnits : 0;
+  const nextPriorityUnit = remainingUnits[0] || null;
+  const nextCheckpointUnit = checkpointUnits[0] || inProgressUnits[0] || nextPriorityUnit;
+  const remainingPlan =
+    remainingUnits.length > 0
+      ? buildAdaptivePlan(
+          buildFilteredStudyUnits(
+            studyUnits,
+            remainingUnits.map((unit) => unit.id),
+          ),
+          learningPathTemplates,
+          adaptivePathRules,
+          vendorSources,
+          preferences,
+        )
+      : null;
+  const milestones = (progressGuide?.milestones || []).map((milestone) => ({
+    ...milestone,
+    unlocked: coverageRatio >= Number(milestone.threshold || 0),
+  }));
+
+  return {
+    preferences,
+    basePlan,
+    planUnits,
+    totalUnits,
+    masteredUnits,
+    checkpointUnits,
+    inProgressUnits,
+    blockedUnits,
+    remainingUnits,
+    completedEquivalentHours,
+    expectedEquivalentHours,
+    elapsedCalendarDays,
+    paceRatio,
+    pace,
+    coverageRatio,
+    remainingPlan,
+    nextPriorityUnit,
+    nextCheckpointUnit,
+    milestones,
+  };
 }
 
 function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources) {
@@ -2053,20 +2307,6 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
   const sourceLookup = buildSourceLookup(vendorSources);
   let activeUnitId = null;
   let currentPlan = null;
-
-  function fillSelectOptions(element, options, valueKey = "value", labelKey = "label") {
-    if (!element) {
-      return;
-    }
-
-    element.innerHTML = (options || [])
-      .map(
-        (option) => `
-          <option value="${escapeHtml(option[valueKey])}">${escapeHtml(option[labelKey])}</option>
-        `,
-      )
-      .join("");
-  }
 
   fillSelectOptions(hoursPerDay, adaptivePathRules.hours_per_day_options || []);
   fillSelectOptions(daysPerWeek, adaptivePathRules.days_per_week_options || []);
@@ -2321,6 +2561,21 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
               unit_id: plan.nextDistinctSession.unit_id,
             }
           : null,
+        {
+          badge: "Checkpoint semanal",
+          status_class: "status-done",
+          title: "Atualizar Progresso",
+          description: "Marque dominio por unidade, revise pendencias e replaneje o restante da trilha.",
+          note: "Use esta rota no fechamento de cada semana ou quando o ritmo real mudar.",
+          buttons: [
+            {
+              label: "Abrir Progresso",
+              href: "/progresso/",
+              variant: "secondary",
+            },
+          ],
+          unit_id: plan.firstSession?.unit_id || plan.nextDistinctSession?.unit_id || plan.scaledUnits[0]?.id || "",
+        },
       ].filter(Boolean),
       (item) => `
         <article class="workflow-card">
@@ -2483,6 +2738,560 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
   });
 
   syncPlan();
+}
+
+function renderProgress(progressGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources) {
+  renderCards(
+    "progress-orientation",
+    progressGuide.orientation || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  const studySteps = document.getElementById("progress-study-steps");
+  if (studySteps) {
+    studySteps.innerHTML = (progressGuide.study_steps || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  const checkpointRules = document.getElementById("progress-checkpoint-rules");
+  if (checkpointRules) {
+    checkpointRules.innerHTML = (progressGuide.checkpoint_rules || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  const replanningRules = document.getElementById("progress-replanning-rules");
+  if (replanningRules) {
+    replanningRules.innerHTML = (progressGuide.replanning_rules || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  renderCards(
+    "progress-route-sequence",
+    progressGuide.route_sequence || [],
+    (item) => `
+      <article class="artifact-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  renderCards(
+    "progress-status-legend",
+    progressGuide.status_model || [],
+    (item) => `
+      <article class="study-card compact-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.label)}</span>
+        <p class="card-copy">${escapeHtml(item.summary)}</p>
+      </article>
+    `,
+  );
+
+  const form = document.getElementById("progress-replan-form");
+  if (!form) {
+    return;
+  }
+
+  const defaults = adaptivePathRules.defaults || {};
+  const savedAdaptivePreferences = loadAdaptivePathPreferences(defaults);
+  let progressState = loadStudyProgressState();
+  let activeUnitId = null;
+  let currentSnapshot = null;
+
+  const hoursPerDay = document.getElementById("progress-hours-per-day");
+  const daysPerWeek = document.getElementById("progress-days-per-week");
+  const level = document.getElementById("progress-level");
+  const focus = document.getElementById("progress-focus");
+  const goal = document.getElementById("progress-goal");
+  const feedback = document.getElementById("progress-feedback");
+  const pageContent = document.getElementById("content");
+  const sourceLookup = buildSourceLookup(vendorSources);
+  const statusLookup = buildProgressStatusLookup(progressGuide);
+
+  fillSelectOptions(hoursPerDay, adaptivePathRules.hours_per_day_options || []);
+  fillSelectOptions(daysPerWeek, adaptivePathRules.days_per_week_options || []);
+  fillSelectOptions(level, learningPathTemplates.level_profiles || [], "id", "label");
+  fillSelectOptions(focus, learningPathTemplates.focus_profiles || [], "id", "label");
+  fillSelectOptions(goal, learningPathTemplates.templates || [], "id", "label");
+
+  function readPreferences() {
+    return {
+      hours_per_day: Number(hoursPerDay?.value || defaults.hours_per_day || 3),
+      days_per_week: Number(daysPerWeek?.value || defaults.days_per_week || 5),
+      level: level?.value || defaults.level || "intermediate",
+      focus: focus?.value || defaults.focus || "rag",
+      goal: goal?.value || defaults.goal || "specialist_general",
+    };
+  }
+
+  function applyPreferences(preferences) {
+    if (hoursPerDay) {
+      hoursPerDay.value = String(preferences.hours_per_day || defaults.hours_per_day || 3);
+    }
+    if (daysPerWeek) {
+      daysPerWeek.value = String(preferences.days_per_week || defaults.days_per_week || 5);
+    }
+    if (level) {
+      level.value = preferences.level || defaults.level || "intermediate";
+    }
+    if (focus) {
+      focus.value = preferences.focus || defaults.focus || "rag";
+    }
+    if (goal) {
+      goal.value = preferences.goal || defaults.goal || "specialist_general";
+    }
+  }
+
+  function resolveActiveUnit(snapshot) {
+    return (
+      snapshot.planUnits.find((unit) => unit.id === activeUnitId) ||
+      snapshot.nextCheckpointUnit ||
+      snapshot.nextPriorityUnit ||
+      snapshot.planUnits[0] ||
+      null
+    );
+  }
+
+  function renderProgressBoard(snapshot) {
+    renderCards(
+      "progress-unit-board",
+      snapshot.planUnits || [],
+      (unit) => `
+        <article class="workflow-card progress-unit-card ${unit.id === activeUnitId ? "active" : ""}">
+          <span class="status-badge ${escapeHtml(unit.progress_status.status_class)}">${escapeHtml(unit.progress_status.label)}</span>
+          <h3>${escapeHtml(unit.title)}</h3>
+          <p class="card-copy">${escapeHtml(unit.summary)}</p>
+          <ul class="summary-list">
+            <li><strong>Horas:</strong> ${escapeHtml(formatNumber(unit.allocated_hours, 1))}h</li>
+            <li><strong>Sessoes:</strong> ${escapeHtml(String(unit.session_count || 0))}</li>
+            <li><strong>Ultima atualizacao:</strong> ${escapeHtml(formatShortDate(unit.progress_record.updated_on))}</li>
+          </ul>
+          <div class="button-group">
+            <button class="button secondary" type="button" data-progress-unit-focus="${escapeHtml(unit.id)}">Focar unidade</button>
+          </div>
+        </article>
+      `,
+    );
+  }
+
+  function renderProgressUnit(snapshot) {
+    const focusPanel = document.getElementById("progress-unit-focus");
+    if (!focusPanel) {
+      return;
+    }
+
+    const currentUnit = resolveActiveUnit(snapshot);
+    if (!currentUnit) {
+      focusPanel.innerHTML = '<div class="empty-note">Nenhuma unidade disponivel no plano atual.</div>';
+      return;
+    }
+
+    activeUnitId = currentUnit.id;
+    const nextUnit =
+      snapshot.planUnits.find(
+        (unit) => unit.id !== currentUnit.id && unit.progress_status.id !== "mastered",
+      ) || null;
+
+    focusPanel.innerHTML = `
+      <div class="adaptive-unit-header">
+        <div>
+          <span class="status-badge ${escapeHtml(currentUnit.progress_status.status_class)}">${escapeHtml(currentUnit.progress_status.label)}</span>
+          <h3>${escapeHtml(currentUnit.title)}</h3>
+          <p class="card-copy">${escapeHtml(currentUnit.summary)}</p>
+        </div>
+        <div class="adaptive-unit-metrics">
+          <article>
+            <span class="label">Horas planejadas</span>
+            <strong>${escapeHtml(formatNumber(currentUnit.allocated_hours, 1))}h</strong>
+          </article>
+          <article>
+            <span class="label">Equivalente concluido</span>
+            <strong>${escapeHtml(formatNumber(currentUnit.equivalent_hours, 1))}h</strong>
+          </article>
+          <article>
+            <span class="label">Ultima atualizacao</span>
+            <strong>${escapeHtml(formatShortDate(currentUnit.progress_record.updated_on))}</strong>
+          </article>
+        </div>
+      </div>
+      <div class="adaptive-unit-grid">
+        <section class="adaptive-unit-section">
+          <span class="eyebrow">Conceito</span>
+          <p>${escapeHtml(currentUnit.concept || currentUnit.summary)}</p>
+        </section>
+        <section class="adaptive-unit-section">
+          <span class="eyebrow">Exercicio</span>
+          <p>${escapeHtml(currentUnit.exercise)}</p>
+        </section>
+        <section class="adaptive-unit-section">
+          <span class="eyebrow">Entregavel</span>
+          <p>${escapeHtml(currentUnit.deliverable)}</p>
+        </section>
+        <section class="adaptive-unit-section">
+          <span class="eyebrow">Sinal de dominio</span>
+          <p>${escapeHtml(currentUnit.mastery)}</p>
+        </section>
+      </div>
+      <section class="adaptive-unit-section">
+        <span class="eyebrow">Evidencias esperadas</span>
+        <ul class="summary-list">
+          ${(currentUnit.evidence_examples || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </section>
+      <section class="adaptive-unit-section">
+        <span class="eyebrow">Criterio de conclusao</span>
+        <ul class="summary-list">
+          ${(currentUnit.completion_criteria || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </section>
+      <section class="adaptive-unit-section">
+        <span class="eyebrow">Atualizar status</span>
+        <div class="progress-status-row">
+          ${(progressGuide.status_model || [])
+            .map(
+              (statusItem) => `
+                <button
+                  class="progress-status-button ${statusItem.id === currentUnit.progress_status.id ? "active" : ""}"
+                  type="button"
+                  data-progress-status="${escapeHtml(statusItem.id)}"
+                  data-progress-unit="${escapeHtml(currentUnit.id)}"
+                >
+                  <span>${escapeHtml(statusItem.label)}</span>
+                  <small>${escapeHtml(statusItem.summary)}</small>
+                </button>
+              `,
+            )
+            .join("")}
+        </div>
+      </section>
+      <div class="button-group adaptive-unit-actions">
+        <a class="button" href="${resolveUrl(currentUnit.portal_href || "/")}">${escapeHtml(currentUnit.portal_label || "Abrir rota")}</a>
+        ${
+          nextUnit
+            ? `<button class="button secondary" type="button" data-progress-unit-focus="${escapeHtml(nextUnit.id)}">Focar proximo pendente</button>`
+            : `<a class="button secondary" href="${resolveUrl("/roadmap/")}">Fechar ciclo no Roadmap</a>`
+        }
+        ${buildSourceButtons(sourceLookup, currentUnit.official_resource_ids, 2)
+          .map(
+            (button) => `
+              <a class="button ghost" href="${resolveUrl(button.href)}">${escapeHtml(button.label)}</a>
+            `,
+          )
+          .join("")}
+      </div>
+    `;
+  }
+
+  function renderMilestones(snapshot) {
+    renderCards(
+      "progress-milestones",
+      snapshot.milestones || [],
+      (item) => `
+        <article class="phase-card ${item.unlocked ? "progress-milestone-card-active" : ""}">
+          <span class="status-badge ${item.unlocked ? "status-done" : "status-next"}">${escapeHtml(item.label)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="timeline-copy">${escapeHtml(item.description)}</p>
+          <p class="metric-note">${item.unlocked ? "Este marco ja foi destravado pelo seu progresso atual." : `Destrava em ${escapeHtml(formatPercent(item.threshold))} de unidades dominadas.`}</p>
+        </article>
+      `,
+    );
+  }
+
+  function renderRemainingPlan(snapshot) {
+    const remainingPlan = snapshot.remainingPlan;
+    if (!remainingPlan || !remainingPlan.weeks?.length) {
+      renderCards(
+        "progress-remaining-weeks",
+        [
+          {
+            week_number: "Fim",
+            calendar_label: "Trilha fechada",
+            hours: 0,
+            session_count: 0,
+            deliverables: ["Use Senior, Roadmap e o capstone para continuar iterando com dados reais."],
+            primary_href: "/roadmap/",
+            primary_label: "Abrir Roadmap",
+          },
+        ],
+        (week) => `
+          <article class="phase-card adaptive-continuation-card">
+            <span class="status-badge status-done">${escapeHtml(week.week_number)}</span>
+            <p class="timeline-kicker">${escapeHtml(week.calendar_label)}</p>
+            <h3>Trilha concluida com checkpoints</h3>
+            <p class="timeline-copy">O plano adaptativo atual nao tem mais semanas pendentes.</p>
+            <ul class="summary-list">
+              ${(week.deliverables || []).map((deliverable) => `<li>${escapeHtml(deliverable)}</li>`).join("")}
+            </ul>
+            ${renderButtonList([
+              {
+                label: week.primary_label,
+                href: week.primary_href,
+                variant: "secondary",
+              },
+            ])}
+          </article>
+        `,
+      );
+      return;
+    }
+
+    const visibleWeeks = (remainingPlan.weeks || []).slice(0, adaptivePathRules.generation_rules?.max_visible_weeks || 8);
+    const hasHiddenWeeks = (remainingPlan.weeks || []).length > visibleWeeks.length;
+    renderCards(
+      "progress-remaining-weeks",
+      [
+        ...visibleWeeks,
+        ...(hasHiddenWeeks
+          ? [
+              {
+                week_number: `+${remainingPlan.weeks.length - visibleWeeks.length}`,
+                calendar_label: "Continuidade",
+                hours: 0,
+                session_count: 0,
+                deliverables: ["As semanas restantes seguem o mesmo racional do plano recalculado."],
+                primary_href: "/trilha/",
+                primary_label: "Ver trilha completa",
+                continuation: true,
+              },
+            ]
+          : []),
+      ],
+      (week) => `
+        <article class="phase-card ${week.continuation ? "adaptive-continuation-card" : ""}">
+          <span class="status-badge ${week.continuation ? "status-next" : "status-done"}">${escapeHtml(
+            week.continuation ? "Continuacao" : `Semana ${week.week_number}`,
+          )}</span>
+          <p class="timeline-kicker">${escapeHtml(week.calendar_label)}</p>
+          <h3>${escapeHtml(week.units?.[0] || "Semana planejada")}</h3>
+          <p class="timeline-copy">${week.continuation ? "A leitura completa continua disponivel na Trilha." : `${formatNumber(week.hours, 1)}h em ${week.session_count} sessoes`}</p>
+          <ul class="summary-list">
+            ${(week.deliverables || []).map((deliverable) => `<li>${escapeHtml(deliverable)}</li>`).join("")}
+          </ul>
+          ${renderButtonList([
+            {
+              label: week.primary_label,
+              href: week.primary_href,
+              variant: "secondary",
+            },
+            ...(!week.continuation ? week.source_buttons || [] : []),
+          ])}
+        </article>
+      `,
+    );
+  }
+
+  function renderSnapshot(snapshot, message = "") {
+    currentSnapshot = snapshot;
+    activeUnitId = resolveActiveUnit(snapshot)?.id || activeUnitId;
+
+    renderCards(
+      "progress-summary",
+      [
+        {
+          badge: "Dominio",
+          status_class: "status-done",
+          title: `${snapshot.masteredUnits.length}/${snapshot.totalUnits} unidades`,
+          body: formatPercent(snapshot.coverageRatio),
+          note: "Percentual de unidades ja marcadas como dominadas.",
+        },
+        {
+          badge: "Horas equivalentes",
+          status_class: snapshot.pace.status_class,
+          title: `${formatNumber(snapshot.completedEquivalentHours, 1)}h concluidas`,
+          body: `${formatNumber(snapshot.expectedEquivalentHours, 1)}h esperadas`,
+          note: "Equivalencia calculada pelo status atual de cada unidade.",
+        },
+        {
+          badge: "Pendencias",
+          status_class: snapshot.checkpointUnits.length ? "status-in-progress" : "status-done",
+          title: `${snapshot.checkpointUnits.length} em checkpoint`,
+          body: `${snapshot.blockedUnits.length} bloqueadas`,
+          note: "Checkpoint e bloqueio viram fila explicita de correcao.",
+        },
+        {
+          badge: "Plano restante",
+          status_class: snapshot.remainingPlan ? "status-done" : "status-next",
+          title: snapshot.remainingPlan ? `${formatNumber(snapshot.remainingPlan.totalHours, 1)}h restantes` : "Sem horas restantes",
+          body: snapshot.remainingPlan
+            ? `${snapshot.remainingPlan.totalCalendarDays} dias corridos`
+            : "Trilha atual fechada",
+          note: snapshot.remainingPlan
+            ? `${snapshot.remainingPlan.totalWeeks} semanas / ${snapshot.remainingPlan.totalStudySessions} sessoes`
+            : "Use o Roadmap para abrir o proximo ciclo.",
+        },
+      ],
+      (item) => `
+        <article class="metric-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="metric-value">${escapeHtml(item.body)}</p>
+          <p class="metric-note">${escapeHtml(item.note)}</p>
+        </article>
+      `,
+    );
+
+    const paceTitle = document.getElementById("progress-pace-title");
+    if (paceTitle) {
+      paceTitle.textContent = snapshot.pace.title;
+    }
+
+    const paceStory = document.getElementById("progress-pace-story");
+    if (paceStory) {
+      paceStory.textContent =
+        `Desde ${formatShortDate(progressState.started_on)}, voce acumulou ${formatNumber(snapshot.completedEquivalentHours, 1)}h equivalentes de estudo ` +
+        `contra ${formatNumber(snapshot.expectedEquivalentHours, 1)}h previstas para o ritmo salvo. ${snapshot.pace.summary}`;
+    }
+
+    const replanTitle = document.getElementById("progress-replan-title");
+    if (replanTitle) {
+      replanTitle.textContent = snapshot.remainingPlan
+        ? `Restam ${formatNumber(snapshot.remainingPlan.totalHours, 1)}h neste recorte`
+        : "Nada pendente na trilha atual";
+    }
+
+    const replanStory = document.getElementById("progress-replan-story");
+    if (replanStory) {
+      replanStory.textContent = snapshot.remainingPlan
+        ? `O plano restante fecha em ${snapshot.remainingPlan.totalCalendarDays} dias corridos, priorizando ${snapshot.remainingPlan.focusProfile.label.toLowerCase()} dentro de ${snapshot.remainingPlan.template.label.toLowerCase()}.`
+        : "A trilha atual foi marcada como dominada. O proximo passo agora e consolidar capstone, retro e refinamentos reais.";
+    }
+
+    renderCards(
+      "progress-replan-summary",
+      [
+        {
+          badge: "Ritmo salvo",
+          status_class: "status-done",
+          title: `${snapshot.preferences.hours_per_day}h x ${snapshot.preferences.days_per_week}d`,
+          body: `${formatNumber((snapshot.preferences.hours_per_day || 0) * (snapshot.preferences.days_per_week || 0), 1)}h por semana`,
+          note: "Estas preferencias continuam sincronizadas com a Trilha.",
+        },
+        {
+          badge: "Proximo bloco",
+          status_class: snapshot.nextPriorityUnit ? "status-in-progress" : "status-done",
+          title: snapshot.nextPriorityUnit?.title || "Sem pendencias abertas",
+          body: snapshot.nextPriorityUnit?.portal_label || "Fechar ciclo atual",
+          note: snapshot.nextPriorityUnit?.exercise || "O restante da energia pode ir para experimentos e capstone.",
+        },
+        {
+          badge: "Checkpoint prioritario",
+          status_class: snapshot.nextCheckpointUnit ? "status-in-progress" : "status-done",
+          title: snapshot.nextCheckpointUnit?.title || "Nenhum checkpoint pendente",
+          body: snapshot.nextCheckpointUnit?.progress_status?.label || "Tudo limpo",
+          note: snapshot.nextCheckpointUnit?.deliverable || "Sem fila de revisao pendente.",
+        },
+        {
+          badge: "Ultima atualizacao",
+          status_class: "status-done",
+          title: formatShortDate(progressState.updated_on),
+          body: `${snapshot.elapsedCalendarDays} dias desde o inicio`,
+          note: "Revisar esta pagina no fim de cada semana ajuda a manter o plano vivo.",
+        },
+      ],
+      (item) => `
+        <article class="metric-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="metric-value">${escapeHtml(item.body)}</p>
+          <p class="metric-note">${escapeHtml(item.note)}</p>
+        </article>
+      `,
+    );
+
+    renderProgressBoard(snapshot);
+    renderProgressUnit(snapshot);
+    renderMilestones(snapshot);
+    renderRemainingPlan(snapshot);
+
+    if (feedback) {
+      feedback.textContent = message;
+      if (message) {
+        window.clearTimeout(window.__progressFeedbackTimer);
+        window.__progressFeedbackTimer = window.setTimeout(() => {
+          feedback.textContent = "";
+        }, 2400);
+      }
+    }
+  }
+
+  function syncProgress(message = "") {
+    const nextPreferences = readPreferences();
+    persistAdaptivePathPreferences(nextPreferences);
+    renderSnapshot(
+      buildProgressSnapshot(
+        progressGuide,
+        studyUnits,
+        learningPathTemplates,
+        adaptivePathRules,
+        vendorSources,
+        nextPreferences,
+        progressState,
+      ),
+      message,
+    );
+  }
+
+  applyPreferences(savedAdaptivePreferences);
+
+  if (pageContent && pageContent.dataset.progressBound !== "true") {
+    pageContent.addEventListener("click", (event) => {
+      const focusButton = event.target.closest("[data-progress-unit-focus]");
+      if (focusButton) {
+        activeUnitId = focusButton.getAttribute("data-progress-unit-focus");
+        if (currentSnapshot) {
+          renderSnapshot(currentSnapshot);
+        }
+        return;
+      }
+
+      const statusButton = event.target.closest("[data-progress-status]");
+      if (!statusButton) {
+        return;
+      }
+
+      const unitId = statusButton.getAttribute("data-progress-unit");
+      const statusId = statusButton.getAttribute("data-progress-status");
+      if (!unitId || !statusLookup.has(statusId)) {
+        return;
+      }
+
+      progressState = updateProgressRecord(progressState, unitId, statusId);
+      persistStudyProgressState(progressState);
+      activeUnitId = unitId;
+      syncProgress("Progresso atualizado.");
+    });
+
+    pageContent.dataset.progressBound = "true";
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    syncProgress("Plano restante recalculado.");
+  });
+
+  [hoursPerDay, daysPerWeek, level, focus, goal].forEach((element) => {
+    element?.addEventListener("change", () => syncProgress("Configuracao de replanejamento atualizada."));
+  });
+
+  const resetButton = document.getElementById("progress-reset");
+  resetButton?.addEventListener("click", () => {
+    applyPreferences(loadAdaptivePathPreferences(defaults));
+    syncProgress("Configuracao salva reaplicada.");
+  });
+
+  syncProgress();
 }
 
 function renderPromptLibrary(containerId, examples, options = {}) {
@@ -4925,6 +5734,7 @@ async function init() {
       matrixArtifact,
       journeyGuide,
       trilhaGuide,
+      progressGuide,
       studyUnits,
       learningPathTemplates,
       adaptivePathRules,
@@ -4941,6 +5751,7 @@ async function init() {
       home: () => renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap),
       jornada: () => renderJourney(journeyGuide),
       trilha: () => renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),
+      progresso: () => renderProgress(progressGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),
       prompts: () =>
         renderPrompts(
           promptsGuide,

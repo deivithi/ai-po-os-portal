@@ -3,23 +3,23 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "19 ciclos publicados",
-      "body": "Portal completo com Radar Vivo, Trilha formativa e camada senior publicada",
-      "note": "O sistema fechou o ciclo base do portal, consolidou o Prompt Studio, abriu o Radar Vivo, migrou o publish para Actions, publicou a Trilha formativa e agora entrega a camada senior."
+      "title": "20 ciclos publicados",
+      "body": "Portal completo com Radar Vivo, Trilha formativa, camada senior e Progresso publicados",
+      "note": "O sistema fechou o ciclo base do portal, consolidou o Prompt Studio, abriu o Radar Vivo, migrou o publish para Actions, publicou a Trilha formativa, a camada senior e agora fecha o loop com progresso e checkpoints."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Macrofase 5 concluida",
-      "body": "Camada senior publicada",
-      "note": "A plataforma agora conecta evals, memoria, agents/MCP e producao a uma rota didatica propria, com fontes oficiais e linguagem de operacao."
+      "title": "Macrofase 6 concluida",
+      "body": "Progresso, checkpoints e replanejamento publicados",
+      "note": "A plataforma agora conecta trilha, dominio por unidade e replanejamento semanal numa camada propria, leve e sincronizada."
     },
     {
       "badge": "Plano de 30 dias",
       "status_class": "status-done",
-      "title": "Base funcional e adaptativa pronta",
-      "body": "30D-A, 30D-B, Radar Vivo, Trilha e camada senior ja conversam entre si",
-      "note": "A partir daqui o trabalho e acompanhar progresso real por unidade, checkpoints e replanejamento da trilha."
+      "title": "Base funcional, adaptativa e acompanhada pronta",
+      "body": "30D-A, 30D-B, Radar Vivo, Trilha, Senior e Progresso ja conversam entre si",
+      "note": "A partir daqui o trabalho migra para refinamento guiado por uso real, melhoria de UX e aprofundamento dos laboratorios."
     },
     {
       "badge": "Regra",
@@ -171,6 +171,12 @@
     {
       "phase": "Refino L",
       "focus": "Camada senior: evals, memoria, agents e producao",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino M",
+      "focus": "Progresso, checkpoints e replanejamento",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }

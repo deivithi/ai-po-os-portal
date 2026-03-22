@@ -1,0 +1,163 @@
+{
+  "study_steps": [
+    "Marque o que ja foi dominado, o que ainda esta em execucao e o que travou seu ritmo.",
+    "Use checkpoint como prova de dominio parcial: a unidade ja foi estudada, mas ainda pede evidencia ou retro.",
+    "Sempre que o ritmo real sair do combinado, replaneje pelo que falta estudar, nao pelo plano inteiro."
+  ],
+  "orientation": [
+    {
+      "badge": "Camada nova",
+      "status_class": "status-done",
+      "title": "O portal agora mede progresso por unidade",
+      "body": "Leitura vira estado verificavel, e nao lembranca vaga",
+      "note": "A ideia e fechar cada bloco com status, evidencia, checkpoint e proxima decisao."
+    },
+    {
+      "badge": "Checkpoints",
+      "status_class": "status-done",
+      "title": "Pendencia fica visivel",
+      "body": "O que ficou em revisao ou bloqueado aparece no fluxo",
+      "note": "Assim a trilha deixa de parecer concluida quando, na pratica, ainda ha lacunas abertas."
+    },
+    {
+      "badge": "Replanejamento",
+      "status_class": "status-done",
+      "title": "A trilha agora acompanha o ritmo real",
+      "body": "Horas, foco e objetivo podem ser recalculados sem apagar o que ja foi dominado",
+      "note": "O plano restante reaproveita a mesma logica da Trilha, so que filtrando o que ainda falta."
+    },
+    {
+      "badge": "Leitura senior",
+      "status_class": "status-done",
+      "title": "Estudar deixa de ser linear",
+      "body": "Progresso, retro e ajuste entram como parte oficial do sistema",
+      "note": "Especialista senior nao avanca so por volume de leitura; avanca por checkpoints, correcoes e ritmo sustentavel."
+    }
+  ],
+  "checkpoint_rules": [
+    "Marque `Em checkpoint` quando a unidade ja foi estudada, mas ainda falta prova, comparativo ou revisao curta.",
+    "Marque `Bloqueado` quando a unidade depende de uma lacuna anterior, falta de contexto ou excesso de escopo.",
+    "Toda semana precisa fechar pelo menos um item em `Dominado` ou um bloqueio resolvido.",
+    "Se duas semanas passarem sem mudar o estado de uma unidade, a trilha precisa ser replanejada."
+  ],
+  "replanning_rules": [
+    "Aumente horas por dia so se voce realmente consegue sustentar o novo ritmo por duas semanas.",
+    "Se o plano estourar demais, reduza foco antes de aumentar ansiedade.",
+    "Quando estiver adiantado, puxe capstone, comparativos reais e camada senior mais cedo.",
+    "Replanejar nao e fracassar; e tratar o estudo como sistema vivo."
+  ],
+  "status_model": [
+    {
+      "id": "not_started",
+      "label": "Nao iniciado",
+      "status_class": "status-next",
+      "summary": "A unidade ainda nao entrou em execucao.",
+      "weight": 0
+    },
+    {
+      "id": "in_progress",
+      "label": "Em execucao",
+      "status_class": "status-in-progress",
+      "summary": "A unidade esta em estudo e ainda precisa fechar evidencias.",
+      "weight": 0.45
+    },
+    {
+      "id": "checkpoint",
+      "label": "Em checkpoint",
+      "status_class": "status-pending",
+      "summary": "A unidade ja foi estudada, mas ainda pede retro, comparativo ou prova final.",
+      "weight": 0.8
+    },
+    {
+      "id": "mastered",
+      "label": "Dominado",
+      "status_class": "status-done",
+      "summary": "A unidade ja foi fechada com dominio verificavel.",
+      "weight": 1
+    },
+    {
+      "id": "blocked",
+      "label": "Bloqueado",
+      "status_class": "status-next",
+      "summary": "A unidade travou e precisa de destravamento explicito.",
+      "weight": 0.2
+    }
+  ],
+  "milestones": [
+    {
+      "threshold": 0.25,
+      "label": "Marco 1",
+      "title": "Base organizada",
+      "description": "Voce ja saiu da exploracao inicial e estabilizou o metodo de estudo."
+    },
+    {
+      "threshold": 0.5,
+      "label": "Marco 2",
+      "title": "Corpo principal em andamento",
+      "description": "Prompting, modelos e contexto ja pararam de ser estudo solto e viraram criterio."
+    },
+    {
+      "threshold": 0.75,
+      "label": "Marco 3",
+      "title": "Camada senior em consolidacao",
+      "description": "Memoria, evals, agents e producao ja entraram no radar operacional do sistema."
+    },
+    {
+      "threshold": 1,
+      "label": "Marco final",
+      "title": "Trilha fechada com evidencias",
+      "description": "Agora o foco deixa de ser consumir pagina e vira repetir experimentos, capstone e refinamento."
+    }
+  ],
+  "route_sequence": [
+    {
+      "badge": "Replanejar",
+      "status_class": "status-done",
+      "title": "Voltar para a Trilha",
+      "description": "A Trilha continua sendo o motor do plano. Use Progresso para medir, e a Trilha para reorganizar o que falta.",
+      "buttons": [
+        {
+          "label": "Abrir Trilha",
+          "href": "/trilha/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Executar",
+      "status_class": "status-done",
+      "title": "Abrir a rota da unidade ativa",
+      "description": "O objetivo desta pagina nao e competir com as rotas tematicas, mas mandar voce de volta para o estudo certo com mais clareza.",
+      "buttons": [
+        {
+          "label": "Abrir Prompts",
+          "href": "/prompts/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir RAG",
+          "href": "/rag/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Fechar ciclo",
+      "status_class": "status-done",
+      "title": "Usar Roadmap e Senior como retro",
+      "description": "Quando o estudo subir de nivel, feche no Roadmap e use Senior para validar se a maturidade ja virou criterio operacional.",
+      "buttons": [
+        {
+          "label": "Abrir Roadmap",
+          "href": "/roadmap/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir Senior",
+          "href": "/senior/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ]
+}

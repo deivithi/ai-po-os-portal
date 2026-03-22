@@ -31,12 +31,17 @@
     {
       "title": "Camada senior com criterio operacional",
       "description": "Sempre que o portal falar de evals, memoria, agents ou producao, a pagina precisa ligar o conceito a decisao operacional, trade-offs e docs oficiais."
+    },
+    {
+      "title": "Progresso sincronizado com a Trilha",
+      "description": "Sempre que o portal marcar progresso, a pagina precisa manter status por unidade, checkpoints claros e replanejamento do restante sem apagar o que ja foi dominado."
     }
   ],
   "qa_targets": [
     "/",
     "/jornada/",
     "/trilha/",
+    "/progresso/",
     "/prompts/",
     "/matriz/",
     "/workflows/",
@@ -57,6 +62,7 @@
     "/data/learning_path_templates.json",
     "/data/adaptive_path_rules.json",
     "/data/trilha_page.json",
-    "/data/senior_page.json"
+    "/data/senior_page.json",
+    "/data/progress_page.json"
   ]
 }

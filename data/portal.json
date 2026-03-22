@@ -4,16 +4,17 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "Evals, memoria persistente, agents e producao",
-    "phase_summary": "O portal agora ganhou uma camada senior propria para qualidade, memoria, tools/MCP e disciplina de publicacao, ligando estudo forte a operacao real.",
-    "next_phase": "Progresso, checkpoints e replanejamento",
-    "next_phase_summary": "Com a camada senior no ar, o proximo salto e acompanhar progresso por unidade, revisar o que ficou pendente e replanejar a trilha com base no ritmo real.",
+    "phase_focus": "Progresso, checkpoints e replanejamento",
+    "phase_summary": "O portal agora fecha o loop de estudo com uma camada propria para marcar dominio por unidade, revisar pendencias e recalcular a trilha pelo ritmo real.",
+    "next_phase": "Refino guiado por uso real",
+    "next_phase_summary": "Com progresso e checkpoints publicados, a proxima frente e refinar a plataforma por uso real, aprofundar laboratorios e preparar a camada futura de productizacao.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
     { "id": "home", "label": "Home", "description": "Mapa de estudo e visao executiva", "href": "/" },
     { "id": "jornada", "label": "Jornada", "description": "Como usar o portal em 30 dias", "href": "/jornada/" },
     { "id": "trilha", "label": "Trilha", "description": "Plano adaptativo por horas, foco e objetivo", "href": "/trilha/" },
+    { "id": "progresso", "label": "Progresso", "description": "Checkpoints, dominio e replanejamento", "href": "/progresso/" },
     { "id": "prompts", "label": "Prompts", "description": "Prompt Studio e anatomia de prompt", "href": "/prompts/" },
     { "id": "matriz", "label": "Matriz", "description": "Comparacao de modelos e scorecards", "href": "/matriz/" },
     { "id": "workflows", "label": "Workflows", "description": "Operacao, risco e aprovacao humana", "href": "/workflows/" },
@@ -37,6 +38,11 @@
       "title": "Trilha",
       "nav_label": "Trilha",
       "summary": "Adaptive Study Path: geracao de trilha por horas por dia, dias por semana, foco, nivel e objetivo final, agora com unidade em foco e criterio de dominio."
+    },
+    "progresso": {
+      "title": "Progresso",
+      "nav_label": "Progresso",
+      "summary": "Camada de progresso: checkpoints por unidade, ritmo real, pendencias e replanejamento sincronizado com a Trilha."
     },
     "prompts": {
       "title": "Prompt Studio",
@@ -180,6 +186,13 @@
       "description": "Abra Senior para estudar evals, memoria persistente, agents/MCP e producao com uma linguagem mais proxima de engenharia aplicada.",
       "href": "/senior/",
       "badge": "Camada rara",
+      "status_class": "status-done"
+    },
+    {
+      "title": "Acompanhar progresso e recalcular o plano",
+      "description": "Use Progresso para marcar dominio por unidade, visualizar pendencias e replanejar a trilha sem apagar o que ja foi dominado.",
+      "href": "/progresso/",
+      "badge": "Checkpoints semanais",
       "status_class": "status-done"
     },
     {

@@ -80,6 +80,16 @@
       "href": "/artefatos/",
       "action_label": "Abrir Artefatos",
       "next_step": "Usar sempre junto com a pagina RAG para nao misturar estudo e pipeline operacional."
+    },
+    {
+      "domain": "Progresso e checkpoints",
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "A nova rota de Progresso fecha o ciclo da Trilha com status por unidade, checkpoints visiveis e replanejamento sem resetar o estudo.",
+      "route_label": "Progresso",
+      "href": "/progresso/",
+      "action_label": "Abrir Progresso",
+      "next_step": "Usar semanalmente para corrigir ritmo, destravar pendencias e recalibrar o plano restante."
     }
   ]
 }

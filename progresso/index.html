@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Progresso | AI Operating System do PO Salesforce</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body data-page="progresso">
+    <a class="skip-link" href="#content">Pular para o conteudo</a>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar"></aside>
+      <div class="content-shell">
+        <header class="topbar" id="topbar"></header>
+        <main class="page" id="content">
+          <section class="page-hero compact">
+            <div class="hero-copy">
+              <span class="eyebrow">Progress operating layer</span>
+              <h1>Checkpoint, progresso e replanejamento sem perder o fio do estudo.</h1>
+              <p class="lead">
+                Esta rota transforma a trilha em sistema vivo: cada unidade pode
+                ser marcada, revisada, destravada e recalculada conforme o ritmo
+                real da sua semana.
+              </p>
+            </div>
+            <aside class="callout-panel">
+              <span class="eyebrow">Como usar</span>
+              <ol class="step-list" id="progress-study-steps"></ol>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="metric-grid" id="progress-orientation"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Painel de ritmo</span>
+                <h2>O que ja foi dominado, o que esta pendente e o que precisa mudar</h2>
+                <p>
+                  Este painel nao mostra apenas porcentagem. Ele tenta traduzir
+                  ritmo real, horas equivalentes e pendencias que ainda pedem
+                  evidencia.
+                </p>
+              </div>
+              <div class="adaptive-summary-panel">
+                <div class="metric-grid" id="progress-summary"></div>
+                <article class="callout-panel adaptive-story-card">
+                  <span class="eyebrow">Leitura do momento</span>
+                  <h3 id="progress-pace-title">Carregando o estado da trilha...</h3>
+                  <p id="progress-pace-story">
+                    A camada de progresso vai explicar se o seu ritmo esta
+                    sustentavel, atrasado ou mais rapido do que o plano atual.
+                  </p>
+                </article>
+              </div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Regras de checkpoint</span>
+              <ul class="resource-list" id="progress-checkpoint-rules"></ul>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Board de unidades</span>
+              <h2>Escolha o bloco e atualize o estado real do estudo</h2>
+              <p>
+                Cada card resume horas, status, ultima atualizacao e acao mais
+                importante para aquela unidade.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-3" id="progress-unit-board"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Unidade ativa</span>
+                <h2>Prova, ajuste e proxima acao</h2>
+                <p>
+                  O painel abaixo concentra o que precisa ser entendido, o que
+                  precisa ser provado e como o status da unidade deve mudar.
+                </p>
+              </div>
+              <article class="data-panel adaptive-unit-focus" id="progress-unit-focus"></article>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Modelo de status</span>
+              <div class="cards-grid cards-grid-1" id="progress-status-legend"></div>
+            </aside>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Replanejamento</span>
+                <h2>Recalcule a trilha pelo que ainda falta</h2>
+                <p>
+                  O formulario abaixo usa o mesmo motor da Trilha, mas ignora o
+                  que ja esta dominado para evitar resetar seu avanco.
+                </p>
+              </div>
+              <div class="adaptive-shell">
+                <form class="data-panel adaptive-form" id="progress-replan-form">
+                  <div class="adaptive-form-grid">
+                    <label class="adaptive-field">
+                      <span class="builder-field-label">Horas por dia</span>
+                      <select id="progress-hours-per-day"></select>
+                    </label>
+                    <label class="adaptive-field">
+                      <span class="builder-field-label">Dias por semana</span>
+                      <select id="progress-days-per-week"></select>
+                    </label>
+                    <label class="adaptive-field">
+                      <span class="builder-field-label">Nivel atual</span>
+                      <select id="progress-level"></select>
+                    </label>
+                    <label class="adaptive-field">
+                      <span class="builder-field-label">Foco principal</span>
+                      <select id="progress-focus"></select>
+                    </label>
+                    <label class="adaptive-field adaptive-field-full">
+                      <span class="builder-field-label">Objetivo final</span>
+                      <select id="progress-goal"></select>
+                    </label>
+                  </div>
+                  <div class="builder-controls">
+                    <button class="button" id="progress-apply" type="submit">Replanejar o restante</button>
+                    <button class="button secondary" id="progress-reset" type="button">Voltar ao plano salvo</button>
+                    <p class="builder-copy-feedback" id="progress-feedback"></p>
+                  </div>
+                </form>
+                <div class="adaptive-summary-panel">
+                  <div class="metric-grid" id="progress-replan-summary"></div>
+                  <article class="callout-panel adaptive-story-card">
+                    <span class="eyebrow">Plano restante</span>
+                    <h3 id="progress-replan-title">Calculando o que falta...</h3>
+                    <p id="progress-replan-story">
+                      O replanejamento vai mostrar horas restantes, horizonte
+                      novo e proximo bloco do que ainda nao foi dominado.
+                    </p>
+                  </article>
+                </div>
+              </div>
+            </div>
+            <aside class="callout-panel">
+              <span class="eyebrow">Regras de replanejamento</span>
+              <ul class="summary-list" id="progress-replanning-rules"></ul>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Marcos</span>
+              <h2>O que cada faixa de progresso quer dizer</h2>
+              <p>
+                Estes marcos ajudam a interpretar a evolucao do estudo sem cair
+                na armadilha de achar que qualquer percentual ja significa
+                dominio.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-2" id="progress-milestones"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Semanas restantes</span>
+              <h2>Como o plano se reorganiza a partir de agora</h2>
+              <p>
+                Esta timeline reflete o plano restante, e nao o plano inteiro da
+                trilha original.
+              </p>
+            </div>
+            <div class="timeline-grid" id="progress-remaining-weeks"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Fluxo recomendado</span>
+              <h2>Para onde ir depois de medir o progresso</h2>
+              <p>
+                A rota Progresso existe para ajustar o sistema. Depois disso,
+                ela sempre precisa te mandar para a pagina certa do portal.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-3" id="progress-route-sequence"></div>
+          </section>
+        </main>
+        <footer class="footer" id="portal-footer"></footer>
+      </div>
+    </div>
+    <script src="../assets/app.js"></script>
+  </body>
+</html>

@@ -19,16 +19,16 @@
       {
         "badge": "Paginas fortes",
         "status_class": "status-done",
-        "title": "6 rotas verificadas",
-        "value": "Home, Jornada, Trilha, Prompts, Senior e Artefatos",
-        "note": "Essas paginas ja podem ser tratadas como ponto de estudo principal sem misturar snapshot, mercado e camada senior."
+        "title": "7 rotas verificadas",
+        "value": "Home, Jornada, Trilha, Progresso, Prompts, Senior e Artefatos",
+        "note": "Essas paginas ja podem ser tratadas como ponto de estudo principal sem misturar snapshot, mercado, trilha e checkpoints."
       },
       {
         "badge": "Fila editorial",
         "status_class": "status-next",
         "title": "Proxima macrofrente",
-        "value": "Progresso e checkpoints",
-        "note": "Com a camada senior publicada, o proximo passo e medir progresso por unidade, revisar pendencias e replanejar a trilha."
+        "value": "Refino guiado por uso real",
+        "note": "Com a camada de progresso publicada, o proximo passo e observar uso real, apertar a UX e aprofundar laboratorios."
       }
     ]
   },
@@ -47,13 +47,18 @@
       },
       {
         "label": "Rotas fortes",
-        "value": "6"
+        "value": "7"
       }
     ],
     "buttons": [
       {
         "label": "Abrir radar oficial",
         "href": "/#home-vendor-updates",
+        "variant": "secondary"
+      },
+      {
+        "label": "Abrir progresso",
+        "href": "/progresso/",
         "variant": "secondary"
       },
       {
@@ -110,6 +115,17 @@
       "note": "Boa pagina para transformar estudo em sequencia acionavel e em dominio verificavel.",
       "action_href": "/trilha/",
       "action_label": "Abrir Trilha"
+    },
+    {
+      "id": "progresso",
+      "title": "Progresso",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "summary": "A rota nova fecha o loop da Trilha com status por unidade, checkpoints e replanejamento sincronizado com o ritmo real.",
+      "note": "Boa pagina para impedir que o estudo continue bonito no papel e travado na pratica.",
+      "action_href": "/progresso/",
+      "action_label": "Abrir Progresso"
     },
     {
       "id": "prompts",
