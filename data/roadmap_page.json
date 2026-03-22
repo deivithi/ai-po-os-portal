@@ -3,16 +3,16 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "12 ciclos publicados",
+      "title": "13 ciclos publicados",
       "body": "Portal completo e em expansao didatica",
       "note": "O sistema fechou o ciclo base do portal e agora esta expandindo o Prompt Studio por fases, sem perder disciplina de release nem clareza de estudo."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Prompt Studio fase 4",
-      "body": "Builder + overlays por fornecedor publicados",
-      "note": "O portal agora combina fundamentos, biblioteca, builder orientado por contexto e uma camada didatica que traduz o mesmo prompt para OpenAI, Anthropic, Google e xAI."
+      "title": "Prompt Studio fase 5",
+      "body": "Builder + overlays + laboratorio de qualidade publicados",
+      "note": "O portal agora combina fundamentos, biblioteca, builder orientado por contexto, camada didatica por fornecedor e uma rubrica viva para avaliar qualidade de prompt."
     },
     {
       "badge": "Plano de 30 dias",
@@ -130,6 +130,12 @@
       "phase": "Refino E",
       "focus": "Prompt Studio fase 4",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/commit/68b96e266f0c83cbb8c648404429a98f9a3c3f6a",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino F",
+      "focus": "Prompt Studio fase 5",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/commit/5cd8c97a1f44da868ded84bdf6f67011b86b51a8",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }
   ],
