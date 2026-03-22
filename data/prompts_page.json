@@ -24,9 +24,9 @@
     {
       "badge": "Fase atual",
       "status_class": "status-done",
-      "title": "Prompt Studio fase 4",
-      "body": "Builder reativo + overlays por fornecedor",
-      "note": "A aba agora nao so monta um prompt final: ela mostra como esse mesmo trabalho muda entre OpenAI, Anthropic, Google e xAI com base em documentacao oficial."
+      "title": "Prompt Studio fase 5",
+      "body": "Builder + overlays + laboratorio de qualidade",
+      "note": "A aba agora nao so monta e adapta prompts por fornecedor: ela tambem ensina como avaliar rubrica, robustez, antes e depois e checklist por caso de uso."
     }
   ],
   "maturity_levels": [
@@ -260,29 +260,29 @@
     }
   ],
   "phase_boundary": [
-    "Esta fase ja entrega builder com contexto do usuario, prompt final montado em tempo real e overlays por fornecedor.",
+    "Esta fase ja entrega builder com contexto do usuario, prompt final montado em tempo real, overlays por fornecedor e laboratorio de qualidade em cima do estado atual do prompt.",
     "A comparacao principal cobre OpenAI, Anthropic, Google e xAI com base nas docs oficiais mais uteis para a trilha do portal.",
-    "Laboratorio de qualidade de prompt entra na Fase 5.",
+    "O laboratorio ensina rubrica, antes e depois, testes de robustez e checklist por caso de uso.",
     "Arquitetura premium e productizacao futura entram na Fase 6."
   ],
   "next_steps": [
     {
       "badge": "Depois desta fase",
       "status_class": "status-next",
-      "title": "Ensinar qualidade de prompt",
-      "description": "A proxima entrega mais valiosa agora e avaliar a qualidade do proprio prompt com rubrica, antes e depois, testes e antipadroes recorrentes."
+      "title": "Preparar productizacao futura",
+      "description": "A proxima entrega mais valiosa agora e organizar a arquitetura para camada premium, favoritos, trilhas exclusivas e crescimento sem retrabalho."
     },
     {
       "badge": "Depois desta fase",
       "status_class": "status-next",
-      "title": "Abrir comparativos de robustez",
-      "description": "Depois dos overlays, faz sentido mostrar onde o mesmo prompt degrada, melhora ou pede arquitetura extra em cada stack."
+      "title": "Abrir camadas proprietarias",
+      "description": "Com builder, overlays e laboratorio prontos, o portal fica preparado para templates proprietarios, estudos de caso por nicho e trilhas vendaveis."
     },
     {
       "badge": "Depois desta fase",
       "status_class": "status-next",
-      "title": "Preparar a camada premium futura",
-      "description": "Com biblioteca e builder, o portal comeca a ficar pronto para trilhas exclusivas, templates proprietarios e productizacao futura."
+      "title": "Conectar qualidade a evolucao continua",
+      "description": "O passo seguinte e deixar a camada de produto pronta para adicionar novas rubricas, novos templates e novas trilhas sem reescrever a pagina."
     }
   ]
 }

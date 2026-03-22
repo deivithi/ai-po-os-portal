@@ -1,0 +1,373 @@
+{
+  "overview": [
+    {
+      "badge": "Fase 5",
+      "status_class": "status-done",
+      "title": "Qualidade de prompt como disciplina",
+      "body": "Rubrica, teste e iteracao",
+      "note": "O objetivo desta fase e ensinar como revisar um prompt com criterio, e nao apenas celebrar a primeira versao que parece boa."
+    },
+    {
+      "badge": "Regra central",
+      "status_class": "status-done",
+      "title": "Iterar o bloco certo",
+      "body": "Ajuste objetivo, contexto, controle e fallback",
+      "note": "A melhoria profissional vem de identificar qual parte do prompt esta fraca. Nem todo problema pede mais texto; muitas vezes pede mais contrato."
+    },
+    {
+      "badge": "Conexao com sistema",
+      "status_class": "status-in-progress",
+      "title": "Prompt bom sabe quando escalar",
+      "body": "Schema, RAG, tools e workflow entram com motivo",
+      "note": "Se a auditoria mostrar baixa confiabilidade, o ganho real pode vir de retrieval, tools ou governanca, nao de enfeitar o prompt."
+    }
+  ],
+  "rubric": [
+    {
+      "id": "clarity",
+      "badge": "Rubrica 1",
+      "status_class": "status-done",
+      "title": "Clareza",
+      "description": "O prompt deixa evidente qual trabalho deve ser feito, com que papel e com qual resultado final?",
+      "questions": [
+        "O objetivo cabe em um verbo claro e observavel?",
+        "O papel reduz ambiguidade sem virar teatro?",
+        "A pessoa sabe o que a resposta deve entregar ao final?"
+      ],
+      "improve_hint": "Se a clareza estiver baixa, reescreva objetivo e papel antes de mexer no resto.",
+      "official_buttons": [
+        {
+          "label": "OpenAI prompt guidance",
+          "href": "https://developers.openai.com/api/docs/guides/prompt-guidance",
+          "variant": "secondary"
+        },
+        {
+          "label": "Anthropic best practices",
+          "href": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "control",
+      "badge": "Rubrica 2",
+      "status_class": "status-done",
+      "title": "Controle",
+      "description": "O prompt controla restricoes, criterio de aceite e formato de saida de um jeito que realmente guia a execucao?",
+      "questions": [
+        "As restricoes dizem o que nao pode acontecer?",
+        "Existe criterio objetivo para reconhecer uma boa resposta?",
+        "O formato de saida esta observavel e pronto para reuse?"
+      ],
+      "improve_hint": "Se o modelo responde de forma bonita, mas inconsistente, normalmente o problema esta aqui.",
+      "official_buttons": [
+        {
+          "label": "OpenAI structured outputs",
+          "href": "https://platform.openai.com/docs/guides/structured-outputs",
+          "variant": "secondary"
+        },
+        {
+          "label": "Google controlled output",
+          "href": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/multimodal/control-generated-output",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "context_fidelity",
+      "badge": "Rubrica 3",
+      "status_class": "status-done",
+      "title": "Fidelidade ao contexto",
+      "description": "O prompt usa o contexto certo, no volume certo, e deixa claro quando o material nao basta?",
+      "questions": [
+        "O contexto traz os fatos que realmente mudam a decisao?",
+        "O prompt evita inventar quando a base e insuficiente?",
+        "Quando ha necessidade de fonte, a escalada para retrieval ou grounding esta clara?"
+      ],
+      "improve_hint": "Mais contexto nao e automaticamente melhor. O contexto precisa ser util, verificavel e orientado a decisao.",
+      "official_buttons": [
+        {
+          "label": "Google long context",
+          "href": "https://ai.google.dev/gemini-api/docs/long-context",
+          "variant": "secondary"
+        },
+        {
+          "label": "Google compare prompts",
+          "href": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/compare-prompts",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "ambiguity_robustness",
+      "badge": "Rubrica 4",
+      "status_class": "status-in-progress",
+      "title": "Robustez a ambiguidade",
+      "description": "O prompt se comporta bem quando falta dado, quando ha conflito ou quando o usuario escreve de forma incompleta?",
+      "questions": [
+        "Existe fallback explicito para falta de informacao?",
+        "O prompt permite responder insuficiente ou inconclusivo quando fizer sentido?",
+        "Exemplos, gates ou few-shot estao ajudando a reduzir variacao?"
+      ],
+      "improve_hint": "Prompt maduro nao empurra o modelo para improviso; ele define o que fazer quando o contexto falha.",
+      "official_buttons": [
+        {
+          "label": "Anthropic multishot",
+          "href": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/multishot-prompting",
+          "variant": "secondary"
+        },
+        {
+          "label": "Anthropic develop tests",
+          "href": "https://docs.anthropic.com/en/docs/test-and-evaluate/develop-tests",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "output_quality",
+      "badge": "Rubrica 5",
+      "status_class": "status-in-progress",
+      "title": "Qualidade da saida",
+      "description": "A resposta resultante tende a sair util para acao, revisao ou integracao, e nao apenas correta em tese?",
+      "questions": [
+        "A saida e facil de revisar ou reaproveitar?",
+        "O formato evita texto solto quando voce precisa de estrutura?",
+        "Existe sinal claro de proxima acao, risco ou evidencia quando a tarefa pede isso?"
+      ],
+      "improve_hint": "O teste final do prompt e pragmatico: a saida serve para o trabalho seguinte sem retrabalho excessivo?",
+      "official_buttons": [
+        {
+          "label": "OpenAI evals",
+          "href": "https://developers.openai.com/api/docs/guides/evals",
+          "variant": "secondary"
+        },
+        {
+          "label": "OpenAI graders",
+          "href": "https://developers.openai.com/api/docs/guides/graders",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "iteration_loop": [
+    {
+      "kicker": "Passo 1",
+      "title": "Defina sucesso antes do teste",
+      "description": "Escolha o que uma boa resposta precisa mostrar. Sem isso, qualquer ajuste vira gosto pessoal."
+    },
+    {
+      "kicker": "Passo 2",
+      "title": "Teste casos normais e casos limite",
+      "description": "Nao avalie o prompt apenas com o melhor exemplo. Inclua ambiguidade, falta de contexto e casos de borda."
+    },
+    {
+      "kicker": "Passo 3",
+      "title": "Mude um bloco por vez",
+      "description": "Ajuste objetivo, contexto, criterio ou formato isoladamente para saber o que realmente melhorou."
+    },
+    {
+      "kicker": "Passo 4",
+      "title": "Promova a arquitetura quando preciso",
+      "description": "Se a auditoria continuar fraca, suba para schema, retrieval, tools ou workflow em vez de insistir no mesmo prompt."
+    }
+  ],
+  "before_after": [
+    {
+      "id": "summary-upgrade",
+      "label": "Sintese",
+      "title": "Resumo executivo que sai do generico",
+      "summary": "O ganho aqui vem de trocar um pedido vago por conclusao, pendencias e proxima acao.",
+      "before_title": "Pedido generico",
+      "before_prompt": "Leia esse texto e me faca um resumo.",
+      "after_title": "Resumo com criterio",
+      "after_prompt": "Papel:\\nVoce e um assistente de sintese executiva.\\n\\nObjetivo:\\nLer o contexto abaixo e produzir um resumo util para decisao.\\n\\nContexto:\\n[cole aqui o email, nota ou documento curto]\\n\\nRestricoes:\\n- Nao invente fatos.\\n- Se faltar informacao, diga o que esta faltando.\\n- Nao repita o texto original.\\n\\nCriterio de aceite:\\n- Mostrar conclusao clara.\\n- Destacar pendencias relevantes.\\n- Indicar proxima acao recomendada.\\n\\nFormato de saida:\\n1. Resumo executivo em 5 bullets\\n2. Pendencias\\n3. Proxima acao recomendada",
+      "impact_title": "O que mudou de verdade",
+      "impact_note": "O prompt deixa de pedir apenas condensacao e passa a pedir decisao, controle e honestidade sobre falta de informacao.",
+      "improvements": [
+        {
+          "kicker": "Ganho 1",
+          "title": "Objetivo observavel",
+          "description": "Nao basta pedir resumo. Agora o resultado precisa servir para decisao."
+        },
+        {
+          "kicker": "Ganho 2",
+          "title": "Saida pronta para agir",
+          "description": "Pendencias e proxima acao reduzem retrabalho e evitam resposta bonita, mas inutil."
+        },
+        {
+          "kicker": "Ganho 3",
+          "title": "Fallback explicito",
+          "description": "Se o contexto nao bastar, o modelo deve dizer isso em vez de improvisar."
+        }
+      ],
+      "official_buttons": [
+        {
+          "label": "OpenAI prompt guidance",
+          "href": "https://developers.openai.com/api/docs/guides/prompt-guidance",
+          "variant": "secondary"
+        },
+        {
+          "label": "Anthropic prompt overview",
+          "href": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "requirements-upgrade",
+      "label": "Analise",
+      "title": "Revisor de requisito com criterio de aceite",
+      "summary": "O salto aqui e sair da opiniao vaga para um julgamento sustentado por criterios claros.",
+      "before_title": "Pergunta vaga",
+      "before_prompt": "Analise esse requisito e me diga se ele esta bom.",
+      "after_title": "Revisao auditavel",
+      "after_prompt": "Papel:\\nVoce e um Product Owner senior revisando requisitos antes de build ou homologacao.\\n\\nObjetivo:\\nAvaliar o requisito abaixo e apontar se ele esta pronto, incompleto ou arriscado.\\n\\nContexto:\\n[cole aqui o requisito]\\n\\nCriterios de avaliacao:\\n- O objetivo de negocio esta claro?\\n- Os criterios de aceite estao testaveis?\\n- Existem dependencias ou impactos cross-funcionais?\\n- Ha ambiguidades que podem gerar retrabalho?\\n\\nFormato de saida:\\n1. Status: pronto | incompleto | arriscado\\n2. Pontos fortes\\n3. Lacunas\\n4. Riscos\\n5. Proxima acao\\n\\nSe algum criterio nao puder ser avaliado pelo material enviado, diga isso explicitamente.",
+      "impact_title": "Por que esta versao fica mais forte",
+      "impact_note": "O modelo recebe um criterio de julgamento, um status fechado e uma regra para dizer quando o material nao basta.",
+      "improvements": [
+        {
+          "kicker": "Ganho 1",
+          "title": "Criterios de avaliacao",
+          "description": "A analise deixa de depender do humor do modelo e passa a seguir uma rubrica clara."
+        },
+        {
+          "kicker": "Ganho 2",
+          "title": "Status fechado",
+          "description": "Pronto, incompleto ou arriscado cria uma decisao simples e rastreavel."
+        },
+        {
+          "kicker": "Ganho 3",
+          "title": "Honestidade sobre lacunas",
+          "description": "Quando nao houver base suficiente, o prompt instrui o modelo a dizer isso."
+        }
+      ],
+      "official_buttons": [
+        {
+          "label": "Anthropic develop tests",
+          "href": "https://docs.anthropic.com/en/docs/test-and-evaluate/develop-tests",
+          "variant": "secondary"
+        },
+        {
+          "label": "OpenAI evals",
+          "href": "https://developers.openai.com/api/docs/guides/evals",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "extraction-upgrade",
+      "label": "Extracao",
+      "title": "Extracao estruturada em vez de texto solto",
+      "summary": "Aqui o ganho vem de trocar narrativa por contrato de saida, null e schema.",
+      "before_title": "Pedido fraco",
+      "before_prompt": "Extraia os dados importantes desse texto.",
+      "after_title": "Extracao controlada",
+      "after_prompt": "Voce vai extrair dados do texto abaixo e devolver apenas JSON valido.\\n\\nSchema:\\n{\\n  \"nome_conta\": string | null,\\n  \"canal_origem\": string | null,\\n  \"status_lead\": string | null,\\n  \"sinal_risco\": string | null\\n}\\n\\nRegras:\\n- Nao invente campos.\\n- Se um valor nao estiver presente, use null.\\n- Nao escreva explicacoes fora do JSON.\\n\\nTexto:\\n[cole aqui o texto fonte]",
+      "impact_title": "Por que esse upgrade muda o jogo",
+      "impact_note": "A saida passa a ficar pronta para integracao, revisao e downstream, reduzindo variacao inutil.",
+      "improvements": [
+        {
+          "kicker": "Ganho 1",
+          "title": "Schema explicito",
+          "description": "O modelo sabe exatamente o que deve produzir e em qual formato."
+        },
+        {
+          "kicker": "Ganho 2",
+          "title": "Null no lugar de chute",
+          "description": "Isso reduz erro silencioso e melhora confiabilidade operacional."
+        },
+        {
+          "kicker": "Ganho 3",
+          "title": "Texto fora do contrato proibido",
+          "description": "A resposta fica muito mais facil de reutilizar em scripts, planilhas e automacoes."
+        }
+      ],
+      "official_buttons": [
+        {
+          "label": "OpenAI structured outputs",
+          "href": "https://platform.openai.com/docs/guides/structured-outputs",
+          "variant": "secondary"
+        },
+        {
+          "label": "xAI structured outputs",
+          "href": "https://docs.x.ai/developers/model-capabilities/text/structured-outputs",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "checklists": [
+    {
+      "id": "summary-checklist",
+      "title": "Sintese e resumo executivo",
+      "summary": "Use esta lente quando o prompt precisa resumir, reorganizar ou transformar contexto curto em decisao.",
+      "template_ids": ["executive-summary"],
+      "checks": [
+        "O resumo precisa terminar com conclusao ou proxima acao?",
+        "O prompt impede repeticao do texto original em bloco corrido?",
+        "Existe regra para dizer quando faltam dados essenciais?",
+        "O contexto traz apenas o que muda a decisao?"
+      ],
+      "red_flags": [
+        "Pedido so com o verbo resumir, sem dizer para que serve a resposta.",
+        "Texto enorme colado sem prioridade, hierarquia ou foco.",
+        "Ausencia de formato que torne a sintese reutilizavel."
+      ],
+      "exit_rule": "Promova o prompt quando a resposta sair curta, util para decisao e honesta sobre lacunas."
+    },
+    {
+      "id": "review-checklist",
+      "title": "Analise, revisao e decisao assistida",
+      "summary": "Ideal para prompts que precisam julgar prontidao, risco, completude ou proxima acao.",
+      "template_ids": ["requirements-review"],
+      "checks": [
+        "Os criterios de avaliacao estao escritos no prompt?",
+        "Existe status fechado ou escala que force decisao observavel?",
+        "Ha instrucao para dizer quando um criterio nao pode ser avaliado?",
+        "A saida mostra risco, lacuna e proxima acao?"
+      ],
+      "red_flags": [
+        "Prompt pede opiniao, mas nao define criterios.",
+        "Nao existe forma clara de classificar o resultado.",
+        "A resposta fica longa, bonita e sem decisao pratica."
+      ],
+      "exit_rule": "Promova o prompt quando duas pessoas diferentes conseguirem revisar a mesma saida e chegar a leitura parecida."
+    },
+    {
+      "id": "extraction-checklist",
+      "title": "Extracao estruturada e output integravel",
+      "summary": "Use esta lente quando a resposta precisa entrar em JSON, tabela, planilha ou automacao.",
+      "template_ids": ["structured-extraction", "operational-classifier"],
+      "checks": [
+        "O schema ou o formato estao explicitos?",
+        "O prompt instrui o uso de null ou categoria inconclusiva quando faltar dado?",
+        "Existe proibicao de texto fora do contrato?",
+        "Os campos pedidos realmente existem no texto fonte?"
+      ],
+      "red_flags": [
+        "Prompt descreve o formato, mas ainda aceita texto livre.",
+        "Nao ha comportamento definido para dado ausente.",
+        "O schema mistura narracao com integracao."
+      ],
+      "exit_rule": "Promova o prompt quando a resposta puder ser consumida por outra etapa sem limpeza manual excessiva."
+    },
+    {
+      "id": "gate-checklist",
+      "title": "Gate de contexto, RAG e tools",
+      "summary": "Use esta lente quando o prompt precisa decidir se responde, pede contexto, usa retrieval ou chama ferramentas.",
+      "template_ids": ["context-gate"],
+      "checks": [
+        "Os modos de decisao estao poucos, claros e mutuamente distinguiveis?",
+        "O prompt explica quando deve pedir contexto em vez de responder?",
+        "Ha regra clara para recomendar RAG, grounding ou tool use?",
+        "Se o risco for alto, existe sinal de governanca humana?"
+      ],
+      "red_flags": [
+        "Muitos modos com fronteiras confusas.",
+        "O modelo pode responder direto mesmo quando falta contexto critico.",
+        "Nao ha trilha para risco alto ou decisao sensivel."
+      ],
+      "exit_rule": "Promova o prompt quando o gate decidir com consistencia em varios cenarios, inclusive casos ambguos e insuficientes."
+    }
+  ]
+}

@@ -4,10 +4,10 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "Prompt Studio fase 4",
-    "phase_summary": "O portal agora evoluiu o Prompt Studio para uma bancada orientada por contexto com overlays por fornecedor, mostrando como OpenAI, Anthropic, Google e xAI pedem ajustes especificos no mesmo prompt.",
-    "next_phase": "Prompt Studio fase 5",
-    "next_phase_summary": "O proximo passo mais valioso agora e ensinar como avaliar a qualidade do proprio prompt com rubrica, comparativos antes e depois e antipadroes recorrentes.",
+    "phase_focus": "Prompt Studio fase 5",
+    "phase_summary": "O portal agora evoluiu o Prompt Studio para uma bancada completa de qualidade, com builder orientado por contexto, overlays por fornecedor, rubrica ao vivo, antes e depois e checklist por caso de uso.",
+    "next_phase": "Prompt Studio fase 6",
+    "next_phase_summary": "O proximo passo mais valioso agora e preparar a arquitetura para productizacao futura, camada premium, trilhas proprietarias e crescimento sem retrabalho.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
@@ -34,7 +34,7 @@
     "prompts": {
       "title": "Prompt Studio",
       "nav_label": "Prompts",
-      "summary": "Fundamentos, biblioteca didatica e builder orientado por contexto para sair do improviso e entrar em design de tarefa."
+      "summary": "Fundamentos, biblioteca didatica, builder orientado por contexto, overlays por fornecedor e laboratorio de qualidade para sair do improviso e entrar em design de tarefa."
     },
     "matriz": {
       "title": "Matriz",
@@ -130,7 +130,7 @@
     },
     {
       "title": "Dominar prompting com criterio",
-      "description": "Use Prompt Studio para aprender estrutura, anatomia, limites e a hora certa de subir para schema, RAG ou tools.",
+      "description": "Use Prompt Studio para aprender estrutura, anatomia, limites, overlays por fornecedor, rubrica de qualidade e a hora certa de subir para schema, RAG ou tools.",
       "href": "/prompts/",
       "badge": "Camada de comando",
       "status_class": "status-done"

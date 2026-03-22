@@ -6,6 +6,7 @@ const DATA_PATHS = {
   promptLibrary: "/data/prompt_library.json",
   promptBuilder: "/data/prompt_builder.json",
   promptProviderOverlays: "/data/prompt_provider_overlays.json",
+  promptQualityLab: "/data/prompt_quality_lab.json",
   matrixGuide: "/data/matrix_page.json",
   matrixArtifact: "/artifacts/files/model_matrix.json",
   journeyGuide: "/data/journey_page.json",
@@ -18,7 +19,7 @@ const DATA_PATHS = {
 const PAGE_DATA_KEYS = {
   home: ["overview", "artifacts"],
   jornada: ["journeyGuide"],
-  prompts: ["promptsGuide", "promptLibrary", "promptBuilder", "promptProviderOverlays"],
+  prompts: ["promptsGuide", "promptLibrary", "promptBuilder", "promptProviderOverlays", "promptQualityLab"],
   matriz: ["overview", "artifacts", "matrixGuide", "matrixArtifact"],
   workflows: ["overview", "workflowsGuide"],
   rag: ["ragGuide"],
@@ -2045,6 +2046,574 @@ function renderPromptProviderOverlays(promptProviderOverlays) {
   });
 }
 
+function normalizePromptValue(value) {
+  return String(value || "").trim();
+}
+
+function countPromptLines(value) {
+  return normalizePromptValue(value)
+    .split(/\n+/)
+    .map((line) => line.replace(/^[-*\d.\s]+/, "").trim())
+    .filter(Boolean).length;
+}
+
+function hasPromptPattern(text, pattern) {
+  return pattern.test(normalizePromptValue(text));
+}
+
+function computePromptQualityMetric(metric, state) {
+  const values = state?.values || {};
+  const flags = state?.flags || {};
+  const escalation = Array.isArray(state?.escalation) ? state.escalation : [];
+  const role = normalizePromptValue(values.role);
+  const objective = normalizePromptValue(values.objective);
+  const context = normalizePromptValue(values.context);
+  const constraints = normalizePromptValue(values.constraints);
+  const acceptance = normalizePromptValue(values.acceptance);
+  const outputFormat = normalizePromptValue(values.outputFormat);
+  const examples = normalizePromptValue(values.examples);
+  const fallback = normalizePromptValue(values.fallback);
+  const constraintsLines = countPromptLines(constraints);
+  const acceptanceLines = countPromptLines(acceptance);
+  const outputLines = countPromptLines(outputFormat);
+  const contextLength = context.length;
+  const objectiveLength = objective.length;
+  const fallbackGuard =
+    Boolean(fallback) ||
+    hasPromptPattern([constraints, acceptance, outputFormat].join("\n"), /falt|insuf|inconclus|null|missing|nao bast/i);
+  const structuredOutput = hasPromptPattern(outputFormat, /json|schema|^\s*\{|^\s*\d+\.\s|^\s*modo:|^\s*categoria:|^\s*status:/im);
+  const evidenceLanguage = hasPromptPattern(
+    [constraints, acceptance, outputFormat, fallback].join("\n"),
+    /cit|fonte|evid|trecho|ground|retrieve|search/i,
+  );
+  const decisionLanguage = hasPromptPattern(outputFormat, /resumo|status|risco|proxima acao|categoria|json|modo/i);
+
+  let score = 0;
+  let note = "";
+
+  switch (metric.id) {
+    case "clarity":
+      score += role ? 22 : 0;
+      score += objective ? 28 : 0;
+      score += objectiveLength >= 70 ? 20 : objectiveLength >= 28 ? 12 : 0;
+      score += outputFormat ? 18 : 0;
+      score += acceptance ? 12 : 0;
+      note = role && objective
+        ? "Papel e objetivo estao visiveis. O principal agora e manter a formulacao observavel."
+        : "Sem papel e objetivo claros, o prompt ainda deixa espaco demais para interpretacao.";
+      break;
+    case "control":
+      score += constraintsLines > 0 ? 22 : 0;
+      score += acceptanceLines > 0 ? 24 : 0;
+      score += outputLines > 0 ? 24 : 0;
+      score += structuredOutput ? 16 : 0;
+      score += flags.requires_schema && structuredOutput ? 14 : !flags.requires_schema ? 8 : 0;
+      note = acceptanceLines > 0 && outputLines > 0
+        ? "O prompt ja mostra criterio e contrato de saida, que sao os maiores estabilizadores de resposta."
+        : "A resposta ainda depende demais da boa vontade do modelo porque falta contrato explicito.";
+      break;
+    case "context_fidelity":
+      score += contextLength >= 240 ? 35 : contextLength >= 80 ? 24 : contextLength >= 24 ? 12 : 0;
+      score += fallbackGuard ? 16 : 0;
+      score += evidenceLanguage ? 16 : 0;
+      score += flags.requires_citations ? (contextLength >= 80 ? 17 : 6) : 11;
+      score += escalation.some((item) => item.label === "RAG") ? 16 : 0;
+      note = contextLength >= 80
+        ? "Existe material suficiente para orientar a resposta. O ponto critico e manter a honestidade quando a base nao bastar."
+        : "O contexto ainda esta curto para tarefas mais exigentes. Reforce fatos, dados ou fontes que mudam a decisao.";
+      break;
+    case "ambiguity_robustness":
+      score += fallbackGuard ? 34 : 0;
+      score += examples ? 14 : 0;
+      score += hasPromptPattern([constraints, acceptance, fallback].join("\n"), /falt|insuf|inconclus|null|esclare/i) ? 20 : 0;
+      score += context ? 12 : 0;
+      score += flags.high_risk && escalation.some((item) => item.label === "Workflow") ? 20 : flags.high_risk ? 6 : 12;
+      note = fallbackGuard
+        ? "O prompt ja reduz improviso quando falta base. Agora vale testar casos limites de verdade."
+        : "Sem fallback e regra para insuficiencia, o modelo tende a improvisar quando o input vier fraco.";
+      break;
+    case "output_quality":
+      score += outputLines > 0 ? 28 : 0;
+      score += acceptanceLines > 0 ? 18 : 0;
+      score += decisionLanguage ? 18 : 0;
+      score += structuredOutput ? 18 : 0;
+      score += state?.mode?.id === "operation" ? 10 : 8;
+      score += flags.high_risk ? 8 : 10;
+      note = decisionLanguage || structuredOutput
+        ? "A saida ja aponta para reutilizacao, revisao ou acao. Esse e o teste pragmatico mais importante."
+        : "A resposta ainda corre risco de sair correta em tese, mas pouco util para o trabalho seguinte.";
+      break;
+    default:
+      score = 0;
+      note = metric.description || "";
+      break;
+  }
+
+  const finalScore = Math.max(0, Math.min(100, score));
+  const statusClass =
+    finalScore >= 85 ? "status-done" : finalScore >= 65 ? "status-in-progress" : "status-risk";
+  const verdict =
+    finalScore >= 85 ? "Forte" : finalScore >= 65 ? "Bom" : finalScore >= 45 ? "Em ajuste" : "Fraco";
+
+  return {
+    ...metric,
+    score: finalScore,
+    score_label: `${finalScore}/100`,
+    verdict,
+    status_class: statusClass,
+    note,
+  };
+}
+
+function computePromptQualityAudit(promptQualityLab, state) {
+  const safeState = state || {
+    template: null,
+    mode: null,
+    values: {},
+    flags: {},
+    escalation: [],
+    diagnostics: [],
+  };
+  const metrics = (promptQualityLab?.rubric || []).map((metric) => computePromptQualityMetric(metric, safeState));
+  const overallScore =
+    metrics.length > 0
+      ? Math.round(metrics.reduce((total, metric) => total + metric.score, 0) / metrics.length)
+      : 0;
+  const overallStatus =
+    overallScore >= 85 ? "status-done" : overallScore >= 65 ? "status-in-progress" : "status-risk";
+  const overallVerdict =
+    overallScore >= 85
+      ? "Prompt forte"
+      : overallScore >= 65
+        ? "Prompt bom com margem"
+        : overallScore >= 45
+          ? "Prompt em ajuste"
+          : "Prompt ainda fragil";
+
+  const suggestions = [];
+  const lowMetrics = [...metrics].sort((left, right) => left.score - right.score);
+
+  lowMetrics.forEach((metric) => {
+    if (metric.score >= 72) {
+      return;
+    }
+
+    const titles = {
+      clarity: "Reescreva objetivo e papel",
+      control: "Fortalezca criterio e contrato de saida",
+      context_fidelity: "Reforce contexto e origem confiavel",
+      ambiguity_robustness: "Defina fallback e regra para insuficiencia",
+      output_quality: "Transforme a saida em algo reutilizavel",
+    };
+
+    suggestions.push({
+      title: titles[metric.id] || metric.title,
+      description: metric.improve_hint || metric.note,
+      status_class: metric.status_class,
+    });
+  });
+
+  if (safeState.flags?.requires_citations) {
+    suggestions.push({
+      title: "Se precisa de fonte, trate retrieval como parte da tarefa",
+      description: "Quando a resposta precisa ser verificavel, o ganho real pode vir de RAG, grounding ou busca, nao so de um prompt mais bonito.",
+      status_class: "status-in-progress",
+    });
+  }
+
+  if (safeState.flags?.high_risk) {
+    suggestions.push({
+      title: "Escalone risco alto para governanca humana",
+      description: "Se a decisao e sensivel, use o prompt como parte do workflow e nao como autoridade final isolada.",
+      status_class: "status-in-progress",
+    });
+  }
+
+  const recommendations = suggestions
+    .filter((item, index, collection) => collection.findIndex((entry) => entry.title === item.title) === index)
+    .slice(0, 4)
+    .map((item, index) => ({
+      badge: `Prioridade ${index + 1}`,
+      ...item,
+    }));
+
+  const stressTests = [
+    {
+      badge: "Teste",
+      status_class: metrics.find((item) => item.id === "ambiguity_robustness")?.status_class || "status-risk",
+      title: "Input ambiguo",
+      value:
+        metrics.find((item) => item.id === "ambiguity_robustness")?.score >= 70 ? "Resiste bem" : "Precisa reforco",
+      note:
+        metrics.find((item) => item.id === "ambiguity_robustness")?.score >= 70
+          ? "Existe fallback ou regra explicita para quando o contexto nao sustenta resposta firme."
+          : "Inclua fallback, status inconclusivo ou criterio para dizer quando o modelo deve parar e pedir base melhor.",
+    },
+    {
+      badge: "Teste",
+      status_class: metrics.find((item) => item.id === "context_fidelity")?.status_class || "status-risk",
+      title: "Contexto insuficiente",
+      value:
+        metrics.find((item) => item.id === "context_fidelity")?.score >= 70 ? "Controlado" : "Risco de chute",
+      note:
+        safeState.flags?.requires_citations
+          ? "Como voce marcou necessidade de citacao, valide se retrieval ou grounding entram antes da resposta final."
+          : "Se o contexto for curto demais, o prompt deve dizer o que falta em vez de compensar no improviso.",
+    },
+    {
+      badge: "Teste",
+      status_class: metrics.find((item) => item.id === "control")?.status_class || "status-risk",
+      title: "Saida integravel",
+      value:
+        safeState.flags?.requires_schema || hasPromptPattern(safeState.values?.outputFormat, /json|^\s*\{|^\s*\d+\.\s/im)
+          ? "Bem encaminhada"
+          : "Atenção",
+      note:
+        safeState.flags?.requires_schema
+          ? "O prompt ja sinaliza necessidade de contrato. O proximo passo e endurecer schema e validacao."
+          : "Se a resposta alimentar outra etapa, explicite melhor formato, campos e comportamento para dados ausentes.",
+    },
+    {
+      badge: "Teste",
+      status_class: safeState.flags?.high_risk ? "status-in-progress" : "status-done",
+      title: "Risco sensivel",
+      value: safeState.flags?.high_risk ? "Exige governanca" : "Baixo risco",
+      note:
+        safeState.flags?.high_risk
+          ? "Este caso pede checkpoint humano, logs ou workflow governado antes de promover o prompt para operacao."
+          : "Sem risco alto marcado, o foco principal continua sendo clareza, controle e utilidade da saida.",
+    },
+  ];
+
+  return {
+    metrics,
+    overallScore,
+    overallStatus,
+    overallVerdict,
+    recommendations,
+    stressTests,
+  };
+}
+
+function findPromptQualityChecklist(checklists, state) {
+  const templateId = state?.template?.id;
+  return (
+    checklists.find((item) => Array.isArray(item.template_ids) && item.template_ids.includes(templateId)) ||
+    checklists[0] ||
+    null
+  );
+}
+
+function renderPromptQualityLab(promptQualityLab) {
+  if (!promptQualityLab) {
+    return;
+  }
+
+  renderCards(
+    "prompt-quality-overview",
+    promptQualityLab.overview || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "prompt-quality-rubric",
+    promptQualityLab.rubric || [],
+    (item) => `
+      <article class="study-card compact-card quality-rubric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <ul class="summary-list">
+          ${(item.questions || []).map((question) => `<li>${escapeHtml(question)}</li>`).join("")}
+        </ul>
+        <p class="metric-note">${escapeHtml(item.improve_hint)}</p>
+        ${renderButtonList(item.official_buttons || [])}
+      </article>
+    `,
+  );
+
+  renderCards(
+    "prompt-quality-loop",
+    promptQualityLab.iteration_loop || [],
+    (item) => `
+      <article class="study-card compact-card quality-loop-card">
+        <span class="label">${escapeHtml(item.kicker)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+      </article>
+    `,
+  );
+
+  const qualityElements = {
+    title: document.getElementById("prompt-quality-title"),
+    summary: document.getElementById("prompt-quality-summary"),
+    scoreBadge: document.getElementById("prompt-quality-score-badge"),
+    focusBadge: document.getElementById("prompt-quality-focus-badge"),
+    checklistTitle: document.getElementById("prompt-quality-checklist-title"),
+    checklistSummary: document.getElementById("prompt-quality-checklist-summary"),
+    checklistItems: document.getElementById("prompt-quality-checklist-items"),
+    checklistRedFlags: document.getElementById("prompt-quality-checklist-red-flags"),
+    checklistExit: document.getElementById("prompt-quality-checklist-exit"),
+    exampleSwitcher: document.getElementById("prompt-quality-example-switcher"),
+    exampleKicker: document.getElementById("prompt-quality-example-kicker"),
+    exampleTitle: document.getElementById("prompt-quality-example-title"),
+    exampleSummary: document.getElementById("prompt-quality-example-summary"),
+    beforeTitle: document.getElementById("prompt-quality-before-title"),
+    beforeOutput: document.getElementById("prompt-quality-before-output"),
+    afterTitle: document.getElementById("prompt-quality-after-title"),
+    afterOutput: document.getElementById("prompt-quality-after-output"),
+    impactTitle: document.getElementById("prompt-quality-example-impact-title"),
+    impactNote: document.getElementById("prompt-quality-example-impact-note"),
+  };
+
+  const examples = Array.isArray(promptQualityLab.before_after) ? promptQualityLab.before_after : [];
+  const checklists = Array.isArray(promptQualityLab.checklists) ? promptQualityLab.checklists : [];
+  let activeExampleId = examples[0]?.id || null;
+
+  function renderExampleSwitcher() {
+    if (!qualityElements.exampleSwitcher) {
+      return;
+    }
+
+    qualityElements.exampleSwitcher.innerHTML = examples
+      .map(
+        (item) => `
+          <button
+            class="builder-chip ${item.id === activeExampleId ? "active" : ""}"
+            type="button"
+            data-quality-example="${escapeHtml(item.id)}"
+          >
+            <span>
+              <strong>${escapeHtml(item.title)}</strong>
+              <small>${escapeHtml(item.label)}</small>
+            </span>
+          </button>
+        `,
+      )
+      .join("");
+
+    qualityElements.exampleSwitcher.querySelectorAll("[data-quality-example]").forEach((button) => {
+      button.addEventListener("click", () => {
+        activeExampleId = button.getAttribute("data-quality-example");
+        renderExampleSwitcher();
+        renderExample();
+      });
+    });
+  }
+
+  function renderExample() {
+    const example = examples.find((item) => item.id === activeExampleId) || examples[0];
+    if (!example) {
+      return;
+    }
+
+    if (qualityElements.exampleKicker) {
+      qualityElements.exampleKicker.textContent = example.label;
+    }
+
+    if (qualityElements.exampleTitle) {
+      qualityElements.exampleTitle.textContent = example.title;
+    }
+
+    if (qualityElements.exampleSummary) {
+      qualityElements.exampleSummary.textContent = example.summary;
+    }
+
+    if (qualityElements.beforeTitle) {
+      qualityElements.beforeTitle.textContent = example.before_title;
+    }
+
+    if (qualityElements.beforeOutput) {
+      qualityElements.beforeOutput.textContent = example.before_prompt;
+    }
+
+    if (qualityElements.afterTitle) {
+      qualityElements.afterTitle.textContent = example.after_title;
+    }
+
+    if (qualityElements.afterOutput) {
+      qualityElements.afterOutput.textContent = example.after_prompt;
+    }
+
+    if (qualityElements.impactTitle) {
+      qualityElements.impactTitle.textContent = example.impact_title;
+    }
+
+    if (qualityElements.impactNote) {
+      qualityElements.impactNote.textContent = example.impact_note;
+    }
+
+    renderCards(
+      "prompt-quality-example-improvements",
+      example.improvements || [],
+      (item) => `
+        <article class="study-card compact-card">
+          <span class="label">${escapeHtml(item.kicker)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.description)}</p>
+        </article>
+      `,
+    );
+
+    renderCards(
+      "prompt-quality-example-officials",
+      (example.official_buttons || []).map((button) => ({
+        title: button.label,
+        summary: example.summary,
+        buttons: [button],
+      })),
+      (item) => `
+        <article class="artifact-card compact-card">
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.summary)}</p>
+          ${renderButtonList(item.buttons || [])}
+        </article>
+      `,
+    );
+  }
+
+  function renderChecklist(state) {
+    const recommendedChecklist = findPromptQualityChecklist(checklists, state);
+
+    renderCards(
+      "prompt-quality-checklists",
+      checklists.map((item) => ({
+        ...item,
+        recommended: recommendedChecklist?.id === item.id,
+      })),
+      (item) => `
+        <article class="study-card compact-card quality-checklist-card ${item.recommended ? "recommended" : ""}">
+          <span class="status-badge ${item.recommended ? "status-done" : "status-in-progress"}">
+            ${escapeHtml(item.recommended ? "Recomendado agora" : "Checklist")}
+          </span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.summary)}</p>
+          <ul class="summary-list">
+            ${(item.checks || []).slice(0, 3).map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+          </ul>
+        </article>
+      `,
+    );
+
+    if (!recommendedChecklist) {
+      return;
+    }
+
+    if (qualityElements.checklistTitle) {
+      qualityElements.checklistTitle.textContent = recommendedChecklist.title;
+    }
+
+    if (qualityElements.checklistSummary) {
+      qualityElements.checklistSummary.textContent = recommendedChecklist.summary;
+    }
+
+    if (qualityElements.checklistItems) {
+      qualityElements.checklistItems.innerHTML = (recommendedChecklist.checks || [])
+        .map((item) => `<li>${escapeHtml(item)}</li>`)
+        .join("");
+    }
+
+    if (qualityElements.checklistRedFlags) {
+      qualityElements.checklistRedFlags.innerHTML = (recommendedChecklist.red_flags || [])
+        .map((item) => `<li>${escapeHtml(item)}</li>`)
+        .join("");
+    }
+
+    if (qualityElements.checklistExit) {
+      qualityElements.checklistExit.textContent = recommendedChecklist.exit_rule || "";
+    }
+  }
+
+  function renderLiveAudit(state) {
+    const audit = computePromptQualityAudit(promptQualityLab, state);
+    const weakestMetric = [...audit.metrics].sort((left, right) => left.score - right.score)[0];
+
+    if (qualityElements.title) {
+      qualityElements.title.textContent = state?.template?.title
+        ? `Rubrica do template ${state.template.title}`
+        : "Rubrica do prompt atual";
+    }
+
+    if (qualityElements.summary) {
+      qualityElements.summary.textContent =
+        weakestMetric?.score < 72
+          ? `O gargalo principal agora esta em ${weakestMetric.title.toLowerCase()}. Ajuste esse bloco antes de polir o resto.`
+          : "O prompt atual ja passa bem pela rubrica. Agora vale validar em casos normais e casos limite.";
+    }
+
+    if (qualityElements.scoreBadge) {
+      qualityElements.scoreBadge.textContent = `${audit.overallScore}/100`;
+      qualityElements.scoreBadge.className = `status-badge ${audit.overallStatus}`;
+    }
+
+    if (qualityElements.focusBadge) {
+      qualityElements.focusBadge.textContent = audit.overallVerdict;
+      qualityElements.focusBadge.className = `status-badge ${audit.overallStatus}`;
+    }
+
+    renderCards(
+      "prompt-quality-scores",
+      audit.metrics,
+      (item) => `
+        <article class="metric-card quality-score-card">
+          <div class="quality-score-header">
+            <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+            <strong>${escapeHtml(item.score_label)}</strong>
+          </div>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="metric-note">${escapeHtml(item.description)}</p>
+          <div class="quality-score-rail" aria-hidden="true">
+            <span class="quality-score-fill ${escapeHtml(item.status_class)}" style="width: ${escapeHtml(String(item.score))}%"></span>
+          </div>
+          <p class="builder-diagnostic-value">${escapeHtml(item.verdict)}</p>
+          <p class="metric-note">${escapeHtml(item.note)}</p>
+        </article>
+      `,
+    );
+
+    renderCards(
+      "prompt-quality-recommendations",
+      audit.recommendations,
+      (item) => `
+        <article class="study-card compact-card quality-recommendation-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.description)}</p>
+        </article>
+      `,
+    );
+
+    renderCards(
+      "prompt-quality-stress-tests",
+      audit.stressTests,
+      (item) => `
+        <article class="metric-card builder-diagnostic-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="builder-diagnostic-value">${escapeHtml(item.value)}</p>
+          <p class="metric-note">${escapeHtml(item.note)}</p>
+        </article>
+      `,
+    );
+
+    renderChecklist(state);
+  }
+
+  renderExampleSwitcher();
+  renderExample();
+  renderLiveAudit(window.__promptBuilderState || null);
+  document.addEventListener("prompt-builder:updated", (event) => {
+    renderLiveAudit(event.detail || window.__promptBuilderState || null);
+  });
+}
+
 function renderPromptBuilder(promptBuilder) {
   if (!promptBuilder) {
     return;
@@ -2387,7 +2956,7 @@ function renderPromptBuilder(promptBuilder) {
   applyTemplateDefaults(getActiveTemplate());
 }
 
-function renderPrompts(promptsGuide, promptLibrary, promptBuilder, promptProviderOverlays) {
+function renderPrompts(promptsGuide, promptLibrary, promptBuilder, promptProviderOverlays, promptQualityLab) {
   renderCards(
     "prompts-orientation",
     promptsGuide.orientation || [],
@@ -2431,6 +3000,7 @@ function renderPrompts(promptsGuide, promptLibrary, promptBuilder, promptProvide
 
   renderPromptBuilder(promptBuilder);
   renderPromptProviderOverlays(promptProviderOverlays);
+  renderPromptQualityLab(promptQualityLab);
 
   renderCards(
     "prompt-library-level-summaries",
@@ -2705,6 +3275,7 @@ async function init() {
       promptLibrary,
       promptBuilder,
       promptProviderOverlays,
+      promptQualityLab,
       matrixGuide,
       matrixArtifact,
       journeyGuide,
@@ -2719,7 +3290,7 @@ async function init() {
     const renderers = {
       home: () => renderHome(portal, overview, artifacts),
       jornada: () => renderJourney(journeyGuide),
-      prompts: () => renderPrompts(promptsGuide, promptLibrary, promptBuilder, promptProviderOverlays),
+      prompts: () => renderPrompts(promptsGuide, promptLibrary, promptBuilder, promptProviderOverlays, promptQualityLab),
       matriz: () => renderMatrix(portal, overview, artifacts, matrixGuide, matrixArtifact),
       workflows: () => renderWorkflows(portal, overview, workflowsGuide),
       rag: () => renderRag(portal, ragGuide, releaseManifest),

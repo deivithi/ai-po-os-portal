@@ -24,10 +24,12 @@
                 escrever melhor, quando parar de mexer no prompt e quando subir
                 para schema, RAG, tools ou workflow. Agora a pagina tambem
                 mostra como esse mesmo prompt muda entre OpenAI, Anthropic,
-                Google e xAI.
+                Google e xAI e como auditar a qualidade do proprio prompt antes
+                de trata-lo como pronto.
               </p>
               <div class="hero-actions">
                 <a class="button" href="#builder">Abrir builder</a>
+                <a class="button secondary" href="#quality-lab">Auditar qualidade</a>
                 <a class="button secondary" href="#provider-overlays">Ver overlays</a>
                 <a class="button secondary" href="../jornada/">Ver Jornada</a>
                 <a class="button secondary" href="../matriz/">Cruzar com Matriz</a>
@@ -35,12 +37,12 @@
               </div>
             </div>
             <aside class="callout-panel">
-              <span class="eyebrow">Tese da fase 4</span>
-              <h3>Agora a bancada virou comparador vivo de fornecedores.</h3>
+              <span class="eyebrow">Tese da fase 5</span>
+              <h3>Prompt bom nao e arte final: e ciclo de avaliacao e iteracao.</h3>
               <p>
-                Esta fase pega o prompt montado no builder e o traduz em
-                variantes oficiais por fornecedor, para mostrar o que muda em
-                contrato, XML, grounding, schema, tools e governanca.
+                Esta fase transforma o Prompt Studio em um laboratorio de
+                qualidade, com rubrica, antes e depois, testes de robustez e
+                checklist por caso de uso para ensinar iteracao profissional.
               </p>
             </aside>
           </section>
@@ -221,6 +223,143 @@
             <div class="cards-grid cards-grid-3" id="provider-overlay-radar"></div>
           </section>
 
+          <section class="section" id="quality-lab">
+            <div class="section-header">
+              <span class="eyebrow">Laboratorio de qualidade</span>
+              <h2>Audite o prompt antes de confiar nele</h2>
+              <p>
+                Um prompt profissional nao nasce pronto. Ele passa por rubrica,
+                comparacao, teste de robustez e iteracao. Esta bancada pega o
+                estado real do builder e mostra onde seu prompt esta forte,
+                onde ainda esta vago e o que ajustar primeiro.
+              </p>
+            </div>
+            <div class="metric-grid" id="prompt-quality-overview"></div>
+            <div class="quality-lab-shell">
+              <section class="builder-panel quality-lab-panel">
+                <div class="section-header compact-section-header">
+                  <span class="eyebrow">Rubrica</span>
+                  <h3>Os cinco eixos que definem um prompt forte</h3>
+                  <p>
+                    Use esta rubrica para sair do feeling e entrar em criterio.
+                    A avaliacao abaixo combina principios de prompting,
+                    estruturacao de output e disciplina de testes.
+                  </p>
+                </div>
+                <div class="cards-grid cards-grid-2" id="prompt-quality-rubric"></div>
+
+                <div class="section-header compact-section-header">
+                  <span class="eyebrow">Loop de iteracao</span>
+                  <h3>Como melhorar sem virar tuning infinito</h3>
+                  <p>
+                    O objetivo nao e lapidar sem fim. E testar, observar,
+                    ajustar o bloco certo e decidir rapido se o problema ainda
+                    e de prompt ou ja e de arquitetura.
+                  </p>
+                </div>
+                <div class="cards-grid cards-grid-3" id="prompt-quality-loop"></div>
+              </section>
+
+              <aside class="builder-preview-panel quality-score-panel">
+                <div class="builder-preview-head">
+                  <div>
+                    <span class="eyebrow">Auditoria ao vivo</span>
+                    <h3 id="prompt-quality-title">Rubrica do prompt atual</h3>
+                    <p class="metric-note" id="prompt-quality-summary"></p>
+                  </div>
+                  <div class="builder-badges">
+                    <span class="status-badge status-done" id="prompt-quality-score-badge"></span>
+                    <span class="status-badge status-next" id="prompt-quality-focus-badge"></span>
+                  </div>
+                </div>
+
+                <div class="cards-grid" id="prompt-quality-scores"></div>
+                <div class="cards-grid" id="prompt-quality-recommendations"></div>
+                <div class="cards-grid cards-grid-2" id="prompt-quality-stress-tests"></div>
+              </aside>
+            </div>
+          </section>
+
+          <section class="section" id="before-after">
+            <div class="section-header">
+              <span class="eyebrow">Antes e depois</span>
+              <h2>Veja a iteracao acontecendo na pratica</h2>
+              <p>
+                Esta comparacao mostra como um prompt muda quando sai do pedido
+                generico e ganha objetivo, criterio, formato e fallback. Nao e
+                maquiagem de texto: e aumento de controle.
+              </p>
+            </div>
+            <div class="builder-mode-group quality-example-switcher" id="prompt-quality-example-switcher"></div>
+            <div class="quality-example-shell">
+              <section class="builder-panel quality-example-panel">
+                <div class="quality-example-header">
+                  <span class="eyebrow" id="prompt-quality-example-kicker">Caso atual</span>
+                  <h3 id="prompt-quality-example-title">Carregando exemplo...</h3>
+                  <p class="metric-note" id="prompt-quality-example-summary"></p>
+                </div>
+                <div class="quality-before-after-grid">
+                  <article class="data-panel prompt-formula-panel quality-text-panel">
+                    <div class="quality-text-header">
+                      <span class="status-badge status-risk">Antes</span>
+                      <h4 id="prompt-quality-before-title">Prompt fraco</h4>
+                    </div>
+                    <pre class="prompt-skeleton quality-example-output" id="prompt-quality-before-output"></pre>
+                  </article>
+                  <article class="data-panel prompt-formula-panel quality-text-panel">
+                    <div class="quality-text-header">
+                      <span class="status-badge status-done">Depois</span>
+                      <h4 id="prompt-quality-after-title">Prompt fortalecido</h4>
+                    </div>
+                    <pre class="prompt-skeleton quality-example-output" id="prompt-quality-after-output"></pre>
+                  </article>
+                </div>
+              </section>
+
+              <aside class="builder-preview-panel quality-example-insights">
+                <div class="builder-preview-head">
+                  <div>
+                    <span class="eyebrow">Leitura do ganho</span>
+                    <h3 id="prompt-quality-example-impact-title">O que melhorou</h3>
+                    <p class="metric-note" id="prompt-quality-example-impact-note"></p>
+                  </div>
+                </div>
+                <div class="cards-grid" id="prompt-quality-example-improvements"></div>
+                <div class="cards-grid cards-grid-2" id="prompt-quality-example-officials"></div>
+              </aside>
+            </div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Checklists por caso de uso</span>
+                <h2>Revise o prompt com a lente certa para a tarefa</h2>
+                <p>
+                  Nem todo prompt precisa da mesma exigencia. Sintese, extracao
+                  e gates de contexto pedem perguntas diferentes. Use o
+                  checklist abaixo para revisar o prompt conforme o trabalho que
+                  ele precisa executar.
+                </p>
+              </div>
+              <div class="cards-grid cards-grid-2" id="prompt-quality-checklists"></div>
+            </div>
+            <aside class="evidence-panel quality-checklist-panel">
+              <span class="eyebrow">Checklist recomendado agora</span>
+              <h3 id="prompt-quality-checklist-title">Carregando checklist...</h3>
+              <p id="prompt-quality-checklist-summary"></p>
+              <ul class="resource-list" id="prompt-quality-checklist-items"></ul>
+              <div class="prompt-decision-block">
+                <strong>Sinais de alerta</strong>
+                <ul class="resource-list" id="prompt-quality-checklist-red-flags"></ul>
+              </div>
+              <div class="prompt-decision-block">
+                <strong>Regra de saida</strong>
+                <p class="metric-note" id="prompt-quality-checklist-exit"></p>
+              </div>
+            </aside>
+          </section>
+
           <section class="section">
             <div class="section-header">
               <span class="eyebrow">Niveis de maturidade</span>
@@ -375,7 +514,7 @@
               <div class="cards-grid cards-grid-2" id="prompts-anti-patterns"></div>
             </div>
             <aside class="evidence-panel">
-              <span class="eyebrow">Limites da fase 4</span>
+              <span class="eyebrow">Limites da fase 5</span>
               <ul class="resource-list" id="prompts-phase-boundary"></ul>
             </aside>
           </section>
@@ -385,9 +524,9 @@
               <span class="eyebrow">Proximas fases</span>
               <h2>O que vem depois deste fundamento</h2>
               <p>
-                Esta fase fecha a comparacao entre fornecedores. As proximas
-                entregas vao ensinar como avaliar a qualidade do proprio prompt
-                e preparar a camada futura de productizacao.
+                Esta fase fecha o ciclo de qualidade de prompt. A proxima
+                entrega mais valiosa agora e preparar a camada de
+                productizacao, premium future-ready e novas trilhas exclusivas.
               </p>
             </div>
             <div class="cards-grid cards-grid-3" id="prompts-next-steps"></div>
