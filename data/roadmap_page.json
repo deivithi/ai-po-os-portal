@@ -3,23 +3,23 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "21 ciclos publicados",
-      "body": "Portal completo com Radar Vivo, Trilha formativa, camada senior, Progresso e Guia publicados",
-      "note": "O sistema fechou o ciclo base e agora tambem ensina explicitamente como deve ser usado, reduzindo atrito entre conteudo, trilha e pratica."
+      "title": "22 ciclos publicados",
+      "body": "Portal completo com Radar Vivo, Trilha, camada senior, Progresso, Guia e Labs publicados",
+      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint e aprofundamento senior sem depender de uso passivo."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Refino N concluido",
-      "body": "Guia de uso e extracao de valor publicado",
-      "note": "A plataforma agora orienta entrada, sessao, ritual, escolha de rota e resultado esperado de forma explicita."
+      "title": "Refino O concluido",
+      "body": "Labs e desafios praticos publicados",
+      "note": "A plataforma agora ganhou uma camada propria para provar dominio por missao, evidencias e criterio de conclusao."
     },
     {
       "badge": "Plano de 30 dias",
       "status_class": "status-done",
-      "title": "Base funcional, adaptativa e ativada pronta",
-      "body": "30D-A, 30D-B, Radar Vivo, Trilha, Senior, Progresso e Guia ja conversam entre si",
-      "note": "A partir daqui o trabalho migra para labs de uso real, melhoria de UX e aprofundamento de provas praticas."
+      "title": "Base funcional, adaptativa, ativada e pratica pronta",
+      "body": "30D-A, 30D-B, Radar Vivo, Trilha, Senior, Progresso, Guia e Labs ja conversam entre si",
+      "note": "A partir daqui o trabalho migra para analytics de estudo, recomendacao adaptativa e refinamento guiado por comportamento real."
     },
     {
       "badge": "Regra",
@@ -56,7 +56,7 @@
       "title": "Capstone e productizacao",
       "status_label": "Em evolucao",
       "status_class": "status-in-progress",
-      "description": "Portal publico, narrativa executiva, onboarding/ativacao, ativos de autoridade e governanca de release."
+      "description": "Portal publico, narrativa executiva, onboarding/ativacao, labs praticos, ativos de autoridade e governanca de release."
     }
   ],
   "portal_release_history": [
@@ -183,6 +183,12 @@
     {
       "phase": "Refino N",
       "focus": "Guia de uso e extracao de valor",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino O",
+      "focus": "Labs e desafios praticos",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }

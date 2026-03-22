@@ -303,6 +303,23 @@
       ]
     },
     {
+      "badge": "Pratica",
+      "status_class": "status-done",
+      "title": "Labs",
+      "description": "Use Labs quando o objetivo do dia for provar dominio em vez de apenas estudar conceito: cada desafio ja nasce com missao, evidencias e criterio de conclusao.",
+      "best_for": "Dias em que voce quer transformar o portal em pratica guiada.",
+      "output": "Comparativo, checklist, run, memo ou bateria de teste concluida.",
+      "common_trap": "Abrir o lab sem antes respeitar o tempo real disponivel e sem voltar para Progresso depois.",
+      "tags": ["Desafios", "Pratica", "Prova de dominio"],
+      "buttons": [
+        {
+          "label": "Abrir Labs",
+          "href": "/labs/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
       "badge": "Comando",
       "status_class": "status-done",
       "title": "Prompts",
@@ -594,7 +611,7 @@
       "badge": "Atalho",
       "status_class": "status-done",
       "title": "Aprender com criterio hoje",
-      "description": "Se a lacuna for escolha de modelo, abra Matriz. Se a lacuna for estrutura da interacao, abra Prompts. Se a lacuna for conhecimento, abra RAG.",
+      "description": "Se a lacuna for escolha de modelo, abra Matriz. Se a lacuna for estrutura da interacao, abra Prompts. Se quiser provar dominio em pratica, abra Labs.",
       "buttons": [
         {
           "label": "Abrir Matriz",
@@ -607,8 +624,8 @@
           "variant": "secondary"
         },
         {
-          "label": "Abrir RAG",
-          "href": "/rag/",
+          "label": "Abrir Labs",
+          "href": "/labs/",
           "variant": "secondary"
         }
       ]

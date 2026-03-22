@@ -19,16 +19,16 @@
       {
         "badge": "Paginas fortes",
         "status_class": "status-done",
-        "title": "8 rotas verificadas",
-        "value": "Home, Guia, Jornada, Trilha, Progresso, Prompts, Senior e Artefatos",
-        "note": "Essas paginas ja podem ser tratadas como espinha dorsal de uso, estudo e consolidacao do sistema."
+        "title": "9 rotas verificadas",
+        "value": "Home, Guia, Jornada, Trilha, Progresso, Labs, Prompts, Senior e Artefatos",
+        "note": "Essas paginas ja podem ser tratadas como espinha dorsal de uso, estudo, pratica e consolidacao do sistema."
       },
       {
         "badge": "Fila editorial",
         "status_class": "status-next",
         "title": "Proxima macrofrente",
-        "value": "Labs e desafios praticos",
-        "note": "Com Guia, Trilha e Progresso publicados, o proximo passo e aprofundar pratica real, desafios e provas de dominio."
+        "value": "Analytics de estudo e recomendacao adaptativa",
+        "note": "Com Labs publicados, o proximo passo e observar uso real, recomendar proximas missoes com mais inteligencia e apertar a plataforma por dados."
       }
     ]
   },
@@ -47,13 +47,18 @@
       },
       {
         "label": "Rotas fortes",
-        "value": "8"
+        "value": "9"
       }
     ],
     "buttons": [
       {
         "label": "Abrir Guia",
         "href": "/guia/",
+        "variant": "secondary"
+      },
+      {
+        "label": "Abrir Labs",
+        "href": "/labs/",
         "variant": "secondary"
       },
       {
@@ -137,6 +142,17 @@
       "note": "Boa pagina para impedir que o estudo continue bonito no papel e travado na pratica.",
       "action_href": "/progresso/",
       "action_label": "Abrir Progresso"
+    },
+    {
+      "id": "labs",
+      "title": "Labs",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "summary": "A rota nova transforma estudo em desafios praticos por tema, tempo e nivel, com missao, evidencias e criterio de conclusao bem definidos.",
+      "note": "Boa pagina para provar dominio em vez de apenas revisar conceito.",
+      "action_href": "/labs/",
+      "action_label": "Abrir Labs"
     },
     {
       "id": "prompts",

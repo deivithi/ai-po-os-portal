@@ -12,6 +12,16 @@
       "next_step": "Subir de ativacao para labs praticos e desafios que provem dominio por caso de uso."
     },
     {
+      "domain": "Labs e provas praticas",
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "A nova rota Labs transforma os temas do portal em desafios com missao, evidencias e criterio de conclusao, reduzindo o risco de estudo passivo.",
+      "route_label": "Labs",
+      "href": "/labs/",
+      "action_label": "Abrir Labs",
+      "next_step": "Passar de labs estaticos para recomendacao inteligente por uso real, progresso e dificuldade."
+    },
+    {
       "domain": "Modelos e lineup",
       "coverage_label": "Coberto forte",
       "status_class": "status-done",

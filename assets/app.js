@@ -15,6 +15,7 @@ const DATA_PATHS = {
   matrixGuide: "/data/matrix_page.json",
   matrixArtifact: "/artifacts/files/model_matrix.json",
   guideGuide: "/data/guide_page.json",
+  labsGuide: "/data/labs_page.json",
   journeyGuide: "/data/journey_page.json",
   trilhaGuide: "/data/trilha_page.json",
   progressGuide: "/data/progress_page.json",
@@ -31,6 +32,7 @@ const DATA_PATHS = {
 const PAGE_DATA_KEYS = {
   home: ["overview", "artifacts", "freshnessStatus", "vendorSources", "vendorUpdates", "domainMap"],
   guia: ["guideGuide", "vendorSources", "freshnessStatus"],
+  labs: ["labsGuide", "vendorSources", "freshnessStatus"],
   jornada: ["journeyGuide", "freshnessStatus"],
   trilha: ["trilhaGuide", "studyUnits", "learningPathTemplates", "adaptivePathRules", "vendorSources", "freshnessStatus"],
   progresso: ["progressGuide", "studyUnits", "learningPathTemplates", "adaptivePathRules", "vendorSources", "freshnessStatus"],
@@ -44,8 +46,9 @@ const PAGE_DATA_KEYS = {
 };
 
 const PREFETCH_ROUTE_MAP = {
-  home: ["/guia/", "/trilha/", "/jornada/"],
-  guia: ["/trilha/", "/jornada/", "/progresso/"],
+  home: ["/guia/", "/trilha/", "/labs/"],
+  guia: ["/labs/", "/trilha/", "/jornada/"],
+  labs: ["/progresso/", "/senior/", "/roadmap/"],
   trilha: ["/progresso/", "/jornada/", "/prompts/"],
   progresso: ["/trilha/", "/roadmap/", "/senior/"],
   jornada: ["/prompts/", "/matriz/", "/rag/"],
@@ -63,6 +66,7 @@ const SESSION_CACHE_TTL_MS = 1000 * 60 * 15;
 const FAVORITES_STORAGE_KEY = "ai-po-os::prompt-favorites::v1";
 const ADAPTIVE_PATH_STORAGE_KEY = "ai-po-os::adaptive-path::v1";
 const STUDY_PROGRESS_STORAGE_KEY = "ai-po-os::study-progress::v1";
+const LABS_FILTER_STORAGE_KEY = "ai-po-os::labs-filters::v1";
 const memoryCache = new Map();
 const prefetchedRoutes = new Set();
 const SITE_BASE_PATH = detectSiteBasePath();
@@ -379,6 +383,39 @@ function loadAdaptivePathPreferences(defaults = {}) {
 function persistAdaptivePathPreferences(preferences) {
   try {
     window.localStorage.setItem(ADAPTIVE_PATH_STORAGE_KEY, JSON.stringify(preferences));
+  } catch (_error) {
+    // Keep runtime-only state if storage is unavailable.
+  }
+}
+
+function loadLabsPreferences(defaults = {}) {
+  const query = new URL(window.location.href).searchParams;
+
+  try {
+    const raw = window.localStorage.getItem(LABS_FILTER_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return {
+      ...defaults,
+      ...(parsed && typeof parsed === "object" ? parsed : {}),
+      domain: query.get("domain") || parsed?.domain || defaults.domain || "all",
+      difficulty: query.get("difficulty") || parsed?.difficulty || defaults.difficulty || "all",
+      timebox: query.get("timebox") || parsed?.timebox || defaults.timebox || "all",
+      objective: query.get("objective") || parsed?.objective || defaults.objective || "all",
+    };
+  } catch (_error) {
+    return {
+      ...defaults,
+      domain: query.get("domain") || defaults.domain || "all",
+      difficulty: query.get("difficulty") || defaults.difficulty || "all",
+      timebox: query.get("timebox") || defaults.timebox || "all",
+      objective: query.get("objective") || defaults.objective || "all",
+    };
+  }
+}
+
+function persistLabsPreferences(preferences) {
+  try {
+    window.localStorage.setItem(LABS_FILTER_STORAGE_KEY, JSON.stringify(preferences));
   } catch (_error) {
     // Keep runtime-only state if storage is unavailable.
   }
@@ -1767,6 +1804,351 @@ function renderGuide(guideGuide, vendorSources) {
       </article>
     `,
   );
+}
+
+function renderLabs(labsGuide, vendorSources) {
+  const sourceLookup = buildSourceLookup(vendorSources);
+  const labs = Array.isArray(labsGuide?.labs) ? labsGuide.labs : [];
+  const filterMeta = labsGuide?.filters || {};
+
+  renderCards(
+    "labs-orientation",
+    labsGuide.orientation || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  const studySteps = document.getElementById("labs-study-steps");
+  if (studySteps) {
+    studySteps.innerHTML = (labsGuide.study_steps || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  renderCards(
+    "labs-rubric",
+    labsGuide.rubric || [],
+    (item) => `
+      <article class="study-card compact-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+      </article>
+    `,
+  );
+
+  const form = document.getElementById("labs-filter-form");
+  if (!form) {
+    return;
+  }
+
+  const domainSelect = document.getElementById("labs-domain");
+  const difficultySelect = document.getElementById("labs-difficulty");
+  const timeboxSelect = document.getElementById("labs-timebox");
+  const objectiveSelect = document.getElementById("labs-objective");
+  const feedback = document.getElementById("labs-feedback");
+  const storyTitle = document.getElementById("labs-story-title");
+  const storyCopy = document.getElementById("labs-story-copy");
+  const focusPanel = document.getElementById("labs-focus");
+  const pageContent = document.getElementById("content");
+  const defaults = labsGuide.defaults || {};
+  let activeLabId = new URL(window.location.href).searchParams.get("lab") || null;
+
+  fillSelectOptions(domainSelect, filterMeta.domains || []);
+  fillSelectOptions(difficultySelect, filterMeta.difficulties || []);
+  fillSelectOptions(timeboxSelect, filterMeta.timeboxes || []);
+  fillSelectOptions(objectiveSelect, filterMeta.objectives || []);
+
+  function getFilterLabel(options, value) {
+    return (options || []).find((item) => item.value === value)?.label || "Todos";
+  }
+
+  function readPreferences() {
+    return {
+      domain: domainSelect?.value || defaults.domain || "all",
+      difficulty: difficultySelect?.value || defaults.difficulty || "all",
+      timebox: timeboxSelect?.value || defaults.timebox || "all",
+      objective: objectiveSelect?.value || defaults.objective || "all",
+    };
+  }
+
+  function applyPreferences(preferences) {
+    if (domainSelect) {
+      domainSelect.value = preferences.domain || defaults.domain || "all";
+    }
+    if (difficultySelect) {
+      difficultySelect.value = preferences.difficulty || defaults.difficulty || "all";
+    }
+    if (timeboxSelect) {
+      timeboxSelect.value = preferences.timebox || defaults.timebox || "all";
+    }
+    if (objectiveSelect) {
+      objectiveSelect.value = preferences.objective || defaults.objective || "all";
+    }
+  }
+
+  function buildFilteredLabs(preferences) {
+    return labs.filter((lab) => {
+      if (preferences.domain !== "all" && lab.domain !== preferences.domain) {
+        return false;
+      }
+      if (preferences.difficulty !== "all" && lab.difficulty !== preferences.difficulty) {
+        return false;
+      }
+      if (preferences.timebox !== "all" && lab.timebox !== preferences.timebox) {
+        return false;
+      }
+      if (preferences.objective !== "all" && lab.objective !== preferences.objective) {
+        return false;
+      }
+      return true;
+    });
+  }
+
+  function resolveActiveLab(filteredLabs) {
+    return filteredLabs.find((lab) => lab.id === activeLabId) || filteredLabs[0] || null;
+  }
+
+  function renderPacks(currentLab) {
+    renderCards(
+      "labs-packs",
+      (labsGuide.packs || []).map((pack) => ({
+        ...pack,
+        recommended: currentLab ? pack.labs.includes(currentLab.id) : false,
+        labTitles: (pack.labs || [])
+          .map((labId) => labs.find((lab) => lab.id === labId)?.title)
+          .filter(Boolean),
+      })),
+      (item) => `
+        <article class="study-card compact-card ${item.recommended ? "recommended" : ""}">
+          <span class="status-badge ${item.recommended ? "status-done" : escapeHtml(item.status_class)}">${escapeHtml(item.recommended ? "Pack sugerido" : item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.description)}</p>
+          <ul class="summary-list">
+            ${(item.labTitles || []).map((title) => `<li>${escapeHtml(title)}</li>`).join("")}
+          </ul>
+          ${renderButtonList(item.buttons || [])}
+        </article>
+      `,
+    );
+  }
+
+  function renderSummary(filteredLabs, preferences) {
+    const currentLab = resolveActiveLab(filteredLabs);
+
+    renderCards(
+      "labs-summary",
+      [
+        {
+          label: "Labs visiveis",
+          value: String(filteredLabs.length),
+          note: "Desafios que combinam com os filtros atuais.",
+        },
+        {
+          label: "Dominio atual",
+          value: getFilterLabel(filterMeta.domains, preferences.domain),
+          note: "Tema principal selecionado para a sessao.",
+        },
+        {
+          label: "Tempo de hoje",
+          value: getFilterLabel(filterMeta.timeboxes, preferences.timebox),
+          note: "Faixa de tempo usada para montar o proximo desafio.",
+        },
+        {
+          label: "Objetivo",
+          value: getFilterLabel(filterMeta.objectives, preferences.objective),
+          note: "Tipo de ganho que a sessao deve entregar.",
+        },
+      ],
+      (item) => `
+        <article class="metric-card">
+          <span class="label">${escapeHtml(item.label)}</span>
+          <p class="metric-value">${escapeHtml(item.value)}</p>
+          <p class="metric-note">${escapeHtml(item.note)}</p>
+        </article>
+      `,
+    );
+
+    if (storyTitle) {
+      storyTitle.textContent = currentLab
+        ? `Comece por ${currentLab.title}`
+        : "Nenhum lab bate com o filtro atual";
+    }
+
+    if (storyCopy) {
+      storyCopy.textContent = currentLab
+        ? `${currentLab.summary} O melhor movimento agora e executar a missao, registrar as evidencias e depois voltar para Progresso ou Roadmap.`
+        : "Relaxe um dos filtros para voltar a ter desafios recomendados nesta rota.";
+    }
+
+    renderPacks(currentLab);
+  }
+
+  function renderBoard(filteredLabs) {
+    renderCards(
+      "labs-board",
+      filteredLabs,
+      (lab) => `
+        <article class="workflow-card progress-unit-card ${lab.id === activeLabId ? "active" : ""}">
+          <span class="status-badge ${escapeHtml(lab.status_class)}">${escapeHtml(lab.badge)}</span>
+          <h3>${escapeHtml(lab.title)}</h3>
+          <p class="card-copy">${escapeHtml(lab.summary)}</p>
+          <ul class="summary-list">
+            <li><strong>Dominio:</strong> ${escapeHtml(lab.domain_label)}</li>
+            <li><strong>Nivel:</strong> ${escapeHtml(lab.difficulty_label)}</li>
+            <li><strong>Tempo:</strong> ${escapeHtml(lab.time_label)}</li>
+          </ul>
+          ${renderTagList(lab.tags || [])}
+          <div class="button-group">
+            <button class="button secondary" type="button" data-lab-focus="${escapeHtml(lab.id)}">Focar lab</button>
+          </div>
+        </article>
+      `,
+    );
+  }
+
+  function renderFocus(filteredLabs) {
+    if (!focusPanel) {
+      return;
+    }
+
+    const currentLab = resolveActiveLab(filteredLabs);
+    if (!currentLab) {
+      focusPanel.innerHTML = '<div class="empty-note">Nenhum lab disponivel para esta combinacao de filtros.</div>';
+      setQueryParam("lab", "all");
+      renderPacks(null);
+      return;
+    }
+
+    activeLabId = currentLab.id;
+    setQueryParam("lab", activeLabId);
+
+    const buttons = [
+      ...(currentLab.buttons || []),
+      ...buildSourceButtons(sourceLookup, currentLab.source_ids, 3),
+    ];
+
+    focusPanel.innerHTML = `
+      <div class="adaptive-unit-header">
+        <div>
+          <span class="status-badge ${escapeHtml(currentLab.status_class)}">${escapeHtml(currentLab.badge)}</span>
+          <h3>${escapeHtml(currentLab.title)}</h3>
+          <p class="card-copy">${escapeHtml(currentLab.summary)}</p>
+        </div>
+        <div class="adaptive-unit-metrics">
+          <article>
+            <span class="label">Dominio</span>
+            <strong>${escapeHtml(currentLab.domain_label)}</strong>
+          </article>
+          <article>
+            <span class="label">Nivel</span>
+            <strong>${escapeHtml(currentLab.difficulty_label)}</strong>
+          </article>
+          <article>
+            <span class="label">Tempo</span>
+            <strong>${escapeHtml(currentLab.time_label)}</strong>
+          </article>
+        </div>
+      </div>
+      <div class="adaptive-unit-grid">
+        <section class="adaptive-unit-section">
+          <span class="eyebrow">Missao</span>
+          <p>${escapeHtml(currentLab.mission)}</p>
+        </section>
+        <section class="adaptive-unit-section">
+          <span class="eyebrow">Contexto</span>
+          <p>${escapeHtml(currentLab.scenario)}</p>
+        </section>
+      </div>
+      <section class="adaptive-unit-section">
+        <span class="eyebrow">Entregaveis</span>
+        <ul class="summary-list">
+          ${(currentLab.deliverables || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </section>
+      <section class="adaptive-unit-section">
+        <span class="eyebrow">Criterio de conclusao</span>
+        <ul class="summary-list">
+          ${(currentLab.completion_criteria || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </section>
+      <section class="adaptive-unit-section">
+        <span class="eyebrow">Falhas comuns</span>
+        <ul class="summary-list">
+          ${(currentLab.common_failures || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </section>
+      ${renderTagList(currentLab.tags || [])}
+      ${renderButtonList(buttons)}
+    `;
+
+    renderPacks(currentLab);
+  }
+
+  function syncLabs(message = "") {
+    const preferences = readPreferences();
+    persistLabsPreferences(preferences);
+    setQueryParam("domain", preferences.domain);
+    setQueryParam("difficulty", preferences.difficulty);
+    setQueryParam("timebox", preferences.timebox);
+    setQueryParam("objective", preferences.objective);
+
+    const filteredLabs = buildFilteredLabs(preferences);
+
+    if (!filteredLabs.some((lab) => lab.id === activeLabId)) {
+      activeLabId = filteredLabs[0]?.id || null;
+    }
+
+    renderSummary(filteredLabs, preferences);
+    renderBoard(filteredLabs);
+    renderFocus(filteredLabs);
+
+    if (feedback) {
+      feedback.textContent =
+        message || `${filteredLabs.length} labs combinam com os filtros atuais.`;
+    }
+  }
+
+  const savedPreferences = loadLabsPreferences(defaults);
+  applyPreferences(savedPreferences);
+
+  if (pageContent && pageContent.dataset.labsBound !== "true") {
+    pageContent.addEventListener("click", (event) => {
+      const target = event.target.closest("[data-lab-focus]");
+      if (!target) {
+        return;
+      }
+
+      activeLabId = target.getAttribute("data-lab-focus");
+      syncLabs("Lab em foco atualizado.");
+    });
+
+    pageContent.dataset.labsBound = "true";
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    syncLabs("Selecao de labs atualizada.");
+  });
+
+  [domainSelect, difficultySelect, timeboxSelect, objectiveSelect].forEach((element) => {
+    element?.addEventListener("change", () => syncLabs("Filtro atualizado."));
+  });
+
+  const resetButton = document.getElementById("labs-reset");
+  resetButton?.addEventListener("click", () => {
+    applyPreferences(defaults);
+    activeLabId = null;
+    syncLabs("Filtros restaurados.");
+  });
+
+  syncLabs();
 }
 
 function renderSenior(seniorGuide) {
@@ -5888,6 +6270,7 @@ async function init() {
       matrixGuide,
       matrixArtifact,
       guideGuide,
+      labsGuide,
       journeyGuide,
       trilhaGuide,
       progressGuide,
@@ -5906,6 +6289,7 @@ async function init() {
     const renderers = {
       home: () => renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap),
       guia: () => renderGuide(guideGuide, vendorSources),
+      labs: () => renderLabs(labsGuide, vendorSources),
       jornada: () => renderJourney(journeyGuide),
       trilha: () => renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),
       progresso: () => renderProgress(progressGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),

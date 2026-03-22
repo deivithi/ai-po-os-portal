@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Labs | AI Operating System do PO Salesforce</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body data-page="labs">
+    <a class="skip-link" href="#content">Pular para o conteudo</a>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar"></aside>
+      <div class="content-shell">
+        <header class="topbar" id="topbar"></header>
+        <main class="page" id="content">
+          <section class="page-hero compact">
+            <div class="hero-copy">
+              <span class="eyebrow">Pratica guiada</span>
+              <h1>Labs para transformar criterio em prova pratica.</h1>
+              <p class="lead">
+                Esta rota organiza desafios reais por tema, tempo e nivel. Cada
+                lab mostra missao, contexto, entregavel, criterio de conclusao
+                e a melhor proxima rota do portal.
+              </p>
+            </div>
+            <aside class="callout-panel">
+              <span class="eyebrow">Como usar</span>
+              <ol class="step-list" id="labs-study-steps"></ol>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="metric-grid" id="labs-orientation"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Escolha seu proximo desafio</span>
+                <h2>Filtre por tema, dificuldade, tempo e tipo de objetivo</h2>
+                <p>
+                  Em vez de adivinhar qual desafio cabe hoje, monte a proxima
+                  sessao pela sua realidade e pelo tipo de ganho que voce quer.
+                </p>
+              </div>
+              <div class="adaptive-shell">
+                <form class="data-panel adaptive-form" id="labs-filter-form">
+                  <div class="adaptive-form-grid">
+                    <label class="adaptive-field">
+                      <span class="builder-field-label">Dominio</span>
+                      <select id="labs-domain"></select>
+                    </label>
+                    <label class="adaptive-field">
+                      <span class="builder-field-label">Nivel</span>
+                      <select id="labs-difficulty"></select>
+                    </label>
+                    <label class="adaptive-field">
+                      <span class="builder-field-label">Tempo</span>
+                      <select id="labs-timebox"></select>
+                    </label>
+                    <label class="adaptive-field">
+                      <span class="builder-field-label">Objetivo</span>
+                      <select id="labs-objective"></select>
+                    </label>
+                  </div>
+                  <div class="builder-controls">
+                    <button class="button" type="submit">Atualizar selecao</button>
+                    <button class="button secondary" id="labs-reset" type="button">Limpar filtros</button>
+                    <p class="builder-copy-feedback" id="labs-feedback"></p>
+                  </div>
+                </form>
+                <div class="adaptive-summary-panel">
+                  <div class="metric-grid" id="labs-summary"></div>
+                  <article class="callout-panel adaptive-story-card">
+                    <span class="eyebrow">Recomendacao do momento</span>
+                    <h3 id="labs-story-title">Carregando recomendacao...</h3>
+                    <p id="labs-story-copy">
+                      O portal vai sugerir o melhor lab para o seu filtro atual.
+                    </p>
+                  </article>
+                </div>
+              </div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Rubrica do lab</span>
+              <div class="cards-grid cards-grid-1" id="labs-rubric"></div>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Catalogo</span>
+              <h2>Escolha um lab e foque no desafio certo</h2>
+              <p>
+                Estes labs foram desenhados para conversar com Prompts, Matriz,
+                RAG, Workflows, Senior, Guia e Progresso sem virar conteudo
+                solto.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-2" id="labs-board"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Lab em foco</span>
+                <h2>Missao, evidencias e criterio de conclusao</h2>
+                <p>
+                  O painel abaixo concentra o desafio atual e deixa explicito o
+                  que significa concluir bem esse lab.
+                </p>
+              </div>
+              <article class="data-panel adaptive-unit-focus" id="labs-focus"></article>
+            </div>
+            <aside class="callout-panel">
+              <span class="eyebrow">Packs recomendados</span>
+              <div class="cards-grid cards-grid-1" id="labs-packs"></div>
+            </aside>
+          </section>
+        </main>
+        <footer class="footer" id="portal-footer"></footer>
+      </div>
+    </div>
+    <script src="../assets/app.js"></script>
+  </body>
+</html>

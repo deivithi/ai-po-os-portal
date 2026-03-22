@@ -1,0 +1,484 @@
+{
+  "study_steps": [
+    "Escolha um lab pelo tempo real que voce tem hoje, nao pelo desafio mais bonito.",
+    "Abra a rota principal do lab, execute a missao e registre a evidencia antes de marcar como concluido no seu proprio sistema.",
+    "Feche o ciclo voltando para Progresso ou Roadmap para decidir o proximo passo."
+  ],
+  "orientation": [
+    {
+      "badge": "Nova camada",
+      "status_class": "status-done",
+      "title": "O portal agora tambem prova dominio",
+      "body": "Labs transformam estudo em missao pratica",
+      "note": "Cada lab foi desenhado para fazer voce aplicar criterio, nao apenas consumir conteudo."
+    },
+    {
+      "badge": "Regra",
+      "status_class": "status-done",
+      "title": "Todo lab termina com evidencia",
+      "body": "Comparativo, checklist, run, memo ou bateria de teste",
+      "note": "Sem evidencia, o lab vira leitura guiada. Com evidencia, ele vira progresso senior de verdade."
+    },
+    {
+      "badge": "Uso ideal",
+      "status_class": "status-done",
+      "title": "Escolha por tempo, tema e nivel",
+      "body": "Nao precisa adivinhar qual desafio cabe hoje",
+      "note": "A filtragem existe para manter a plataforma pratica mesmo quando o dia esta corrido."
+    },
+    {
+      "badge": "Resultado esperado",
+      "status_class": "status-next",
+      "title": "Mais criterio operacional",
+      "body": "O objetivo e sair de cada lab com uma decisao melhor",
+      "note": "Os labs devem fortalecer Matriz, RAG, Workflows, Senior e Progresso ao mesmo tempo."
+    }
+  ],
+  "defaults": {
+    "domain": "all",
+    "difficulty": "all",
+    "timebox": "all",
+    "objective": "all"
+  },
+  "filters": {
+    "domains": [
+      { "value": "all", "label": "Todos os dominios" },
+      { "value": "prompting", "label": "Prompts" },
+      { "value": "models", "label": "Modelos" },
+      { "value": "rag", "label": "RAG e contexto" },
+      { "value": "workflows", "label": "Workflows" },
+      { "value": "senior", "label": "Senior" },
+      { "value": "capstone", "label": "Capstone" }
+    ],
+    "difficulties": [
+      { "value": "all", "label": "Todos os niveis" },
+      { "value": "foundation", "label": "Fundacao" },
+      { "value": "applied", "label": "Aplicado" },
+      { "value": "senior", "label": "Senior" }
+    ],
+    "timeboxes": [
+      { "value": "all", "label": "Qualquer tempo" },
+      { "value": "quick", "label": "Ate 60 min" },
+      { "value": "session", "label": "Ate 120 min" },
+      { "value": "deep", "label": "180+ min" }
+    ],
+    "objectives": [
+      { "value": "all", "label": "Qualquer objetivo" },
+      { "value": "criteria", "label": "Ganhar criterio" },
+      { "value": "knowledge", "label": "Testar conhecimento" },
+      { "value": "operation", "label": "Resolver problema real" },
+      { "value": "senior", "label": "Subir para camada senior" }
+    ]
+  },
+  "rubric": [
+    {
+      "badge": "Qualidade",
+      "status_class": "status-done",
+      "title": "Missao clara",
+      "description": "O lab precisa deixar obvio o que voce tem que fazer e o que conta como bom resultado."
+    },
+    {
+      "badge": "Qualidade",
+      "status_class": "status-done",
+      "title": "Evidencia verificavel",
+      "description": "Toda conclusao do lab precisa aparecer como artefato, comparativo, checklist, nota ou run."
+    },
+    {
+      "badge": "Qualidade",
+      "status_class": "status-done",
+      "title": "Decisao melhor no final",
+      "description": "Se o lab nao muda criterio, escolha de rota ou proxima acao, ele ainda esta raso."
+    }
+  ],
+  "packs": [
+    {
+      "badge": "Pack 1",
+      "status_class": "status-done",
+      "title": "Sprint de fundacao",
+      "description": "Pack ideal para consolidar Prompts, Matriz e RAG sem dispersao.",
+      "labs": [
+        "prompt-structured-output",
+        "provider-comparison-real-case",
+        "context-decision-table"
+      ],
+      "buttons": [
+        {
+          "label": "Abrir Trilha",
+          "href": "/trilha/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Pack 2",
+      "status_class": "status-done",
+      "title": "Sprint aplicado",
+      "description": "Boa sequencia para transformar conhecimento em verificacao grounded e operacao com risco.",
+      "labs": [
+        "grounded-qa-battery",
+        "workflow-risk-audit",
+        "eval-rubric-baseline"
+      ],
+      "buttons": [
+        {
+          "label": "Abrir Progresso",
+          "href": "/progresso/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Pack 3",
+      "status_class": "status-in-progress",
+      "title": "Sprint senior",
+      "description": "Sequencia para memoria, MCP e capstone, mais proxima de criterio de producao.",
+      "labs": [
+        "memory-boundary-map",
+        "mcp-tool-handoff",
+        "capstone-architecture-memo"
+      ],
+      "buttons": [
+        {
+          "label": "Abrir Senior",
+          "href": "/senior/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "labs": [
+    {
+      "id": "prompt-structured-output",
+      "badge": "Lab rapido",
+      "status_class": "status-done",
+      "title": "Refatorar um prompt solto em contrato estruturado",
+      "domain": "prompting",
+      "difficulty": "foundation",
+      "timebox": "quick",
+      "objective": "criteria",
+      "domain_label": "Prompts",
+      "difficulty_label": "Fundacao",
+      "time_label": "45-60 min",
+      "summary": "Pegue um prompt generico e transforme-o em um prompt com papel, contexto, restricoes, criterio de aceite e formato de saida.",
+      "mission": "Sair do texto livre e chegar a uma estrutura que reduza ambiguidade e facilite avaliacao.",
+      "scenario": "Voce recebeu um pedido vago de analise ou sintese e precisa transformar isso em uma entrada mais controlada para o modelo.",
+      "deliverables": [
+        "Versao original e versao refatorada do prompt.",
+        "Lista curta explicando o que mudou e por que ficou melhor.",
+        "Schema ou formato de saida esperado."
+      ],
+      "completion_criteria": [
+        "O prompt final deixa explicitos papel, tarefa, contexto, restricoes e saida.",
+        "Existe criterio claro para dizer se a resposta ficou boa ou ruim.",
+        "Voce consegue explicar por que prompt sozinho basta ou nao basta aqui."
+      ],
+      "common_failures": [
+        "Melhorar o texto sem mudar a estrutura de controle.",
+        "Esquecer criterio de aceite ou formato de saida.",
+        "Nao registrar o racional da refatoracao."
+      ],
+      "tags": ["Prompting", "Controle", "Structured output"],
+      "source_ids": ["openai-resources", "anthropic-prompting", "google-prompt-design"],
+      "buttons": [
+        { "label": "Abrir Prompts", "href": "/prompts/", "variant": "primary" },
+        { "label": "Abrir Guia", "href": "/guia/", "variant": "secondary" }
+      ]
+    },
+    {
+      "id": "provider-comparison-real-case",
+      "badge": "Lab de criterio",
+      "status_class": "status-done",
+      "title": "Comparar tres familias de modelos em um caso real",
+      "domain": "models",
+      "difficulty": "applied",
+      "timebox": "session",
+      "objective": "criteria",
+      "domain_label": "Modelos",
+      "difficulty_label": "Aplicado",
+      "time_label": "90-120 min",
+      "summary": "Escolha um caso de uso real do seu contexto e compare pelo menos tres familias de modelos com criterio de custo, controle, risco e adequacao.",
+      "mission": "Substituir benchmark generico por decisao defensavel no seu proprio contexto.",
+      "scenario": "Voce precisa escolher o melhor encaixe para analise, sintese ou workflow sem cair em hype ou ranking superficial.",
+      "deliverables": [
+        "Tabela comparativa com tres modelos ou familias.",
+        "Decisao recomendada com trade-offs explicitos.",
+        "Registro do que voce mediria em um rerun futuro."
+      ],
+      "completion_criteria": [
+        "A comparacao foi feita em cima de um caso real, nao abstrato.",
+        "Ha uma escolha final com justificativa clara.",
+        "Voce separa mercado atual de snapshot operacional."
+      ],
+      "common_failures": [
+        "Comparar sem caso de uso real.",
+        "Olhar so qualidade percebida e ignorar risco ou custo.",
+        "Nao documentar o que invalidaria a decisao."
+      ],
+      "tags": ["Matriz", "Trade-offs", "Escolha de modelo"],
+      "source_ids": ["openai-models", "anthropic-models", "google-models", "xai-models"],
+      "buttons": [
+        { "label": "Abrir Matriz", "href": "/matriz/", "variant": "primary" },
+        { "label": "Abrir Artefatos", "href": "/artefatos/", "variant": "secondary" }
+      ]
+    },
+    {
+      "id": "context-decision-table",
+      "badge": "Lab essencial",
+      "status_class": "status-done",
+      "title": "Montar uma tabela de decisao para contexto",
+      "domain": "rag",
+      "difficulty": "foundation",
+      "timebox": "session",
+      "objective": "knowledge",
+      "domain_label": "RAG e contexto",
+      "difficulty_label": "Fundacao",
+      "time_label": "60-90 min",
+      "summary": "Crie uma tabela que diga quando usar long context, NotebookLM, Projects ou vector RAG para diferentes tipos de problema.",
+      "mission": "Sair da intuicao e construir criterio reutilizavel para escolha de estrategia de conhecimento.",
+      "scenario": "Voce esta em duvida entre usar contexto longo, estudo guiado, memory scoped ou retrieval mais controlado.",
+      "deliverables": [
+        "Tabela com pelo menos quatro cenarios e a estrategia recomendada.",
+        "Uma regra curta do que evitar em cada abordagem.",
+        "Fonte oficial que sustentou a escolha."
+      ],
+      "completion_criteria": [
+        "A tabela diferencia estudo, produtividade e operacao.",
+        "Cada linha tem motivo da escolha e limite principal.",
+        "A decisao pode ser reutilizada em outros projetos."
+      ],
+      "common_failures": [
+        "Colocar vector RAG como resposta para tudo.",
+        "Misturar NotebookLM com pipeline operacional.",
+        "Nao registrar o limite de cada estrategia."
+      ],
+      "tags": ["Contexto", "Grounding", "NotebookLM"],
+      "source_ids": ["google-long-context", "google-grounding", "notebooklm-sources"],
+      "buttons": [
+        { "label": "Abrir RAG", "href": "/rag/", "variant": "primary" },
+        { "label": "Abrir Jornada", "href": "/jornada/", "variant": "secondary" }
+      ]
+    },
+    {
+      "id": "grounded-qa-battery",
+      "badge": "Lab profundo",
+      "status_class": "status-in-progress",
+      "title": "Criar uma bateria de perguntas grounded com citacao",
+      "domain": "rag",
+      "difficulty": "applied",
+      "timebox": "deep",
+      "objective": "knowledge",
+      "domain_label": "RAG e contexto",
+      "difficulty_label": "Aplicado",
+      "time_label": "180+ min",
+      "summary": "Monte um conjunto de perguntas para testar conhecimento, citacao e falhas de resposta grounded em um corpus limitado.",
+      "mission": "Trocar confianca subjetiva por verificacao minima do comportamento do sistema de conhecimento.",
+      "scenario": "Voce quer saber se a base responde de forma boa, citavel e consistente, em vez de parecer boa so em demos.",
+      "deliverables": [
+        "Pelo menos oito perguntas com resposta esperada ou criterio de avaliacao.",
+        "Registro de pelo menos duas falhas relevantes.",
+        "Hipoteses de melhoria para retrieval, citacao ou contexto."
+      ],
+      "completion_criteria": [
+        "As perguntas exercitam caso normal e caso limite.",
+        "As respostas exigem citacao ou evidencia verificavel.",
+        "O lab termina com plano de melhoria, nao so com nota."
+      ],
+      "common_failures": [
+        "Criar perguntas faceis demais.",
+        "Aceitar resposta bonita sem citacao.",
+        "Nao registrar a falha de retrieval ou grounding."
+      ],
+      "tags": ["Grounded QA", "Citacao", "Retrieval"],
+      "source_ids": ["google-grounding", "openai-evals", "anthropic-develop-tests"],
+      "buttons": [
+        { "label": "Abrir RAG", "href": "/rag/", "variant": "primary" },
+        { "label": "Abrir Senior", "href": "/senior/", "variant": "secondary" }
+      ]
+    },
+    {
+      "id": "workflow-risk-audit",
+      "badge": "Lab operacional",
+      "status_class": "status-done",
+      "title": "Auditar um workflow com risco, approval e proxima acao",
+      "domain": "workflows",
+      "difficulty": "applied",
+      "timebox": "deep",
+      "objective": "operation",
+      "domain_label": "Workflows",
+      "difficulty_label": "Aplicado",
+      "time_label": "120-180 min",
+      "summary": "Pegue um workflow do portal ou do seu contexto e avalie entradas, saidas, risco, pontos de aprovacao humana e criterio de pronto.",
+      "mission": "Aprender a olhar automacao como sistema auditavel, nao como sequencia automatizada apenas.",
+      "scenario": "Voce precisa decidir se um fluxo esta seguro o bastante para continuar evoluindo ou se ainda esta perigoso.",
+      "deliverables": [
+        "Checklist de risco e approval.",
+        "Mapa de entradas, saidas e irreversibilidades.",
+        "Proxima acao recomendada para endurecer o fluxo."
+      ],
+      "completion_criteria": [
+        "O workflow deixa claro onde ha decisao humana.",
+        "Os riscos principais estao nomeados e priorizados.",
+        "Existe uma proxima acao concreta para endurecer o fluxo."
+      ],
+      "common_failures": [
+        "Descrever o fluxo sem auditar risco.",
+        "Ignorar pontos de irreversibilidade.",
+        "Tratar approval como detalhe e nao como camada central."
+      ],
+      "tags": ["Workflow", "Approval", "Risco"],
+      "source_ids": ["mcp-architecture", "xai-remote-mcp"],
+      "buttons": [
+        { "label": "Abrir Workflows", "href": "/workflows/", "variant": "primary" },
+        { "label": "Abrir Progresso", "href": "/progresso/", "variant": "secondary" }
+      ]
+    },
+    {
+      "id": "eval-rubric-baseline",
+      "badge": "Lab senior",
+      "status_class": "status-in-progress",
+      "title": "Criar uma rubrica de eval com baseline vivo",
+      "domain": "senior",
+      "difficulty": "senior",
+      "timebox": "session",
+      "objective": "senior",
+      "domain_label": "Senior",
+      "difficulty_label": "Senior",
+      "time_label": "90-120 min",
+      "summary": "Defina um mini harness mental para uma tarefa importante: o que medir, o que comparar e o que significa regressao.",
+      "mission": "Subir da opiniao para avaliacao repetivel, mesmo que em escala pequena.",
+      "scenario": "Voce quer parar de dizer que algo esta melhor e comecar a provar isso com criterio comparavel.",
+      "deliverables": [
+        "Rubrica com metricas, pesos ou sinais obrigatorios.",
+        "Baseline inicial com pelo menos dois candidatos.",
+        "Regra clara do que conta como regressao."
+      ],
+      "completion_criteria": [
+        "A rubrica consegue ser reutilizada.",
+        "Ha baseline, nao apenas intuicao.",
+        "Existe definicao de regressao e proximo rerun."
+      ],
+      "common_failures": [
+        "Criar rubrica sem baseline.",
+        "Medir coisas demais e nao decidir nada.",
+        "Nao registrar o que dispara rerun."
+      ],
+      "tags": ["Evals", "Baseline", "Regressao"],
+      "source_ids": ["openai-evals", "openai-graders", "anthropic-develop-tests"],
+      "buttons": [
+        { "label": "Abrir Senior", "href": "/senior/", "variant": "primary" },
+        { "label": "Abrir Matriz", "href": "/matriz/", "variant": "secondary" }
+      ]
+    },
+    {
+      "id": "memory-boundary-map",
+      "badge": "Lab senior",
+      "status_class": "status-in-progress",
+      "title": "Mapear o que e memoria, estado, cache e conhecimento",
+      "domain": "senior",
+      "difficulty": "senior",
+      "timebox": "session",
+      "objective": "senior",
+      "domain_label": "Senior",
+      "difficulty_label": "Senior",
+      "time_label": "60-90 min",
+      "summary": "Desenhe a fronteira entre memoria persistente, conversation state, prompt caching e base de conhecimento para um caso concreto.",
+      "mission": "Evitar que o sistema use memoria como magia ou salve o que deveria estar em outro lugar.",
+      "scenario": "Voce precisa decidir o que lembrar, por quanto tempo e com qual responsabilidade dentro do sistema.",
+      "deliverables": [
+        "Mapa simples com quatro camadas: estado, cache, memoria persistente e conhecimento.",
+        "Exemplo de dado que pertence a cada camada.",
+        "Risco principal de confundir as camadas."
+      ],
+      "completion_criteria": [
+        "As quatro camadas ficaram separadas com criterio.",
+        "Voce consegue explicar por que retrieval nao e memoria.",
+        "Ha uma politica minima de uso para cada camada."
+      ],
+      "common_failures": [
+        "Chamar tudo de memoria.",
+        "Misturar cache com preferencia persistente.",
+        "Nao registrar limite de retencao ou escopo."
+      ],
+      "tags": ["Memoria", "State", "Caching"],
+      "source_ids": ["openai-conversation-state", "openai-prompt-caching", "anthropic-prompt-caching"],
+      "buttons": [
+        { "label": "Abrir Senior", "href": "/senior/", "variant": "primary" },
+        { "label": "Abrir RAG", "href": "/rag/", "variant": "secondary" }
+      ]
+    },
+    {
+      "id": "mcp-tool-handoff",
+      "badge": "Lab senior",
+      "status_class": "status-in-progress",
+      "title": "Decidir quando um agente com tools vale a pena",
+      "domain": "senior",
+      "difficulty": "senior",
+      "timebox": "deep",
+      "objective": "senior",
+      "domain_label": "Senior",
+      "difficulty_label": "Senior",
+      "time_label": "120-180 min",
+      "summary": "Analise um problema e decida se ele pede prompt, workflow, agent com tools ou MCP, com handoffs e guardrails explicitos.",
+      "mission": "Trocar empolgacao com agents por criterio arquitetural de verdade.",
+      "scenario": "Voce esta pensando em usar tools, MCP ou agent orchestration, mas precisa justificar isso sem hype.",
+      "deliverables": [
+        "Decision memo com a arquitetura escolhida.",
+        "Lista de ferramentas, handoffs e guardrails necessarios.",
+        "Explicacao do que nao vale a pena automatizar ainda."
+      ],
+      "completion_criteria": [
+        "A decisao final inclui alternativa mais simples quando ela fizer mais sentido.",
+        "Os guardrails e pontos de handoff estao explicitos.",
+        "Existe justificativa para usar ou nao usar MCP."
+      ],
+      "common_failures": [
+        "Escolher agent por fascinio e nao por necessidade.",
+        "Omitir guardrails ou revisao humana.",
+        "Nao explicar por que um workflow simples nao resolveria."
+      ],
+      "tags": ["Agents", "MCP", "Guardrails"],
+      "source_ids": ["mcp-architecture", "xai-remote-mcp"],
+      "buttons": [
+        { "label": "Abrir Senior", "href": "/senior/", "variant": "primary" },
+        { "label": "Abrir Workflows", "href": "/workflows/", "variant": "secondary" }
+      ]
+    },
+    {
+      "id": "capstone-architecture-memo",
+      "badge": "Capstone",
+      "status_class": "status-next",
+      "title": "Escrever um memo de arquitetura aplicada do seu sistema",
+      "domain": "capstone",
+      "difficulty": "senior",
+      "timebox": "deep",
+      "objective": "operation",
+      "domain_label": "Capstone",
+      "difficulty_label": "Senior",
+      "time_label": "180+ min",
+      "summary": "Conecte modelo, prompting, contexto, retrieval, risco, evals e operacao em um memo unico para um caso real do seu contexto.",
+      "mission": "Provar que voce nao aprendeu blocos isolados, e sim um sistema coerente de decisao aplicada.",
+      "scenario": "Voce precisa mostrar como construiria ou avaliaria um sistema de IA aplicada sem cair em gaps conceituais ou operacionais.",
+      "deliverables": [
+        "Memo de arquitetura com secoes de modelo, contexto, memoria, evals e workflow.",
+        "Principais riscos e mitigacoes.",
+        "Proxima iteracao recomendada para o sistema."
+      ],
+      "completion_criteria": [
+        "O memo conecta as camadas do portal de forma coerente.",
+        "Ha trade-offs explicitos, e nao apenas boas praticas genericas.",
+        "O documento deixa claro o que entraria agora, depois e nunca."
+      ],
+      "common_failures": [
+        "Escrever uma lista de conceitos sem arquitetura integrada.",
+        "Falar de features sem custo, risco ou rollout.",
+        "Nao deixar uma proxima iteracao clara."
+      ],
+      "tags": ["Capstone", "Arquitetura", "Integracao"],
+      "source_ids": ["openai-models", "google-grounding", "mcp-architecture"],
+      "buttons": [
+        { "label": "Abrir Roadmap", "href": "/roadmap/", "variant": "primary" },
+        { "label": "Abrir Guia", "href": "/guia/", "variant": "secondary" }
+      ]
+    }
+  ]
+}

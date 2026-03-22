@@ -39,11 +39,16 @@
     {
       "title": "Ativacao clara da plataforma",
       "description": "Sempre que o portal crescer em conteudo, a camada Guia precisa manter claro por onde entrar, que rota abrir por objetivo e como fechar cada sessao com uma entrega."
+    },
+    {
+      "title": "Labs com prova de dominio",
+      "description": "Sempre que um lab entrar no portal, ele precisa mostrar missao, contexto, evidencias, criterio de conclusao e ponte explicita para a rota ou fonte certa."
     }
   ],
   "qa_targets": [
     "/",
     "/guia/",
+    "/labs/",
     "/jornada/",
     "/trilha/",
     "/progresso/",
@@ -69,6 +74,7 @@
     "/data/trilha_page.json",
     "/data/senior_page.json",
     "/data/progress_page.json",
-    "/data/guide_page.json"
+    "/data/guide_page.json",
+    "/data/labs_page.json"
   ]
 }
