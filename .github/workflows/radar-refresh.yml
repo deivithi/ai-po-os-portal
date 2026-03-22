@@ -25,10 +25,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -47,14 +47,30 @@ jobs:
           git commit -m "chore: refresh radar health"
           git push
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
+      - name: Package GitHub Pages artifact
+        run: |
+          tar \
+            --dereference --hard-dereference \
+            --directory "." \
+            -cvf "$RUNNER_TEMP/artifact.tar" \
+            --exclude=.git \
+            --exclude=.github \
+            --exclude=".[^/]*" \
+            .
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        id: artifact
+        uses: actions/upload-artifact@v7
         with:
-          path: .
+          name: github-pages
+          path: ${{ runner.temp }}/artifact.tar
+          retention-days: 1
+          if-no-files-found: error
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages via API
         id: deployment
-        uses: actions/deploy-pages@v4
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python scripts/deploy_pages.py \
+            --artifact-id "${{ steps.artifact.outputs.artifact-id }}"

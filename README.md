@@ -9,6 +9,7 @@ Repositorio de deploy do portal estatico `AI Operating System do PO Salesforce`.
 - Publicacao principal: workflow `Deploy GitHub Pages`
 - Refresh agendado do radar: workflow `Refresh Radar Vivo`
 - Raiz publicada: `.`
+- Runtime hardening: checkout, setup e upload em actions `node24`, com deploy do Pages feito via API oficial em `scripts/deploy_pages.py`
 
 ## Estrutura
 
@@ -26,6 +27,7 @@ Repositorio de deploy do portal estatico `AI Operating System do PO Salesforce`.
 - O portal foi ajustado para funcionar tanto em dominio raiz quanto em subpath de repositorio no GitHub Pages.
 - O deploy acontece automaticamente a cada push na branch `main` pelo workflow dedicado do Pages.
 - O workflow `Refresh Radar Vivo` roda manualmente e por agenda, gera `data/radar_health.json`, faz commit se houver diferenca e publica o portal na mesma execucao.
+- O deploy do Pages nao depende mais de `actions/configure-pages`, `actions/upload-pages-artifact` ou `actions/deploy-pages`, o que elimina a dependencia direta de actions ainda presas em `node20`.
 - A rota `prompts/` agora inclui fundamentos, biblioteca, builder orientado por contexto e overlays por fornecedor.
 - A rota `trilha/` agora gera um plano de estudo personalizado por horas por dia, dias por semana, foco, nivel e objetivo, persistindo a configuracao localmente.
 - A rota `progresso/` agora fecha o loop da Trilha com status por unidade, checkpoints e replanejamento do restante.
