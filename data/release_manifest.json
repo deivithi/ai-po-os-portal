@@ -67,6 +67,10 @@
     {
       "title": "Rotas tecnicas premium estabilizadas",
       "description": "Sempre que Matriz, Workflows, RAG e Roadmap forem tratadas como espinha dorsal tecnica, cada uma precisa deixar claro o racional de estudo, a decisao certa e a fronteira entre leitura conceitual, operacao e proxima acao."
+    },
+    {
+      "title": "Learning Path View conectada",
+      "description": "Sempre que a Trilha montar um caminho, a pagina precisa mostrar rail continua, nodes com estado, inspector forte e progressao clara sem parecer uma lista de cards soltos."
     }
   ],
   "qa_targets": [

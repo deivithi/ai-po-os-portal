@@ -128,24 +128,27 @@
             <div class="cards-grid cards-grid-2" id="trilha-next-actions"></div>
           </section>
 
-          <section class="section split-section">
+          <section class="section split-section learning-path-section">
             <div class="split-main">
               <div class="section-header">
-                <span class="eyebrow">Unidade em foco</span>
-                <h2>Conceito, evidencias e criterio de dominio</h2>
+                <span class="eyebrow">Learning Path View</span>
+                <h2>Percorra a trilha como caminho, nao como lista.</h2>
                 <p>
-                  Esta camada transforma a trilha em um ambiente mais
-                  formativo: cada unidade mostra o que entender, o que provar e
-                  como saber se voce realmente dominou aquele bloco.
+                  A rail abaixo mostra o que ja foi dominado, onde voce esta
+                  agora e qual o proximo salto. Clique em um node para abrir o
+                  inspector e entender o que estudar, o que provar e para onde
+                  seguir.
                 </p>
               </div>
-              <div class="adaptive-unit-shell">
-                <div class="chip-list adaptive-unit-nav" id="trilha-unit-nav"></div>
-                <article class="data-panel adaptive-unit-focus" id="trilha-unit-focus"></article>
+              <div class="metric-grid" id="trilha-path-overview"></div>
+              <div class="chip-list learning-path-legend" id="trilha-path-legend"></div>
+              <div class="learning-path-shell">
+                <div class="learning-path-track" id="trilha-learning-path"></div>
               </div>
             </div>
-            <aside class="evidence-panel">
-              <span class="eyebrow">Criterio de dominio</span>
+            <aside class="evidence-panel learning-path-inspector-panel">
+              <span class="eyebrow">Inspector do node</span>
+              <div id="trilha-node-inspector"></div>
               <div id="trilha-unit-criteria"></div>
             </aside>
           </section>

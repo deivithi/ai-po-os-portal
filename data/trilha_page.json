@@ -42,6 +42,35 @@
     "No fechamento, voce deve conseguir demonstrar um mini sistema com modelo, contexto, risco, criterio de dominio, evals e decisao.",
     "Toda semana agora precisa passar pela rota Progresso para registrar status, checkpoint e ajuste de ritmo."
   ],
+  "connected_path": {
+    "legend": [
+      {
+        "label": "Dominado",
+        "status_class": "status-done",
+        "summary": "Ja existe evidencia forte, checkpoint fechado ou unidade marcada como mastered."
+      },
+      {
+        "label": "Ativo",
+        "status_class": "status-in-progress",
+        "summary": "Este e o node que concentra a energia do estudo agora."
+      },
+      {
+        "label": "Disponivel",
+        "status_class": "status-next",
+        "summary": "Ja e seguro abrir este bloco na sequencia sem perder coerencia da trilha."
+      },
+      {
+        "label": "Protegido",
+        "status_class": "status-next",
+        "summary": "Ainda nao e a melhor hora de investir aqui; primeiro feche o node atual."
+      },
+      {
+        "label": "Boss node",
+        "status_class": "status-done",
+        "summary": "Marco grande de consolidacao ou capstone, tratado como salto de nivel."
+      }
+    ]
+  },
   "route_roles": [
     {
       "badge": "Mapa",

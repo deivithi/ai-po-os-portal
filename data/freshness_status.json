@@ -27,15 +27,15 @@
         "badge": "Fila editorial",
         "status_class": "status-next",
         "title": "Nova frente ativa",
-        "value": "Capstone demonstravel e packs de produto",
-        "note": "Com as rotas tecnicas estabilizadas, o foco agora sobe para demo final, onboarding e empacotamento vendavel."
+        "value": "Trilha conectada fase 1",
+        "note": "Com a espinha dorsal tecnica estabilizada, o foco agora sobe para um percurso visual conectado, mais memoravel e mais guiado."
       }
     ]
   },
   "strip": {
     "eyebrow": "Radar Vivo",
-    "title": "Mercado atual conferido; espinha dorsal tecnica estabilizada",
-    "summary": "Use esta barra para distinguir mercado atual, snapshot operacional e rotas verificadas. Agora as paginas centrais do sistema ja saem da fila de revisao e entram como referencia forte de estudo.",
+    "title": "Mercado atual conferido; trilha conectada em construcao premium",
+    "summary": "Use esta barra para distinguir mercado atual, snapshot operacional e rotas verificadas. Agora o foco principal do portal sobe para a camada de percurso visual e progressao conectada.",
     "metrics": [
       {
         "label": "Mercado",
@@ -143,8 +143,8 @@
       "status_label": "Verificado hoje",
       "status_class": "status-done",
       "checked_on": "2026-03-22",
-      "summary": "A rota monta o plano por horas, foco, nivel e objetivo e agora detalha unidade em foco, evidencias e criterio de dominio.",
-      "note": "Boa pagina para transformar estudo em sequencia acionavel e em dominio verificavel.",
+      "summary": "A rota agora monta o plano e tambem o transforma em uma learning path view conectada, com rail visual, nodes em estado real e inspector de node.",
+      "note": "Boa pagina para sentir o caminho, ver o proximo salto e transformar estudo em percurso memoravel e verificavel.",
       "action_href": "/trilha/",
       "action_label": "Abrir Trilha"
     },

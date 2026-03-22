@@ -3974,6 +3974,81 @@ function buildAdaptivePlan(studyUnits, learningPathTemplates, adaptivePathRules,
   };
 }
 
+function resolveLearningPathNodeState(node, index, activeIndex) {
+  if (node.progress_status_id === "mastered") {
+    return {
+      id: "mastered",
+      label: "Dominado",
+      status_class: "status-done",
+      summary: "Este node ja virou evidencia real dentro da jornada.",
+    };
+  }
+
+  if (index === activeIndex) {
+    return {
+      id: "active",
+      label: "Em foco",
+      status_class: "status-in-progress",
+      summary: "Este e o melhor ponto de energia para estudar agora.",
+    };
+  }
+
+  if (index <= activeIndex + 1) {
+    return {
+      id: "available",
+      label: "Disponivel",
+      status_class: "status-next",
+      summary: "Ja pode entrar na fila curta sem quebrar a ordem do caminho.",
+    };
+  }
+
+  return {
+    id: "locked",
+    label: "Protegido",
+    status_class: "status-next",
+    summary: "Ainda nao e hora de puxar este bloco. Primeiro feche o node atual.",
+  };
+}
+
+function buildLearningPathNodes(plan, activeUnitId) {
+  const progressState = loadStudyProgressState();
+  const progressUnits = progressState.units || {};
+  const activeIndex = Math.max(
+    0,
+    plan.scaledUnits.findIndex((unit) => unit.id === activeUnitId),
+  );
+
+  return plan.scaledUnits.map((unit, index) => {
+    const progressRecord = progressUnits[unit.id] || {};
+    const unitSessions = plan.sessions.filter((session) => session.unit_id === unit.id);
+    const firstSession = unitSessions[0] || null;
+    const lastSession = unitSessions[unitSessions.length - 1] || null;
+    const flagged = isStudyFlagged("unit", unit.id);
+    const isBoss = !unit.next_unit_id || /capstone/i.test(unit.title);
+    const state = resolveLearningPathNodeState(
+      {
+        progress_status_id: progressRecord.status_id || null,
+      },
+      index,
+      activeIndex,
+    );
+
+    return {
+      ...unit,
+      index,
+      flagged,
+      isBoss,
+      progressRecord,
+      state,
+      window_label: firstSession && lastSession
+        ? `Dia ${firstSession.calendar_day} a ${lastSession.calendar_day}`
+        : "Janela em definicao",
+      session_count: unitSessions.length,
+      xp_value: Math.max(40, Math.round(Number(unit.allocated_hours || 0) * 14)),
+    };
+  });
+}
+
 function renderAdaptiveDomainMix(plan) {
   const container = document.getElementById("trilha-domain-mix");
   if (!container) {
@@ -5953,6 +6028,20 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
       .join("");
   }
 
+  const pathLegend = document.getElementById("trilha-path-legend");
+  if (pathLegend) {
+    pathLegend.innerHTML = (trilhaGuide.connected_path?.legend || [])
+      .map(
+        (item) => `
+          <span class="chip learning-path-legend-item">
+            <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.label)}</span>
+            <span>${escapeHtml(item.summary)}</span>
+          </span>
+        `,
+      )
+      .join("");
+  }
+
   const form = document.getElementById("trilha-form");
   if (!form) {
     return;
@@ -6022,17 +6111,19 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
   }
 
   function renderUnitExplorer(plan) {
-    const nav = document.getElementById("trilha-unit-nav");
-    const focusPanel = document.getElementById("trilha-unit-focus");
+    const pathOverview = document.getElementById("trilha-path-overview");
+    const pathTrack = document.getElementById("trilha-learning-path");
+    const focusPanel = document.getElementById("trilha-node-inspector");
     const criteriaPanel = document.getElementById("trilha-unit-criteria");
 
-    if (!nav || !focusPanel || !criteriaPanel) {
+    if (!pathOverview || !pathTrack || !focusPanel || !criteriaPanel) {
       return;
     }
 
     const currentUnit = resolvePlanUnit(plan, activeUnitId || plan.firstSession?.unit_id);
     if (!currentUnit) {
-      nav.innerHTML = "";
+      pathOverview.innerHTML = "";
+      pathTrack.innerHTML = "";
       focusPanel.innerHTML = '<div class="empty-note">Nenhuma unidade disponivel.</div>';
       criteriaPanel.innerHTML = "";
       return;
@@ -6043,6 +6134,15 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
     const unitSessions = plan.sessions.filter((session) => session.unit_id === currentUnit.id);
     const firstUnitSession = unitSessions[0];
     const lastUnitSession = unitSessions[unitSessions.length - 1];
+    const journeyNodes = buildLearningPathNodes(plan, currentUnit.id);
+    const currentNode = journeyNodes.find((unit) => unit.id === currentUnit.id) || null;
+    const currentIndex = Math.max(
+      0,
+      journeyNodes.findIndex((unit) => unit.id === currentUnit.id),
+    );
+    const masteredCount = journeyNodes.filter((unit) => unit.state.id === "mastered").length;
+    const flaggedCount = journeyNodes.filter((unit) => unit.flagged).length;
+    const remainingCount = Math.max(0, journeyNodes.length - masteredCount - 1);
 
     persistResumePatch({
       study: {
@@ -6064,24 +6164,98 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
       },
     });
 
-    nav.innerHTML = plan.scaledUnits
-      .map(
-        (unit) => `
-          <button
-            type="button"
-            class="chip chip-button ${unit.id === currentUnit.id ? "active" : ""}"
-            data-unit-focus="${escapeHtml(unit.id)}"
-          >
-            ${escapeHtml(unit.title)}
-          </button>
-        `,
-      )
-      .join("");
+    renderCards(
+      "trilha-path-overview",
+      [
+        {
+          badge: "Concluido",
+          status_class: "status-done",
+          title: `${masteredCount} nodes`,
+          body: "Ja viraram evidencia real",
+          note: "Esses blocos ja podem ser tratados como base confiavel da trilha.",
+        },
+        {
+          badge: "Em foco",
+          status_class: currentNode?.state.status_class || "status-in-progress",
+          title: currentNode?.title || currentUnit.title,
+          body: currentNode?.window_label || `Dia ${firstUnitSession?.calendar_day || 1}`,
+          note: currentNode?.state.summary || "Este e o melhor ponto de energia para estudar agora.",
+        },
+        {
+          badge: "Proximo salto",
+          status_class: nextUnit ? "status-next" : "status-done",
+          title: nextUnit?.title || "Capstone destravado",
+          body: nextUnit ? nextUnit.portal_label || "Abrir rota" : "Voce ja esta no boss node",
+          note: nextUnit
+            ? `Quando fechar ${currentUnit.title}, este bloco assume a frente.`
+            : "A proxima acao deixa de ser abrir teoria e vira consolidar o sistema.",
+        },
+        {
+          badge: "Sinais",
+          status_class: flaggedCount ? "status-in-progress" : "status-done",
+          title: flaggedCount ? `${flaggedCount} flag(s)` : "Trilha limpa",
+          body: flaggedCount ? `${remainingCount} blocos ainda por dominar` : `${remainingCount} blocos restantes`,
+          note: flaggedCount
+            ? "Existe fila de revisao aberta. Vale fechar os pontos marcados antes de subir escopo."
+            : "Sem flags abertas agora. Mantenha a cadencia e siga pela rail.",
+        },
+      ],
+      (item) => `
+        <article class="metric-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="metric-value">${escapeHtml(item.body)}</p>
+          <p class="metric-note">${escapeHtml(item.note)}</p>
+        </article>
+      `,
+    );
+
+    pathTrack.innerHTML = `
+      <div class="learning-path-track-shell">
+        ${journeyNodes
+          .map(
+            (unit) => `
+              <button
+                type="button"
+                class="learning-node state-${escapeHtml(unit.state.id)} ${unit.id === currentUnit.id ? "selected" : ""} ${unit.isBoss ? "boss" : ""}"
+                data-unit-focus="${escapeHtml(unit.id)}"
+                aria-pressed="${unit.id === currentUnit.id ? "true" : "false"}"
+              >
+                <span class="learning-node-orb">
+                  <span>${escapeHtml(String(unit.index + 1).padStart(2, "0"))}</span>
+                </span>
+                <span class="learning-node-copy">
+                  <span class="learning-node-meta">
+                    <span class="status-badge ${escapeHtml(unit.state.status_class)}">${escapeHtml(unit.state.label)}</span>
+                    <span class="learning-node-hours">${escapeHtml(formatNumber(unit.allocated_hours, 1))}h</span>
+                    <span class="learning-node-window">${escapeHtml(unit.window_label)}</span>
+                    ${unit.flagged ? '<span class="learning-node-flag">Flag</span>' : ""}
+                    ${unit.isBoss ? '<span class="learning-node-boss">Boss</span>' : ""}
+                  </span>
+                  <strong>${escapeHtml(unit.title)}</strong>
+                  <span class="learning-node-summary">${escapeHtml(unit.summary)}</span>
+                  <span class="learning-node-footer">
+                    <span>${escapeHtml(titleCase(unit.domain))}</span>
+                    <span>${escapeHtml(String(unit.session_count))} sessao(oes)</span>
+                    <span>+${escapeHtml(String(unit.xp_value))} XP</span>
+                  </span>
+                </span>
+              </button>
+            `,
+          )
+          .join("")}
+      </div>
+    `;
 
     focusPanel.innerHTML = `
       <div class="adaptive-unit-header">
         <div>
-          <span class="status-badge status-done">${escapeHtml(titleCase(currentUnit.domain))}</span>
+          <div class="learning-inspector-badges">
+            <span class="status-badge ${escapeHtml(currentNode?.state.status_class || "status-done")}">${escapeHtml(currentNode?.state.label || "Em foco")}</span>
+            <span class="status-badge status-done">${escapeHtml(titleCase(currentUnit.domain))}</span>
+            ${currentNode?.flagged ? '<span class="status-badge status-in-progress">Flag aberta</span>' : ""}
+            ${currentNode?.isBoss ? '<span class="status-badge status-done">Boss node</span>' : ""}
+          </div>
           <h3>${escapeHtml(currentUnit.title)}</h3>
           <p class="card-copy">${escapeHtml(currentUnit.summary)}</p>
         </div>
@@ -6098,8 +6272,26 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
             <span class="label">Janela</span>
             <strong>Dia ${escapeHtml(String(firstUnitSession?.calendar_day || 1))} a ${escapeHtml(String(lastUnitSession?.calendar_day || 1))}</strong>
           </article>
+          <article>
+            <span class="label">XP do node</span>
+            <strong>+${escapeHtml(String(currentNode?.xp_value || 0))}</strong>
+          </article>
         </div>
       </div>
+      <section class="adaptive-unit-section learning-path-inspector-highlight">
+        <span class="eyebrow">Leitura do percurso</span>
+        <p>
+          ${escapeHtml(
+            currentNode?.state.id === "mastered"
+              ? "Este node ja foi fechado com evidencia. Use o inspector para revisar criterio e decidir se vale revisita ou se a energia deve ir para o proximo salto."
+              : currentNode?.state.id === "active"
+                ? "Este e o node que deve puxar a sua energia agora. A trilha esta desenhada para impedir dispersao e te levar direto ao ponto certo."
+                : currentNode?.state.id === "available"
+                  ? "Este node ja esta destravado e pode entrar na fila curta. Ainda assim, o node ativo continua sendo a melhor aposta para manter consistencia."
+                  : "Este node ainda esta protegido pela ordem da trilha. Ele aparece para dar visibilidade do caminho, mas nao para roubar sua energia cedo demais.",
+          )}
+        </p>
+      </section>
       <div class="adaptive-unit-grid">
         <section class="adaptive-unit-section">
           <span class="eyebrow">Conceito</span>
@@ -6128,7 +6320,7 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
         <a class="button" href="${resolveUrl(currentUnit.portal_href || "/")}">${escapeHtml(currentUnit.portal_label || "Abrir rota")}</a>
         ${
           nextUnit
-            ? `<button class="button secondary" type="button" data-unit-focus="${escapeHtml(nextUnit.id)}">Focar proximo bloco</button>`
+            ? `<button class="button secondary" type="button" data-unit-focus="${escapeHtml(nextUnit.id)}">Ver proximo node</button>`
             : `<a class="button secondary" href="${resolveUrl("/roadmap/")}">Fechar trilha no Roadmap</a>`
         }
         ${buildFlagToggleButton("unit", {
@@ -6156,6 +6348,17 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
         <ul class="summary-list">
           ${(currentUnit.completion_criteria || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
         </ul>
+        <div class="learning-path-stepper">
+          <span class="label">Posicao na trilha</span>
+          <strong>Node ${escapeHtml(String(currentIndex + 1).padStart(2, "0"))} de ${escapeHtml(String(journeyNodes.length).padStart(2, "0"))}</strong>
+          <p class="metric-note">
+            ${escapeHtml(
+              nextUnit
+                ? `Depois de fechar ${currentUnit.title}, o caminho empurra para ${nextUnit.title}.`
+                : "Este e o fechamento da jornada. A partir daqui o foco passa a ser consolidar e demonstrar o sistema.",
+            )}
+          </p>
+        </div>
       </article>
     `;
   }
