@@ -24,9 +24,9 @@
     {
       "badge": "Fase atual",
       "status_class": "status-done",
-      "title": "Prompt Studio fase 3",
-      "body": "Builder orientado por contexto em producao",
-      "note": "A aba agora nao so ensina exemplos: ela monta um prompt final com base no seu contexto e diagnostica quando voce deve escalar para schema, RAG, tools ou workflow."
+      "title": "Prompt Studio fase 4",
+      "body": "Builder reativo + overlays por fornecedor",
+      "note": "A aba agora nao so monta um prompt final: ela mostra como esse mesmo trabalho muda entre OpenAI, Anthropic, Google e xAI com base em documentacao oficial."
     }
   ],
   "maturity_levels": [
@@ -260,9 +260,8 @@
     }
   ],
   "phase_boundary": [
-    "Esta fase ja entrega builder com contexto do usuario e prompt final montado em tempo real.",
-    "O builder ainda trabalha com logica universal de prompt, nao com overlays detalhados por fornecedor.",
-    "Comparacao profunda por fornecedor entra na Fase 4.",
+    "Esta fase ja entrega builder com contexto do usuario, prompt final montado em tempo real e overlays por fornecedor.",
+    "A comparacao principal cobre OpenAI, Anthropic, Google e xAI com base nas docs oficiais mais uteis para a trilha do portal.",
     "Laboratorio de qualidade de prompt entra na Fase 5.",
     "Arquitetura premium e productizacao futura entram na Fase 6."
   ],
@@ -270,14 +269,14 @@
     {
       "badge": "Depois desta fase",
       "status_class": "status-next",
-      "title": "Aprofundar overlays por fornecedor",
-      "description": "A proxima entrega mais valiosa agora e comparar como o mesmo prompt deve ser ajustado entre OpenAI, Anthropic, Google e xAI com base em documentacao oficial."
+      "title": "Ensinar qualidade de prompt",
+      "description": "A proxima entrega mais valiosa agora e avaliar a qualidade do proprio prompt com rubrica, antes e depois, testes e antipadroes recorrentes."
     },
     {
       "badge": "Depois desta fase",
       "status_class": "status-next",
-      "title": "Ensinar qualidade de prompt",
-      "description": "Depois do builder, o portal deve ajudar o usuario a avaliar o proprio prompt com rubrica, antes/depois e antipadroes."
+      "title": "Abrir comparativos de robustez",
+      "description": "Depois dos overlays, faz sentido mostrar onde o mesmo prompt degrada, melhora ou pede arquitetura extra em cada stack."
     },
     {
       "badge": "Depois desta fase",

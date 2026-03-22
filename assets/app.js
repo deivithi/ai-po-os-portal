@@ -5,6 +5,7 @@ const DATA_PATHS = {
   promptsGuide: "/data/prompts_page.json",
   promptLibrary: "/data/prompt_library.json",
   promptBuilder: "/data/prompt_builder.json",
+  promptProviderOverlays: "/data/prompt_provider_overlays.json",
   matrixGuide: "/data/matrix_page.json",
   matrixArtifact: "/artifacts/files/model_matrix.json",
   journeyGuide: "/data/journey_page.json",
@@ -17,7 +18,7 @@ const DATA_PATHS = {
 const PAGE_DATA_KEYS = {
   home: ["overview", "artifacts"],
   jornada: ["journeyGuide"],
-  prompts: ["promptsGuide", "promptLibrary", "promptBuilder"],
+  prompts: ["promptsGuide", "promptLibrary", "promptBuilder", "promptProviderOverlays"],
   matriz: ["overview", "artifacts", "matrixGuide", "matrixArtifact"],
   workflows: ["overview", "workflowsGuide"],
   rag: ["ragGuide"],
@@ -1472,6 +1473,578 @@ function computePromptBuilderDiagnostics(template, mode, values, flags) {
   ];
 }
 
+function buildPromptBuilderState(template, mode, values, flags) {
+  const escalation = computePromptBuilderEscalation(flags);
+  const prompt = buildPromptBuilderPrompt(template, mode, values, flags);
+  const diagnostics = computePromptBuilderDiagnostics(template, mode, values, flags);
+
+  return {
+    template,
+    mode,
+    values,
+    flags,
+    escalation,
+    prompt,
+    diagnostics,
+  };
+}
+
+function publishPromptBuilderState(state) {
+  window.__promptBuilderState = state;
+  document.dispatchEvent(
+    new CustomEvent("prompt-builder:updated", {
+      detail: state,
+    }),
+  );
+}
+
+function formatXmlSection(tag, value) {
+  const content = String(value || "").trim();
+  if (!content) {
+    return null;
+  }
+
+  return `<${tag}>\n${content}\n</${tag}>`;
+}
+
+function uniqueNotes(items) {
+  return [...new Set((items || []).map((item) => String(item || "").trim()).filter(Boolean))];
+}
+
+function collectProviderOverlayNotes(provider, state) {
+  const notes = [];
+  const providerNotes = provider?.notes || {};
+
+  if (providerNotes.default) {
+    notes.push(providerNotes.default);
+  }
+
+  if (state?.mode?.id === "study" && providerNotes.mode_study) {
+    notes.push(providerNotes.mode_study);
+  }
+
+  if (state?.mode?.id === "operation" && providerNotes.mode_operation) {
+    notes.push(providerNotes.mode_operation);
+  }
+
+  if (state?.flags?.requires_schema && providerNotes.requires_schema) {
+    notes.push(providerNotes.requires_schema);
+  }
+
+  if (state?.flags?.requires_citations && providerNotes.requires_citations) {
+    notes.push(providerNotes.requires_citations);
+  }
+
+  if (state?.flags?.requires_tools && providerNotes.requires_tools) {
+    notes.push(providerNotes.requires_tools);
+  }
+
+  if (state?.flags?.high_risk && providerNotes.high_risk) {
+    notes.push(providerNotes.high_risk);
+  }
+
+  const templateNote = provider?.template_bias?.[state?.template?.id];
+  if (templateNote) {
+    notes.push(templateNote);
+  }
+
+  return uniqueNotes(notes);
+}
+
+function buildOpenAiOverlayPrompt(provider, state, notes) {
+  const values = state.values || {};
+  const escalation = state.escalation || [];
+
+  return [
+    formatPromptBulletSection(
+      "SYSTEM PRIORITIES",
+      [
+        `Role: ${values.role || "Defina um papel claro antes de usar esta variante."}`,
+        notes[0],
+        notes[1],
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    ),
+    formatPromptSection("TASK", values.objective),
+    formatPromptSection("WORKING CONTEXT", values.context),
+    formatPromptBulletSection("CONSTRAINTS", values.constraints),
+    formatPromptBulletSection("COMPLETION CRITERIA", values.acceptance),
+    formatPromptSection("OUTPUT CONTRACT", values.outputFormat),
+    formatPromptSection("REFERENCE EXAMPLES", values.examples),
+    formatPromptSection(
+      "IF CONTEXT IS INSUFFICIENT",
+      values.fallback || "State exactly what is missing before continuing.",
+    ),
+    state.flags?.requires_citations
+      ? formatPromptBulletSection(
+          "GROUNDING RULES",
+          "Support each critical claim with the source or quote that justifies it.\nIf the context cannot support a claim, say that the source is missing.",
+        )
+      : null,
+    state.flags?.requires_tools
+      ? formatPromptBulletSection(
+          "TOOL RULES",
+          "Use the required tool step before finalizing.\nSummarize what was verified through tools before the final answer.",
+        )
+      : null,
+    state.flags?.requires_schema
+      ? formatPromptSection(
+          "STRUCTURED OUTPUT",
+          "Return the final answer using the required schema, with no extra prose outside the contract.",
+        )
+      : null,
+    state.flags?.high_risk
+      ? formatPromptSection(
+          "HUMAN CHECK",
+          "Before any irreversible or sensitive action, summarize the risk and ask for confirmation.",
+        )
+      : null,
+    escalation.length > 0
+      ? formatPromptBulletSection(
+          "ESCALATION BEFORE EXECUTION",
+          escalation.map((item) => `${item.label}: ${item.reason}`).join("\n"),
+        )
+      : null,
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+function buildAnthropicOverlayPrompt(provider, state, notes) {
+  const values = state.values || {};
+  const instructionLines = [
+    `Role: ${values.role || "Defina um papel claro antes de usar esta variante."}`,
+    `Task: ${values.objective || "Defina um objetivo observavel."}`,
+    notes[0],
+    notes[1],
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  return [
+    formatXmlSection("context", values.context),
+    formatXmlSection("examples", values.examples),
+    formatXmlSection("instructions", instructionLines),
+    formatXmlSection("constraints", toCleanLines(values.constraints).join("\n")),
+    formatXmlSection("acceptance_criteria", toCleanLines(values.acceptance).join("\n")),
+    formatXmlSection("output_format", values.outputFormat),
+    state.flags?.requires_citations
+      ? formatXmlSection(
+          "quote_first_policy",
+          "First extract the most relevant quotes from the context. Then answer using only what those quotes support.",
+        )
+      : null,
+    state.flags?.requires_tools
+      ? formatXmlSection(
+          "tool_policy",
+          "If a tool or lookup is required, state the dependency clearly and use the tool step before the final answer.",
+        )
+      : null,
+    state.flags?.requires_schema
+      ? formatXmlSection(
+          "structured_output_policy",
+          "Treat the requested format as a hard contract and do not add text outside the agreed structure.",
+        )
+      : null,
+    state.flags?.high_risk
+      ? formatXmlSection(
+          "human_review_gate",
+          "If the task has financial, legal or irreversible impact, stop and ask for human validation before the action step.",
+        )
+      : null,
+    formatXmlSection(
+      "fallback",
+      values.fallback || "If the context is not sufficient, say exactly what is missing before answering.",
+    ),
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+function buildGoogleOverlayPrompt(provider, state, notes) {
+  const values = state.values || {};
+  const requirementLines = [
+    values.acceptance,
+    notes[0],
+    notes[1],
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  return [
+    formatPromptSection(
+      "SYSTEM INSTRUCTION",
+      `${values.role || "Defina um papel claro antes de usar esta variante."} Follow the response contract exactly and do not guess when the context is not enough.`,
+    ),
+    formatPromptSection("TASK", values.objective),
+    formatPromptSection("CONTEXT", values.context),
+    formatPromptBulletSection("RESPONSE REQUIREMENTS", requirementLines),
+    formatPromptBulletSection("CONSTRAINTS", values.constraints),
+    formatPromptSection("OUTPUT FORMAT", values.outputFormat),
+    formatPromptSection("FEW-SHOT OR HINTS", values.examples),
+    state.flags?.requires_citations
+      ? formatPromptBulletSection(
+          "GROUNDING PLAN",
+          "Use grounding or retrieved sources before finalizing the answer.\nIf the current context cannot support the answer, ask for the missing source instead of guessing.",
+        )
+      : null,
+    state.flags?.requires_schema
+      ? formatPromptSection(
+          "CONTROLLED OUTPUT",
+          "Respect the required structure exactly. If a value is missing, return null or state the gap according to the contract.",
+        )
+      : null,
+    state.flags?.requires_tools
+      ? formatPromptSection(
+          "TOOL OR SEARCH STEP",
+          "If external lookup, search or execution is required, do that before the final answer and mention what was checked.",
+        )
+      : null,
+    state.flags?.high_risk
+      ? formatPromptSection(
+          "RISK GATE",
+          "If the task has sensitive impact, do not guess or overcommit. Stop and request the missing confirmation before acting.",
+        )
+      : null,
+    formatPromptSection(
+      "WHEN CONTEXT IS NOT ENOUGH",
+      values.fallback || "State what is missing and stop before guessing.",
+    ),
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+function buildXaiOverlayPrompt(provider, state, notes) {
+  const values = state.values || {};
+  const developerRules = [
+    `Role: ${values.role || "Defina um papel claro antes de usar esta variante."}`,
+    `Goal: ${values.objective || "Defina um objetivo observavel."}`,
+    notes[0],
+    notes[1],
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  return [
+    formatPromptSection("DEVELOPER MESSAGE", developerRules),
+    formatPromptSection("USER CONTEXT", values.context),
+    formatPromptBulletSection("RULES", values.constraints),
+    formatPromptBulletSection("SUCCESS CHECKS", values.acceptance),
+    formatPromptSection("RESPONSE FORMAT", values.outputFormat),
+    formatPromptSection("REFERENCE SNIPPETS", values.examples),
+    state.flags?.requires_schema
+      ? formatPromptSection(
+          "STRUCTURED OUTPUT HANDOFF",
+          "Use json_schema or structured outputs with strict contract instead of relying only on prose compliance.",
+        )
+      : null,
+    state.flags?.requires_tools
+      ? formatPromptBulletSection(
+          "TOOL SURFACE",
+          "Use only approved tools.\nKeep the allowed tool surface narrow.\nTreat approval and side effects as application responsibilities.",
+        )
+      : null,
+    state.flags?.requires_citations
+      ? formatPromptSection(
+          "GROUNDING NOTE",
+          "If the answer depends on current or external information, use search or retrieval before finalizing the answer.",
+        )
+      : null,
+    state.flags?.high_risk
+      ? formatPromptSection(
+          "HUMAN GOVERNANCE",
+          "Do not execute sensitive or irreversible decisions without a human checkpoint in the surrounding application.",
+        )
+      : null,
+    formatPromptSection(
+      "FALLBACK",
+      values.fallback || "If the task cannot be completed safely, state what is missing or which tool is required.",
+    ),
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+function buildProviderOverlayPrompt(provider, state, notes) {
+  if (!provider || !state) {
+    return "Use o builder acima para gerar um prompt base e depois compare as adaptacoes por fornecedor.";
+  }
+
+  const builders = {
+    openai: buildOpenAiOverlayPrompt,
+    anthropic: buildAnthropicOverlayPrompt,
+    google: buildGoogleOverlayPrompt,
+    xai: buildXaiOverlayPrompt,
+  };
+
+  const builder = builders[provider.id] || buildOpenAiOverlayPrompt;
+  return builder(provider, state, notes);
+}
+
+function computeProviderOverlayAdjustments(provider, state, notes) {
+  const shifts = Array.isArray(provider?.shift_cards) ? provider.shift_cards : [];
+  const escalation = Array.isArray(state?.escalation) ? state.escalation : [];
+  const escalationLabel =
+    escalation.length > 0 ? escalation.map((item) => item.label).join(" + ") : "Prompt puro ainda basta";
+
+  return [
+    {
+      kicker: "Mudanca principal",
+      title: shifts[0]?.title || "Contrato mais claro",
+      description: notes[0] || provider?.summary || "",
+    },
+    {
+      kicker: "Quando isso importa",
+      title: shifts[1]?.title || "Ajuste operacional",
+      description: notes[1] || provider?.template_bias?.[state?.template?.id] || provider?.summary || "",
+    },
+    {
+      kicker: "Template atual",
+      title: state?.template?.title || "Template nao selecionado",
+      description: provider?.template_bias?.[state?.template?.id] || state?.template?.best_for || provider?.summary || "",
+    },
+    {
+      kicker: "Escalada agora",
+      title: escalationLabel,
+      description:
+        escalation.length > 0
+          ? escalation.map((item) => `${item.label}: ${item.reason}`).join(" ")
+          : "Sem sinais fortes de schema, RAG, tools ou workflow no estado atual.",
+    },
+  ];
+}
+
+function computeProviderOverlaySignals(provider, state, notes) {
+  const escalation = Array.isArray(state?.escalation) ? state.escalation : [];
+
+  return [
+    {
+      badge: "Modelo",
+      status_class: provider?.status_class || "status-done",
+      title: provider?.model_label || provider?.label || "Fornecedor",
+      value: state?.mode?.label || "Modo nao definido",
+      note: provider?.summary || "",
+    },
+    {
+      badge: "Ajuste principal",
+      status_class: "status-in-progress",
+      title: provider?.shift_cards?.[0]?.title || "Contrato mais forte",
+      value: state?.template?.level_label || "Template",
+      note: notes[0] || provider?.summary || "",
+    },
+    {
+      badge: "Escalada",
+      status_class: escalation.length > 0 ? "status-in-progress" : "status-done",
+      title: escalation.length > 0 ? escalation.map((item) => item.label).join(" + ") : "Prompt puro",
+      value: escalation.length > 0 ? String(escalation.length) : "0",
+      note:
+        escalation.length > 0
+          ? escalation.map((item) => item.reason).join(" ")
+          : "Sem sinais fortes de schema, RAG, tools ou workflow no estado atual.",
+    },
+    {
+      badge: "Template",
+      status_class: state?.template?.status_class || "status-done",
+      title: state?.template?.title || "Template nao definido",
+      value: provider?.label || "Fornecedor",
+      note: provider?.template_bias?.[state?.template?.id] || state?.template?.summary || "",
+    },
+  ];
+}
+
+function renderPromptProviderOverlays(promptProviderOverlays) {
+  if (!promptProviderOverlays) {
+    return;
+  }
+
+  renderCards(
+    "provider-overlays-overview",
+    promptProviderOverlays.overview || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "provider-overlay-radar",
+    promptProviderOverlays.radar || [],
+    (item) => `
+      <article class="artifact-card compact-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  const providers = Array.isArray(promptProviderOverlays.providers) ? promptProviderOverlays.providers : [];
+  if (providers.length === 0) {
+    return;
+  }
+
+  const overlayElements = {
+    switcher: document.getElementById("provider-overlay-switcher"),
+    eyebrow: document.getElementById("provider-overlay-eyebrow"),
+    title: document.getElementById("provider-overlay-title"),
+    summary: document.getElementById("provider-overlay-summary"),
+    previewTitle: document.getElementById("provider-overlay-preview-title"),
+    previewNote: document.getElementById("provider-overlay-preview-note"),
+    model: document.getElementById("provider-overlay-model"),
+    mode: document.getElementById("provider-overlay-mode"),
+    principles: document.getElementById("provider-overlay-principles"),
+    adjustments: document.getElementById("provider-overlay-adjustments"),
+    output: document.getElementById("provider-overlay-output"),
+    signals: document.getElementById("provider-overlay-signals"),
+    officials: document.getElementById("provider-overlay-officials"),
+  };
+
+  let activeProviderId = providers[0].id;
+
+  function getActiveProvider() {
+    return providers.find((item) => item.id === activeProviderId) || providers[0];
+  }
+
+  function renderProviderSwitcher() {
+    if (!overlayElements.switcher) {
+      return;
+    }
+
+    overlayElements.switcher.innerHTML = providers
+      .map(
+        (provider) => `
+          <button
+            class="builder-chip ${provider.id === activeProviderId ? "active" : ""}"
+            type="button"
+            data-provider-id="${escapeHtml(provider.id)}"
+          >
+            <span>
+              <strong>${escapeHtml(provider.label)}</strong>
+              <small>${escapeHtml(provider.model_label)}</small>
+            </span>
+          </button>
+        `,
+      )
+      .join("");
+
+    overlayElements.switcher.querySelectorAll("[data-provider-id]").forEach((button) => {
+      button.addEventListener("click", () => {
+        activeProviderId = button.getAttribute("data-provider-id");
+        renderProviderSwitcher();
+        renderProviderState(window.__promptBuilderState || null);
+      });
+    });
+  }
+
+  function renderProviderState(state) {
+    const provider = getActiveProvider();
+    const notes = collectProviderOverlayNotes(provider, state);
+
+    if (overlayElements.eyebrow) {
+      overlayElements.eyebrow.textContent = provider.label;
+    }
+
+    if (overlayElements.title) {
+      overlayElements.title.textContent = provider.model_label;
+    }
+
+    if (overlayElements.summary) {
+      overlayElements.summary.textContent = provider.summary;
+    }
+
+    if (overlayElements.previewTitle) {
+      overlayElements.previewTitle.textContent = state?.template?.title
+        ? `${state.template.title} adaptado para ${provider.label}`
+        : `Versao ${provider.label} do prompt atual`;
+    }
+
+    if (overlayElements.previewNote) {
+      overlayElements.previewNote.textContent =
+        notes[0] || "Escolha um fornecedor para ver o que muda no mesmo prompt.";
+    }
+
+    if (overlayElements.model) {
+      overlayElements.model.textContent = provider.model_label;
+      overlayElements.model.className = `status-badge ${provider.status_class || "status-done"}`;
+    }
+
+    if (overlayElements.mode) {
+      overlayElements.mode.textContent = state?.mode?.label || "Sem modo";
+      overlayElements.mode.className = `status-badge ${state?.mode?.status_class || "status-next"}`;
+    }
+
+    renderCards(
+      "provider-overlay-principles",
+      provider.principles || [],
+      (item) => `
+        <article class="study-card compact-card">
+          <span class="label">${escapeHtml(item.kicker)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.description)}</p>
+        </article>
+      `,
+    );
+
+    renderCards(
+      "provider-overlay-adjustments",
+      computeProviderOverlayAdjustments(provider, state, notes),
+      (item) => `
+        <article class="study-card compact-card provider-adjustment-card">
+          <span class="label">${escapeHtml(item.kicker)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.description)}</p>
+        </article>
+      `,
+    );
+
+    if (overlayElements.output) {
+      overlayElements.output.textContent = buildProviderOverlayPrompt(provider, state, notes);
+    }
+
+    renderCards(
+      "provider-overlay-signals",
+      computeProviderOverlaySignals(provider, state, notes),
+      (item) => `
+        <article class="metric-card builder-diagnostic-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="builder-diagnostic-value">${escapeHtml(item.value)}</p>
+          <p class="metric-note">${escapeHtml(item.note)}</p>
+        </article>
+      `,
+    );
+
+    renderCards(
+      "provider-overlay-officials",
+      (provider.official_buttons || []).map((button) => ({
+        title: button.label,
+        summary: provider.summary,
+        buttons: [button],
+      })),
+      (item) => `
+        <article class="artifact-card compact-card">
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.summary)}</p>
+          ${renderButtonList(item.buttons || [])}
+        </article>
+      `,
+    );
+  }
+
+  renderProviderSwitcher();
+  renderProviderState(window.__promptBuilderState || null);
+  document.addEventListener("prompt-builder:updated", (event) => {
+    renderProviderState(event.detail || window.__promptBuilderState || null);
+  });
+}
+
 function renderPromptBuilder(promptBuilder) {
   if (!promptBuilder) {
     return;
@@ -1696,6 +2269,7 @@ function renderPromptBuilder(promptBuilder) {
     const mode = getActiveMode();
     const values = readBuilderValues();
     const flags = readBuilderFlags();
+    const builderState = buildPromptBuilderState(template, mode, values, flags);
 
     if (builderElements.title) {
       builderElements.title.textContent = template.title;
@@ -1716,12 +2290,12 @@ function renderPromptBuilder(promptBuilder) {
     }
 
     if (builderElements.output) {
-      builderElements.output.textContent = buildPromptBuilderPrompt(template, mode, values, flags);
+      builderElements.output.textContent = builderState.prompt;
     }
 
     renderCards(
       "prompt-builder-diagnostics",
-      computePromptBuilderDiagnostics(template, mode, values, flags),
+      builderState.diagnostics,
       (item) => `
         <article class="metric-card builder-diagnostic-card">
           <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
@@ -1733,6 +2307,7 @@ function renderPromptBuilder(promptBuilder) {
     );
 
     renderOfficials(template);
+    publishPromptBuilderState(builderState);
   }
 
   function applyTemplateDefaults(template, preserveMode = false) {
@@ -1812,7 +2387,7 @@ function renderPromptBuilder(promptBuilder) {
   applyTemplateDefaults(getActiveTemplate());
 }
 
-function renderPrompts(promptsGuide, promptLibrary, promptBuilder) {
+function renderPrompts(promptsGuide, promptLibrary, promptBuilder, promptProviderOverlays) {
   renderCards(
     "prompts-orientation",
     promptsGuide.orientation || [],
@@ -1855,6 +2430,7 @@ function renderPrompts(promptsGuide, promptLibrary, promptBuilder) {
   );
 
   renderPromptBuilder(promptBuilder);
+  renderPromptProviderOverlays(promptProviderOverlays);
 
   renderCards(
     "prompt-library-level-summaries",
@@ -2128,6 +2704,7 @@ async function init() {
       promptsGuide,
       promptLibrary,
       promptBuilder,
+      promptProviderOverlays,
       matrixGuide,
       matrixArtifact,
       journeyGuide,
@@ -2142,7 +2719,7 @@ async function init() {
     const renderers = {
       home: () => renderHome(portal, overview, artifacts),
       jornada: () => renderJourney(journeyGuide),
-      prompts: () => renderPrompts(promptsGuide, promptLibrary, promptBuilder),
+      prompts: () => renderPrompts(promptsGuide, promptLibrary, promptBuilder, promptProviderOverlays),
       matriz: () => renderMatrix(portal, overview, artifacts, matrixGuide, matrixArtifact),
       workflows: () => renderWorkflows(portal, overview, workflowsGuide),
       rag: () => renderRag(portal, ragGuide, releaseManifest),

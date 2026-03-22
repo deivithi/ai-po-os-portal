@@ -3,16 +3,16 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "11 ciclos publicados",
+      "title": "12 ciclos publicados",
       "body": "Portal completo e em expansao didatica",
       "note": "O sistema fechou o ciclo base do portal e agora esta expandindo o Prompt Studio por fases, sem perder disciplina de release nem clareza de estudo."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Prompt Studio fase 3",
-      "body": "Builder orientado por contexto publicado",
-      "note": "O portal agora combina fundamentos, biblioteca e uma bancada que monta o prompt final, alterna modo de uso e diagnostica quando voce precisa escalar para schema, RAG, tools ou workflow."
+      "title": "Prompt Studio fase 4",
+      "body": "Builder + overlays por fornecedor publicados",
+      "note": "O portal agora combina fundamentos, biblioteca, builder orientado por contexto e uma camada didatica que traduz o mesmo prompt para OpenAI, Anthropic, Google e xAI."
     },
     {
       "badge": "Plano de 30 dias",

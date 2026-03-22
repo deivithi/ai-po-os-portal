@@ -22,22 +22,25 @@
                 Esta nova aba organiza prompting em niveis de maturidade,
                 anatomia, criterio e limites. O foco aqui e ensinar como
                 escrever melhor, quando parar de mexer no prompt e quando subir
-                para schema, RAG, tools ou workflow.
+                para schema, RAG, tools ou workflow. Agora a pagina tambem
+                mostra como esse mesmo prompt muda entre OpenAI, Anthropic,
+                Google e xAI.
               </p>
               <div class="hero-actions">
                 <a class="button" href="#builder">Abrir builder</a>
+                <a class="button secondary" href="#provider-overlays">Ver overlays</a>
                 <a class="button secondary" href="../jornada/">Ver Jornada</a>
                 <a class="button secondary" href="../matriz/">Cruzar com Matriz</a>
                 <a class="button secondary" href="../rag/">Cruzar com RAG</a>
               </div>
             </div>
             <aside class="callout-panel">
-              <span class="eyebrow">Tese da fase 3</span>
-              <h3>Agora a biblioteca virou bancada de montagem.</h3>
+              <span class="eyebrow">Tese da fase 4</span>
+              <h3>Agora a bancada virou comparador vivo de fornecedores.</h3>
               <p>
-                Esta fase pega os exemplos da fase 2 e transforma em um builder
-                que monta prompts em tempo real, mostra lacunas e avisa quando
-                a tarefa pede mais do que prompting puro.
+                Esta fase pega o prompt montado no builder e o traduz em
+                variantes oficiais por fornecedor, para mostrar o que muda em
+                contrato, XML, grounding, schema, tools e governanca.
               </p>
             </aside>
           </section>
@@ -153,6 +156,69 @@
               <span class="eyebrow">Escalada orientada</span>
               <div class="cards-grid" id="prompt-builder-escalations"></div>
             </aside>
+          </section>
+
+          <section class="section" id="provider-overlays">
+            <div class="section-header">
+              <span class="eyebrow">Overlays por fornecedor</span>
+              <h2>Veja como o mesmo prompt muda entre stacks oficiais</h2>
+              <p>
+                Esta camada usa o estado real do builder e mostra a adaptacao
+                mais didatica para OpenAI, Anthropic, Google e xAI. O objetivo
+                nao e decorar formatos, e sim entender o raciocinio por tras de
+                cada ajuste.
+              </p>
+            </div>
+            <div class="metric-grid" id="provider-overlays-overview"></div>
+            <div class="provider-overlay-shell">
+              <section class="builder-panel provider-overlay-panel">
+                <div class="provider-overlay-toolbar">
+                  <div>
+                    <span class="label">Fornecedor em foco</span>
+                    <div class="builder-mode-group" id="provider-overlay-switcher"></div>
+                  </div>
+                  <div class="provider-overlay-summary">
+                    <span class="eyebrow" id="provider-overlay-eyebrow">Aguardando fornecedor</span>
+                    <h3 id="provider-overlay-title">Carregando overlay...</h3>
+                    <p class="metric-note" id="provider-overlay-summary"></p>
+                  </div>
+                </div>
+                <div class="cards-grid cards-grid-3" id="provider-overlay-principles"></div>
+                <div class="cards-grid cards-grid-2" id="provider-overlay-adjustments"></div>
+              </section>
+
+              <aside class="builder-preview-panel provider-preview-panel">
+                <div class="builder-preview-head">
+                  <div>
+                    <span class="eyebrow">Versao adaptada</span>
+                    <h3 id="provider-overlay-preview-title">Prompt por fornecedor</h3>
+                    <p class="metric-note" id="provider-overlay-preview-note"></p>
+                  </div>
+                  <div class="builder-badges">
+                    <span class="status-badge status-done" id="provider-overlay-model"></span>
+                    <span class="status-badge status-next" id="provider-overlay-mode"></span>
+                  </div>
+                </div>
+
+                <div class="data-panel prompt-formula-panel builder-preview-shell">
+                  <pre class="prompt-skeleton builder-output" id="provider-overlay-output"></pre>
+                </div>
+
+                <div class="metric-grid" id="provider-overlay-signals"></div>
+                <div class="cards-grid cards-grid-2" id="provider-overlay-officials"></div>
+              </aside>
+            </div>
+
+            <div class="section-header provider-radar-header">
+              <span class="eyebrow">Radar complementar</span>
+              <h2>Labs para acompanhar sem poluir a camada principal</h2>
+              <p>
+                Qwen, DeepSeek e outros labs seguem como radar de estudo. Eles
+                entram como laboratorio, enquanto os overlays principais ficam
+                nos fornecedores mais centrais para o percurso do portal.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-3" id="provider-overlay-radar"></div>
           </section>
 
           <section class="section">
@@ -309,7 +375,7 @@
               <div class="cards-grid cards-grid-2" id="prompts-anti-patterns"></div>
             </div>
             <aside class="evidence-panel">
-              <span class="eyebrow">Limites da fase 3</span>
+              <span class="eyebrow">Limites da fase 4</span>
               <ul class="resource-list" id="prompts-phase-boundary"></ul>
             </aside>
           </section>
@@ -319,9 +385,9 @@
               <span class="eyebrow">Proximas fases</span>
               <h2>O que vem depois deste fundamento</h2>
               <p>
-                Esta fase abre o mapa. As proximas entregas vao transformar esse
-                mapa em biblioteca, builder, overlays por fornecedor e
-                laboratorio de qualidade.
+                Esta fase fecha a comparacao entre fornecedores. As proximas
+                entregas vao ensinar como avaliar a qualidade do proprio prompt
+                e preparar a camada futura de productizacao.
               </p>
             </div>
             <div class="cards-grid cards-grid-3" id="prompts-next-steps"></div>
