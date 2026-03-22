@@ -17,6 +17,10 @@
         "memory-vs-rag",
         "workflow-governance",
         "agents-mcp-primer",
+        "evals-quality-loop",
+        "persistent-memory-architecture",
+        "agents-mcp-guardrails",
+        "production-rollout-observability",
         "artifact-review-loop",
         "roadmap-retro",
         "capstone-systems-sprint"
@@ -28,15 +32,17 @@
         "llm_landscape": 0.16,
         "rag": 0.2,
         "memory": 0.1,
+        "evals_quality": 0.08,
         "agents_mcp": 0.08,
         "workflows": 0.12,
+        "production": 0.08,
         "consolidation": 0.05,
         "radar": 0.03
       },
       "outcomes": [
         "Escolher modelos com criterio para casos reais.",
         "Subir de prompting para contexto, memoria e operacao com clareza.",
-        "Fechar um mini capstone com sistema, risco e proxima acao."
+        "Fechar um mini capstone com sistema, risco, evals e proxima acao."
       ]
     },
     {
@@ -52,13 +58,17 @@
         "context-grounding-foundations",
         "notebooklm-long-context",
         "memory-vs-rag",
+        "evals-quality-loop",
+        "persistent-memory-architecture",
+        "production-rollout-observability",
         "artifact-review-loop",
         "roadmap-retro",
         "capstone-systems-sprint"
       ],
       "stretch_unit_ids": [
         "provider-prompt-patterns",
-        "workflow-governance"
+        "workflow-governance",
+        "agents-mcp-guardrails"
       ],
       "domain_weights": {
         "orientation": 0.08,
@@ -66,8 +76,10 @@
         "llm_landscape": 0.12,
         "rag": 0.28,
         "memory": 0.18,
+        "evals_quality": 0.1,
         "agents_mcp": 0.05,
         "workflows": 0.07,
+        "production": 0.06,
         "consolidation": 0.05,
         "radar": 0.03
       },
@@ -91,6 +103,10 @@
         "workflow-governance",
         "agents-mcp-primer",
         "memory-vs-rag",
+        "evals-quality-loop",
+        "persistent-memory-architecture",
+        "agents-mcp-guardrails",
+        "production-rollout-observability",
         "artifact-review-loop",
         "roadmap-retro",
         "capstone-systems-sprint"
@@ -105,8 +121,10 @@
         "llm_landscape": 0.14,
         "rag": 0.08,
         "memory": 0.12,
+        "evals_quality": 0.09,
         "agents_mcp": 0.2,
         "workflows": 0.14,
+        "production": 0.12,
         "consolidation": 0.05,
         "radar": 0.02
       },
@@ -129,13 +147,17 @@
         "model-selection-rubric",
         "context-grounding-foundations",
         "workflow-governance",
+        "evals-quality-loop",
+        "persistent-memory-architecture",
+        "production-rollout-observability",
         "artifact-review-loop",
         "roadmap-retro",
         "capstone-systems-sprint"
       ],
       "stretch_unit_ids": [
         "notebooklm-long-context",
-        "agents-mcp-primer"
+        "agents-mcp-primer",
+        "agents-mcp-guardrails"
       ],
       "domain_weights": {
         "orientation": 0.09,
@@ -143,8 +165,10 @@
         "llm_landscape": 0.18,
         "rag": 0.15,
         "memory": 0.07,
+        "evals_quality": 0.08,
         "agents_mcp": 0.08,
         "workflows": 0.18,
+        "production": 0.14,
         "consolidation": 0.06,
         "radar": 0.03
       },
@@ -192,12 +216,14 @@
       "hours_delta": 6,
       "priority_domains": {
         "rag": 0.16,
-        "memory": 0.08
+        "memory": 0.08,
+        "evals_quality": 0.05
       },
       "highlight_unit_ids": [
         "context-grounding-foundations",
         "notebooklm-long-context",
-        "memory-vs-rag"
+        "memory-vs-rag",
+        "evals-quality-loop"
       ]
     },
     {
@@ -207,10 +233,12 @@
       "hours_delta": 6,
       "priority_domains": {
         "memory": 0.18,
-        "rag": 0.08
+        "rag": 0.08,
+        "evals_quality": 0.04
       },
       "highlight_unit_ids": [
         "memory-vs-rag",
+        "persistent-memory-architecture",
         "notebooklm-long-context",
         "context-grounding-foundations"
       ]
@@ -222,10 +250,12 @@
       "hours_delta": 8,
       "priority_domains": {
         "agents_mcp": 0.18,
-        "workflows": 0.06
+        "workflows": 0.06,
+        "production": 0.05
       },
       "highlight_unit_ids": [
         "agents-mcp-primer",
+        "agents-mcp-guardrails",
         "workflow-governance",
         "provider-prompt-patterns"
       ]
@@ -237,13 +267,15 @@
       "hours_delta": 6,
       "priority_domains": {
         "workflows": 0.16,
+        "production": 0.18,
+        "evals_quality": 0.08,
         "consolidation": 0.05,
-        "llm_landscape": 0.03
+        "llm_landscape": 0.02
       },
       "highlight_unit_ids": [
         "workflow-governance",
-        "capstone-systems-sprint",
-        "roadmap-retro"
+        "evals-quality-loop",
+        "production-rollout-observability"
       ]
     }
   ],
@@ -285,7 +317,9 @@
       "priority_domains": {
         "llm_landscape": 0.03,
         "agents_mcp": 0.03,
-        "workflows": 0.04
+        "workflows": 0.04,
+        "evals_quality": 0.04,
+        "production": 0.04
       }
     }
   ]

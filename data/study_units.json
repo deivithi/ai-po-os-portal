@@ -26,6 +26,11 @@
       "summary": "Estado conversacional, prompt caching e fronteira entre memoria e RAG."
     },
     {
+      "id": "evals_quality",
+      "label": "Evals e qualidade",
+      "summary": "Rubrica, regressao, graders e criterio repetivel para comparar qualidade."
+    },
+    {
       "id": "agents_mcp",
       "label": "Agents e MCP",
       "summary": "Ferramentas, contratos de tool use e desenho de sistemas conectados."
@@ -34,6 +39,11 @@
       "id": "workflows",
       "label": "Workflows",
       "summary": "Approval humano, risco, schema e operacao auditavel."
+    },
+    {
+      "id": "production",
+      "label": "Producao",
+      "summary": "Custo, latencia, rollout, observabilidade e disciplina de publicacao."
     },
     {
       "id": "consolidation",
@@ -393,14 +403,122 @@
         "Voce registra o que dominou e o que ainda nao domina.",
         "Voce transforma a retro em acao da semana seguinte."
       ],
-      "next_unit_id": "capstone-systems-sprint",
+      "next_unit_id": "evals-quality-loop",
       "focus_tags": ["llms", "prompting", "rag", "memoria", "agents_mcp", "operacao_producao"],
       "goal_tags": ["specialist_general", "specialist_rag", "specialist_agents", "specialist_product_ops"],
       "official_resource_ids": ["openai-evals", "anthropic-develop-tests"]
     },
     {
-      "id": "capstone-systems-sprint",
+      "id": "evals-quality-loop",
       "sequence": 140,
+      "domain": "evals_quality",
+      "title": "Evals, graders e loop de regressao",
+      "summary": "Suba da comparacao intuitiva para uma camada de qualidade com rubrica, baseline, regressao e revisao recorrente.",
+      "base_hours": 7,
+      "portal_href": "/senior/",
+      "portal_label": "Abrir Senior",
+      "deliverable": "Rubrica simples com criterios de sucesso, falha bloqueante e baseline de comparacao.",
+      "exercise": "Compare duas saidas do mesmo caso com uma rubrica escrita e registre a decisao final.",
+      "mastery": "Voce mede qualidade com criterio, nao com impressao solta.",
+      "concept": "Evals fortes transformam qualidade em sistema observavel: o objetivo e saber quando a resposta melhorou, piorou ou so parece diferente.",
+      "evidence_examples": [
+        "Rubrica com exemplos de saida boa, ruim e aceitavel.",
+        "Comparacao de duas versoes com justificativa baseada em criterio."
+      ],
+      "completion_criteria": [
+        "Voce escreve criterio de sucesso antes de rerodar o caso.",
+        "Voce guarda falhas como conjunto de regressao.",
+        "Voce sabe quando usar grader e quando manter revisao humana."
+      ],
+      "next_unit_id": "persistent-memory-architecture",
+      "focus_tags": ["rag", "operacao_producao", "agents_mcp"],
+      "goal_tags": ["specialist_general", "specialist_rag", "specialist_agents", "specialist_product_ops"],
+      "official_resource_ids": ["openai-evals", "openai-graders", "anthropic-develop-tests"]
+    },
+    {
+      "id": "persistent-memory-architecture",
+      "sequence": 150,
+      "domain": "memory",
+      "title": "Arquitetura de memoria persistente",
+      "summary": "Separe estado, cache, memoria persistente e retrieval para evitar sistemas opacos e caros.",
+      "base_hours": 7,
+      "portal_href": "/senior/",
+      "portal_label": "Abrir Senior",
+      "deliverable": "Mapa arquitetural dizendo o que fica em estado, o que vira cache e o que precisa de memoria persistente.",
+      "exercise": "Redesenhe um caso seu separando camada conversacional, cache e conhecimento recuperado.",
+      "mastery": "Voce para de chamar todo contexto salvo de memoria e passa a desenhar camadas com funcao clara.",
+      "concept": "Memoria persistente so faz sentido quando ha politica de gravacao, consulta, expiracao e valor futuro; sem isso, e apenas acmulo de contexto.",
+      "evidence_examples": [
+        "Mapa de arquitetura separando estado, cache, memoria e retrieval.",
+        "Registro de uma decisao explicando por que algo deve ou nao ser salvo."
+      ],
+      "completion_criteria": [
+        "Voce diferencia conversation state, caching e memoria persistente.",
+        "Voce sabe o que nao deve ser salvo.",
+        "Voce liga memoria a um objetivo futuro de uso."
+      ],
+      "next_unit_id": "agents-mcp-guardrails",
+      "focus_tags": ["memoria", "rag", "agents_mcp"],
+      "goal_tags": ["specialist_general", "specialist_rag", "specialist_agents", "specialist_product_ops"],
+      "official_resource_ids": ["openai-conversation-state", "openai-prompt-caching", "anthropic-prompt-caching"]
+    },
+    {
+      "id": "agents-mcp-guardrails",
+      "sequence": 160,
+      "domain": "agents_mcp",
+      "title": "Agents, MCP e guardrails operacionais",
+      "summary": "Entenda quando um agente vale o custo, como tools entram com contrato e onde MCP precisa de guardrails claros.",
+      "base_hours": 8,
+      "portal_href": "/senior/",
+      "portal_label": "Abrir Senior",
+      "deliverable": "Diagrama com host, client, server, tools, guardrails e ponto de handoff humano.",
+      "exercise": "Descreva uma automacao sua e diga se ela continua workflow ou se realmente pede um agente.",
+      "mastery": "Voce sabe justificar complexidade e recusar agentizacao vazia.",
+      "concept": "Agent senior nao e o que faz mais coisas; e o que coordena tools e decisoes com contrato, observabilidade e limite de risco.",
+      "evidence_examples": [
+        "Diagrama com handoff e tools de um caso de uso real.",
+        "Checklist explicando por que o agente foi escolhido ou descartado."
+      ],
+      "completion_criteria": [
+        "Voce sabe dizer quando um workflow simples e suficiente.",
+        "Voce define contrato de entrada e saida para cada tool.",
+        "Voce coloca guardrail e humano onde o risco pede."
+      ],
+      "next_unit_id": "production-rollout-observability",
+      "focus_tags": ["agents_mcp", "operacao_producao", "memoria"],
+      "goal_tags": ["specialist_general", "specialist_agents", "specialist_product_ops"],
+      "official_resource_ids": ["mcp-architecture", "xai-remote-mcp", "openai-resources"]
+    },
+    {
+      "id": "production-rollout-observability",
+      "sequence": 170,
+      "domain": "production",
+      "title": "Producao, rollout e observabilidade",
+      "summary": "Feche a camada senior entendendo custo, latencia, rollout progressivo, logs e disciplina de release.",
+      "base_hours": 8,
+      "portal_href": "/senior/",
+      "portal_label": "Abrir Senior",
+      "deliverable": "Checklist de publicacao com budget, fallback, monitoramento e criterio de rollback.",
+      "exercise": "Pegue um fluxo real e desenhe como voce faria rollout em etapas sem perder controle.",
+      "mastery": "Voce para de chamar demo de sistema pronto e passa a pensar como dono do release.",
+      "concept": "Producao senior depende de disciplina: se custo, latencia, log e fallback nao entram no desenho, o sistema ainda esta cru.",
+      "evidence_examples": [
+        "Checklist de rollout com etapas e criterios de rollback.",
+        "Mapa de sinais que voce observaria apos publicar."
+      ],
+      "completion_criteria": [
+        "Voce consegue definir rollout gradual e rollback.",
+        "Voce descreve o minimo de telemetria que precisa existir.",
+        "Voce relaciona mudanca de provider ou prompt a custo e risco operacional."
+      ],
+      "next_unit_id": "capstone-systems-sprint",
+      "focus_tags": ["operacao_producao", "agents_mcp", "llms"],
+      "goal_tags": ["specialist_general", "specialist_rag", "specialist_agents", "specialist_product_ops"],
+      "official_resource_ids": ["google-release-notes", "openai-prompt-caching", "anthropic-prompt-caching"]
+    },
+    {
+      "id": "capstone-systems-sprint",
+      "sequence": 180,
       "domain": "consolidation",
       "title": "Sprint de capstone e sistema de verdade",
       "summary": "Amarre Home, Prompts, Matriz, RAG, Workflows e Artefatos em um experimento real que prove criterio, nao apenas leitura.",

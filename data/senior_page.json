@@ -1,0 +1,394 @@
+{
+  "orientation": [
+    {
+      "badge": "Camada nova",
+      "status_class": "status-done",
+      "title": "4 blocos senior publicados",
+      "body": "Evals, memoria, agents/MCP e producao",
+      "note": "A partir daqui o portal deixa de ser so guia de estudo e passa a ensinar engenharia aplicada de uso."
+    },
+    {
+      "badge": "Regra central",
+      "status_class": "status-done",
+      "title": "Qualidade precisa ser observavel",
+      "body": "Julgamento forte vira rubrica, teste e regressao",
+      "note": "Se a qualidade nao pode ser comparada no tempo, o sistema ainda depende demais de impressao."
+    },
+    {
+      "badge": "Memoria certa",
+      "status_class": "status-done",
+      "title": "Cada camada tem uma funcao",
+      "body": "Estado, cache, memoria e retrieval nao sao a mesma coisa",
+      "note": "Misturar as camadas cria sistemas opacos, caros e dificeis de governar."
+    },
+    {
+      "badge": "Publicacao",
+      "status_class": "status-done",
+      "title": "Producao e disciplina, nao entusiasmo",
+      "body": "Rollout, observabilidade e fallback entram antes da escala",
+      "note": "O objetivo nao e impressionar em demo. E sustentar operacao real sem perder controle."
+    }
+  ],
+  "study_steps": [
+    "Leia os quatro pilares primeiro para ganhar mapa geral da camada senior.",
+    "Escolha um bloco principal para esta semana: evals, memoria, agents/MCP ou producao.",
+    "Abra a Trilha e conecte esse bloco ao seu foco atual.",
+    "Feche a sessao registrando uma evidencia pratica, nao apenas um resumo."
+  ],
+  "pillars": [
+    {
+      "badge": "Evals",
+      "status_class": "status-done",
+      "title": "Definir sucesso antes de automatizar",
+      "description": "A camada de evals ensina a sair de opiniao solta e construir comparacoes, regressao e criterio de aceite.",
+      "points": [
+        "Rubrica antes de benchmark generico.",
+        "Graders como apoio, nao como muleta de julgamento.",
+        "Comparacao continua entre prompt, provider e versao."
+      ],
+      "buttons": [
+        {
+          "label": "OpenAI Evals",
+          "href": "https://developers.openai.com/api/docs/guides/evals",
+          "variant": "secondary"
+        },
+        {
+          "label": "OpenAI Graders",
+          "href": "https://developers.openai.com/api/docs/guides/graders",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Memoria",
+      "status_class": "status-done",
+      "title": "Persistir o que importa sem confundir tudo",
+      "description": "A camada de memoria separa estado conversacional, contexto recuperado, cache e memoria de longo prazo.",
+      "points": [
+        "Conversation state nao substitui conhecimento.",
+        "Prompt caching reduz custo, mas nao vira memoria sozinho.",
+        "Memoria precisa politica de gravacao, consulta e expiracao."
+      ],
+      "buttons": [
+        {
+          "label": "Conversation state",
+          "href": "https://developers.openai.com/api/docs/guides/conversation-state",
+          "variant": "secondary"
+        },
+        {
+          "label": "Prompt caching",
+          "href": "https://developers.openai.com/api/docs/guides/prompt-caching",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Agents e MCP",
+      "status_class": "status-done",
+      "title": "Tools com contratos claros",
+      "description": "A camada de agents e MCP mostra quando vale usar tools, como desenhar handoff e onde entram guardrails reais.",
+      "points": [
+        "Tool use com responsabilidade explicita.",
+        "MCP como protocolo, nao slogan.",
+        "Human-in-the-loop quando o impacto e real."
+      ],
+      "buttons": [
+        {
+          "label": "MCP Architecture",
+          "href": "https://modelcontextprotocol.io/docs/learn/architecture",
+          "variant": "secondary"
+        },
+        {
+          "label": "xAI Remote MCP",
+          "href": "https://docs.x.ai/developers/tools/remote-mcp",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Producao",
+      "status_class": "status-done",
+      "title": "Publicar sem perder governanca",
+      "description": "A camada de producao conecta custo, latencia, rollout, logs e disciplina de release para transformar prototipo em sistema.",
+      "points": [
+        "Rollout gradual em vez de salto cego.",
+        "Fallback e log antes da escala.",
+        "Release note, cache e revisao editorial como rotina."
+      ],
+      "buttons": [
+        {
+          "label": "Vertex AI release notes",
+          "href": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/release-notes",
+          "variant": "secondary"
+        },
+        {
+          "label": "Anthropic prompt caching",
+          "href": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "evals_cards": [
+    {
+      "title": "Comece com criterio de aceite",
+      "description": "Toda avaliacao forte nasce de exemplos bons, ruins e aceitaveis para o seu caso de uso.",
+      "points": [
+        "Defina o que seria uma resposta boa.",
+        "Defina o que falha bloqueia o uso.",
+        "Escreva isso antes de testar provider."
+      ],
+      "buttons": [
+        {
+          "label": "OpenAI Evals",
+          "href": "https://developers.openai.com/api/docs/guides/evals",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "title": "Graders entram para ganhar escala",
+      "description": "Use graders para ampliar a revisao sem substituir o julgamento humano nos casos mais sensiveis.",
+      "points": [
+        "Grader bom segue rubrica, nao impressao.",
+        "Use amostras humanas para calibrar.",
+        "Reavalie sempre que mudar prompt, modelo ou contexto."
+      ],
+      "buttons": [
+        {
+          "label": "OpenAI Graders",
+          "href": "https://developers.openai.com/api/docs/guides/graders",
+          "variant": "secondary"
+        },
+        {
+          "label": "Anthropic Develop tests",
+          "href": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "evals_rules": [
+    "Nao comparar respostas sem rubrica escrita.",
+    "Sempre guardar casos de falha para regressao futura.",
+    "Toda melhora de prompt precisa ser checada contra baseline anterior.",
+    "Benchmark publico nao substitui conjunto ouro do seu fluxo."
+  ],
+  "memory_cards": [
+    {
+      "title": "Estado conversacional",
+      "description": "Guarda o que a sessao atual precisa lembrar para nao se perder entre turnos.",
+      "points": [
+        "Serve para continuidade imediata.",
+        "Nao substitui base de conhecimento.",
+        "Precisa politica de atualizacao e limpeza."
+      ],
+      "buttons": [
+        {
+          "label": "Conversation state",
+          "href": "https://developers.openai.com/api/docs/guides/conversation-state",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "title": "Cache, memoria e retrieval",
+      "description": "Cache acelera, memoria personaliza e retrieval recupera fonte. Misturar os tres quebra a arquitetura.",
+      "points": [
+        "Prompt caching reduz custo e latencia.",
+        "Memoria persistente precisa politica de gravacao.",
+        "Retrieval entra quando a base precisa ser consultada com evidencia."
+      ],
+      "buttons": [
+        {
+          "label": "Prompt caching",
+          "href": "https://developers.openai.com/api/docs/guides/prompt-caching",
+          "variant": "secondary"
+        },
+        {
+          "label": "Memory Bank overview",
+          "href": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/overview",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "memory_rules": [
+    "Nao chamar qualquer historico de memoria persistente.",
+    "Nao salvar tudo; salve apenas o que tem utilidade futura clara.",
+    "Defina criterios de expiracao, atualizacao e consulta.",
+    "Se a origem precisa aparecer, isso e retrieval ou grounding, nao so memoria."
+  ],
+  "agents_cards": [
+    {
+      "title": "Quando um agente vale a pena",
+      "description": "Agente faz sentido quando precisa coordenar tools, memoria, contexto e decisao em mais de uma etapa.",
+      "points": [
+        "Se um workflow simples resolve, fique no workflow.",
+        "Use agente quando houver orquestracao real.",
+        "Toda tool precisa contrato de entrada e saida."
+      ],
+      "buttons": [
+        {
+          "label": "MCP Architecture",
+          "href": "https://modelcontextprotocol.io/docs/learn/architecture",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "title": "MCP e handoff com governanca",
+      "description": "MCP entra para padronizar integracao de tools, nao para justificar complexidade desnecessaria.",
+      "points": [
+        "Host, client e server precisam papel claro.",
+        "Human-in-the-loop entra onde o custo de erro e alto.",
+        "Log e observabilidade acompanham toda chamada importante."
+      ],
+      "buttons": [
+        {
+          "label": "xAI Remote MCP",
+          "href": "https://docs.x.ai/developers/tools/remote-mcp",
+          "variant": "secondary"
+        },
+        {
+          "label": "OpenAI Resources",
+          "href": "https://developers.openai.com/resources/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "agents_rules": [
+    "Nao criar agente onde um formulario ou workflow seria suficiente.",
+    "Toda tool precisa falha conhecida e fallback explicito.",
+    "Nao delegar acao irreversivel sem gate humano.",
+    "Se voce nao consegue descrever o contrato da tool, ainda nao esta pronto para publicar."
+  ],
+  "production_cards": [
+    {
+      "title": "Custo e latencia entram no desenho",
+      "description": "A decisao de modelo e contexto muda quando o sistema passa a rodar continuamente.",
+      "points": [
+        "Cache e batching mudam o custo real.",
+        "Latencia percebida importa tanto quanto throughput bruto.",
+        "Troca de provider precisa plano de comparacao."
+      ],
+      "buttons": [
+        {
+          "label": "Prompt caching",
+          "href": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "title": "Rollout, logs e revisao",
+      "description": "Publicacao senior combina rollout gradual, log de erro, release note e leitura editorial do que mudou.",
+      "points": [
+        "Nao solte tudo de uma vez.",
+        "Monitore falhas e quedas de qualidade.",
+        "Revisite docs e release notes sempre que um vendor mudar."
+      ],
+      "buttons": [
+        {
+          "label": "Vertex AI release notes",
+          "href": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/release-notes",
+          "variant": "secondary"
+        },
+        {
+          "label": "OpenAI Resources",
+          "href": "https://developers.openai.com/resources/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "production_rules": [
+    "Toda mudanca de prompt, modelo ou tool precisa impacto observado, nao so intuicao.",
+    "Publicacao forte pede rollout progressivo e plano de rollback.",
+    "Se a doc oficial mudou, o portal precisa sinalizar isso no Radar Vivo.",
+    "Produzir sem telemetria minima e uma forma sofisticada de adivinhacao."
+  ],
+  "mastery": [
+    {
+      "badge": "Evidencia 1",
+      "status_class": "status-done",
+      "title": "Voce consegue rerodar um caso com rubrica",
+      "description": "Em vez de dizer que uma resposta parece melhor, voce compara duas saidas com criterio e registra a decisao."
+    },
+    {
+      "badge": "Evidencia 2",
+      "status_class": "status-done",
+      "title": "Voce desenha memoria por camada",
+      "description": "Voce decide o que fica em estado, o que vira cache, o que merece memoria persistente e o que continua em retrieval."
+    },
+    {
+      "badge": "Evidencia 3",
+      "status_class": "status-done",
+      "title": "Voce sabe recusar complexidade vazia",
+      "description": "Voce justifica quando um agente nao vale a pena e quando um workflow simples e mais elegante."
+    },
+    {
+      "badge": "Evidencia 4",
+      "status_class": "status-done",
+      "title": "Voce opera como dono do release",
+      "description": "Voce pensa em rollout, log, custo, latencia e fallback antes de chamar algo de pronto."
+    }
+  ],
+  "route_sequence": [
+    {
+      "badge": "Antes",
+      "status_class": "status-done",
+      "title": "Trilha e Jornada",
+      "description": "Use Trilha para montar o plano e Jornada para manter o ritual semanal antes de mergulhar nas camadas senior.",
+      "buttons": [
+        {
+          "label": "Abrir Trilha",
+          "href": "/trilha/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir Jornada",
+          "href": "/jornada/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Durante",
+      "status_class": "status-done",
+      "title": "RAG, Workflows e Prompt Studio",
+      "description": "Estas rotas fornecem os casos concretos que a camada senior vai medir, lembrar, orquestrar e publicar.",
+      "buttons": [
+        {
+          "label": "Abrir RAG",
+          "href": "/rag/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir Workflows",
+          "href": "/workflows/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Depois",
+      "status_class": "status-next",
+      "title": "Roadmap e artefatos",
+      "description": "Feche esta camada usando o Roadmap para revisar maturidade e Artefatos para guardar evidencias e referencias de apoio.",
+      "buttons": [
+        {
+          "label": "Abrir Roadmap",
+          "href": "/roadmap/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir Artefatos",
+          "href": "/artefatos/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ]
+}

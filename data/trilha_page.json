@@ -39,7 +39,7 @@
     "No fim da semana 1, voce ja precisa saber estruturar prompts e comparar modelos sem usar ranking vazio.",
     "No fim da semana 2, contexto, grounding, NotebookLM e memoria precisam estar separados na sua cabeca.",
     "No fim da semana 3, approval humano, schema, risco e proxima acao precisam aparecer no seu caderno de operacao.",
-    "No fechamento, voce deve conseguir demonstrar um mini sistema com modelo, contexto, risco, criterio de dominio e decisao."
+    "No fechamento, voce deve conseguir demonstrar um mini sistema com modelo, contexto, risco, criterio de dominio, evals e decisao."
   ],
   "route_roles": [
     {
@@ -116,6 +116,19 @@
         {
           "label": "Abrir Workflows",
           "href": "/workflows/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Camada rara",
+      "status_class": "status-done",
+      "title": "Senior",
+      "description": "Condensa evals, memoria persistente, agents/MCP e producao para quem precisa sair do bom nivel e entrar em operacao senior.",
+      "buttons": [
+        {
+          "label": "Abrir Senior",
+          "href": "/senior/",
           "variant": "secondary"
         }
       ]

@@ -4,10 +4,10 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "Unidades didaticas e criterio de dominio",
-    "phase_summary": "A Trilha agora ensina cada bloco com conceito, evidencias esperadas, criterio de conclusao e CTA de proximo passo, deixando o estudo mais formativo e menos superficial.",
-    "next_phase": "Evals, memoria persistente, agents e producao",
-    "next_phase_summary": "Depois de dominar a trilha base, o proximo salto e adicionar camadas senior de qualidade, memoria, ferramentas e operacao em producao.",
+    "phase_focus": "Evals, memoria persistente, agents e producao",
+    "phase_summary": "O portal agora ganhou uma camada senior propria para qualidade, memoria, tools/MCP e disciplina de publicacao, ligando estudo forte a operacao real.",
+    "next_phase": "Progresso, checkpoints e replanejamento",
+    "next_phase_summary": "Com a camada senior no ar, o proximo salto e acompanhar progresso por unidade, revisar o que ficou pendente e replanejar a trilha com base no ritmo real.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
@@ -18,6 +18,7 @@
     { "id": "matriz", "label": "Matriz", "description": "Comparacao de modelos e scorecards", "href": "/matriz/" },
     { "id": "workflows", "label": "Workflows", "description": "Operacao, risco e aprovacao humana", "href": "/workflows/" },
     { "id": "rag", "label": "RAG", "description": "Conhecimento, grounding e citacao", "href": "/rag/" },
+    { "id": "senior", "label": "Senior", "description": "Evals, memoria, agents e producao", "href": "/senior/" },
     { "id": "roadmap", "label": "Roadmap", "description": "Fases, progresso e proxima etapa", "href": "/roadmap/" },
     { "id": "artefatos", "label": "Artefatos", "description": "Hub publico dos ativos do projeto", "href": "/artefatos/" }
   ],
@@ -98,6 +99,11 @@
       "nav_label": "RAG",
       "summary": "Atlas do RAG: decisao de contexto, grounding, confiabilidade e evidencias do projeto."
     },
+    "senior": {
+      "title": "Senior",
+      "nav_label": "Senior",
+      "summary": "Camada senior: evals, memoria persistente, agents/MCP e producao com criterio, docs oficiais e checklists operacionais."
+    },
     "roadmap": {
       "title": "Roadmap",
       "nav_label": "Roadmap",
@@ -170,6 +176,13 @@
       "status_class": "status-done"
     },
     {
+      "title": "Subir para a camada senior",
+      "description": "Abra Senior para estudar evals, memoria persistente, agents/MCP e producao com uma linguagem mais proxima de engenharia aplicada.",
+      "href": "/senior/",
+      "badge": "Camada rara",
+      "status_class": "status-done"
+    },
+    {
       "title": "Consolidar pelo Roadmap e artefatos",
       "description": "Feche ciclos usando o Roadmap e use Artefatos como biblioteca de apoio para revisar, comparar e aprofundar.",
       "href": "/roadmap/",
@@ -193,11 +206,11 @@
       "badge": "O que falta",
       "status_class": "status-in-progress",
       "title": "Blocos que ainda precisam entrar para nivel raro",
-      "description": "Para sair do nivel usuario avancado e se aproximar de referencia aplicada, voce ainda precisa aprofundar retrieval em detalhe, evals formais, protocolos de agentes, custo/latencia e governanca tecnica.",
+      "description": "Para sair do nivel usuario avancado e se aproximar de referencia aplicada, voce ainda precisa aprofundar retrieval em detalhe, avaliar o sistema com dados proprios e ligar a camada senior a observabilidade real.",
       "points": [
         "Embeddings, chunking, rerankers e avaliacao de retrieval.",
-        "Harness de evals continuo, regressao e comparacao de providers.",
-        "MCP, tool use, observabilidade, seguranca e disciplina de rollout."
+        "Harness de evals continuo com dados do seu contexto e baselines vivos.",
+        "Observabilidade, seguranca, rollout progressivo e telemetria de producao."
       ]
     },
     {

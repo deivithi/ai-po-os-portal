@@ -33,43 +33,43 @@
     },
     {
       "domain": "Memoria persistente",
-      "coverage_label": "Parcial",
-      "status_class": "status-in-progress",
-      "summary": "O portal toca em conversation state, contexto e Projects, mas ainda nao abriu uma camada dedicada de memoria persistente.",
-      "route_label": "Roadmap",
-      "href": "/roadmap/",
-      "action_label": "Ver Roadmap",
-      "next_step": "Entrar como frente propria com estado de conversa, memoria de trabalho e memoria de longo prazo."
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "O portal agora tem uma camada dedicada para separar estado, cache, memoria persistente e retrieval sem misturar os papeis.",
+      "route_label": "Senior",
+      "href": "/senior/",
+      "action_label": "Abrir Senior",
+      "next_step": "Ligar a teoria a politica real de gravacao, expiracao e governanca dos dados."
     },
     {
       "domain": "Agents, tools e MCP",
-      "coverage_label": "Parcial",
-      "status_class": "status-in-progress",
-      "summary": "A base conceitual ja existe, mas a experiencia ainda nao virou uma trilha dedicada com exemplos de tools, guardrails e handoff.",
-      "route_label": "Roadmap",
-      "href": "/roadmap/",
-      "action_label": "Acompanhar plano",
-      "next_step": "Construir uma unidade propria com agents, MCP, human-in-the-loop e observabilidade."
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "A camada Senior agora mostra quando um agente vale a pena, como MCP entra e onde guardrails e handoff precisam ser explicitados.",
+      "route_label": "Senior",
+      "href": "/senior/",
+      "action_label": "Abrir Senior",
+      "next_step": "Trazer exemplos com tools reais, observabilidade e governanca por caso de uso."
     },
     {
       "domain": "Evals e graders",
-      "coverage_label": "Fila editorial",
-      "status_class": "status-next",
-      "summary": "A necessidade ja foi diagnosticada, mas o portal ainda nao tem a camada didatica de evals, regressao e comparacao continua.",
-      "route_label": "Roadmap",
-      "href": "/roadmap/",
-      "action_label": "Ver proxima fase",
-      "next_step": "Entrar apos Trilha Adaptativa como bloco para nivel senior raro."
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "A camada Senior abriu a frente de evals, graders e regressao, explicando como criterio de qualidade vira sistema repetivel.",
+      "route_label": "Senior",
+      "href": "/senior/",
+      "action_label": "Abrir Senior",
+      "next_step": "Subir para harness proprio com dados do seu contexto, baseline vivo e comparacao recorrente."
     },
     {
       "domain": "Custo, latencia e rollout",
-      "coverage_label": "Parcial",
-      "status_class": "status-in-progress",
-      "summary": "A linguagem do portal ja fala de risco e operacao, mas ainda nao abriu um modulo proprio de custo, rollout e observabilidade.",
-      "route_label": "Workflows",
-      "href": "/workflows/",
-      "action_label": "Abrir Workflows",
-      "next_step": "Conectar runs, logs, trade-offs e disciplina de producao."
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "A camada Senior agora trata producao como disciplina, conectando custo, latencia, rollout, logs e revisao de release.",
+      "route_label": "Senior",
+      "href": "/senior/",
+      "action_label": "Abrir Senior",
+      "next_step": "Ligar a camada de publicacao a telemetria real, budget e regressao observavel."
     },
     {
       "domain": "Estudo grounded com NotebookLM",

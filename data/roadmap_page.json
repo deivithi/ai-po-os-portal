@@ -3,23 +3,23 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "18 ciclos publicados",
-      "body": "Portal completo com Radar Vivo, publish automatizado, Trilha ativa e criterio de dominio",
-      "note": "O sistema fechou o ciclo base do portal, consolidou o Prompt Studio, abriu o Radar Vivo, migrou o publish para Actions, abriu a Trilha e agora adiciona leitura formativa por unidade."
+      "title": "19 ciclos publicados",
+      "body": "Portal completo com Radar Vivo, Trilha formativa e camada senior publicada",
+      "note": "O sistema fechou o ciclo base do portal, consolidou o Prompt Studio, abriu o Radar Vivo, migrou o publish para Actions, publicou a Trilha formativa e agora entrega a camada senior."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Macrofase 4 concluida",
-      "body": "Unidades didaticas e criterio de dominio publicados",
-      "note": "A plataforma agora transforma horas por dia, foco, nivel e objetivo em uma rota acionavel com semanas, blocos, evidencias e criterio claro de conclusao."
+      "title": "Macrofase 5 concluida",
+      "body": "Camada senior publicada",
+      "note": "A plataforma agora conecta evals, memoria, agents/MCP e producao a uma rota didatica propria, com fontes oficiais e linguagem de operacao."
     },
     {
       "badge": "Plano de 30 dias",
       "status_class": "status-done",
       "title": "Base funcional e adaptativa pronta",
-      "body": "30D-A, 30D-B, Radar Vivo, Trilha e criterio de dominio ja conversam entre si",
-      "note": "A partir daqui o trabalho e aprofundar as camadas senior que ainda faltam: evals, memoria persistente, agents, MCP e producao."
+      "body": "30D-A, 30D-B, Radar Vivo, Trilha e camada senior ja conversam entre si",
+      "note": "A partir daqui o trabalho e acompanhar progresso real por unidade, checkpoints e replanejamento da trilha."
     },
     {
       "badge": "Regra",
@@ -165,6 +165,12 @@
     {
       "phase": "Refino K",
       "focus": "Unidades didaticas e criterio de dominio",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino L",
+      "focus": "Camada senior: evals, memoria, agents e producao",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }

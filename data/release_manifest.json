@@ -27,6 +27,10 @@
     {
       "title": "Dominio verificavel por unidade",
       "description": "Sempre que a Trilha destacar uma unidade, a pagina precisa mostrar conceito, evidencias esperadas e criterio de conclusao de forma acionavel."
+    },
+    {
+      "title": "Camada senior com criterio operacional",
+      "description": "Sempre que o portal falar de evals, memoria, agents ou producao, a pagina precisa ligar o conceito a decisao operacional, trade-offs e docs oficiais."
     }
   ],
   "qa_targets": [
@@ -37,6 +41,7 @@
     "/matriz/",
     "/workflows/",
     "/rag/",
+    "/senior/",
     "/roadmap/",
     "/artefatos/",
     "/data/overview.json",
@@ -51,6 +56,7 @@
     "/data/study_units.json",
     "/data/learning_path_templates.json",
     "/data/adaptive_path_rules.json",
-    "/data/trilha_page.json"
+    "/data/trilha_page.json",
+    "/data/senior_page.json"
   ]
 }

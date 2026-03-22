@@ -21,6 +21,7 @@ const DATA_PATHS = {
   adaptivePathRules: "/data/adaptive_path_rules.json",
   workflowsGuide: "/data/workflows_page.json",
   ragGuide: "/data/rag_page.json",
+  seniorGuide: "/data/senior_page.json",
   roadmapGuide: "/data/roadmap_page.json",
   releaseManifest: "/data/release_manifest.json",
 };
@@ -33,6 +34,7 @@ const PAGE_DATA_KEYS = {
   matriz: ["overview", "artifacts", "matrixGuide", "matrixArtifact", "freshnessStatus"],
   workflows: ["overview", "workflowsGuide", "freshnessStatus"],
   rag: ["ragGuide", "freshnessStatus"],
+  senior: ["seniorGuide", "freshnessStatus"],
   roadmap: ["roadmapGuide", "releaseManifest", "freshnessStatus"],
   artefatos: ["artifacts", "freshnessStatus"],
 };
@@ -43,9 +45,10 @@ const PREFETCH_ROUTE_MAP = {
   jornada: ["/prompts/", "/matriz/", "/rag/"],
   prompts: ["/matriz/", "/rag/", "/artefatos/"],
   matriz: ["/prompts/", "/rag/", "/workflows/"],
-  rag: ["/workflows/", "/artefatos/", "/roadmap/"],
-  workflows: ["/roadmap/", "/artefatos/", "/matriz/"],
-  roadmap: ["/trilha/", "/jornada/", "/artefatos/"],
+  rag: ["/workflows/", "/senior/", "/roadmap/"],
+  workflows: ["/senior/", "/roadmap/", "/artefatos/"],
+  senior: ["/roadmap/", "/artefatos/", "/trilha/"],
+  roadmap: ["/trilha/", "/jornada/", "/senior/"],
   artefatos: ["/trilha/", "/prompts/", "/matriz/"],
 };
 
@@ -1541,6 +1544,157 @@ function renderJourney(journeyGuide) {
       .map((item) => `<li>${escapeHtml(item)}</li>`)
       .join("");
   }
+}
+
+function renderSenior(seniorGuide) {
+  renderCards(
+    "senior-orientation",
+    seniorGuide.orientation || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  const studySteps = document.getElementById("senior-study-steps");
+  if (studySteps) {
+    studySteps.innerHTML = (seniorGuide.study_steps || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  renderCards(
+    "senior-pillars",
+    seniorGuide.pillars || [],
+    (item) => `
+      <article class="artifact-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <ul class="summary-list">
+          ${(item.points || []).map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+        </ul>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  renderCards(
+    "senior-evals-cards",
+    seniorGuide.evals_cards || [],
+    (item) => `
+      <article class="workflow-card">
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <ul class="summary-list">
+          ${(item.points || []).map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+        </ul>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  const evalsRules = document.getElementById("senior-evals-rules");
+  if (evalsRules) {
+    evalsRules.innerHTML = (seniorGuide.evals_rules || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  renderCards(
+    "senior-memory-cards",
+    seniorGuide.memory_cards || [],
+    (item) => `
+      <article class="workflow-card">
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <ul class="summary-list">
+          ${(item.points || []).map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+        </ul>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  const memoryRules = document.getElementById("senior-memory-rules");
+  if (memoryRules) {
+    memoryRules.innerHTML = (seniorGuide.memory_rules || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  renderCards(
+    "senior-agents-cards",
+    seniorGuide.agents_cards || [],
+    (item) => `
+      <article class="workflow-card">
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <ul class="summary-list">
+          ${(item.points || []).map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+        </ul>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  const agentsRules = document.getElementById("senior-agents-rules");
+  if (agentsRules) {
+    agentsRules.innerHTML = (seniorGuide.agents_rules || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  renderCards(
+    "senior-production-cards",
+    seniorGuide.production_cards || [],
+    (item) => `
+      <article class="workflow-card">
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <ul class="summary-list">
+          ${(item.points || []).map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+        </ul>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  const productionRules = document.getElementById("senior-production-rules");
+  if (productionRules) {
+    productionRules.innerHTML = (seniorGuide.production_rules || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  renderCards(
+    "senior-mastery",
+    seniorGuide.mastery || [],
+    (item) => `
+      <article class="phase-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="timeline-copy">${escapeHtml(item.description)}</p>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "senior-route-sequence",
+    seniorGuide.route_sequence || [],
+    (item) => `
+      <article class="artifact-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
 }
 
 function roundToHalf(value) {
@@ -4776,6 +4930,7 @@ async function init() {
       adaptivePathRules,
       workflowsGuide,
       ragGuide,
+      seniorGuide,
       roadmapGuide,
       releaseManifest,
     } = data;
@@ -4798,6 +4953,7 @@ async function init() {
       matriz: () => renderMatrix(portal, overview, artifacts, matrixGuide, matrixArtifact),
       workflows: () => renderWorkflows(portal, overview, workflowsGuide),
       rag: () => renderRag(portal, ragGuide, releaseManifest),
+      senior: () => renderSenior(seniorGuide),
       roadmap: () => renderRoadmap(portal, roadmapGuide, releaseManifest),
       artefatos: () => renderArtifacts(portal, artifacts),
     };
