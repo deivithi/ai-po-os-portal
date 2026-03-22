@@ -7,6 +7,7 @@ const DATA_PATHS = {
   promptBuilder: "/data/prompt_builder.json",
   promptProviderOverlays: "/data/prompt_provider_overlays.json",
   promptQualityLab: "/data/prompt_quality_lab.json",
+  promptProductization: "/data/prompt_productization.json",
   matrixGuide: "/data/matrix_page.json",
   matrixArtifact: "/artifacts/files/model_matrix.json",
   journeyGuide: "/data/journey_page.json",
@@ -19,7 +20,7 @@ const DATA_PATHS = {
 const PAGE_DATA_KEYS = {
   home: ["overview", "artifacts"],
   jornada: ["journeyGuide"],
-  prompts: ["promptsGuide", "promptLibrary", "promptBuilder", "promptProviderOverlays", "promptQualityLab"],
+  prompts: ["promptsGuide", "promptLibrary", "promptBuilder", "promptProviderOverlays", "promptQualityLab", "promptProductization"],
   matriz: ["overview", "artifacts", "matrixGuide", "matrixArtifact"],
   workflows: ["overview", "workflowsGuide"],
   rag: ["ragGuide"],
@@ -40,6 +41,7 @@ const PREFETCH_ROUTE_MAP = {
 
 const SESSION_CACHE_PREFIX = "ai-po-os::";
 const SESSION_CACHE_TTL_MS = 1000 * 60 * 15;
+const FAVORITES_STORAGE_KEY = "ai-po-os::prompt-favorites::v1";
 const memoryCache = new Map();
 const prefetchedRoutes = new Set();
 const SITE_BASE_PATH = detectSiteBasePath();
@@ -238,6 +240,77 @@ function writeCachedJson(path, data) {
   } catch (_error) {
     // Ignore quota/storage issues and keep the in-memory cache for this page load.
   }
+}
+
+function loadPromptFavorites() {
+  try {
+    const raw = window.localStorage.getItem(FAVORITES_STORAGE_KEY);
+    if (!raw) {
+      return {
+        templates: [],
+        examples: [],
+      };
+    }
+
+    const parsed = JSON.parse(raw);
+    return {
+      templates: Array.isArray(parsed?.templates) ? parsed.templates : [],
+      examples: Array.isArray(parsed?.examples) ? parsed.examples : [],
+    };
+  } catch (_error) {
+    return {
+      templates: [],
+      examples: [],
+    };
+  }
+}
+
+function persistPromptFavorites(favorites) {
+  window.__promptFavorites = favorites;
+
+  try {
+    window.localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
+  } catch (_error) {
+    // Keep runtime-only state if storage is unavailable.
+  }
+
+  document.dispatchEvent(
+    new CustomEvent("prompt-favorites:updated", {
+      detail: favorites,
+    }),
+  );
+}
+
+function ensurePromptFavorites() {
+  const favorites = window.__promptFavorites || loadPromptFavorites();
+  window.__promptFavorites = favorites;
+  return favorites;
+}
+
+function isPromptFavorite(kind, id, favorites = ensurePromptFavorites()) {
+  return Array.isArray(favorites?.[kind]) && favorites[kind].includes(id);
+}
+
+function togglePromptFavorite(kind, id) {
+  const favorites = ensurePromptFavorites();
+  const current = Array.isArray(favorites[kind]) ? favorites[kind] : [];
+  const nextValues = current.includes(id) ? current.filter((item) => item !== id) : [...current, id];
+  const nextFavorites = {
+    ...favorites,
+    [kind]: nextValues,
+  };
+  persistPromptFavorites(nextFavorites);
+  return nextFavorites;
+}
+
+function setQueryParam(name, value) {
+  const url = new URL(window.location.href);
+  if (!value || value === "all") {
+    url.searchParams.delete(name);
+  } else {
+    url.searchParams.set(name, value);
+  }
+  window.history.replaceState({}, "", url.toString());
 }
 
 function normalizeInternalPath(value) {
@@ -1267,7 +1340,7 @@ function renderJourney(journeyGuide) {
   }
 }
 
-function renderPromptLibrary(containerId, examples) {
+function renderPromptLibrary(containerId, examples, options = {}) {
   const container = document.getElementById(containerId);
   if (!container) {
     return;
@@ -1281,11 +1354,26 @@ function renderPromptLibrary(containerId, examples) {
   container.innerHTML = examples
     .map(
       (item) => `
-        <article class="prompt-example-card">
+        <article class="prompt-example-card" id="prompt-example-${escapeHtml(item.id)}">
           <div class="prompt-example-header">
             <div class="prompt-example-meta">
               <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.level_label)}</span>
               <span class="label">${escapeHtml(item.family)}</span>
+              ${
+                item.product_tier
+                  ? `<span class="label subtle-label">${escapeHtml(item.product_tier)}</span>`
+                  : ""
+              }
+            </div>
+            <div class="prompt-example-actions">
+              <button
+                class="favorite-button ${isPromptFavorite("examples", item.id, options.favorites) ? "active" : ""}"
+                type="button"
+                data-favorite-example="${escapeHtml(item.id)}"
+                aria-pressed="${isPromptFavorite("examples", item.id, options.favorites)}"
+              >
+                ${isPromptFavorite("examples", item.id, options.favorites) ? "Favorito" : "Salvar"}
+              </button>
             </div>
             <h3>${escapeHtml(item.title)}</h3>
             <p class="card-copy">${escapeHtml(item.objective)}</p>
@@ -1330,6 +1418,13 @@ function renderPromptLibrary(containerId, examples) {
       `,
     )
     .join("");
+
+  container.querySelectorAll("[data-favorite-example]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const exampleId = button.getAttribute("data-favorite-example");
+      togglePromptFavorite("examples", exampleId);
+    });
+  });
 }
 
 function toCleanLines(value) {
@@ -2614,6 +2709,334 @@ function renderPromptQualityLab(promptQualityLab) {
   });
 }
 
+function renderPromptProductization(promptLibrary, promptBuilder, promptProductization, onTrackChange) {
+  if (!promptProductization) {
+    if (typeof onTrackChange === "function") {
+      onTrackChange(null);
+    }
+    return;
+  }
+
+  renderCards(
+    "prompt-product-overview",
+    promptProductization.overview || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "prompt-product-access",
+    promptProductization.access_layers || [],
+    (item) => `
+      <article class="study-card compact-card product-access-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <ul class="summary-list">
+          ${(item.points || []).map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+        </ul>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "prompt-product-future-modules",
+    promptProductization.future_modules || [],
+    (item) => `
+      <article class="study-card compact-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "prompt-product-principles",
+    promptProductization.product_principles || [],
+    (item) => `
+      <article class="study-card compact-card">
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "prompt-product-packs",
+    promptProductization.premium_packs || [],
+    (item) => `
+      <article class="study-card compact-card product-pack-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+      </article>
+    `,
+  );
+
+  const workspaceRules = document.getElementById("prompt-workspace-rules");
+  if (workspaceRules) {
+    workspaceRules.innerHTML = (promptProductization.workspace_rules || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  const tracks = Array.isArray(promptProductization.tracks) ? promptProductization.tracks : [];
+  const templates = Array.isArray(promptBuilder?.templates) ? promptBuilder.templates : [];
+  const examples = Array.isArray(promptLibrary?.examples) ? promptLibrary.examples : [];
+  const templatesById = new Map(templates.map((item) => [item.id, item]));
+  const examplesById = new Map(examples.map((item) => [item.id, item]));
+  const switcher = document.getElementById("prompt-product-track-switcher");
+  const workspaceTitle = document.getElementById("prompt-workspace-title");
+  const workspaceSummary = document.getElementById("prompt-workspace-summary");
+  let activeTrackId = new URLSearchParams(window.location.search).get("track") || tracks[0]?.id || "all";
+
+  if (!tracks.find((item) => item.id === activeTrackId)) {
+    activeTrackId = tracks[0]?.id || "all";
+  }
+
+  function getActiveTrack() {
+    return tracks.find((item) => item.id === activeTrackId) || tracks[0] || null;
+  }
+
+  function renderTrackSwitcher() {
+    if (!switcher) {
+      return;
+    }
+
+    switcher.innerHTML = tracks
+      .map(
+        (track) => `
+          <button
+            class="builder-chip ${track.id === activeTrackId ? "active" : ""}"
+            type="button"
+            data-product-track="${escapeHtml(track.id)}"
+          >
+            <span>
+              <strong>${escapeHtml(track.label)}</strong>
+              <small>${escapeHtml(track.tier)}</small>
+            </span>
+          </button>
+        `,
+      )
+      .join("");
+
+    switcher.querySelectorAll("[data-product-track]").forEach((button) => {
+      button.addEventListener("click", () => {
+        activeTrackId = button.getAttribute("data-product-track");
+        syncProductizationState();
+      });
+    });
+  }
+
+  function renderTracks() {
+    renderCards(
+      "prompt-product-tracks",
+      tracks.map((item) => ({
+        ...item,
+        active: item.id === activeTrackId,
+      })),
+      (item) => `
+        <article class="study-card compact-card product-track-card ${item.active ? "active" : ""}">
+          <span class="status-badge ${item.active ? "status-done" : escapeHtml(item.status_class)}">${escapeHtml(item.tier)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.summary)}</p>
+          <ul class="summary-list">
+            <li><strong>Persona:</strong> ${escapeHtml(item.persona)}</li>
+            <li><strong>Carga sugerida:</strong> ${escapeHtml(item.hours)}</li>
+            <li><strong>Templates:</strong> ${escapeHtml(String((item.template_ids || []).length))}</li>
+            <li><strong>Exemplos:</strong> ${escapeHtml(String((item.example_ids || []).length))}</li>
+          </ul>
+          ${renderTagList(item.deliverables || [])}
+        </article>
+      `,
+    );
+  }
+
+  function buildFavoriteCards(activeTrack, favorites) {
+    const activeTemplateIds = new Set(activeTrack?.template_ids || []);
+    const activeExampleIds = new Set(activeTrack?.example_ids || []);
+    const favoriteTemplates = (favorites.templates || [])
+      .map((id) => templatesById.get(id))
+      .filter(Boolean)
+      .sort((left, right) => Number(activeTemplateIds.has(right.id)) - Number(activeTemplateIds.has(left.id)));
+    const favoriteExamples = (favorites.examples || [])
+      .map((id) => examplesById.get(id))
+      .filter(Boolean)
+      .sort((left, right) => Number(activeExampleIds.has(right.id)) - Number(activeExampleIds.has(left.id)));
+
+    const cards = [
+      ...favoriteTemplates.map((item) => ({
+        kind: "template",
+        id: item.id,
+        title: item.title,
+        description: item.summary,
+        detail: item.best_for,
+        active: activeTemplateIds.has(item.id),
+      })),
+      ...favoriteExamples.map((item) => ({
+        kind: "example",
+        id: item.id,
+        title: item.title,
+        description: item.objective,
+        detail: item.use_case,
+        active: activeExampleIds.has(item.id),
+      })),
+    ];
+
+    return cards;
+  }
+
+  function renderWorkspace() {
+    const favorites = ensurePromptFavorites();
+    const activeTrack = getActiveTrack();
+    const favoriteCards = buildFavoriteCards(activeTrack, favorites);
+
+    if (workspaceTitle) {
+      workspaceTitle.textContent = activeTrack ? `Workspace da trilha ${activeTrack.title}` : "Favoritos e trilha ativa";
+    }
+
+    if (workspaceSummary) {
+      workspaceSummary.textContent = activeTrack
+        ? `${activeTrack.summary} Esta trilha conecta ${activeTrack.template_ids?.length || 0} templates e ${activeTrack.example_ids?.length || 0} exemplos.`
+        : "Salve templates e exemplos para montar sua biblioteca pessoal de estudo.";
+    }
+
+    renderCards(
+      "prompt-favorites-summary",
+      [
+        {
+          badge: "Trilha ativa",
+          status_class: activeTrack?.status_class || "status-done",
+          title: activeTrack?.label || "Sem trilha",
+          value: activeTrack?.tier || "Livre agora",
+          note: activeTrack?.persona || "Biblioteca geral do Prompt Studio.",
+        },
+        {
+          badge: "Templates salvos",
+          status_class: favorites.templates?.length ? "status-done" : "status-in-progress",
+          title: String(favorites.templates?.length || 0),
+          value: "Templates",
+          note: "Use favoritos para montar seu acervo pessoal sem perder a curadoria do portal.",
+        },
+        {
+          badge: "Exemplos salvos",
+          status_class: favorites.examples?.length ? "status-done" : "status-in-progress",
+          title: String(favorites.examples?.length || 0),
+          value: "Exemplos",
+          note: "Exemplos salvos ajudam a revisar antes/depois, blocos e casos de uso com menos ruido.",
+        },
+      ],
+      (item) => `
+        <article class="metric-card builder-diagnostic-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="builder-diagnostic-value">${escapeHtml(item.value)}</p>
+          <p class="metric-note">${escapeHtml(item.note)}</p>
+        </article>
+      `,
+    );
+
+    const favoritesContainer = document.getElementById("prompt-favorites-list");
+    if (!favoritesContainer) {
+      return;
+    }
+
+    if (favoriteCards.length === 0) {
+      favoritesContainer.innerHTML =
+        '<div class="empty-note">Nenhum favorito salvo ainda. Use "Salvar template" ou "Salvar" nos exemplos para montar seu workspace.</div>';
+      return;
+    }
+
+    favoritesContainer.innerHTML = favoriteCards
+      .map(
+        (item) => `
+          <article class="artifact-card compact-card workspace-favorite-card ${item.active ? "active" : ""}">
+            <span class="status-badge ${item.active ? "status-done" : "status-in-progress"}">
+              ${escapeHtml(item.kind === "template" ? "Template salvo" : "Exemplo salvo")}
+            </span>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p class="card-copy">${escapeHtml(item.description)}</p>
+            <p class="metric-note">${escapeHtml(item.detail)}</p>
+            <div class="button-group">
+              ${
+                item.kind === "template"
+                  ? `<button class="button secondary" type="button" data-open-template="${escapeHtml(item.id)}">Abrir no builder</button>`
+                  : `<button class="button secondary" type="button" data-open-example="${escapeHtml(item.id)}">Abrir exemplo</button>`
+              }
+              <button class="button secondary" type="button" data-remove-favorite="${escapeHtml(item.kind)}" data-favorite-id="${escapeHtml(item.id)}">Remover</button>
+            </div>
+          </article>
+        `,
+      )
+      .join("");
+
+    favoritesContainer.querySelectorAll("[data-open-template]").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.dispatchEvent(
+          new CustomEvent("prompt-builder:select-template", {
+            detail: {
+              templateId: button.getAttribute("data-open-template"),
+            },
+          }),
+        );
+      });
+    });
+
+    favoritesContainer.querySelectorAll("[data-open-example]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const exampleId = button.getAttribute("data-open-example");
+        window.location.hash = `prompt-example-${exampleId}`;
+      });
+    });
+
+    favoritesContainer.querySelectorAll("[data-remove-favorite]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const kind = button.getAttribute("data-remove-favorite") === "template" ? "templates" : "examples";
+        togglePromptFavorite(kind, button.getAttribute("data-favorite-id"));
+      });
+    });
+  }
+
+  function syncProductizationState() {
+    const activeTrack = getActiveTrack();
+    setQueryParam("track", activeTrack?.id || "all");
+    renderTrackSwitcher();
+    renderTracks();
+    renderWorkspace();
+    if (typeof onTrackChange === "function") {
+      onTrackChange(activeTrack);
+    }
+  }
+
+  document.addEventListener("prompt-favorites:updated", () => {
+    renderWorkspace();
+    if (typeof onTrackChange === "function") {
+      onTrackChange(getActiveTrack());
+    }
+  });
+
+  window.addEventListener("storage", (event) => {
+    if (event.key !== FAVORITES_STORAGE_KEY) {
+      return;
+    }
+
+    window.__promptFavorites = loadPromptFavorites();
+    renderWorkspace();
+    if (typeof onTrackChange === "function") {
+      onTrackChange(getActiveTrack());
+    }
+  });
+
+  syncProductizationState();
+}
+
 function renderPromptBuilder(promptBuilder) {
   if (!promptBuilder) {
     return;
@@ -2677,6 +3100,7 @@ function renderPromptBuilder(promptBuilder) {
     feedback: document.getElementById("prompt-builder-feedback"),
     copyButton: document.getElementById("prompt-builder-copy"),
     resetButton: document.getElementById("prompt-builder-reset"),
+    saveButton: document.getElementById("prompt-builder-save-template"),
     inputs: {
       role: document.getElementById("builder-role"),
       objective: document.getElementById("builder-objective"),
@@ -2876,7 +3300,19 @@ function renderPromptBuilder(promptBuilder) {
     );
 
     renderOfficials(template);
+    renderSaveButton(template);
     publishPromptBuilderState(builderState);
+  }
+
+  function renderSaveButton(template) {
+    if (!builderElements.saveButton) {
+      return;
+    }
+
+    const favorite = isPromptFavorite("templates", template.id);
+    builderElements.saveButton.textContent = favorite ? "Template salvo" : "Salvar template";
+    builderElements.saveButton.classList.toggle("active", favorite);
+    builderElements.saveButton.setAttribute("aria-pressed", favorite ? "true" : "false");
   }
 
   function applyTemplateDefaults(template, preserveMode = false) {
@@ -2953,10 +3389,55 @@ function renderPromptBuilder(promptBuilder) {
     });
   }
 
+  if (builderElements.saveButton) {
+    builderElements.saveButton.addEventListener("click", () => {
+      const template = getActiveTemplate();
+      togglePromptFavorite("templates", template.id);
+
+      if (builderElements.feedback) {
+        builderElements.feedback.textContent = isPromptFavorite("templates", template.id)
+          ? "Template salvo no workspace."
+          : "Template removido do workspace.";
+        if (feedbackTimer) {
+          window.clearTimeout(feedbackTimer);
+        }
+        feedbackTimer = window.setTimeout(() => {
+          builderElements.feedback.textContent = "";
+        }, 2400);
+      }
+
+      renderSaveButton(template);
+    });
+  }
+
+  document.addEventListener("prompt-builder:select-template", (event) => {
+    const templateId = event.detail?.templateId;
+    const nextTemplate = templates.find((item) => item.id === templateId);
+    if (!nextTemplate) {
+      return;
+    }
+
+    applyTemplateDefaults(nextTemplate, false);
+    if (window.location.hash !== "#builder") {
+      window.location.hash = "builder";
+    }
+  });
+
+  document.addEventListener("prompt-favorites:updated", () => {
+    renderSaveButton(getActiveTemplate());
+  });
+
   applyTemplateDefaults(getActiveTemplate());
 }
 
-function renderPrompts(promptsGuide, promptLibrary, promptBuilder, promptProviderOverlays, promptQualityLab) {
+function renderPrompts(
+  promptsGuide,
+  promptLibrary,
+  promptBuilder,
+  promptProviderOverlays,
+  promptQualityLab,
+  promptProductization,
+) {
   renderCards(
     "prompts-orientation",
     promptsGuide.orientation || [],
@@ -3002,38 +3483,52 @@ function renderPrompts(promptsGuide, promptLibrary, promptBuilder, promptProvide
   renderPromptProviderOverlays(promptProviderOverlays);
   renderPromptQualityLab(promptQualityLab);
 
-  renderCards(
-    "prompt-library-level-summaries",
-    promptsGuide.maturity_levels || [],
-    (item) => `
-      <article class="study-card compact-card">
-        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
-        <h3>${escapeHtml(item.title)}</h3>
-        <p class="card-copy">${escapeHtml(item.description)}</p>
-      </article>
-    `,
-  );
+  function renderPromptCatalog(activeTrack) {
+    const promptExamples = Array.isArray(promptLibrary?.examples) ? promptLibrary.examples : [];
+    const trackExampleIds =
+      activeTrack && activeTrack.id !== "all" ? new Set(activeTrack.example_ids || []) : null;
+    const filteredExamples = trackExampleIds
+      ? promptExamples.filter((item) => trackExampleIds.has(item.id))
+      : promptExamples;
+    const favorites = ensurePromptFavorites();
 
-  const promptLibraryRules = document.getElementById("prompt-library-rules");
-  if (promptLibraryRules) {
-    promptLibraryRules.innerHTML = (promptLibrary?.study_rules || [])
-      .map((item) => `<li>${escapeHtml(item)}</li>`)
-      .join("");
+    renderCards(
+      "prompt-library-level-summaries",
+      promptsGuide.maturity_levels || [],
+      (item) => `
+        <article class="study-card compact-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.description)}</p>
+        </article>
+      `,
+    );
+
+    const promptLibraryRules = document.getElementById("prompt-library-rules");
+    if (promptLibraryRules) {
+      promptLibraryRules.innerHTML = (promptLibrary?.study_rules || [])
+        .map((item) => `<li>${escapeHtml(item)}</li>`)
+        .join("");
+    }
+
+    renderPromptLibrary(
+      "prompt-basic-library",
+      filteredExamples.filter((item) => item.level === "basic"),
+      { favorites },
+    );
+    renderPromptLibrary(
+      "prompt-intermediate-library",
+      filteredExamples.filter((item) => item.level === "intermediate"),
+      { favorites },
+    );
+    renderPromptLibrary(
+      "prompt-advanced-library",
+      filteredExamples.filter((item) => item.level === "advanced"),
+      { favorites },
+    );
   }
 
-  const promptExamples = Array.isArray(promptLibrary?.examples) ? promptLibrary.examples : [];
-  renderPromptLibrary(
-    "prompt-basic-library",
-    promptExamples.filter((item) => item.level === "basic"),
-  );
-  renderPromptLibrary(
-    "prompt-intermediate-library",
-    promptExamples.filter((item) => item.level === "intermediate"),
-  );
-  renderPromptLibrary(
-    "prompt-advanced-library",
-    promptExamples.filter((item) => item.level === "advanced"),
-  );
+  renderPromptProductization(promptLibrary, promptBuilder, promptProductization, renderPromptCatalog);
 
   renderCards(
     "prompts-anatomy",
@@ -3276,6 +3771,7 @@ async function init() {
       promptBuilder,
       promptProviderOverlays,
       promptQualityLab,
+      promptProductization,
       matrixGuide,
       matrixArtifact,
       journeyGuide,
@@ -3290,7 +3786,15 @@ async function init() {
     const renderers = {
       home: () => renderHome(portal, overview, artifacts),
       jornada: () => renderJourney(journeyGuide),
-      prompts: () => renderPrompts(promptsGuide, promptLibrary, promptBuilder, promptProviderOverlays, promptQualityLab),
+      prompts: () =>
+        renderPrompts(
+          promptsGuide,
+          promptLibrary,
+          promptBuilder,
+          promptProviderOverlays,
+          promptQualityLab,
+          promptProductization,
+        ),
       matriz: () => renderMatrix(portal, overview, artifacts, matrixGuide, matrixArtifact),
       workflows: () => renderWorkflows(portal, overview, workflowsGuide),
       rag: () => renderRag(portal, ragGuide, releaseManifest),

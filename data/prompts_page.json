@@ -24,9 +24,9 @@
     {
       "badge": "Fase atual",
       "status_class": "status-done",
-      "title": "Prompt Studio fase 5",
-      "body": "Builder + overlays + laboratorio de qualidade",
-      "note": "A aba agora nao so monta e adapta prompts por fornecedor: ela tambem ensina como avaliar rubrica, robustez, antes e depois e checklist por caso de uso."
+      "title": "Prompt Studio fase 6",
+      "body": "Builder + qualidade + colecoes future-ready",
+      "note": "A aba agora combina builder, overlays, laboratorio de qualidade, trilhas de produto, favoritos locais e arquitetura pronta para packs futuros."
     }
   ],
   "maturity_levels": [
@@ -260,29 +260,29 @@
     }
   ],
   "phase_boundary": [
-    "Esta fase ja entrega builder com contexto do usuario, prompt final montado em tempo real, overlays por fornecedor e laboratorio de qualidade em cima do estado atual do prompt.",
+    "Esta fase ja entrega builder com contexto do usuario, prompt final montado em tempo real, overlays por fornecedor, laboratorio de qualidade e camada de produto future-ready.",
     "A comparacao principal cobre OpenAI, Anthropic, Google e xAI com base nas docs oficiais mais uteis para a trilha do portal.",
-    "O laboratorio ensina rubrica, antes e depois, testes de robustez e checklist por caso de uso.",
-    "Arquitetura premium e productizacao futura entram na Fase 6."
+    "A pagina agora diferencia nucleo livre, trilhas escalaveis, favoritos locais e packs futuros sem quebrar a experiencia didatica.",
+    "Os proximos ciclos deixam de ser uma fase fechada e passam a ser expansoes continuas de colecoes, packs e casos proprietarios."
   ],
   "next_steps": [
     {
-      "badge": "Depois desta fase",
+      "badge": "Ciclo continuo",
       "status_class": "status-next",
-      "title": "Preparar productizacao futura",
-      "description": "A proxima entrega mais valiosa agora e organizar a arquitetura para camada premium, favoritos, trilhas exclusivas e crescimento sem retrabalho."
+      "title": "Adicionar packs por nicho",
+      "description": "A proxima alavanca mais valiosa agora e publicar colecoes especializadas por contexto, vertical e operacao sem refazer a pagina."
     },
     {
-      "badge": "Depois desta fase",
+      "badge": "Ciclo continuo",
       "status_class": "status-next",
-      "title": "Abrir camadas proprietarias",
-      "description": "Com builder, overlays e laboratorio prontos, o portal fica preparado para templates proprietarios, estudos de caso por nicho e trilhas vendaveis."
+      "title": "Sincronizar favoritos e progresso",
+      "description": "Com a base local pronta, o proximo salto e levar favoritos, trilhas e historico para uma camada autenticada e sincronizada."
     },
     {
-      "badge": "Depois desta fase",
+      "badge": "Ciclo continuo",
       "status_class": "status-next",
-      "title": "Conectar qualidade a evolucao continua",
-      "description": "O passo seguinte e deixar a camada de produto pronta para adicionar novas rubricas, novos templates e novas trilhas sem reescrever a pagina."
+      "title": "Expandir casos proprietarios",
+      "description": "O shell agora suporta estudos de caso por nicho, trilhas premium e curadoria editorial mais profunda sem reescrever a UX principal."
     }
   ]
 }

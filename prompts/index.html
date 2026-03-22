@@ -30,6 +30,7 @@
               <div class="hero-actions">
                 <a class="button" href="#builder">Abrir builder</a>
                 <a class="button secondary" href="#quality-lab">Auditar qualidade</a>
+                <a class="button secondary" href="#productization">Ver colecoes</a>
                 <a class="button secondary" href="#provider-overlays">Ver overlays</a>
                 <a class="button secondary" href="../jornada/">Ver Jornada</a>
                 <a class="button secondary" href="../matriz/">Cruzar com Matriz</a>
@@ -37,12 +38,12 @@
               </div>
             </div>
             <aside class="callout-panel">
-              <span class="eyebrow">Tese da fase 5</span>
-              <h3>Prompt bom nao e arte final: e ciclo de avaliacao e iteracao.</h3>
+              <span class="eyebrow">Tese da fase 6</span>
+              <h3>Prompt Studio agora vira produto future-ready, sem perder a alma didatica.</h3>
               <p>
-                Esta fase transforma o Prompt Studio em um laboratorio de
-                qualidade, com rubrica, antes e depois, testes de robustez e
-                checklist por caso de uso para ensinar iteracao profissional.
+                Esta fase separa camadas de acesso, organiza trilhas, cria um
+                workspace pessoal com favoritos locais e prepara a arquitetura
+                para packs proprietarios, casos por nicho e monetizacao futura.
               </p>
             </aside>
           </section>
@@ -129,6 +130,9 @@
                     <span class="status-badge status-done" id="prompt-builder-level"></span>
                     <span class="status-badge status-next" id="prompt-builder-mode-badge"></span>
                   </div>
+                </div>
+                <div class="builder-preview-actions">
+                  <button class="button secondary" type="button" id="prompt-builder-save-template">Salvar template</button>
                 </div>
 
                 <div class="data-panel prompt-formula-panel builder-preview-shell">
@@ -278,6 +282,85 @@
                 <div class="cards-grid cards-grid-2" id="prompt-quality-stress-tests"></div>
               </aside>
             </div>
+          </section>
+
+          <section class="section" id="productization">
+            <div class="section-header">
+              <span class="eyebrow">Arquitetura de produto</span>
+              <h2>Transforme estudo em biblioteca, colecao e produto escalavel</h2>
+              <p>
+                Esta camada organiza o Prompt Studio para crescer sem retrabalho:
+                separa o que esta livre agora, mostra o que pode virar premium,
+                cria trilhas por objetivo e adiciona um workspace pessoal com
+                favoritos locais para estudo recorrente.
+              </p>
+            </div>
+            <div class="metric-grid" id="prompt-product-overview"></div>
+            <div class="productization-shell">
+              <section class="builder-panel productization-panel">
+                <div class="section-header compact-section-header">
+                  <span class="eyebrow">Camadas de acesso</span>
+                  <h3>O que esta aberto hoje e o que pode evoluir amanha</h3>
+                  <p>
+                    O conteudo continua aberto para estudo, mas a arquitetura da
+                    pagina ja diferencia com clareza o nucleo publico do que pode
+                    virar pack proprietario, trilha premium ou caso de nicho.
+                  </p>
+                </div>
+                <div class="cards-grid cards-grid-3" id="prompt-product-access"></div>
+
+                <div class="section-header compact-section-header">
+                  <span class="eyebrow">Trilhas e colecoes</span>
+                  <h3>Filtre a biblioteca pela jornada que voce quer dominar</h3>
+                  <p>
+                    Escolha uma trilha para reorganizar a biblioteca, destacar os
+                    templates mais relevantes e gerar uma leitura mais productizada
+                    do acervo.
+                  </p>
+                </div>
+                <div class="builder-mode-group product-track-switcher" id="prompt-product-track-switcher"></div>
+                <div class="cards-grid cards-grid-2" id="prompt-product-tracks"></div>
+              </section>
+
+              <aside class="builder-preview-panel productization-workspace">
+                <div class="builder-preview-head">
+                  <div>
+                    <span class="eyebrow">Meu workspace</span>
+                    <h3 id="prompt-workspace-title">Favoritos e trilha ativa</h3>
+                    <p class="metric-note" id="prompt-workspace-summary"></p>
+                  </div>
+                </div>
+                <div class="metric-grid" id="prompt-favorites-summary"></div>
+                <div class="cards-grid cards-grid-2" id="prompt-favorites-list"></div>
+                <div class="prompt-decision-block">
+                  <strong>Regras do workspace</strong>
+                  <ul class="resource-list" id="prompt-workspace-rules"></ul>
+                </div>
+              </aside>
+            </div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Pronto para monetizar</span>
+                <h2>Modulos futuros e packs por nicho sem reescrever a pagina</h2>
+                <p>
+                  A pagina agora pode crescer por contratos de dados: novos
+                  templates, packs proprietarios, estudos de caso e trilhas
+                  exclusivas entram por configuracao, sem desmontar a UX atual.
+                </p>
+              </div>
+              <div class="cards-grid cards-grid-2" id="prompt-product-future-modules"></div>
+            </div>
+            <aside class="evidence-panel product-principles-panel">
+              <span class="eyebrow">Principios comerciais</span>
+              <div class="cards-grid" id="prompt-product-principles"></div>
+              <div class="prompt-decision-block">
+                <strong>Packs futuros</strong>
+                <div class="cards-grid" id="prompt-product-packs"></div>
+              </div>
+            </aside>
           </section>
 
           <section class="section" id="before-after">
@@ -514,7 +597,7 @@
               <div class="cards-grid cards-grid-2" id="prompts-anti-patterns"></div>
             </div>
             <aside class="evidence-panel">
-              <span class="eyebrow">Limites da fase 5</span>
+              <span class="eyebrow">Limites da fase 6</span>
               <ul class="resource-list" id="prompts-phase-boundary"></ul>
             </aside>
           </section>
@@ -524,9 +607,9 @@
               <span class="eyebrow">Proximas fases</span>
               <h2>O que vem depois deste fundamento</h2>
               <p>
-                Esta fase fecha o ciclo de qualidade de prompt. A proxima
-                entrega mais valiosa agora e preparar a camada de
-                productizacao, premium future-ready e novas trilhas exclusivas.
+                Esta fase fecha o roadmap inicial do Prompt Studio. A partir
+                daqui, o trabalho passa a ser expansao continua de packs,
+                casos por nicho, curadoria proprietaria e melhorias de produto.
               </p>
             </div>
             <div class="cards-grid cards-grid-3" id="prompts-next-steps"></div>

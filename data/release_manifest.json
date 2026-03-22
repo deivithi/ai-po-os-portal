@@ -19,6 +19,7 @@
   ],
   "qa_targets": [
     "/",
+    "/prompts/",
     "/matriz/",
     "/workflows/",
     "/rag/",
@@ -26,6 +27,7 @@
     "/artefatos/",
     "/data/overview.json",
     "/data/portal.json",
-    "/data/artifacts.json"
+    "/data/artifacts.json",
+    "/data/prompt_productization.json"
   ]
 }

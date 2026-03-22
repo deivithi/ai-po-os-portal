@@ -1,0 +1,249 @@
+{
+  "overview": [
+    {
+      "badge": "Fase 6",
+      "status_class": "status-done",
+      "title": "Prompt Studio future-ready",
+      "body": "Produto interno forte hoje, base comercial amanha",
+      "note": "A arquitetura agora separa acervo livre, trilhas escalaveis, workspace pessoal e modulos futuros sem perder a experiencia didatica da pagina."
+    },
+    {
+      "badge": "Camada de valor",
+      "status_class": "status-done",
+      "title": "Colecoes e nichos",
+      "body": "Do geral para packs proprietarios",
+      "note": "A biblioteca deixa de ser apenas uma lista de prompts e passa a operar como trilha, colecao e ponto de entrada para especializacoes por contexto."
+    },
+    {
+      "badge": "Infraestrutura",
+      "status_class": "status-in-progress",
+      "title": "Favoritos e configuracao",
+      "body": "Sem backend agora, sem retrabalho depois",
+      "note": "O workspace pessoal usa persistencia local hoje e abre caminho para uma camada futura com conta, sync, favoritos na nuvem e analytics de estudo."
+    }
+  ],
+  "access_layers": [
+    {
+      "badge": "Livre agora",
+      "status_class": "status-done",
+      "title": "Nucleo aberto do portal",
+      "description": "Fundamentos, builder, overlays, laboratorio de qualidade e biblioteca base continuam abertos para estudo e operacao.",
+      "points": [
+        "Acervo central para aprender prompting com criterio.",
+        "Ferramentas didaticas para iteracao, comparacao e filtro.",
+        "Base suficiente para estudo serio e uso recorrente."
+      ]
+    },
+    {
+      "badge": "Premium futuro",
+      "status_class": "status-in-progress",
+      "title": "Trilhas proprietarias e packs guiados",
+      "description": "Camada futura para colecoes mais profundas, templates premium, casos curados e rotinas de estudo proprietarias.",
+      "points": [
+        "Packs por nicho com casos reais e notas de implementacao.",
+        "Sequencias de estudo fechadas por objetivo.",
+        "Templates exclusivos com curadoria editorial."
+      ]
+    },
+    {
+      "badge": "Nicho/enterprise",
+      "status_class": "status-next",
+      "title": "Contextos especializados",
+      "description": "Espaco para Salesforce PO, operacao comercial, auditoria de leads, requisitos e sistemas com governanca.",
+      "points": [
+        "Estudos de caso com linguagem do negocio.",
+        "Pacotes por area funcional ou operacao.",
+        "Material premium mais ligado a execucao real."
+      ]
+    }
+  ],
+  "tracks": [
+    {
+      "id": "all",
+      "label": "Tudo",
+      "status_class": "status-done",
+      "tier": "Livre agora",
+      "title": "Biblioteca completa",
+      "summary": "Mostra o acervo inteiro para leitura ampla, comparacao entre niveis e navegacao sem filtro.",
+      "hours": "12h",
+      "persona": "Quem quer ver o sistema inteiro",
+      "deliverables": [
+        "Mapa completo do acervo",
+        "Comparacao entre niveis de maturidade",
+        "Visao ampla antes da especializacao"
+      ],
+      "template_ids": [
+        "executive-summary",
+        "operational-classifier",
+        "requirements-review",
+        "structured-extraction",
+        "context-gate"
+      ],
+      "example_ids": [
+        "basic-summary",
+        "basic-classification",
+        "intermediate-requirements",
+        "intermediate-json-extraction",
+        "advanced-fewshot-review",
+        "advanced-escalation"
+      ]
+    },
+    {
+      "id": "operator-core",
+      "label": "Operator Core",
+      "status_class": "status-done",
+      "tier": "Livre agora",
+      "title": "Operacao e clareza",
+      "summary": "Trilha para quem precisa sair rapido do improviso e ganhar controle em resumo, classificacao e decisao pratica.",
+      "hours": "6h",
+      "persona": "POs, ops, analistas e lideres que precisam de resposta util para o dia a dia",
+      "deliverables": [
+        "Biblioteca pessoal de prompts operacionais",
+        "Checklist de saida pronta para decisao",
+        "Primeiro caderno de iteracoes reais"
+      ],
+      "template_ids": [
+        "executive-summary",
+        "operational-classifier"
+      ],
+      "example_ids": [
+        "basic-summary",
+        "basic-classification"
+      ]
+    },
+    {
+      "id": "requirements-control",
+      "label": "Requirements Control",
+      "status_class": "status-done",
+      "tier": "Livre agora",
+      "title": "Qualidade, requisito e prontidao",
+      "summary": "Trilha para revisar requisitos, validar completude e transformar analise em status, risco e proxima acao.",
+      "hours": "8h",
+      "persona": "POs, analistas de negocio, squads de homologacao e discovery",
+      "deliverables": [
+        "Kit de prompts para validacao funcional",
+        "Rubrica de revisao por criterio",
+        "Prompt gate para status pronto | incompleto | arriscado"
+      ],
+      "template_ids": [
+        "requirements-review"
+      ],
+      "example_ids": [
+        "intermediate-requirements",
+        "advanced-fewshot-review"
+      ]
+    },
+    {
+      "id": "structured-systems",
+      "label": "Structured Systems",
+      "status_class": "status-in-progress",
+      "tier": "Expansion path",
+      "title": "Output estruturado e integracao",
+      "summary": "Trilha que conecta prompting a schema, extracao, JSON, gates e orquestracao com ferramentas.",
+      "hours": "10h",
+      "persona": "Quem quer levar prompting para automacao, integracoes e sistemas mais previsiveis",
+      "deliverables": [
+        "Kit de extracao estruturada",
+        "Guia de saida integravel e null-safe",
+        "Prompt gates para decidir entre responder, pedir contexto ou escalar"
+      ],
+      "template_ids": [
+        "structured-extraction",
+        "context-gate"
+      ],
+      "example_ids": [
+        "intermediate-json-extraction",
+        "advanced-escalation"
+      ]
+    },
+    {
+      "id": "salesforce-po",
+      "label": "Salesforce PO",
+      "status_class": "status-next",
+      "tier": "Premium futuro",
+      "title": "Cases por nicho de Product Operations",
+      "summary": "Trilha preparada para virar pack proprietario com requisitos Salesforce, auditoria de leads, homologacao e operacao cross-funcional.",
+      "hours": "14h",
+      "persona": "PO Salesforce, operacoes comerciais, squads com governanca e contexto Febracis-like",
+      "deliverables": [
+        "Packs de prompts por operacao",
+        "Casos de uso com linguagem do negocio",
+        "Estudos guiados com contexto real e risco controlado"
+      ],
+      "template_ids": [
+        "requirements-review",
+        "context-gate"
+      ],
+      "example_ids": [
+        "intermediate-requirements",
+        "advanced-escalation"
+      ]
+    }
+  ],
+  "workspace_rules": [
+    "Salve como favorito apenas o que voce realmente reutilizaria ou quer revisar depois.",
+    "Use a trilha ativa para reduzir ruido: estudar tudo ao mesmo tempo diminui retencao.",
+    "Quando um favorito parar de servir, remova. Biblioteca pessoal boa e enxuta e viva.",
+    "Promova para pack futuro apenas o que ja foi iterado, validado e documentado."
+  ],
+  "future_modules": [
+    {
+      "badge": "Modulo futuro",
+      "status_class": "status-in-progress",
+      "title": "Favoritos com sync e perfil",
+      "description": "A persistencia local de hoje prepara uma camada futura com conta, sincronizacao entre dispositivos e historico de estudo."
+    },
+    {
+      "badge": "Modulo futuro",
+      "status_class": "status-in-progress",
+      "title": "Packs proprietarios por nicho",
+      "description": "A mesma pagina pode receber colecoes fechadas por nicho, vertical ou contexto sem refazer a navegacao principal."
+    },
+    {
+      "badge": "Modulo futuro",
+      "status_class": "status-next",
+      "title": "Casos e trilhas premium",
+      "description": "Estudos guiados, casos completos e templates mais densos entram como nova camada de valor sem quebrar o acervo livre."
+    },
+    {
+      "badge": "Modulo futuro",
+      "status_class": "status-next",
+      "title": "Analytics de progresso",
+      "description": "A arquitetura tambem fica pronta para score de estudo, historico de uso e mapas de dominancia por trilha."
+    }
+  ],
+  "product_principles": [
+    {
+      "title": "Didatica antes de paywall",
+      "description": "O valor comercial precisa nascer da profundidade e da curadoria, nao da remocao artificial de clareza."
+    },
+    {
+      "title": "Dados versionaveis",
+      "description": "Novos packs e trilhas entram por contrato de dados, sem reescrever o shell da pagina."
+    },
+    {
+      "title": "Produto sem Frankenstein",
+      "description": "Cada novo modulo precisa respeitar a mesma filosofia visual e pedagogica do Prompt Studio."
+    }
+  ],
+  "premium_packs": [
+    {
+      "badge": "Pack futuro",
+      "status_class": "status-next",
+      "title": "Salesforce PO Operating System",
+      "description": "Prompts, gates e casos focados em requisitos, homologacao, auditoria e operacao com governanca."
+    },
+    {
+      "badge": "Pack futuro",
+      "status_class": "status-next",
+      "title": "RAG + Context Systems",
+      "description": "Colecao focada em grounding, citacao, contexto longo, retrieval e desenho de respostas verificaveis."
+    },
+    {
+      "badge": "Pack futuro",
+      "status_class": "status-next",
+      "title": "Executivo e Comercial",
+      "description": "Biblioteca para sintese executiva, decisao assistida, scorecards e leitura orientada a negocio."
+    }
+  ]
+}
