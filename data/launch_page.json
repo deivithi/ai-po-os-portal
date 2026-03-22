@@ -1,0 +1,197 @@
+{
+  "study_steps": [
+    "Use esta rota para enxergar o portal como produto: o que ja esta forte, o que cabe em demo e o que ainda e proxima onda.",
+    "Leia a parte de fechamento premium junto com Analytics e Roadmap para nao separar percepcao de produto da realidade de uso.",
+    "Saia desta pagina com uma decisao clara: o que lancar agora, o que consolidar e qual feature puxa a proxima iteracao."
+  ],
+  "orientation": [
+    {
+      "badge": "Nova frente",
+      "status_class": "status-done",
+      "title": "Fechamento premium do sistema",
+      "body": "O portal agora se apresenta como produto e nao apenas como acervo",
+      "note": "Esta camada organiza a leitura de launch-ready, premium orbit e proxima onda sem perder a didatica."
+    },
+    {
+      "badge": "O que importa",
+      "status_class": "status-done",
+      "title": "Clareza de lancamento",
+      "body": "O usuario precisa entender o que ja pode ser mostrado, vendido ou distribuido",
+      "note": "Sem isso, o portal fica forte por dentro, mas fraco como produto externo."
+    },
+    {
+      "badge": "Regra",
+      "status_class": "status-done",
+      "title": "Premium sem virar ruido",
+      "body": "Empacotamento precisa aumentar valor percebido sem quebrar a experiencia de estudo",
+      "note": "A camada premium aqui funciona como organizacao de valor, nao como artificio visual."
+    },
+    {
+      "badge": "Resultado esperado",
+      "status_class": "status-in-progress",
+      "title": "Saber o que lancar agora e o que entra na fila curta",
+      "body": "Cada iteracao precisa sair com um release candidate claro",
+      "note": "Se a proxima onda continua abstrata, o fechamento premium ainda nao cumpriu o papel."
+    }
+  ],
+  "product_rules": [
+    {
+      "badge": "Tese central",
+      "status_class": "status-done",
+      "title": "Produto de estudo que gera criterio, nao so conteudo",
+      "description": "Tudo o que entra aqui precisa reduzir ambiguidade, acelerar decisao e deixar uma proxima acao melhor."
+    },
+    {
+      "badge": "Release",
+      "status_class": "status-done",
+      "title": "Launch-ready precisa ter prova",
+      "description": "Se uma feature nao tem narrativa, CTA, beneficio claro e validacao funcional, ela ainda e backlog, nao lancamento."
+    },
+    {
+      "badge": "Premium",
+      "status_class": "status-done",
+      "title": "Camada premium e organizacao de valor",
+      "description": "O sistema premium precisa nascer de empacotamento inteligente, nao de bloqueio artificial do que hoje ensina melhor."
+    }
+  ],
+  "launch_ready": [
+    {
+      "badge": "Launch-ready",
+      "status_class": "status-done",
+      "title": "Guia + Jornada + Trilha",
+      "description": "Ja existe onboarding, metodo, plano adaptativo e criterio de estudo suficiente para demonstracao forte.",
+      "proof": "A pessoa entra, entende por onde comecar e sai com plano por horas e objetivo.",
+      "buttons": [
+        { "label": "Abrir Guia", "href": "/guia/", "variant": "secondary" },
+        { "label": "Abrir Trilha", "href": "/trilha/", "variant": "secondary" }
+      ]
+    },
+    {
+      "badge": "Launch-ready",
+      "status_class": "status-done",
+      "title": "Prompt Studio",
+      "description": "Fundamentos, builder, overlays por fornecedor, laboratorio de qualidade e camada de produto ja estao coesos.",
+      "proof": "Existe fluxo claro do estudo para operacao, com estrutura, exemplos e criterios de qualidade.",
+      "buttons": [
+        { "label": "Abrir Prompts", "href": "/prompts/", "variant": "secondary" }
+      ]
+    },
+    {
+      "badge": "Launch-ready",
+      "status_class": "status-done",
+      "title": "Labs + Progresso + Analytics",
+      "description": "O portal ja fecha o ciclo de pratica, checkpoint e leitura adaptativa com recomendacao automatica.",
+      "proof": "Ja existe valor concreto para quem quer estudar, executar e saber a proxima missao sem chute.",
+      "buttons": [
+        { "label": "Abrir Labs", "href": "/labs/", "variant": "secondary" },
+        { "label": "Abrir Analytics", "href": "/analytics/", "variant": "secondary" }
+      ]
+    },
+    {
+      "badge": "Launch-ready",
+      "status_class": "status-done",
+      "title": "Camada Senior",
+      "description": "Evals, memoria, agents/MCP e producao ja aparecem como frente diferenciadora de maturidade aplicada.",
+      "proof": "A plataforma nao para no prompting; ela sobe para criterio operacional e arquitetura de sistema.",
+      "buttons": [
+        { "label": "Abrir Senior", "href": "/senior/", "variant": "secondary" }
+      ]
+    }
+  ],
+  "next_wave": [
+    {
+      "id": "session-of-today",
+      "badge": "Launch rapido",
+      "status_class": "status-done",
+      "title": "Sessao de hoje inteligente",
+      "description": "Uma entrada ultra-rapida que monta a sessao do dia com base em horas, progresso, analytics e contexto atual.",
+      "why_now": "A base adaptativa ja existe. Falta so empacotar a experiencia como atalho premium de uso diario.",
+      "buttons": [
+        { "label": "Abrir Analytics", "href": "/analytics/", "variant": "secondary" },
+        { "label": "Abrir Guia", "href": "/guia/", "variant": "ghost" }
+      ]
+    },
+    {
+      "id": "capstone-hub",
+      "badge": "Fila curta",
+      "status_class": "status-in-progress",
+      "title": "Capstone Hub demonstravel",
+      "description": "Uma rota propria para consolidar mini demos, criterio de aceite, evidencias e showcase final do sistema.",
+      "why_now": "Capstone ja aparece na Trilha, Labs, Journey e Analytics. O que falta e uma camada publica dedicada.",
+      "buttons": [
+        { "label": "Abrir Trilha", "href": "/trilha/", "variant": "secondary" },
+        { "label": "Abrir Labs", "href": "/labs/", "variant": "ghost" }
+      ]
+    },
+    {
+      "id": "persona-packs",
+      "badge": "Fila curta",
+      "status_class": "status-in-progress",
+      "title": "Packs por persona e contexto",
+      "description": "Colecoes especializadas para PO, operacao, growth, lideranca e casos Febracis mais recorrentes.",
+      "why_now": "O Prompt Studio e o Guia ja suportam segmentacao. Falta transformar isso em empacotamento evidente.",
+      "buttons": [
+        { "label": "Abrir Prompts", "href": "/prompts/", "variant": "secondary" }
+      ]
+    },
+    {
+      "id": "review-refresh",
+      "badge": "Upgrade estrutural",
+      "status_class": "status-next",
+      "title": "Refresh tecnico das rotas em revisao",
+      "description": "Recalibrar Matriz, Workflows, RAG e Roadmap para reduzir qualquer diferenca entre pagina forte e pagina ainda em revisao.",
+      "why_now": "Isso nao e nova feature de marketing, mas aumenta muito a forca do produto como sistema confiavel.",
+      "buttons": [
+        { "label": "Abrir Roadmap", "href": "/roadmap/", "variant": "secondary" }
+      ]
+    }
+  ],
+  "packaging_options": [
+    {
+      "badge": "Nucleo aberto",
+      "status_class": "status-done",
+      "title": "Portal publico de estudo",
+      "description": "Mantem Home, Guia, Jornada, Trilha, Labs, Analytics, Prompts e Senior como espinha dorsal de valor aberto.",
+      "audience": "Entrada, demonstracao, autoridade e onboarding.",
+      "includes": [
+        "Mapa do sistema",
+        "Trilha adaptativa",
+        "Prompt Studio",
+        "Labs e checkpoints"
+      ]
+    },
+    {
+      "badge": "Premium natural",
+      "status_class": "status-in-progress",
+      "title": "Packs e trilhas curadas",
+      "description": "Camada proprietaria com casos por persona, colecoes aprofundadas e sequencias mais ligadas a execucao real.",
+      "audience": "Quem quer acelerar sem montar tudo do zero.",
+      "includes": [
+        "Trilhas por contexto",
+        "Casos por persona",
+        "Templates premium",
+        "Rotinas proprietarias"
+      ]
+    },
+    {
+      "badge": "Oferta rara",
+      "status_class": "status-next",
+      "title": "Capstone e sistema demonstravel",
+      "description": "Camada para mostrar aplicacao ponta a ponta com criterio, risco, evidencias e narrativa de produto.",
+      "audience": "Venda, showcase, credibilidade e fechamento de autoridade.",
+      "includes": [
+        "Hub de capstone",
+        "Mini demos",
+        "Checklist de maturidade",
+        "Narrativa executiva"
+      ]
+    }
+  ],
+  "launch_checklist": [
+    "Cada camada precisa responder com clareza: para quem e, o que resolve e qual transformacao entrega.",
+    "Toda feature launch-ready precisa ter CTA, rota, prova funcional e texto que qualquer pessoa entenda rapido.",
+    "O fechamento premium precisa reforcar valor percebido sem esconder a parte didatica que torna o sistema forte.",
+    "Toda proxima wave precisa sair desta pagina com status explicito: launch rapido, fila curta ou upgrade estrutural.",
+    "Nao lancar feature so porque existe tecnicamente; lancar quando a narrativa, o uso e a validacao estiverem alinhados."
+  ]
+}

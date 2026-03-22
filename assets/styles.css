@@ -888,6 +888,19 @@ a {
   margin-top: 18px;
 }
 
+.launch-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.launch-highlight-card {
+  border-color: rgba(98, 208, 179, 0.44);
+  box-shadow: 0 28px 70px rgba(14, 26, 34, 0.42);
+  background:
+    radial-gradient(circle at top right, rgba(98, 208, 179, 0.12), transparent 42%),
+    rgba(8, 21, 32, 0.82);
+}
+
 .adaptive-continuation-card {
   opacity: 0.96;
 }

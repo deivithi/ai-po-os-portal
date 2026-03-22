@@ -18,6 +18,7 @@
   labsGuide: "/data/labs_page.json",
   analyticsGuide: "/data/analytics_page.json",
   analyticsRules: "/data/analytics_rules.json",
+  launchGuide: "/data/launch_page.json",
   journeyGuide: "/data/journey_page.json",
   trilhaGuide: "/data/trilha_page.json",
   progressGuide: "/data/progress_page.json",
@@ -46,6 +47,18 @@ const PAGE_DATA_KEYS = {
     "vendorSources",
     "freshnessStatus",
   ],
+  lancamentos: [
+    "launchGuide",
+    "analyticsGuide",
+    "analyticsRules",
+    "labsGuide",
+    "progressGuide",
+    "studyUnits",
+    "learningPathTemplates",
+    "adaptivePathRules",
+    "guideGuide",
+    "freshnessStatus",
+  ],
   jornada: ["journeyGuide", "freshnessStatus"],
   trilha: ["trilhaGuide", "studyUnits", "learningPathTemplates", "adaptivePathRules", "vendorSources", "freshnessStatus"],
   progresso: ["progressGuide", "studyUnits", "learningPathTemplates", "adaptivePathRules", "vendorSources", "freshnessStatus"],
@@ -62,7 +75,8 @@ const PREFETCH_ROUTE_MAP = {
   home: ["/guia/", "/trilha/", "/analytics/"],
   guia: ["/trilha/", "/analytics/", "/labs/"],
   labs: ["/analytics/", "/progresso/", "/senior/"],
-  analytics: ["/trilha/", "/progresso/", "/labs/"],
+  analytics: ["/lancamentos/", "/trilha/", "/progresso/"],
+  lancamentos: ["/analytics/", "/roadmap/", "/prompts/"],
   trilha: ["/analytics/", "/progresso/", "/prompts/"],
   progresso: ["/analytics/", "/trilha/", "/roadmap/"],
   jornada: ["/prompts/", "/matriz/", "/rag/"],
@@ -71,7 +85,7 @@ const PREFETCH_ROUTE_MAP = {
   rag: ["/workflows/", "/senior/", "/roadmap/"],
   workflows: ["/senior/", "/roadmap/", "/artefatos/"],
   senior: ["/roadmap/", "/artefatos/", "/trilha/"],
-  roadmap: ["/guia/", "/trilha/", "/progresso/"],
+  roadmap: ["/lancamentos/", "/analytics/", "/guia/"],
   artefatos: ["/trilha/", "/prompts/", "/matriz/"],
 };
 
@@ -178,6 +192,22 @@ function formatNumber(value, digits = 3) {
 function formatPercent(value) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? `${Math.round(parsed * 100)}%` : "n/a";
+}
+
+function downloadJsonFile(filename, payload) {
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {
+    type: "application/json;charset=utf-8",
+  });
+  const objectUrl = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = objectUrl;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => {
+    URL.revokeObjectURL(objectUrl);
+  }, 0);
 }
 
 function formatShortDate(value) {
@@ -3796,6 +3826,346 @@ function buildAnalyticsSessionCards(analyticsGuide, snapshot) {
       blocks,
       button: action,
     };
+  });
+}
+
+function resolveLaunchCandidate(launchGuide, progressSnapshot, analyticsSnapshot, freshnessStatus, favorites) {
+  const candidates = launchGuide?.next_wave || [];
+  const routeCoverage = analyticsSnapshot.route_insights.filter(
+    (route) => route.views > 0 || route.interactions > 0 || route.active_minutes >= 0.5,
+  ).length;
+  const totalFavorites = Number(favorites?.templates?.length || 0) + Number(favorites?.examples?.length || 0);
+  const reviewPages = (freshnessStatus?.pages || []).filter((page) => page.status_class !== "status-done").length;
+
+  let recommendedId = "session-of-today";
+
+  if (progressSnapshot.coverageRatio >= 0.55 || analyticsSnapshot.totals.total_labs_focused >= 3) {
+    recommendedId = "capstone-hub";
+  } else if (totalFavorites >= 2 || (analyticsSnapshot.analytics_state?.page_views?.prompts || 0) > 0) {
+    recommendedId = "persona-packs";
+  } else if (routeCoverage >= 5 && reviewPages > 0) {
+    recommendedId = "review-refresh";
+  }
+
+  return {
+    routeCoverage,
+    totalFavorites,
+    reviewPages,
+    recommended: candidates.find((candidate) => candidate.id === recommendedId) || candidates[0] || null,
+  };
+}
+
+function buildLaunchSummaryText(portal, snapshot) {
+  const whyNow = String(snapshot.candidate?.why_now || "ele concentra a maior alavanca atual do sistema").replace(/[.]+$/u, "");
+  return [
+    `${portal?.site?.title || "O portal"} ja tem ${snapshot.readyCount} camada(s) launch-ready com narrativa clara e CTA funcional.`,
+    `Hoje existem ${snapshot.routeCoverage} rota(s) com uso real local, ${snapshot.progressSnapshot.masteredUnits.length} unidade(s) dominada(s) e ${snapshot.evidenceCount} sinal(is) combinados de evidencia local.`,
+    `O melhor proximo release agora e ${snapshot.candidate?.title || "a proxima feature"} porque ${whyNow}.`,
+  ].join(" ");
+}
+
+function buildLaunchSnapshot(
+  portal,
+  launchGuide,
+  analyticsRules,
+  studyUnits,
+  learningPathTemplates,
+  adaptivePathRules,
+  labsGuide,
+  progressGuide,
+  freshnessStatus,
+) {
+  const preferences = loadAdaptivePathPreferences();
+  const progressState = loadStudyProgressState();
+  const favorites = loadPromptFavorites();
+  const progressSnapshot = buildProgressSnapshot(
+    progressGuide,
+    studyUnits,
+    learningPathTemplates,
+    adaptivePathRules,
+    [],
+    preferences,
+    progressState,
+  );
+  const analyticsSnapshot = buildAnalyticsSnapshot(
+    analyticsRules,
+    studyUnits,
+    learningPathTemplates,
+    adaptivePathRules,
+    labsGuide,
+    progressGuide,
+    [],
+  );
+  const candidateMeta = resolveLaunchCandidate(
+    launchGuide,
+    progressSnapshot,
+    analyticsSnapshot,
+    freshnessStatus,
+    favorites,
+  );
+  const readyCount = (launchGuide?.launch_ready || []).length;
+  const evidenceCount =
+    analyticsSnapshot.totals.total_progress_updates +
+    analyticsSnapshot.totals.total_labs_focused +
+    candidateMeta.totalFavorites;
+  const maturityScore = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        readyCount * 10 +
+          candidateMeta.routeCoverage * 6 +
+          progressSnapshot.masteredUnits.length * 8 +
+          evidenceCount * 3 -
+          candidateMeta.reviewPages * 4,
+      ),
+    ),
+  );
+  const nextWave = (launchGuide?.next_wave || []).map((item) => {
+    const isRecommended = item.id === candidateMeta.recommended?.id;
+    return {
+      ...item,
+      recommended: isRecommended,
+      status_class: isRecommended ? "status-done" : item.status_class,
+      badge: isRecommended ? "Melhor proximo release" : item.badge,
+    };
+  });
+  const summaryText = buildLaunchSummaryText(portal, {
+    readyCount,
+    routeCoverage: candidateMeta.routeCoverage,
+    progressSnapshot,
+    evidenceCount,
+    candidate: candidateMeta.recommended,
+  });
+
+  return {
+    preferences,
+    favorites,
+    progressSnapshot,
+    analyticsSnapshot,
+    readyCount,
+    routeCoverage: candidateMeta.routeCoverage,
+    reviewPages: candidateMeta.reviewPages,
+    evidenceCount,
+    maturityScore,
+    candidate: candidateMeta.recommended,
+    nextWave,
+    summaryText,
+    exportPayload: {
+      exported_on: new Date().toISOString(),
+      portal_phase: portal?.site?.phase_focus || "",
+      next_phase: portal?.site?.next_phase || "",
+      readiness: {
+        launch_ready_count: readyCount,
+        route_coverage: candidateMeta.routeCoverage,
+        review_pages: candidateMeta.reviewPages,
+        maturity_score: maturityScore,
+      },
+      preferences,
+      favorites,
+      progress: {
+        coverage_ratio: progressSnapshot.coverageRatio,
+        mastered_units: progressSnapshot.masteredUnits.length,
+        checkpoint_units: progressSnapshot.checkpointUnits.length,
+        blocked_units: progressSnapshot.blockedUnits.length,
+        next_priority_unit: progressSnapshot.nextPriorityUnit?.title || "",
+      },
+      analytics: {
+        total_views: analyticsSnapshot.totals.total_views,
+        total_active_minutes: analyticsSnapshot.totals.total_active_minutes,
+        total_route_interactions: analyticsSnapshot.totals.total_route_interactions,
+        total_labs_focused: analyticsSnapshot.totals.total_labs_focused,
+        total_progress_updates: analyticsSnapshot.totals.total_progress_updates,
+      },
+      recommended_release: candidateMeta.recommended,
+      launch_summary: summaryText,
+    },
+  };
+}
+
+function renderLaunches(
+  portal,
+  launchGuide,
+  analyticsRules,
+  studyUnits,
+  learningPathTemplates,
+  adaptivePathRules,
+  labsGuide,
+  progressGuide,
+  freshnessStatus,
+) {
+  renderCards(
+    "launch-orientation",
+    launchGuide.orientation || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  const studySteps = document.getElementById("launch-study-steps");
+  if (studySteps) {
+    studySteps.innerHTML = (launchGuide.study_steps || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  renderCards(
+    "launch-product-rules",
+    launchGuide.product_rules || [],
+    (item) => `
+      <article class="study-card compact-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "launch-ready-board",
+    launchGuide.launch_ready || [],
+    (item) => `
+      <article class="artifact-card launch-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <p class="metric-note"><strong>Prova:</strong> ${escapeHtml(item.proof)}</p>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  const snapshot = buildLaunchSnapshot(
+    portal,
+    launchGuide,
+    analyticsRules,
+    studyUnits,
+    learningPathTemplates,
+    adaptivePathRules,
+    labsGuide,
+    progressGuide,
+    freshnessStatus,
+  );
+
+  renderCards(
+    "launch-summary",
+    [
+      {
+        badge: "Camadas prontas",
+        status_class: "status-done",
+        title: `${snapshot.readyCount} launch-ready`,
+        body: "Blocos com narrativa, CTA e prova funcional.",
+        note: "Essas camadas ja sustentam demo, onboarding ou distribuicao sem parecer rascunho.",
+      },
+      {
+        badge: "Cobertura real",
+        status_class: snapshot.routeCoverage >= 5 ? "status-done" : "status-in-progress",
+        title: `${snapshot.routeCoverage} rotas com uso`,
+        body: `${formatNumber(snapshot.analyticsSnapshot.totals.total_active_minutes, 1)} min ativos`,
+        note: "A leitura premium fica mais forte quando o produto ja tem uso local consistente.",
+      },
+      {
+        badge: "Evidencias locais",
+        status_class: snapshot.evidenceCount >= 4 ? "status-done" : "status-in-progress",
+        title: `${snapshot.evidenceCount} sinais`,
+        body: `${snapshot.progressSnapshot.masteredUnits.length} unidade(s) dominada(s)`,
+        note: "Aqui entram progresso, labs focados e favoritos do Prompt Studio.",
+      },
+      {
+        badge: "Melhor proximo release",
+        status_class: "status-done",
+        title: snapshot.candidate?.title || "Definindo proximo release",
+        body: `Maturidade atual: ${snapshot.maturityScore}%`,
+        note: snapshot.candidate?.why_now || "A proxima onda sera definida a partir do uso e do roadmap.",
+      },
+    ],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  const launchStoryTitle = document.getElementById("launch-story-title");
+  if (launchStoryTitle) {
+    launchStoryTitle.textContent = snapshot.candidate?.title || "Produto pronto para refinamento final";
+  }
+
+  const launchStoryBody = document.getElementById("launch-story-body");
+  if (launchStoryBody) {
+    launchStoryBody.textContent = snapshot.summaryText;
+  }
+
+  renderCards(
+    "launch-next-wave",
+    snapshot.nextWave,
+    (item) => `
+      <article class="workflow-card launch-card ${item.recommended ? "launch-highlight-card" : ""}">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <p class="metric-note">${escapeHtml(item.why_now)}</p>
+        ${renderButtonList(item.buttons || [])}
+      </article>
+    `,
+  );
+
+  renderCards(
+    "launch-packaging",
+    launchGuide.packaging_options || [],
+    (item) => `
+      <article class="phase-card launch-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <p class="timeline-kicker">${escapeHtml(item.audience)}</p>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="timeline-copy">${escapeHtml(item.description)}</p>
+        <ul class="summary-list">
+          ${(item.includes || []).map((entry) => `<li>${escapeHtml(entry)}</li>`).join("")}
+        </ul>
+      </article>
+    `,
+  );
+
+  const checklist = document.getElementById("launch-checklist");
+  if (checklist) {
+    checklist.innerHTML = (launchGuide.launch_checklist || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  const feedback = document.getElementById("launch-feedback");
+  let feedbackTimer = null;
+
+  function setFeedback(message) {
+    if (!feedback) {
+      return;
+    }
+    feedback.textContent = message;
+    if (feedbackTimer) {
+      window.clearTimeout(feedbackTimer);
+    }
+    feedbackTimer = window.setTimeout(() => {
+      feedback.textContent = "";
+    }, 2600);
+  }
+
+  document.getElementById("launch-export")?.addEventListener("click", () => {
+    const fileName = `ai-po-os-launch-dossie-${todayIsoDate()}.json`;
+    downloadJsonFile(fileName, snapshot.exportPayload);
+    setFeedback("Dossie exportado.");
+  });
+
+  document.getElementById("launch-copy")?.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(snapshot.summaryText);
+      setFeedback("Resumo copiado.");
+    } catch (_error) {
+      setFeedback("Nao foi possivel copiar automaticamente.");
+    }
   });
 }
 
@@ -7678,6 +8048,7 @@ async function init() {
       labsGuide,
       analyticsGuide,
       analyticsRules,
+      launchGuide,
       journeyGuide,
       trilhaGuide,
       progressGuide,
@@ -7708,6 +8079,18 @@ async function init() {
           labsGuide,
           progressGuide,
           vendorSources,
+        ),
+      lancamentos: () =>
+        renderLaunches(
+          portal,
+          launchGuide,
+          analyticsRules,
+          studyUnits,
+          learningPathTemplates,
+          adaptivePathRules,
+          labsGuide,
+          progressGuide,
+          freshnessStatus,
         ),
       jornada: () => renderJourney(journeyGuide),
       trilha: () => renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),

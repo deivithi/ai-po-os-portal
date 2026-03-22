@@ -32,6 +32,16 @@
       "next_step": "Refinar as heuristicas por uso real e preparar product metrics sem perder a camada didatica."
     },
     {
+      "domain": "Productizacao e lancamentos",
+      "coverage_label": "Coberto forte",
+      "status_class": "status-done",
+      "summary": "A nova rota Lancamentos transforma o portal em leitura de produto, deixa visivel o que ja esta launch-ready e organiza a proxima onda de features.",
+      "route_label": "Lancamentos",
+      "href": "/lancamentos/",
+      "action_label": "Abrir Lancamentos",
+      "next_step": "Transformar a proxima onda em releases curtos: sessao de hoje, capstone hub e packs por persona."
+    },
+    {
       "domain": "Modelos e lineup",
       "coverage_label": "Coberto forte",
       "status_class": "status-done",

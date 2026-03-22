@@ -47,6 +47,10 @@
     {
       "title": "Analytics local e recomendacao adaptativa",
       "description": "Sempre que a plataforma sugerir a proxima missao, a pagina precisa deixar claro que sinais foram lidos, como a recomendacao foi montada e como recalcular ou limpar a leitura local."
+    },
+    {
+      "title": "Fechamento premium e features launch-ready",
+      "description": "Sempre que o portal se apresentar como produto, a pagina precisa mostrar o que ja esta pronto para lancar, o que entra na fila curta e quais acoes de exportar ou compartilhar realmente funcionam."
     }
   ],
   "qa_targets": [
@@ -54,6 +58,7 @@
     "/guia/",
     "/labs/",
     "/analytics/",
+    "/lancamentos/",
     "/jornada/",
     "/trilha/",
     "/progresso/",
@@ -82,6 +87,7 @@
     "/data/guide_page.json",
     "/data/labs_page.json",
     "/data/analytics_page.json",
-    "/data/analytics_rules.json"
+    "/data/analytics_rules.json",
+    "/data/launch_page.json"
   ]
 }

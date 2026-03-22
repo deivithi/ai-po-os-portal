@@ -19,16 +19,16 @@
       {
         "badge": "Paginas fortes",
         "status_class": "status-done",
-        "title": "10 rotas verificadas",
-        "value": "Home, Guia, Jornada, Trilha, Progresso, Labs, Analytics, Prompts, Senior e Artefatos",
+        "title": "11 rotas verificadas",
+        "value": "Home, Guia, Jornada, Trilha, Progresso, Labs, Analytics, Lancamentos, Prompts, Senior e Artefatos",
         "note": "Essas paginas ja podem ser tratadas como espinha dorsal de uso, estudo, pratica e consolidacao do sistema."
       },
       {
         "badge": "Fila editorial",
         "status_class": "status-in-progress",
         "title": "Nova frente ativa",
-        "value": "Analytics de estudo e recomendacao adaptativa",
-        "note": "Com a nova rota publicada, o portal passa a ler uso real e sugerir a proxima missao automaticamente."
+        "value": "Fechamento premium e launchboard",
+        "note": "Com a nova rota publicada, o portal passa a mostrar o que ja esta launch-ready e o que entra na proxima onda."
       }
     ]
   },
@@ -47,7 +47,7 @@
       },
       {
         "label": "Rotas fortes",
-        "value": "10"
+        "value": "11"
       }
     ],
     "buttons": [
@@ -64,6 +64,11 @@
       {
         "label": "Abrir Analytics",
         "href": "/analytics/",
+        "variant": "secondary"
+      },
+      {
+        "label": "Ver lancamentos",
+        "href": "/lancamentos/",
         "variant": "secondary"
       },
       {
@@ -164,6 +169,17 @@
       "note": "Boa pagina para transformar uso real em replanejamento fino e proxima acao automatica.",
       "action_href": "/analytics/",
       "action_label": "Abrir Analytics"
+    },
+    {
+      "id": "lancamentos",
+      "title": "Lancamentos",
+      "status_label": "Verificado hoje",
+      "status_class": "status-done",
+      "checked_on": "2026-03-22",
+      "summary": "A nova rota fecha o sistema como produto, separa o que ja pode ser lancado e organiza a proxima onda de features de forma mais vendavel e objetiva.",
+      "note": "Boa pagina para transformar maturidade interna em leitura de demo, release e empacotamento.",
+      "action_href": "/lancamentos/",
+      "action_label": "Abrir Lancamentos"
     },
     {
       "id": "prompts",

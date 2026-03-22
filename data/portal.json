@@ -4,10 +4,10 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "Analytics de estudo e recomendacao adaptativa",
-    "phase_summary": "O portal agora mede uso real, cruza Trilha, Progresso e Labs e recomenda a proxima missao automaticamente com base em comportamento e progresso.",
-    "next_phase": "Refino guiado por uso real e productizacao",
-    "next_phase_summary": "Com analytics publicado, a proxima frente natural e calibrar recomendacoes por uso real, aprofundar product metrics e preparar camadas premium sem perder a didatica.",
+    "phase_focus": "Fechamento premium e launchboard do sistema",
+    "phase_summary": "O portal agora mostra o que ja esta pronto para lancar, organiza a proxima onda de features e traduz estudo em leitura de produto, demo e empacotamento.",
+    "next_phase": "Refresh tecnico das rotas em revisao e capstone demonstravel",
+    "next_phase_summary": "Depois do fechamento premium, a proxima frente natural e reforcar Matriz, Workflows, RAG e Roadmap e transformar capstone em camada publica propria.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
@@ -18,6 +18,7 @@
     { "id": "progresso", "label": "Progresso", "description": "Checkpoints, dominio e replanejamento", "href": "/progresso/" },
     { "id": "labs", "label": "Labs", "description": "Desafios praticos por tema, tempo e nivel", "href": "/labs/" },
     { "id": "analytics", "label": "Analytics", "description": "Uso real, tracao e proxima missao automatica", "href": "/analytics/" },
+    { "id": "lancamentos", "label": "Lancamentos", "description": "Fechamento premium, launch-ready e proxima onda", "href": "/lancamentos/" },
     { "id": "prompts", "label": "Prompts", "description": "Prompt Studio e anatomia de prompt", "href": "/prompts/" },
     { "id": "matriz", "label": "Matriz", "description": "Comparacao de modelos e scorecards", "href": "/matriz/" },
     { "id": "workflows", "label": "Workflows", "description": "Operacao, risco e aprovacao humana", "href": "/workflows/" },
@@ -61,6 +62,11 @@
       "title": "Analytics",
       "nav_label": "Analytics",
       "summary": "Camada de leitura de uso real: comportamento local, tracao por rota, sinais de avanco e proxima missao recomendada automaticamente."
+    },
+    "lancamentos": {
+      "title": "Lancamentos",
+      "nav_label": "Lancamentos",
+      "summary": "Camada de fechamento premium: o que ja esta launch-ready, como o produto se apresenta hoje e quais features entram na proxima onda."
     },
     "prompts": {
       "title": "Prompt Studio",
@@ -183,6 +189,13 @@
       "description": "Use Analytics para medir tempo ativo, rotas fortes, dominios negligenciados e qual e a proxima missao com mais alavanca neste momento.",
       "href": "/analytics/",
       "badge": "Camada adaptativa",
+      "status_class": "status-done"
+    },
+    {
+      "title": "Fechar o sistema como produto",
+      "description": "Use Lancamentos para ver o que ja esta pronto para demo ou distribuicao, o que pode entrar na fila curta e como empacotar o portal sem perder a didatica.",
+      "href": "/lancamentos/",
+      "badge": "Fechamento premium",
       "status_class": "status-done"
     },
     {

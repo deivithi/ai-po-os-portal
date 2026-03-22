@@ -446,6 +446,23 @@
           "variant": "primary"
         }
       ]
+    },
+    {
+      "badge": "Fechamento premium",
+      "status_class": "status-done",
+      "title": "Lancamentos",
+      "description": "Use Lancamentos para entender o que ja esta pronto para demo, distribuicao ou empacotamento e quais features entram na proxima onda com chance real de release.",
+      "best_for": "Fechamento de ciclo, visao de produto, preparo para oferta e leitura do que ja esta launch-ready.",
+      "output": "Resumo premium do sistema com launch-ready atual, proxima onda e acoes de exportar ou compartilhar.",
+      "common_trap": "Tratar productizacao como enfeite em vez de organizar valor percebido, release e narrativa do sistema.",
+      "tags": ["Produto", "Launch-ready", "Proxima onda"],
+      "buttons": [
+        {
+          "label": "Abrir Lancamentos",
+          "href": "/lancamentos/",
+          "variant": "primary"
+        }
+      ]
     }
   ],
   "rituals": [
