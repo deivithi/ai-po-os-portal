@@ -5,7 +5,7 @@ Repositorio de deploy do portal estatico `AI Operating System do PO Salesforce`.
 ## Publicacao
 
 - Hosting: GitHub Pages
-- Deploy automatico: GitHub Actions
+- Deploy automatico: GitHub Pages a partir da branch `main`
 - Raiz publicada: `.`
 
 ## Estrutura
@@ -19,4 +19,4 @@ Repositorio de deploy do portal estatico `AI Operating System do PO Salesforce`.
 ## Observacoes
 
 - O portal foi ajustado para funcionar tanto em dominio raiz quanto em subpath de repositorio no GitHub Pages.
-- O workflow de deploy vive em `.github/workflows/deploy-github-pages.yml`.
+- O deploy acontece automaticamente a cada push na branch `main`.
