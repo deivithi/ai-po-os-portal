@@ -4,10 +4,10 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "Trilha Adaptativa MVP",
-    "phase_summary": "O portal agora monta um plano real por horas por dia, dias por semana, foco, nivel e objetivo, transformando o sistema em uma plataforma de estudo muito mais guiada.",
-    "next_phase": "Unidades didaticas e criterio de dominio",
-    "next_phase_summary": "Com a Trilha no ar, o proximo salto e enriquecer cada unidade com conceito, exercicio, evidencias e criterio claro de conclusao.",
+    "phase_focus": "Unidades didaticas e criterio de dominio",
+    "phase_summary": "A Trilha agora ensina cada bloco com conceito, evidencias esperadas, criterio de conclusao e CTA de proximo passo, deixando o estudo mais formativo e menos superficial.",
+    "next_phase": "Evals, memoria persistente, agents e producao",
+    "next_phase_summary": "Depois de dominar a trilha base, o proximo salto e adicionar camadas senior de qualidade, memoria, ferramentas e operacao em producao.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
@@ -35,7 +35,7 @@
     "trilha": {
       "title": "Trilha",
       "nav_label": "Trilha",
-      "summary": "Adaptive Study Path: geracao de trilha por horas por dia, dias por semana, foco, nivel e objetivo final."
+      "summary": "Adaptive Study Path: geracao de trilha por horas por dia, dias por semana, foco, nivel e objetivo final, agora com unidade em foco e criterio de dominio."
     },
     "prompts": {
       "title": "Prompt Studio",
@@ -129,7 +129,7 @@
   "study_tracks": [
     {
       "title": "Montar a trilha adaptativa",
-      "description": "Abra Trilha para transformar sua disponibilidade real de horas em um plano com semanas, materiais e proximo bloco.",
+      "description": "Abra Trilha para transformar sua disponibilidade real de horas em um plano com semanas, materiais, unidade em foco e proximo bloco.",
       "href": "/trilha/",
       "badge": "Nova porta de entrada",
       "status_class": "status-done"
@@ -182,7 +182,7 @@
       "badge": "Ja te deixa forte",
       "status_class": "status-done",
       "title": "Especialista aplicado em formacao muito forte",
-      "description": "Se voce percorrer esta trilha com pratica semanal, o portal ja te leva a escolher modelos com criterio, montar RAG confiavel, usar NotebookLM com inteligencia e operar workflows com approval humano.",
+      "description": "Se voce percorrer esta trilha com pratica semanal, o portal ja te leva a escolher modelos com criterio, montar RAG confiavel, usar NotebookLM com inteligencia, dominar unidades com evidencias e operar workflows com approval humano.",
       "points": [
         "Aprende a separar mercado atual de matriz operacional.",
         "Aprende quando usar long context, NotebookLM, Projects e vector RAG.",

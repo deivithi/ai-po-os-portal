@@ -59,6 +59,17 @@
       "deliverable": "Mapa pessoal com as rotas que voce vai estudar primeiro e por que.",
       "exercise": "Explique em 5 linhas a diferenca entre radar de mercado, snapshot e pagina verificada.",
       "mastery": "Voce consegue escolher a pagina certa sem navegar por tentativa e erro.",
+      "concept": "Antes de aprofundar qualquer tecnologia, voce precisa saber como o portal separa orientacao, comparacao, contexto, operacao e consolidacao.",
+      "evidence_examples": [
+        "Mapa com a ordem de estudo das rotas do portal.",
+        "Lista curta dizendo quando usar Home, Jornada e Trilha."
+      ],
+      "completion_criteria": [
+        "Voce explica a funcao de cada rota principal sem consultar a Home.",
+        "Voce sabe onde encontrar status editorial e frescor.",
+        "Voce consegue justificar sua ordem inicial de estudo."
+      ],
+      "next_unit_id": "journey-plan",
       "focus_tags": ["llms", "prompting", "rag", "memoria", "agents_mcp", "operacao_producao"],
       "goal_tags": ["specialist_general", "specialist_rag", "specialist_agents", "specialist_product_ops"],
       "official_resource_ids": ["openai-resources", "google-release-notes"]
@@ -75,6 +86,17 @@
       "deliverable": "Plano pessoal com sessao padrao, horario e regra de retro semanal.",
       "exercise": "Defina seu ritual de inicio e fim de cada sessao de estudo.",
       "mastery": "Voce sabe quanto estudar por semana e qual artefato gerar ao final de cada ciclo.",
+      "concept": "A Jornada transforma o portal em rotina: tempo, ordem, entregavel e check-in precisam existir antes do aprofundamento tecnico.",
+      "evidence_examples": [
+        "Agenda semanal com horario de estudo bloqueado.",
+        "Template simples de retro semanal."
+      ],
+      "completion_criteria": [
+        "Voce definiu sessao curta, padrao ou intensiva para o seu ritmo.",
+        "Voce sabe qual artefato minimo precisa sair de cada semana.",
+        "Voce consegue revisar a semana sem depender de memoria solta."
+      ],
+      "next_unit_id": "prompt-foundations",
       "focus_tags": ["llms", "prompting", "rag", "memoria", "agents_mcp", "operacao_producao"],
       "goal_tags": ["specialist_general", "specialist_rag", "specialist_agents", "specialist_product_ops"],
       "official_resource_ids": ["openai-resources", "anthropic-prompting"]
@@ -91,6 +113,17 @@
       "deliverable": "Biblioteca inicial com tres prompts revisados para casos reais seus.",
       "exercise": "Reescreva um prompt seu em estrutura completa e compare a saida em dois providers.",
       "mastery": "Voce consegue explicar por que um prompt esta forte, fraco ou incompleto.",
+      "concept": "Prompt forte nao e frase inspirada; e contrato claro de papel, tarefa, contexto, restricoes, criterio e formato.",
+      "evidence_examples": [
+        "Antes e depois de um prompt reestruturado.",
+        "Saida comparativa de dois modelos com o mesmo prompt revisado."
+      ],
+      "completion_criteria": [
+        "Voce consegue reescrever um prompt quebrado em estrutura forte.",
+        "Voce diferencia contexto util de ruido dentro do prompt.",
+        "Voce sabe quando o problema pede schema ou retrieval em vez de mais texto."
+      ],
+      "next_unit_id": "provider-prompt-patterns",
       "focus_tags": ["prompting", "rag", "agents_mcp", "operacao_producao"],
       "goal_tags": ["specialist_general", "specialist_rag", "specialist_agents", "specialist_product_ops"],
       "official_resource_ids": ["openai-resources", "anthropic-prompting", "google-prompt-design"]
@@ -107,6 +140,17 @@
       "deliverable": "Tabela curta com diferencas de prompting por fornecedor para seu contexto.",
       "exercise": "Rode o mesmo template em dois vendors e registre diferencas de formato, aderencia e risco.",
       "mastery": "Voce sabe adaptar o mesmo problema ao estilo do fornecedor sem perder o objetivo.",
+      "concept": "Mesmo objetivo, vendors diferentes: cada fornecedor responde melhor a estilos diferentes de controle, exemplos e formato.",
+      "evidence_examples": [
+        "Tabela comparando OpenAI, Anthropic, Google e xAI no mesmo caso.",
+        "Registro de um ajuste de prompt feito por causa do provider."
+      ],
+      "completion_criteria": [
+        "Voce sabe quais mudancas de estrutura testar por fornecedor.",
+        "Voce consegue explicar o que mudou na saida e por que.",
+        "Voce para de tratar providers como se fossem identicos."
+      ],
+      "next_unit_id": "model-selection-rubric",
       "focus_tags": ["prompting", "llms", "agents_mcp"],
       "goal_tags": ["specialist_general", "specialist_agents", "specialist_product_ops"],
       "official_resource_ids": ["openai-models", "anthropic-prompting", "xai-structured-outputs"]
@@ -123,6 +167,17 @@
       "deliverable": "Scorecard proprio para pelo menos dois casos de uso do seu trabalho.",
       "exercise": "Compare dois modelos para o mesmo problema e justifique a decisao final sem falar em benchmark generico.",
       "mastery": "Voce decide por criterio operacional, nao por hype ou leaderboard isolado.",
+      "concept": "Escolha de modelo precisa nascer do problema, da rubrica e do risco, nao de nome famoso ou tweet recente.",
+      "evidence_examples": [
+        "Scorecard preenchido para dois casos de uso reais.",
+        "Decisao escrita mostrando por que um modelo venceu o outro."
+      ],
+      "completion_criteria": [
+        "Voce usa custo, latencia, controle e risco na justificativa.",
+        "Voce separa mercado atual de score operacional recalibrado.",
+        "Voce sabe defender a escolha para um stakeholder."
+      ],
+      "next_unit_id": "open-model-radar",
       "focus_tags": ["llms", "operacao_producao", "rag", "agents_mcp"],
       "goal_tags": ["specialist_general", "specialist_rag", "specialist_agents", "specialist_product_ops"],
       "official_resource_ids": ["openai-models", "anthropic-models", "google-models", "xai-models"]
@@ -139,6 +194,17 @@
       "deliverable": "Radar proprio com 3 modelos para acompanhar e por que cada um importa.",
       "exercise": "Liste quando open weights valem mais que frontier models no seu contexto.",
       "mastery": "Voce separa curiosidade de mercado de decisao operacional real.",
+      "concept": "Radar de mercado serve para ampliar repertorio, nao para trocar de stack toda semana por ansiedade de novidade.",
+      "evidence_examples": [
+        "Lista de modelos que vale monitorar por custo, privacidade ou especializacao.",
+        "Anotacao clara do que e radar e do que ja e operacional."
+      ],
+      "completion_criteria": [
+        "Voce sabe por que Qwen, DeepSeek ou Gemma entrariam no seu radar.",
+        "Voce nao confunde benchmark de marketing com decisao de sistema.",
+        "Voce registra quando vale continuar apenas observando."
+      ],
+      "next_unit_id": "context-grounding-foundations",
       "focus_tags": ["llms", "operacao_producao"],
       "goal_tags": ["specialist_general", "specialist_product_ops"],
       "official_resource_ids": ["google-models", "qwen-docs", "deepseek-docs"]
@@ -155,6 +221,17 @@
       "deliverable": "Tabela de decisao dizendo quando usar long context, NotebookLM, Projects ou vector RAG.",
       "exercise": "Pegue um documento longo e decida qual estrategia de contexto faz mais sentido, com justificativa.",
       "mastery": "Voce escolhe a camada de contexto sem misturar conveniencia com confiabilidade.",
+      "concept": "Contexto nao e uma coisa unica: long context, grounding e retrieval existem para resolver problemas diferentes.",
+      "evidence_examples": [
+        "Tabela de decisao comparando quatro estrategias de contexto.",
+        "Perguntas respondidas com citacao ou justificativa de fallback."
+      ],
+      "completion_criteria": [
+        "Voce sabe quando long context basta.",
+        "Voce sabe quando grounding ou retrieval viram obrigatorios.",
+        "Voce explica o trade-off entre simplicidade e auditabilidade."
+      ],
+      "next_unit_id": "notebooklm-long-context",
       "focus_tags": ["rag", "memoria", "operacao_producao"],
       "goal_tags": ["specialist_general", "specialist_rag", "specialist_product_ops"],
       "official_resource_ids": ["google-long-context", "google-grounding", "notebooklm-sources"]
@@ -171,6 +248,17 @@
       "deliverable": "Notebook de estudo com perguntas guiadas, highlights e criterio de citacao.",
       "exercise": "Monte uma sessao de estudo em NotebookLM e liste 3 aprendizados que nao apareceram numa leitura superficial.",
       "mastery": "Voce sabe quando NotebookLM acelera estudo e quando precisa de um pipeline proprio.",
+      "concept": "NotebookLM e uma camada de aprendizado guiado por fonte, excelente para estudo e exploracao, mas nao substitui um pipeline operacional proprio.",
+      "evidence_examples": [
+        "Notebook com fontes carregadas e perguntas chave.",
+        "Resumo com citacoes ou highlights bem referenciados."
+      ],
+      "completion_criteria": [
+        "Voce usa NotebookLM para estudar com mais profundidade, nao so para resumir.",
+        "Voce sabe quando a ferramenta serve para estudo e quando nao serve para producao.",
+        "Voce produz uma nota de aprendizado baseada em fonte."
+      ],
+      "next_unit_id": "memory-vs-rag",
       "focus_tags": ["rag", "memoria"],
       "goal_tags": ["specialist_general", "specialist_rag"],
       "official_resource_ids": ["notebooklm-sources", "google-long-context", "google-release-notes"]
@@ -187,6 +275,17 @@
       "deliverable": "Mapa de decisao separando memoria, contexto recuperado e conhecimento persistido.",
       "exercise": "Desenhe um fluxo simples dizendo o que vai em estado, o que vai em cache e o que vai em retrieval.",
       "mastery": "Voce para de usar memoria como palavra magica e passa a usar camadas com funcao clara.",
+      "concept": "Memoria, estado, cache e retrieval sao camadas distintas; misturar tudo gera sistemas opacos e dificeis de evoluir.",
+      "evidence_examples": [
+        "Fluxo simples separando estado conversacional, cache e retrieval.",
+        "Anotacao explicando por que um problema pede memoria e nao RAG."
+      ],
+      "completion_criteria": [
+        "Voce explica a fronteira entre memoria curta e conhecimento persistido.",
+        "Voce sabe quando prompt caching reduz custo sem virar memoria.",
+        "Voce desenha uma arquitetura simples com cada camada no lugar certo."
+      ],
+      "next_unit_id": "workflow-governance",
       "focus_tags": ["memoria", "rag", "agents_mcp"],
       "goal_tags": ["specialist_general", "specialist_rag", "specialist_agents"],
       "official_resource_ids": ["openai-conversation-state", "openai-prompt-caching", "anthropic-prompt-caching"]
@@ -203,6 +302,17 @@
       "deliverable": "Checklist operacional com gatilhos de approval, risco e rollback.",
       "exercise": "Pegue um fluxo do seu contexto e marque onde precisa de schema, onde precisa de humano e onde precisa de fallback.",
       "mastery": "Voce consegue transformar um bom prototipo em processo auditavel.",
+      "concept": "Workflow auditavel nasce de contrato, schema, approval e visibilidade de falha; sem isso, a automacao vira risco escondido.",
+      "evidence_examples": [
+        "Checklist com pontos de approval, risco e fallback.",
+        "Fluxo anotado mostrando onde o humano precisa entrar."
+      ],
+      "completion_criteria": [
+        "Voce identifica pontos irreversiveis que exigem revisao humana.",
+        "Voce sabe onde um schema reduz ambiguidade.",
+        "Voce consegue propor fallback em caso de erro."
+      ],
+      "next_unit_id": "agents-mcp-primer",
       "focus_tags": ["operacao_producao", "agents_mcp", "prompting"],
       "goal_tags": ["specialist_general", "specialist_agents", "specialist_product_ops"],
       "official_resource_ids": ["openai-graders", "anthropic-develop-tests", "xai-structured-outputs"]
@@ -219,6 +329,17 @@
       "deliverable": "Diagrama simples de host, client, server e ferramentas do seu caso de uso.",
       "exercise": "Desenhe um agente com duas tools e explique por que cada uma existe.",
       "mastery": "Voce sabe quando um agente vale a pena e quando um workflow simples resolve melhor.",
+      "concept": "Agent, tool e MCP so valem quando reduzem atrito ou ampliam capacidade de forma controlada; caso contrario, um workflow simples costuma ser melhor.",
+      "evidence_examples": [
+        "Diagrama simples mostrando host, client, server e tools.",
+        "Explicacao do por que um agente foi necessario nesse caso."
+      ],
+      "completion_criteria": [
+        "Voce sabe diferenciar orquestracao de hype.",
+        "Voce descreve o papel de cada tool no fluxo.",
+        "Voce justifica quando o agente nao vale a complexidade extra."
+      ],
+      "next_unit_id": "artifact-review-loop",
       "focus_tags": ["agents_mcp", "operacao_producao", "memoria"],
       "goal_tags": ["specialist_general", "specialist_agents", "specialist_product_ops"],
       "official_resource_ids": ["mcp-architecture", "xai-remote-mcp", "openai-resources"]
@@ -235,6 +356,17 @@
       "deliverable": "Colecao pessoal de 5 referencias favoritas com motivo de uso.",
       "exercise": "Monte uma pasta mental do que voce abre quando quer lembrar criterio, fonte ou exemplo real.",
       "mastery": "Voce consegue revisar rapido sem perder profundidade.",
+      "concept": "Consolidacao forte depende de biblioteca de apoio bem escolhida; artefato bom reduz retrabalho cognitivo nas proximas sessoes.",
+      "evidence_examples": [
+        "Colecao de referencias favoritas com motivo de uso.",
+        "Lista de artefatos que aceleram decisao ou revisao."
+      ],
+      "completion_criteria": [
+        "Voce sabe onde buscar exemplo, fonte e criterio rapidamente.",
+        "Voce reduz tempo de reacendimento entre sessoes.",
+        "Voce monta sua propria biblioteca de apoio."
+      ],
+      "next_unit_id": "roadmap-retro",
       "focus_tags": ["llms", "rag", "operacao_producao", "prompting"],
       "goal_tags": ["specialist_general", "specialist_rag", "specialist_agents", "specialist_product_ops"],
       "official_resource_ids": ["openai-resources", "google-release-notes"]
@@ -251,6 +383,17 @@
       "deliverable": "Retro objetiva com o que foi aprendido, testado e o que ainda precisa de reforco.",
       "exercise": "Ao fim da semana, anote o que dominou, o que ainda ficou nebuloso e qual pagina volta primeiro.",
       "mastery": "Voce conduz sua propria evolucao sem depender de motivacao aleatoria.",
+      "concept": "Retro nao e burocracia; e o mecanismo que impede acumulo de lacuna, excesso de otimismo e perda de direcao.",
+      "evidence_examples": [
+        "Retro semanal com aprendizados, falhas e proxima alavanca.",
+        "Lista do que foi concluido versus o que precisa de reforco."
+      ],
+      "completion_criteria": [
+        "Voce fecha a semana com decisao clara do proximo foco.",
+        "Voce registra o que dominou e o que ainda nao domina.",
+        "Voce transforma a retro em acao da semana seguinte."
+      ],
+      "next_unit_id": "capstone-systems-sprint",
       "focus_tags": ["llms", "prompting", "rag", "memoria", "agents_mcp", "operacao_producao"],
       "goal_tags": ["specialist_general", "specialist_rag", "specialist_agents", "specialist_product_ops"],
       "official_resource_ids": ["openai-evals", "anthropic-develop-tests"]
@@ -267,6 +410,17 @@
       "deliverable": "Mini capstone com caso de uso, decisao de modelo, desenho de contexto e protocolo de operacao.",
       "exercise": "Monte uma demo curta que mostre escolha de modelo, contexto, resposta, risco e proxima acao.",
       "mastery": "Voce deixa de consumir conteudo e passa a operar um sistema aplicado.",
+      "concept": "Capstone e o teste de verdade: se voce nao consegue integrar modelo, contexto, risco e decisao, ainda falta consolidacao.",
+      "evidence_examples": [
+        "Demo curta mostrando o fluxo ponta a ponta.",
+        "Documento simples com modelo escolhido, contexto e criterios."
+      ],
+      "completion_criteria": [
+        "Voce demonstra o sistema ponta a ponta em poucos minutos.",
+        "Voce justifica modelo, contexto e risco sem improviso.",
+        "Voce fecha a trilha com um artefato que prova experiencia aplicada."
+      ],
+      "next_unit_id": null,
       "focus_tags": ["llms", "prompting", "rag", "memoria", "agents_mcp", "operacao_producao"],
       "goal_tags": ["specialist_general", "specialist_rag", "specialist_agents", "specialist_product_ops"],
       "official_resource_ids": ["openai-evals", "openai-graders", "mcp-architecture"]

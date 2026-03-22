@@ -23,6 +23,10 @@
     {
       "title": "Plano personalizado",
       "description": "Sempre que a trilha montar um plano, a pagina precisa explicar ritmo, horizonte, prioridades e proximo bloco sem esconder trade-offs."
+    },
+    {
+      "title": "Dominio verificavel por unidade",
+      "description": "Sempre que a Trilha destacar uma unidade, a pagina precisa mostrar conceito, evidencias esperadas e criterio de conclusao de forma acionavel."
     }
   ],
   "qa_targets": [

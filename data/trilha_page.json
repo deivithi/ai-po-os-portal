@@ -16,14 +16,14 @@
     },
     {
       "badge": "Honestidade",
-      "status_class": "status-in-progress",
-      "title": "Se 30 dias nao fecharem, o portal mostra",
-      "body": "A duracao responde ao ritmo que voce realmente tem",
-      "note": "Se a carga diaria ficar baixa, a trilha continua boa, mas mostra que o horizonte se alonga."
+      "status_class": "status-done",
+      "title": "Cada unidade agora explica o que provar",
+      "body": "Conceito, evidencia, exercicio e criterio de conclusao aparecem no fluxo",
+      "note": "A ideia e diminuir o risco de ler rapido, sentir que entendeu e nao conseguir aplicar depois."
     },
     {
       "badge": "Resultado esperado",
-      "status_class": "status-next",
+      "status_class": "status-done",
       "title": "Menos leitura solta, mais dominio operacional",
       "body": "Cada bloco aponta para uma pagina, uma fonte oficial e um entregavel",
       "note": "A meta aqui e aproximar o estudo de um sistema de treinamento profissional."
@@ -33,13 +33,13 @@
     "Se voce ainda esta consolidando a base, comece com objetivo Especialista geral.",
     "Se tiver 3h por dia ou mais, preserve o capstone e os comparativos semanais.",
     "Se tiver menos de 2h por dia, reduza foco antes de tentar cobrir tudo ao mesmo tempo.",
-    "Toda rota da trilha deve terminar com experimento, evidencias e retro curta."
+    "Toda rota da trilha deve terminar com experimento, evidencias, criterio de dominio e retro curta."
   ],
   "plan_checks": [
     "No fim da semana 1, voce ja precisa saber estruturar prompts e comparar modelos sem usar ranking vazio.",
     "No fim da semana 2, contexto, grounding, NotebookLM e memoria precisam estar separados na sua cabeca.",
     "No fim da semana 3, approval humano, schema, risco e proxima acao precisam aparecer no seu caderno de operacao.",
-    "No fechamento, voce deve conseguir demonstrar um mini sistema com modelo, contexto, risco e decisao."
+    "No fechamento, voce deve conseguir demonstrar um mini sistema com modelo, contexto, risco, criterio de dominio e decisao."
   ],
   "route_roles": [
     {

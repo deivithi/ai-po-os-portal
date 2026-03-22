@@ -1895,6 +1895,10 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
   const focus = document.getElementById("trilha-focus");
   const goal = document.getElementById("trilha-goal");
   const feedback = document.getElementById("trilha-feedback");
+  const pageContent = document.getElementById("content");
+  const sourceLookup = buildSourceLookup(vendorSources);
+  let activeUnitId = null;
+  let currentPlan = null;
 
   function fillSelectOptions(element, options, valueKey = "value", labelKey = "label") {
     if (!element) {
@@ -1944,7 +1948,132 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
     }
   }
 
+  function resolvePlanUnit(plan, unitId) {
+    return plan.scaledUnits.find((unit) => unit.id === unitId) || plan.scaledUnits[0] || null;
+  }
+
+  function resolveNextPlanUnit(plan, unitId) {
+    const currentIndex = plan.scaledUnits.findIndex((unit) => unit.id === unitId);
+    if (currentIndex >= 0 && currentIndex + 1 < plan.scaledUnits.length) {
+      return plan.scaledUnits[currentIndex + 1];
+    }
+
+    return null;
+  }
+
+  function renderUnitExplorer(plan) {
+    const nav = document.getElementById("trilha-unit-nav");
+    const focusPanel = document.getElementById("trilha-unit-focus");
+    const criteriaPanel = document.getElementById("trilha-unit-criteria");
+
+    if (!nav || !focusPanel || !criteriaPanel) {
+      return;
+    }
+
+    const currentUnit = resolvePlanUnit(plan, activeUnitId || plan.firstSession?.unit_id);
+    if (!currentUnit) {
+      nav.innerHTML = "";
+      focusPanel.innerHTML = '<div class="empty-note">Nenhuma unidade disponivel.</div>';
+      criteriaPanel.innerHTML = "";
+      return;
+    }
+
+    activeUnitId = currentUnit.id;
+    const nextUnit = resolveNextPlanUnit(plan, currentUnit.id);
+    const unitSessions = plan.sessions.filter((session) => session.unit_id === currentUnit.id);
+    const firstUnitSession = unitSessions[0];
+    const lastUnitSession = unitSessions[unitSessions.length - 1];
+
+    nav.innerHTML = plan.scaledUnits
+      .map(
+        (unit) => `
+          <button
+            type="button"
+            class="chip chip-button ${unit.id === currentUnit.id ? "active" : ""}"
+            data-unit-focus="${escapeHtml(unit.id)}"
+          >
+            ${escapeHtml(unit.title)}
+          </button>
+        `,
+      )
+      .join("");
+
+    focusPanel.innerHTML = `
+      <div class="adaptive-unit-header">
+        <div>
+          <span class="status-badge status-done">${escapeHtml(titleCase(currentUnit.domain))}</span>
+          <h3>${escapeHtml(currentUnit.title)}</h3>
+          <p class="card-copy">${escapeHtml(currentUnit.summary)}</p>
+        </div>
+        <div class="adaptive-unit-metrics">
+          <article>
+            <span class="label">Horas</span>
+            <strong>${escapeHtml(formatNumber(currentUnit.allocated_hours, 1))}h</strong>
+          </article>
+          <article>
+            <span class="label">Sessoes</span>
+            <strong>${escapeHtml(String(unitSessions.length))}</strong>
+          </article>
+          <article>
+            <span class="label">Janela</span>
+            <strong>Dia ${escapeHtml(String(firstUnitSession?.calendar_day || 1))} a ${escapeHtml(String(lastUnitSession?.calendar_day || 1))}</strong>
+          </article>
+        </div>
+      </div>
+      <div class="adaptive-unit-grid">
+        <section class="adaptive-unit-section">
+          <span class="eyebrow">Conceito</span>
+          <p>${escapeHtml(currentUnit.concept || currentUnit.summary)}</p>
+        </section>
+        <section class="adaptive-unit-section">
+          <span class="eyebrow">Exercicio</span>
+          <p>${escapeHtml(currentUnit.exercise)}</p>
+        </section>
+        <section class="adaptive-unit-section">
+          <span class="eyebrow">Entregavel</span>
+          <p>${escapeHtml(currentUnit.deliverable)}</p>
+        </section>
+        <section class="adaptive-unit-section">
+          <span class="eyebrow">Sinal de dominio</span>
+          <p>${escapeHtml(currentUnit.mastery)}</p>
+        </section>
+      </div>
+      <section class="adaptive-unit-section">
+        <span class="eyebrow">Evidencias esperadas</span>
+        <ul class="summary-list">
+          ${(currentUnit.evidence_examples || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </section>
+      <div class="button-group adaptive-unit-actions">
+        <a class="button" href="${resolveUrl(currentUnit.portal_href || "/")}">${escapeHtml(currentUnit.portal_label || "Abrir rota")}</a>
+        ${
+          nextUnit
+            ? `<button class="button secondary" type="button" data-unit-focus="${escapeHtml(nextUnit.id)}">Focar proximo bloco</button>`
+            : `<a class="button secondary" href="${resolveUrl("/roadmap/")}">Fechar trilha no Roadmap</a>`
+        }
+        ${buildSourceButtons(sourceLookup, currentUnit.official_resource_ids, 2)
+          .map(
+            (button) => `
+              <a class="button ghost" href="${resolveUrl(button.href)}">${escapeHtml(button.label)}</a>
+            `,
+          )
+          .join("")}
+      </div>
+    `;
+
+    criteriaPanel.innerHTML = `
+      <article class="study-card compact-card">
+        <h3>${escapeHtml(currentUnit.title)}</h3>
+        <p class="card-copy">Esta unidade esta pronta quando os pontos abaixo ja deixaram de ser teoria.</p>
+        <ul class="summary-list">
+          ${(currentUnit.completion_criteria || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </article>
+    `;
+  }
+
   function renderPlan(plan, message = "") {
+    currentPlan = plan;
     renderCards(
       "trilha-plan-summary",
       [
@@ -2015,8 +2144,9 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
                   label: plan.firstSession.portal_label || "Abrir rota",
                   href: plan.firstSession.portal_href || "/",
                 },
-                ...buildSourceButtons(buildSourceLookup(vendorSources), plan.firstSession.official_resource_ids, 1),
+                ...buildSourceButtons(sourceLookup, plan.firstSession.official_resource_ids, 1),
               ],
+              unit_id: plan.firstSession.unit_id,
             }
           : null,
         plan.nextDistinctSession
@@ -2032,8 +2162,9 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
                   href: plan.nextDistinctSession.portal_href || "/",
                   variant: "secondary",
                 },
-                ...buildSourceButtons(buildSourceLookup(vendorSources), plan.nextDistinctSession.official_resource_ids, 1),
+                ...buildSourceButtons(sourceLookup, plan.nextDistinctSession.official_resource_ids, 1),
               ],
+              unit_id: plan.nextDistinctSession.unit_id,
             }
           : null,
       ].filter(Boolean),
@@ -2044,6 +2175,9 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
           <p class="card-copy">${escapeHtml(item.description)}</p>
           <p class="metric-note">${escapeHtml(item.note)}</p>
           ${renderButtonList(item.buttons || [])}
+          <div class="button-group">
+            <button class="button ghost" type="button" data-unit-focus="${escapeHtml(item.unit_id)}">Focar unidade</button>
+          </div>
         </article>
       `,
     );
@@ -2121,10 +2255,14 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
               variant: "secondary",
             },
           ])}
+          <div class="button-group">
+            <button class="button ghost" type="button" data-unit-focus="${escapeHtml(session.unit_id)}">Ver unidade</button>
+          </div>
         </article>
       `,
     );
 
+    renderUnitExplorer(plan);
     renderAdaptiveDomainMix(plan);
 
     renderCards(
@@ -2161,6 +2299,19 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
   }
 
   applyPreferences(persistedPreferences);
+
+  if (pageContent && pageContent.dataset.unitFocusBound !== "true") {
+    pageContent.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-unit-focus]");
+      if (!button || !currentPlan) {
+        return;
+      }
+
+      activeUnitId = button.getAttribute("data-unit-focus");
+      renderUnitExplorer(currentPlan);
+    });
+    pageContent.dataset.unitFocusBound = "true";
+  }
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();

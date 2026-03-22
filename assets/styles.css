@@ -420,6 +420,17 @@ a {
   font-weight: 600;
 }
 
+.chip-button {
+  cursor: pointer;
+  font: inherit;
+}
+
+.chip-button.active {
+  background: rgba(98, 208, 179, 0.22);
+  border-color: rgba(98, 208, 179, 0.46);
+  color: #effff8;
+}
+
 .compact-card {
   padding: 18px;
 }
@@ -734,6 +745,75 @@ a {
 .adaptive-domain-bars {
   display: grid;
   gap: 18px;
+}
+
+.adaptive-unit-shell {
+  display: grid;
+  gap: 18px;
+}
+
+.adaptive-unit-nav {
+  margin-top: 0;
+}
+
+.adaptive-unit-focus {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+}
+
+.adaptive-unit-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.adaptive-unit-header h3 {
+  margin: 10px 0 8px;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.2vw, 1.85rem);
+}
+
+.adaptive-unit-metrics {
+  display: grid;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.adaptive-unit-metrics article {
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(158, 197, 222, 0.12);
+  background: rgba(7, 18, 28, 0.54);
+}
+
+.adaptive-unit-metrics strong {
+  display: block;
+  margin-top: 6px;
+}
+
+.adaptive-unit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.adaptive-unit-section {
+  padding: 16px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(158, 197, 222, 0.1);
+  background: rgba(7, 18, 28, 0.48);
+}
+
+.adaptive-unit-section p {
+  margin: 10px 0 0;
+  line-height: 1.7;
+  color: #d7e9f2;
+}
+
+.adaptive-unit-actions {
+  margin-top: 2px;
 }
 
 .adaptive-domain-row {
@@ -1271,6 +1351,7 @@ a {
   .freshness-strip,
   .split-section,
   .adaptive-shell,
+  .adaptive-unit-grid,
   .builder-workbench,
   .provider-overlay-shell,
   .productization-shell,
@@ -1284,7 +1365,8 @@ a {
   .builder-preview-panel,
   .provider-preview-panel,
   .quality-score-panel,
-  .quality-example-insights {
+  .quality-example-insights,
+  .adaptive-unit-header {
     position: static;
     top: auto;
   }

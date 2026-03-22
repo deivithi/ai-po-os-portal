@@ -27,8 +27,8 @@
         "badge": "Fila editorial",
         "status_class": "status-next",
         "title": "Proxima macrofrente",
-        "value": "Unidades didaticas",
-        "note": "Depois da Trilha, a plataforma passa a detalhar conceito, exercicio, evidencia e criterio de dominio por unidade."
+        "value": "Evals + Memoria + Agents + Producao",
+        "note": "Com as unidades didaticas publicadas, o proximo passo e abrir a camada senior de qualidade, memoria persistente, tools e operacao."
       }
     ]
   },
@@ -106,8 +106,8 @@
       "status_label": "Verificado hoje",
       "status_class": "status-done",
       "checked_on": "2026-03-22",
-      "summary": "A rota nova monta o plano por horas, foco, nivel e objetivo, mantendo coerencia com a camada de frescor e com o metodo do portal.",
-      "note": "Boa pagina para transformar o estudo em sequencia acionavel.",
+      "summary": "A rota monta o plano por horas, foco, nivel e objetivo e agora detalha unidade em foco, evidencias e criterio de dominio.",
+      "note": "Boa pagina para transformar estudo em sequencia acionavel e em dominio verificavel.",
       "action_href": "/trilha/",
       "action_label": "Abrir Trilha"
     },
