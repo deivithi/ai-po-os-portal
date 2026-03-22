@@ -1,0 +1,130 @@
+{
+  "orientation": [
+    {
+      "badge": "Estado atual",
+      "status_class": "status-done",
+      "title": "10 ciclos publicados",
+      "body": "Portal completo e em expansao didatica",
+      "note": "O sistema fechou o ciclo base do portal e agora esta expandindo o Prompt Studio por fases, sem perder disciplina de release."
+    },
+    {
+      "badge": "Pronto agora",
+      "status_class": "status-done",
+      "title": "Prompt Studio fase 2",
+      "body": "Biblioteca didatica publicada",
+      "note": "O portal agora tem exemplos basicos, intermediarios e avancados explicados por estrutura. O foco seguinte passa a ser o builder orientado por contexto."
+    },
+    {
+      "badge": "Plano de 30 dias",
+      "status_class": "status-done",
+      "title": "Base funcional pronta",
+      "body": "30D-A e 30D-B consolidados",
+      "note": "A partir daqui o trabalho e productizar, ensinar e governar o sistema."
+    },
+    {
+      "badge": "Regra",
+      "status_class": "status-done",
+      "title": "Release discipline consolidada",
+      "body": "Preview, producao e QA em todas as fases",
+      "note": "Cada incremento do portal foi publicado e registrado com validacao visual e funcional."
+    }
+  ],
+  "day_tracks": [
+    {
+      "window": "Dias 1-7",
+      "title": "Prompts, matriz e harness",
+      "status_label": "Concluido",
+      "status_class": "status-done",
+      "description": "Comparacao de modelos, fundamentos de prompting, scorecards e regra base de avaliacao."
+    },
+    {
+      "window": "Dias 8-14",
+      "title": "Conhecimento e RAG",
+      "status_label": "Concluido",
+      "status_class": "status-done",
+      "description": "NotebookLM, playbook de contexto e indice local do conhecimento."
+    },
+    {
+      "window": "Dias 15-22",
+      "title": "Workflows auditaveis",
+      "status_label": "Concluido",
+      "status_class": "status-done",
+      "description": "Auditoria de leads e validador de requisitos com approval e risco."
+    },
+    {
+      "window": "Dias 23-30",
+      "title": "Capstone e productizacao",
+      "status_label": "Em evolucao",
+      "status_class": "status-in-progress",
+      "description": "Portal publico, narrativa executiva, ativos de autoridade e governanca de release."
+    }
+  ],
+  "portal_release_history": [
+    {
+      "phase": "Fase 1",
+      "focus": "Shell visual e didatico",
+      "preview_url": "https://69bf5f13b640cf700d124852--ai-po-os-deivithi-20260321.netlify.app",
+      "production_url": "https://ai-po-os-deivithi-20260321.netlify.app"
+    },
+    {
+      "phase": "Fase 2",
+      "focus": "Hub de artefatos e radar de modelos",
+      "preview_url": "https://69bf6204e3502ba0348f1ba8--ai-po-os-deivithi-20260321.netlify.app",
+      "production_url": "https://ai-po-os-deivithi-20260321.netlify.app"
+    },
+    {
+      "phase": "Fase 3",
+      "focus": "Sala de aula da matriz",
+      "preview_url": "https://69bf65d6cfdfd79cdde3b5e5--ai-po-os-deivithi-20260321.netlify.app",
+      "production_url": "https://ai-po-os-deivithi-20260321.netlify.app"
+    },
+    {
+      "phase": "Fase 4",
+      "focus": "Laboratorio de workflows",
+      "preview_url": "https://69bf67ef0e47168a612d999b--ai-po-os-deivithi-20260321.netlify.app",
+      "production_url": "https://ai-po-os-deivithi-20260321.netlify.app"
+    },
+    {
+      "phase": "Fase 5",
+      "focus": "Atlas do RAG",
+      "preview_url": "https://69bf687f865a3fa0a6482689--ai-po-os-deivithi-20260321.netlify.app",
+      "production_url": "https://ai-po-os-deivithi-20260321.netlify.app"
+    },
+    {
+      "phase": "Fase 6",
+      "focus": "Roadmap vivo de 30 dias",
+      "preview_url": "https://69bf6934e3502baef68f1b42--ai-po-os-deivithi-20260321.netlify.app",
+      "production_url": "https://ai-po-os-deivithi-20260321.netlify.app"
+    },
+    {
+      "phase": "Fase 7",
+      "focus": "Polimento premium e governanca de release",
+      "preview_url": "https://69bf6b1428081e8f47a4dd03--ai-po-os-deivithi-20260321.netlify.app",
+      "production_url": "https://ai-po-os-deivithi-20260321.netlify.app"
+    },
+    {
+      "phase": "Refino A",
+      "focus": "Jornada 30D e metodo de uso",
+      "preview_url": "https://69bfe40c215bccb943afcc81--ai-po-os-deivithi-20260321.netlify.app",
+      "production_url": "https://ai-po-os-deivithi-20260321.netlify.app"
+    },
+    {
+      "phase": "Refino B",
+      "focus": "Prompt Studio fase 1",
+      "preview_url": "https://69bff14eec2c8fd2dc8ae853--ai-po-os-deivithi-20260321.netlify.app",
+      "production_url": "https://ai-po-os-deivithi-20260321.netlify.app"
+    },
+    {
+      "phase": "Refino C",
+      "focus": "Prompt Studio fase 2",
+      "preview_url": "https://69c0024d0dd859a8f636204b--ai-po-os-deivithi-20260321.netlify.app",
+      "production_url": "https://ai-po-os-deivithi-20260321.netlify.app"
+    }
+  ],
+  "phase_rules": [
+    "Cada fase precisa fechar com validacao visual e funcional.",
+    "Preview e producao devem ser registradas no projeto.",
+    "A pagina deve ensinar o racional, nao apenas exibir dados.",
+    "Se a UX de uma fase gera retrabalho cognitivo, a fase ainda nao esta pronta."
+  ]
+}

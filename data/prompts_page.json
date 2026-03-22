@@ -1,0 +1,289 @@
+{
+  "orientation": [
+    {
+      "badge": "Escopo",
+      "status_class": "status-done",
+      "title": "Basico ao avancado",
+      "body": "Prompt como disciplina, nao como truque",
+      "note": "A meta desta aba e ensinar como estruturar melhor instrucoes, contexto e formato de saida, sem vender prompting como solucao magica para qualquer problema."
+    },
+    {
+      "badge": "Regra central",
+      "status_class": "status-done",
+      "title": "Prompt bom nasce de design",
+      "body": "Objetivo, contexto, restricao e criterio",
+      "note": "Se a pessoa nao consegue explicar o que quer, para quem, com que limite e em qual formato, o problema ainda nao e de prompt: e de desenho da tarefa."
+    },
+    {
+      "badge": "Limite importante",
+      "status_class": "status-in-progress",
+      "title": "Prompt sozinho nao substitui sistema",
+      "body": "Schema, RAG e tools entram quando preciso",
+      "note": "Quando a tarefa exige memoria confiavel, citações, integracao com ferramentas ou governanca, o salto correto nao e 'mais prompt', e sim arquitetura melhor."
+    },
+    {
+      "badge": "Fase atual",
+      "status_class": "status-next",
+      "title": "Prompt Studio fase 2",
+      "body": "Biblioteca didatica em producao",
+      "note": "Nesta fase, a pagina sai do mapa conceitual e entra em exemplos progressivos. O builder orientado por contexto entra na proxima fase."
+    }
+  ],
+  "maturity_levels": [
+    {
+      "badge": "Basico",
+      "status_class": "status-done",
+      "title": "Pedido claro com objetivo explicito",
+      "description": "O salto inicial nao e falar bonito com o modelo. E declarar objetivo, contexto minimo e forma esperada da resposta.",
+      "points": [
+        "Dizer o que quer e para que quer.",
+        "Dar o minimo de contexto necessario.",
+        "Pedir um formato de saida simples e observavel."
+      ]
+    },
+    {
+      "badge": "Intermediario",
+      "status_class": "status-done",
+      "title": "Estrutura que reduz ambiguidade",
+      "description": "Aqui entram papel, restricoes, criterio de aceite, exemplos e contratos de saida mais claros.",
+      "points": [
+        "Separar papel, tarefa, contexto e restricoes.",
+        "Adicionar criterio do que seria uma boa resposta.",
+        "Usar listas, passos ou JSON quando a saida precisa ser previsivel."
+      ]
+    },
+    {
+      "badge": "Avancado",
+      "status_class": "status-in-progress",
+      "title": "Prompt como parte de um sistema",
+      "description": "Prompt avancado nao e texto complicado. E saber quando combinar few-shot, schema, gating, ferramentas, retrieval e avaliacao.",
+      "points": [
+        "Usar poucos exemplos bem escolhidos.",
+        "Acoplar schema, ferramentas e fallback.",
+        "Avaliar robustez do prompt em vez de idolatrar a primeira versao."
+      ]
+    }
+  ],
+  "anatomy": [
+    {
+      "kicker": "Camada 1",
+      "title": "Papel e tarefa",
+      "description": "Defina quem o modelo deve ser naquele contexto e qual trabalho ele precisa executar. Sem isso, a resposta tende a oscilar.",
+      "points": [
+        "Papel: qual lente o modelo deve assumir.",
+        "Tarefa: o verbo central da acao.",
+        "Saida esperada: o que precisa existir ao final."
+      ]
+    },
+    {
+      "kicker": "Camada 2",
+      "title": "Contexto e restricoes",
+      "description": "Contexto sem restricao vira texto demais. Restricao sem contexto vira resposta fraca. Os dois precisam andar juntos.",
+      "points": [
+        "Contexto: fatos, dados, publico e situacao.",
+        "Restricoes: limites de tom, escopo, tempo, risco ou formato.",
+        "Prioridades: o que vale mais se houver trade-off."
+      ]
+    },
+    {
+      "kicker": "Camada 3",
+      "title": "Criterio de aceite",
+      "description": "A melhor pergunta aqui e: como eu reconheco que essa resposta ficou boa? Esse criterio evita respostas bonitas e vazias.",
+      "points": [
+        "O que precisa aparecer obrigatoriamente.",
+        "O que seria erro ou omissao grave.",
+        "Qual profundidade e suficiente para a tarefa."
+      ]
+    },
+    {
+      "kicker": "Camada 4",
+      "title": "Formato, exemplos e fallback",
+      "description": "Quando a tarefa pede controle, a resposta precisa sair em estrutura util. Exemplos e fallback ajudam a reduzir ambiguidade residual.",
+      "points": [
+        "Formato: lista, tabela, JSON, resumo ou checklist.",
+        "Exemplos: poucos e bons, quando realmente ajudam.",
+        "Fallback: como o modelo deve agir se faltar contexto."
+      ]
+    }
+  ],
+  "prompt_alone": [
+    "Resumo, reescrita, classificacao simples e sintese curta com contexto confiavel.",
+    "Rascunhos de comunicacao, listas iniciais e apoio de pensamento quando o risco e baixo.",
+    "Transformar um documento pequeno em checklist, bullets ou plano de acao."
+  ],
+  "prompt_upgrade": [
+    "Suba para schema quando a saida precisa ser previsivel e integravel.",
+    "Suba para RAG quando a resposta depende de fontes grandes, mutaveis ou citaveis.",
+    "Suba para tools quando a tarefa exige consulta, acao, calculo, busca ou integracao externa.",
+    "Suba para workflow quando houver risco, approval, logs e proximas acoes obrigatorias."
+  ],
+  "formula": {
+    "skeleton": "Papel:\\nVoce e um analista de operacoes focado em clareza e criterio.\\n\\nObjetivo:\\nAvaliar o contexto abaixo e produzir uma resposta util para decisao.\\n\\nContexto:\\n- [insira aqui os fatos, dados, publico e situacao]\\n\\nRestricoes:\\n- Nao invente fatos\\n- Aponte limites quando faltar contexto\\n- Priorize clareza e aplicabilidade\\n\\nCriterio de aceite:\\n- A resposta precisa mostrar conclusao, evidencias, riscos e proxima acao\\n\\nFormato de saida:\\n1. Resumo executivo\\n2. Evidencias\\n3. Riscos\\n4. Proxima acao\\n\\nSe faltar informacao suficiente, diga exatamente o que esta faltando.",
+    "notes": [
+      {
+        "title": "Papel",
+        "description": "Use para orientar a lente do modelo, nao para teatralizar. Papel bom reduz ambiguidade; papel teatral so ocupa contexto."
+      },
+      {
+        "title": "Objetivo",
+        "description": "Se o objetivo cabe em um verbo claro, o modelo tende a responder melhor. Se nem voce consegue resumir o objetivo, o prompt ainda esta fraco."
+      },
+      {
+        "title": "Contexto",
+        "description": "Inclua apenas o que muda a decisao. Contexto demais sem organizacao vira ruido e piora a execucao."
+      },
+      {
+        "title": "Criterio",
+        "description": "Esse trecho ensina ao modelo o que conta como resposta boa. Ele vale mais do que frases genéricas como 'seja excelente'."
+      },
+      {
+        "title": "Formato",
+        "description": "Formato de saida e parte do design da tarefa. Quanto mais a resposta sera reutilizada, mais importante esse bloco fica."
+      },
+      {
+        "title": "Fallback",
+        "description": "Prompt maduro sempre diz o que fazer quando o contexto nao basta. Isso reduz improviso e aumenta honestidade operacional."
+      }
+    ]
+  },
+  "official_materials": [
+    {
+      "category": "OpenAI",
+      "title": "Prompting, estrutura e controle de saida",
+      "summary": "Use a camada de recursos da OpenAI para aprender prompting moderno e combine com Structured Outputs quando a resposta precisa sair em contrato mais controlado.",
+      "buttons": [
+        {
+          "label": "OpenAI resources",
+          "href": "https://developers.openai.com/resources/",
+          "variant": "primary"
+        },
+        {
+          "label": "Structured outputs",
+          "href": "https://platform.openai.com/docs/guides/structured-outputs",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "category": "Anthropic",
+      "title": "Prompt engineering e pensamento estendido",
+      "summary": "Anthropic e uma das referencias mais fortes em estrutura de prompt, XML, multishot, tool use e ajustes para tarefas mais profundas.",
+      "buttons": [
+        {
+          "label": "Prompt engineering",
+          "href": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview",
+          "variant": "primary"
+        },
+        {
+          "label": "Extended thinking",
+          "href": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/extended-thinking-tips",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "category": "Google",
+      "title": "Prompt design, long context e grounding",
+      "summary": "Google ajuda muito a enxergar prompting como parte de um sistema maior: design de prompt, contexto longo, grounding e output estruturado.",
+      "buttons": [
+        {
+          "label": "Prompt design strategies",
+          "href": "https://cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/prompt-design-strategies",
+          "variant": "primary"
+        },
+        {
+          "label": "Long context",
+          "href": "https://ai.google.dev/gemini-api/docs/long-context",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "category": "xAI",
+      "title": "Models e structured outputs",
+      "summary": "Para Grok e xAI, a leitura mais segura nesta fase e usar a documentacao oficial de modelos e structured outputs, sem prometer tecnicas que a doc ainda nao explicita tao bem quanto outros fornecedores.",
+      "buttons": [
+        {
+          "label": "xAI models",
+          "href": "https://docs.x.ai/docs/models",
+          "variant": "primary"
+        },
+        {
+          "label": "Structured outputs",
+          "href": "https://docs.x.ai/docs/guides/structured-outputs",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "category": "Radar",
+      "title": "Qwen e DeepSeek como acompanhamento",
+      "summary": "Esses labs entram como radar de estudo. So devem virar recomendacao forte no portal quando a documentacao oficial sustentar o mesmo nivel de clareza que exigimos dos fornecedores principais.",
+      "buttons": [
+        {
+          "label": "Qwen docs",
+          "href": "https://qwen.readthedocs.io/en/stable/",
+          "variant": "primary"
+        },
+        {
+          "label": "DeepSeek docs",
+          "href": "https://api-docs.deepseek.com/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "anti_patterns": [
+    {
+      "badge": "Erro comum",
+      "status_class": "status-risk",
+      "title": "Prompt enorme sem hierarquia",
+      "description": "Quantidade de texto nao compensa falta de organizacao. Quanto mais longo o prompt, mais ele precisa de estrutura clara."
+    },
+    {
+      "badge": "Erro comum",
+      "status_class": "status-risk",
+      "title": "Mandar o modelo 'pensar melhor'",
+      "description": "Sem objetivo, criterio e contexto, frases genéricas raramente melhoram a resposta de forma consistente."
+    },
+    {
+      "badge": "Erro comum",
+      "status_class": "status-risk",
+      "title": "Usar prompting para esconder ausencia de dados",
+      "description": "Se a resposta depende de fonte, memoria, retrieval ou ferramenta, o problema deixou de ser so de prompt."
+    },
+    {
+      "badge": "Erro comum",
+      "status_class": "status-risk",
+      "title": "Nao dizer o que fazer quando faltar contexto",
+      "description": "Prompt sem fallback empurra o modelo para improviso. Em contexto profissional, isso aumenta erro e retrabalho."
+    }
+  ],
+  "phase_boundary": [
+    "Esta fase ja entrega biblioteca comentada de exemplos progressivos.",
+    "Os prompts ainda sao exemplos didaticos, nao templates adaptativos com input do usuario.",
+    "Builder com contexto do usuario entra na Fase 3.",
+    "Comparacao profunda por fornecedor entra na Fase 4.",
+    "Laboratorio de qualidade de prompt entra na Fase 5."
+  ],
+  "next_steps": [
+    {
+      "badge": "Depois desta fase",
+      "status_class": "status-next",
+      "title": "Construir o Prompt Builder",
+      "description": "A proxima entrega natural e permitir que a pessoa injete objetivo, contexto, restricoes e formato para gerar um prompt final a partir da biblioteca."
+    },
+    {
+      "badge": "Depois desta fase",
+      "status_class": "status-next",
+      "title": "Aprofundar overlays por fornecedor",
+      "description": "A biblioteca ja aponta fontes oficiais, mas a comparacao do mesmo prompt por OpenAI, Anthropic, Google e xAI entra na fase seguinte do roadmap."
+    },
+    {
+      "badge": "Depois desta fase",
+      "status_class": "status-next",
+      "title": "Preparar a camada premium futura",
+      "description": "Com biblioteca e builder, o portal comeca a ficar pronto para trilhas exclusivas, templates proprietarios e productizacao futura."
+    }
+  ]
+}

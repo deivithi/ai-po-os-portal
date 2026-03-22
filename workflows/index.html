@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Workflows | AI Operating System do PO Salesforce</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body data-page="workflows">
+    <a class="skip-link" href="#content">Pular para o conteudo</a>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar"></aside>
+      <div class="content-shell">
+        <header class="topbar" id="topbar"></header>
+        <main class="page" id="content">
+          <section class="page-hero compact">
+            <div class="hero-copy">
+              <span class="eyebrow">Laboratorio operacional</span>
+              <h1>Workflows como produtos auditaveis.</h1>
+              <p class="lead">
+                Aqui o foco nao e apenas executar automacao, mas entender
+                criterios, riscos, logs e o papel obrigatorio da aprovacao
+                humana.
+              </p>
+            </div>
+            <aside class="callout-panel">
+              <span class="eyebrow">O que observar</span>
+              <ol class="step-list">
+                <li>Qual problema cada workflow resolve.</li>
+                <li>Quais sinais exigem revisao humana.</li>
+                <li>Como o resumo dos runs vira acao pratica.</li>
+              </ol>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="metric-grid" id="workflow-orientation"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Anatomia do workflow</span>
+                <h2>O que precisa existir para chamar isso de operacao governada</h2>
+                <p>
+                  Um workflow maduro nao e apenas prompt e saida. Ele precisa
+                  de contrato de entrada, verificacao, schema, risco e gate
+                  humano.
+                </p>
+              </div>
+              <div class="cards-grid cards-grid-2" id="workflow-anatomy"></div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Regras do operador</span>
+              <ul class="resource-list" id="workflow-operator-rules"></ul>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Mapa rapido</span>
+              <h2>Os dois workflows centrais do sistema</h2>
+            </div>
+            <div class="cards-grid cards-grid-2" id="workflow-cards"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Runs comentados</span>
+              <h2>Historico operacional com narrativa de decisao</h2>
+              <p>
+                Cada run precisa responder: o que achou, por que importa e o
+                que fazer depois.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-2" id="workflow-run-cards"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Protocolo de approval</span>
+                <h2>Como a decisao humana entra no fluxo</h2>
+              </div>
+              <div class="cards-grid cards-grid-2" id="workflow-approval-steps"></div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Escada de risco</span>
+              <div class="cards-grid" id="workflow-risk-ladder"></div>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Registro de runs</span>
+              <h2>Tabela resumida para auditoria rapida</h2>
+            </div>
+            <div class="data-panel">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Run</th>
+                    <th>Workflow</th>
+                    <th>Status</th>
+                    <th>Resumo</th>
+                    <th>Proxima acao</th>
+                  </tr>
+                </thead>
+                <tbody id="workflow-runs-table"></tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+        <footer class="footer" id="portal-footer"></footer>
+      </div>
+    </div>
+    <script src="../assets/app.js"></script>
+  </body>
+</html>

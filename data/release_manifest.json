@@ -1,0 +1,31 @@
+{
+  "release_checks": [
+    {
+      "title": "Estados de carregamento e vazio",
+      "description": "O portal precisa comunicar falha, ausencia de dados e carregamento sem parecer quebrado."
+    },
+    {
+      "title": "Acessibilidade basica",
+      "description": "Foco visivel, landmarks, hierarquia semantica e contraste permanecem obrigatorios."
+    },
+    {
+      "title": "Headers e cache",
+      "description": "JSONs precisam de cache control previsivel e o site deve expor headers basicos de seguranca."
+    },
+    {
+      "title": "Release discipline",
+      "description": "Cada deploy deve deixar rastros claros em preview, producao e documentacao do projeto."
+    }
+  ],
+  "qa_targets": [
+    "/",
+    "/matriz/",
+    "/workflows/",
+    "/rag/",
+    "/roadmap/",
+    "/artefatos/",
+    "/data/overview.json",
+    "/data/portal.json",
+    "/data/artifacts.json"
+  ]
+}

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Operating System do PO Salesforce</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./assets/styles.css" />
+  </head>
+  <body data-page="home">
+    <a class="skip-link" href="#content">Pular para o conteudo</a>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar"></aside>
+      <div class="content-shell">
+        <header class="topbar" id="topbar"></header>
+        <main class="page" id="content">
+          <section class="page-hero">
+            <div class="hero-copy">
+              <span class="eyebrow">Portal de estudo e operacao</span>
+              <h1>Aprenda IA aplicada com profundidade, clareza e execucao.</h1>
+              <p class="lead">
+                Este portal foi desenhado para explicar o sistema, mostrar o que
+                importa e acelerar a transferencia do conhecimento para o seu
+                trabalho real como PO de Salesforce.
+              </p>
+              <div class="hero-actions">
+                <a class="button" href="./jornada/">Comecar jornada</a>
+                <a class="button secondary" href="./prompts/">Abrir Prompt Studio</a>
+                <a class="button secondary" href="./matriz/">Explorar matriz</a>
+                <a class="button secondary" href="./roadmap/">Ver roadmap</a>
+              </div>
+            </div>
+            <aside class="hero-panel">
+              <div class="hero-panel-card">
+                <span class="label">Fase atual</span>
+                <strong id="phase-focus">Carregando fase...</strong>
+                <p class="muted" id="phase-summary">
+                  Atualizando status da fase atual.
+                </p>
+              </div>
+              <div class="hero-panel-card">
+                <span class="label">Como usar</span>
+                <p class="muted">
+                  Leia a Home para orientacao, aprofunde por tema nas paginas e
+                  feche cada ciclo revisando o roadmap.
+                </p>
+              </div>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Visao geral</span>
+              <h2>Estado atual do sistema</h2>
+              <p>
+                O portal organiza o projeto em camadas para facilitar estudo,
+                decisao e operacao.
+              </p>
+            </div>
+            <div class="metric-grid" id="home-overview"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Trilha guiada</span>
+              <h2>Como estudar sem se perder</h2>
+              <p>
+                A leitura foi desenhada para ir do macro para o detalhe e do
+                conceito para a aplicacao.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-3" id="study-principles"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Rotas de aprendizado</span>
+                <h2>Escolha a forma de navegar pelo portal</h2>
+                <p>
+                  Cada rota prioriza um tipo de aprendizado: entendimento,
+                  comparacao, operacao e consolidacao.
+                </p>
+              </div>
+              <div class="cards-grid cards-grid-3" id="study-tracks"></div>
+            </div>
+            <aside class="callout-panel">
+              <span class="eyebrow">Leitura recomendada</span>
+              <h3>Sequencia ideal para ganhar contexto rapido</h3>
+              <ol class="step-list">
+                <li>Comece pela Jornada para enxergar o plano inteiro.</li>
+                <li>Abra Prompts para estruturar melhor o comando dos modelos.</li>
+                <li>Use Matriz para comparar modelos e criterios.</li>
+                <li>Estude RAG para dominar contexto e citacao.</li>
+                <li>Abra Workflows para ver aplicacao operacional.</li>
+                <li>Feche no Roadmap para revisar maturidade e proximo passo.</li>
+              </ol>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Validacao da trilha</span>
+              <h2>Esta trilha ja te leva longe, mas nao deve parar aqui</h2>
+              <p>
+                O portal ja e uma base muito forte para IA aplicada. Esta secao
+                deixa claro o que ele cobre bem e o que ainda precisa entrar no
+                seu estudo para nivel raro.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-3" id="study-validation"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Snapshot x mercado</span>
+              <h2>Leia a matriz sem congelar nos nomes antigos</h2>
+              <p>
+                O score abaixo vem do harness calibrado em 2026-03-21. A
+                primeira coluna mostra qual familia atual vale estudar hoje nas
+                docs oficiais, sem fingir que o score ja foi rerodado nesses
+                nomes novos.
+              </p>
+            </div>
+            <div class="data-panel">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Familia atual</th>
+                    <th>Base calibrada</th>
+                    <th>Vendor</th>
+                    <th>Score snapshot</th>
+                    <th>O que estudar agora</th>
+                  </tr>
+                </thead>
+                <tbody id="home-ranking"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Artefatos principais</span>
+              <h2>Abra os recursos mais importantes sem sair do portal</h2>
+              <p>
+                Esta secao coloca os ativos centrais do projeto em uma camada
+                publica e navegavel, para estudo e reutilizacao.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-2" id="home-featured-artifacts"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Radar de LLMs</span>
+              <h2>Modelos atuais para acompanhar no mercado</h2>
+              <p>
+                Este radar complementa a matriz operacional. Aqui entram os
+                modelos mais relevantes do momento, incluindo Grok e alguns
+                players chineses de destaque.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-3" id="home-llm-watchlist"></div>
+          </section>
+        </main>
+        <footer class="footer" id="portal-footer"></footer>
+      </div>
+    </div>
+    <script src="./assets/app.js"></script>
+  </body>
+</html>

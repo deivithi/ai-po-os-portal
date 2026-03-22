@@ -1,0 +1,386 @@
+{
+  "site": {
+    "title": "AI Operating System do PO Salesforce",
+    "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
+    "updated_on": "2026-03-22",
+    "phase_label": "Refinamento ativo",
+    "phase_focus": "Prompt Studio fase 2",
+    "phase_summary": "O portal agora evoluiu o Prompt Studio para uma biblioteca didatica de exemplos progressivos, explicados em estrutura, limites, erro comum e materiais oficiais.",
+    "next_phase": "Prompt Studio fase 3",
+    "next_phase_summary": "O proximo passo mais valioso e construir o builder orientado por contexto para transformar a biblioteca em geracao assistida de prompts.",
+    "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
+  },
+  "navigation": [
+    { "id": "home", "label": "Home", "description": "Mapa de estudo e visao executiva", "href": "/" },
+    { "id": "jornada", "label": "Jornada", "description": "Como usar o portal em 30 dias", "href": "/jornada/" },
+    { "id": "prompts", "label": "Prompts", "description": "Prompt Studio e anatomia de prompt", "href": "/prompts/" },
+    { "id": "matriz", "label": "Matriz", "description": "Comparacao de modelos e scorecards", "href": "/matriz/" },
+    { "id": "workflows", "label": "Workflows", "description": "Operacao, risco e aprovacao humana", "href": "/workflows/" },
+    { "id": "rag", "label": "RAG", "description": "Conhecimento, grounding e citacao", "href": "/rag/" },
+    { "id": "roadmap", "label": "Roadmap", "description": "Fases, progresso e proxima etapa", "href": "/roadmap/" },
+    { "id": "artefatos", "label": "Artefatos", "description": "Hub publico dos ativos do projeto", "href": "/artefatos/" }
+  ],
+  "pages": {
+    "home": {
+      "title": "Home",
+      "nav_label": "Home",
+      "summary": "Visao geral do sistema, trilha de estudo e status executivo."
+    },
+    "jornada": {
+      "title": "Jornada",
+      "nav_label": "Jornada",
+      "summary": "Metodo de uso do portal: ordem, horas, entregaveis e materiais de apoio para 30 dias."
+    },
+    "prompts": {
+      "title": "Prompt Studio",
+      "nav_label": "Prompts",
+      "summary": "Fundamentos, biblioteca didatica e criterio de prompting para sair do improviso e entrar em design de tarefa."
+    },
+    "matriz": {
+      "title": "Matriz",
+      "nav_label": "Matriz",
+      "summary": "Sala de aula da matriz: leitura tecnica, didatica e comparativa dos modelos e scorecards.",
+      "questions": [
+        {
+          "kicker": "Pergunta 1",
+          "title": "Que tarefa real eu quero resolver?",
+          "description": "Escolha de modelo sem caso de uso definido vira ranking vazio. Parta do problema e so depois compare os modelos."
+        },
+        {
+          "kicker": "Pergunta 2",
+          "title": "O score alto se sustenta no meu contexto?",
+          "description": "Considere custo, controle, latencia, dados sensiveis e necessidade de explicacao antes de promover um modelo."
+        },
+        {
+          "kicker": "Pergunta 3",
+          "title": "Quais fontes sustentam a comparacao?",
+          "description": "Toda leitura da matriz precisa voltar para docs oficiais, evidencias do projeto e testes reais do seu fluxo."
+        }
+      ]
+    },
+    "workflows": {
+      "title": "Workflows",
+      "nav_label": "Workflows",
+      "summary": "Laboratorio demonstravel de workflows, com risco, approval e leitura operacional.",
+      "catalog": [
+        {
+          "title": "Auditoria de leads",
+          "badge": "Workflow operacional",
+          "status_class": "status-done",
+          "description": "Detecta duplicidade, falta de campos obrigatorios, quebra de SLA e problemas de roteamento para apoiar correcao com governanca.",
+          "points": [
+            "Leitura de qualidade e risco em lote.",
+            "Nao autoriza acao irreversivel sem revisao humana.",
+            "Serve tanto para estudo de regra quanto para operacao real."
+          ]
+        },
+        {
+          "title": "Validador de requisitos Salesforce",
+          "badge": "Workflow de homologacao",
+          "status_class": "status-done",
+          "description": "Le criterio de aceite, cobertura de testes e prontidao para build ou homologacao antes de avancar no ciclo.",
+          "points": [
+            "Explica readiness score em linguagem pratica.",
+            "Mostra lacunas de criterio e rastreabilidade.",
+            "Mantem logs e estado de approval."
+          ]
+        }
+      ]
+    },
+    "rag": {
+      "title": "RAG",
+      "nav_label": "RAG",
+      "summary": "Atlas do RAG: decisao de contexto, grounding, confiabilidade e evidencias do projeto."
+    },
+    "roadmap": {
+      "title": "Roadmap",
+      "nav_label": "Roadmap",
+      "summary": "Roadmap vivo: progresso dos 30 dias, releases do portal e proximas alavancas."
+    },
+    "artefatos": {
+      "title": "Artefatos",
+      "nav_label": "Artefatos",
+      "summary": "Hub publico dos ativos do projeto e curadoria de modelos para estudo."
+    }
+  },
+  "study_principles": [
+    {
+      "kicker": "Macro primeiro",
+      "title": "Comece por orientacao, nao por arquivo.",
+      "description": "A Home existe para reduzir confusao. Entenda mapa, fase atual e caminhos antes de abrir detalhes tecnicos."
+    },
+    {
+      "kicker": "Conceito + aplicacao",
+      "title": "Toda pagina deve ensinar e operar.",
+      "description": "Nao basta exibir dados. Cada area precisa explicar o por que, o quando e o que fazer com a informacao."
+    },
+    {
+      "kicker": "Visual com disciplina",
+      "title": "Ser visual sem virar ruido.",
+      "description": "Hierarquia, espacamento e contraste servem para acelerar entendimento, nao para competir com o conteudo."
+    }
+  ],
+  "study_tracks": [
+    {
+      "title": "Comecar pela Jornada 30D",
+      "description": "Abra a nova aba Jornada para entender a ordem ideal, a carga horaria e o que produzir a cada semana.",
+      "href": "/jornada/",
+      "badge": "Porta de entrada",
+      "status_class": "status-done"
+    },
+    {
+      "title": "Dominar prompting com criterio",
+      "description": "Use Prompt Studio para aprender estrutura, anatomia, limites e a hora certa de subir para schema, RAG ou tools.",
+      "href": "/prompts/",
+      "badge": "Camada de comando",
+      "status_class": "status-done"
+    },
+    {
+      "title": "Entender fundamentos de conhecimento",
+      "description": "Use a pagina RAG para ganhar seguranca sobre contexto, grounding, citacao e escolha de estrategia.",
+      "href": "/rag/",
+      "badge": "Base conceitual",
+      "status_class": "status-done"
+    },
+    {
+      "title": "Comparar modelos com criterio",
+      "description": "A pagina Matriz traduz scorecards em decisao pratica, evitando leitura superficial de benchmark.",
+      "href": "/matriz/",
+      "badge": "Analise comparativa",
+      "status_class": "status-done"
+    },
+    {
+      "title": "Ver operacao de verdade",
+      "description": "Abra Workflows para entender risco, aprovacao humana e como o sistema vira rotina auditavel.",
+      "href": "/workflows/",
+      "badge": "Aplicacao real",
+      "status_class": "status-done"
+    },
+    {
+      "title": "Consolidar pelo Roadmap e artefatos",
+      "description": "Feche ciclos usando o Roadmap e use Artefatos como biblioteca de apoio para revisar, comparar e aprofundar.",
+      "href": "/roadmap/",
+      "badge": "Consolidacao",
+      "status_class": "status-done"
+    }
+  ],
+  "study_validation": [
+    {
+      "badge": "Ja te deixa forte",
+      "status_class": "status-done",
+      "title": "Especialista aplicado em formacao muito forte",
+      "description": "Se voce percorrer esta trilha com pratica semanal, o portal ja te leva a escolher modelos com criterio, montar RAG confiavel, usar NotebookLM com inteligencia e operar workflows com approval humano.",
+      "points": [
+        "Aprende a separar mercado atual de matriz operacional.",
+        "Aprende quando usar long context, NotebookLM, Projects e vector RAG.",
+        "Aprende a tratar risco, fonte, citacao, approval e observabilidade como parte do sistema."
+      ]
+    },
+    {
+      "badge": "O que falta",
+      "status_class": "status-in-progress",
+      "title": "Blocos que ainda precisam entrar para nivel raro",
+      "description": "Para sair do nivel usuario avancado e se aproximar de referencia aplicada, voce ainda precisa aprofundar retrieval em detalhe, evals formais, protocolos de agentes, custo/latencia e governanca tecnica.",
+      "points": [
+        "Embeddings, chunking, rerankers e avaliacao de retrieval.",
+        "Harness de evals continuo, regressao e comparacao de providers.",
+        "MCP, tool use, observabilidade, seguranca e disciplina de rollout."
+      ]
+    },
+    {
+      "badge": "Regra de estudo",
+      "status_class": "status-next",
+      "title": "A expertise vem de experimento, nao so de leitura",
+      "description": "O portal te da mapa e criterio. O salto para especialista vem quando cada bloco vira teste comparativo, run real, caderno de achados e iteracao frequente.",
+      "points": [
+        "Rodar comparacoes semanais entre dois modelos por caso de uso.",
+        "Registrar decisoes, falhas e trade-offs no proprio sistema.",
+        "Converter cada pagina estudada em um experimento pratico no projeto."
+      ]
+    }
+  ],
+  "rag_modes": [
+    {
+      "badge": "Modo 1",
+      "status_class": "status-done",
+      "title": "Long context",
+      "description": "Bom quando o volume cabe em contexto e o ganho principal esta em leitura sequencial de material confiavel.",
+      "points": [
+        "Menor complexidade de implementacao.",
+        "Otimo para revisao de documento grande.",
+        "Ainda exige criterio de fonte e validacao."
+      ]
+    },
+    {
+      "badge": "Modo 2",
+      "status_class": "status-done",
+      "title": "NotebookLM",
+      "description": "Forte para estudo, citacao, analise de fontes e exploracao guiada do conhecimento ja reunido.",
+      "points": [
+        "Excelente para aprendizagem e consolidacao.",
+        "Ajuda a navegar corpus com linguagem natural.",
+        "Complementa, nao substitui, o pipeline operacional."
+      ]
+    },
+    {
+      "badge": "Modo 3",
+      "status_class": "status-done",
+      "title": "Projects",
+      "description": "Conveniente para knowledge scoped dentro do fornecedor quando a necessidade principal e produtividade contextual.",
+      "points": [
+        "Baixa friccao para uso diario.",
+        "Bom para memory de trabalho por assunto.",
+        "Menos flexivel que pipeline proprio."
+      ]
+    },
+    {
+      "badge": "Modo 4",
+      "status_class": "status-done",
+      "title": "Vector RAG",
+      "description": "Melhor quando voce precisa recuperar, citar e controlar a forma como a base de conhecimento e consultada.",
+      "points": [
+        "Maior controle sobre chunking e retrieval.",
+        "Melhor para operacao auditavel.",
+        "Exige mais desenho e manutencao."
+      ]
+    }
+  ],
+  "rag_checklist": [
+    {
+      "kicker": "Checklist",
+      "title": "Sempre mostrar a origem",
+      "description": "Nao trate resposta bem escrita como resposta confiavel. Fonte e citacao precisam estar visiveis."
+    },
+    {
+      "kicker": "Checklist",
+      "title": "Separar estudo de execucao",
+      "description": "Ferramenta de aprendizado e pipeline de producao podem cooperar, mas nao precisam ser a mesma coisa."
+    },
+    {
+      "kicker": "Checklist",
+      "title": "Definir fallback e limite",
+      "description": "Todo sistema de conhecimento precisa deixar claro quando sabe, quando recupera e quando deve pedir ajuda."
+    }
+  ],
+  "roadmap_phases": [
+    {
+      "window": "Fase 0",
+      "title": "Baseline e contrato do portal",
+      "status_label": "Concluida",
+      "status_class": "status-done",
+      "goal": "Congelar escopo, rotas, contratos de dados e a disciplina de entrega por fase.",
+      "deliverables": ["Roadmap oficial do portal", "Criterios de aceite por fase", "Definicao da arquitetura multipagina"]
+    },
+    {
+      "window": "Fase 1",
+      "title": "Shell visual e didatico",
+      "status_label": "Concluida",
+      "status_class": "status-done",
+      "goal": "Transformar o dashboard em um portal com navegacao, identidade visual e leitura guiada.",
+      "deliverables": ["Home reformulada", "Paginas base para Matriz, Workflows, RAG, Roadmap e Artefatos", "Assets compartilhados de CSS e JS"]
+    },
+    {
+      "window": "Fase 2",
+      "title": "Hub de artefatos guiado",
+      "status_label": "Concluida",
+      "status_class": "status-done",
+      "goal": "Publicar um espelho web-safe dos artefatos principais, criar botoes reais e adicionar um radar atual de LLMs relevantes.",
+      "deliverables": ["Secao de artefatos na Home", "Pagina Artefatos funcional", "Links publicos para ativos selecionados", "Curadoria atualizada de Grok e modelos chineses"]
+    },
+    {
+      "window": "Fase 3",
+      "title": "Sala de aula da matriz",
+      "status_label": "Concluida",
+      "status_class": "status-done",
+      "goal": "Transformar a pagina Matriz em uma experiencia de comparacao, ensino e criterio operacional.",
+      "deliverables": ["Rubrica explicada com pesos visiveis", "Leitura por caso de uso real", "Perfis dos modelos com forcas e limites", "Fronteira clara entre matriz e radar"]
+    },
+    {
+      "window": "Fase 4",
+      "title": "Laboratorio de workflows",
+      "status_label": "Concluida",
+      "status_class": "status-done",
+      "goal": "Transformar a pagina Workflows em uma area demonstravel com runs comentados, approval e leitura de risco.",
+      "deliverables": ["Anatomia do workflow", "Runs comentados", "Escada de risco", "Protocolo de approval"]
+    },
+    {
+      "window": "Fase 5",
+      "title": "Atlas do RAG",
+      "status_label": "Concluida",
+      "status_class": "status-done",
+      "goal": "Transformar a pagina RAG em um atlas de decisao com modos de uso, confiabilidade e evidencias reais do sistema.",
+      "deliverables": ["Orientacao por modo de uso", "Contrato de confianca", "Antipadroes explicitos", "Evidencias do RAG local e NotebookLM"]
+    },
+    {
+      "window": "Fase 6",
+      "title": "Roadmap vivo de 30 dias",
+      "status_label": "Concluida",
+      "status_class": "status-done",
+      "goal": "Transformar a pagina Roadmap em trilha viva com releases, maturidade e proximas alavancas.",
+      "deliverables": ["Leitura dos 30 dias", "Historico de releases", "Regras de fase", "Proxima recomendacao explicita"]
+    },
+    {
+      "window": "Fase 7",
+      "title": "Polimento premium e governanca de release",
+      "status_label": "Concluida",
+      "status_class": "status-done",
+      "goal": "Fechar o portal com acessibilidade, estados refinados, headers melhores e disciplina final de release.",
+      "deliverables": ["QA final de rotas", "Estados e empty/loading", "Headers e release manifest", "Acabamento responsivo"]
+    }
+  ],
+  "maturity_map": [
+    {
+      "stage": "30D-A",
+      "title": "Fundacao pronta",
+      "description": "Matriz, harness e criterios de comparacao ja foram construidos."
+    },
+    {
+      "stage": "30D-B",
+      "title": "Operacao pronta",
+      "description": "RAG, workflows e evidencias ja existem como base funcional."
+    },
+    {
+      "stage": "30D-C",
+      "title": "Experiencia de estudo em consolidacao",
+      "description": "O portal ja tem shell visual, hub de artefatos, matriz ensinando criterio, workflows demonstrando operacao e atlas do conhecimento."
+    },
+    {
+      "stage": "30D-D",
+      "title": "Governanca e apresentacao",
+      "description": "O portal fechou o ciclo de productizacao e esta pronto para feedback fino, demonstracao e ajustes orientados por uso."
+    }
+  ],
+  "artifacts": {
+    "available": [
+      {
+        "badge": "Disponivel",
+        "title": "Overview JSON do portal",
+        "description": "Contrato publico que alimenta a visao geral atual da Home, Matriz e Workflows.",
+        "href": "/data/overview.json"
+      },
+      {
+        "badge": "Disponivel",
+        "title": "Portal JSON",
+        "description": "Metadados das paginas, trilhas de estudo, roadmap e navegacao compartilhada.",
+        "href": "/data/portal.json"
+      }
+    ],
+    "soon": [
+      {
+        "badge": "Fase 2",
+        "title": "Matriz em CSV, JSON e Markdown",
+        "description": "Publicacao controlada dos formatos mais uteis para estudo e reaproveitamento."
+      },
+      {
+        "badge": "Fase 2",
+        "title": "Playbook e guia mestre",
+        "description": "Versoes web-safe dos principais documentos de apoio ao aprendizado."
+      },
+      {
+        "badge": "Fase 2",
+        "title": "Runs selecionados dos workflows",
+        "description": "Abertura de execucoes exemplares com leitura guiada e contexto."
+      }
+    ]
+  }
+}

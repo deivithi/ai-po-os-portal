@@ -1,0 +1,126 @@
+{
+  "orientation": [
+    {
+      "badge": "Base atual",
+      "status_class": "status-done",
+      "title": "15 chunks indexados",
+      "body": "Conhecimento local pronto para consulta",
+      "note": "O RAG local do projeto ja indexa materiais de governanca, requisitos e contexto de decisao."
+    },
+    {
+      "badge": "Pesquisa",
+      "status_class": "status-done",
+      "title": "NotebookLM ativo",
+      "body": "Pesquisa grounded com notebook proprio",
+      "note": "O projeto preserva o notebook, manifesto das fontes e estudo exportado para comparacao com o pipeline local."
+    },
+    {
+      "badge": "Regra",
+      "status_class": "status-in-progress",
+      "title": "Citar antes de concluir",
+      "body": "Texto bom nao basta",
+      "note": "Toda resposta importante precisa deixar visivel a origem e o limite do sistema."
+    },
+    {
+      "badge": "Decisao",
+      "status_class": "status-next",
+      "title": "Modo certo para o problema",
+      "body": "Long context, NotebookLM, Projects ou vector RAG",
+      "note": "A escolha depende de reuso, auditabilidade, volume e frequencia de mudanca da base."
+    }
+  ],
+  "decision_tracks": [
+    {
+      "title": "Poucos documentos, analise pontual",
+      "badge": "Use long context",
+      "status_class": "status-done",
+      "description": "Quando o material cabe em contexto e a necessidade principal e leitura sequencial, a janela longa evita sobre-engenharia."
+    },
+    {
+      "title": "Pesquisa, sintese e estudo guiado",
+      "badge": "Use NotebookLM",
+      "status_class": "status-done",
+      "description": "Quando o objetivo e aprender a partir de fontes, citar e explorar o corpus com linguagem natural."
+    },
+    {
+      "title": "Memoria contextual de fornecedor",
+      "badge": "Use Projects",
+      "status_class": "status-in-progress",
+      "description": "Quando a produtividade contextual importa, mas voce ainda nao precisa do controle completo de um pipeline proprio."
+    },
+    {
+      "title": "Base reutilizavel por muitos workflows",
+      "badge": "Use vector RAG",
+      "status_class": "status-done",
+      "description": "Quando a mesma base alimenta agentes, automacoes e dashboards com governanca e citacao."
+    }
+  ],
+  "trust_contract": [
+    {
+      "kicker": "Regra 1",
+      "title": "Mostrar origem",
+      "description": "Resposta sem origem visivel pode soar boa e ainda assim ser fraca para operacao."
+    },
+    {
+      "kicker": "Regra 2",
+      "title": "Separar estudo de producao",
+      "description": "NotebookLM ajuda a aprender. Vector RAG ajuda a operar. Eles podem cooperar sem virar a mesma camada."
+    },
+    {
+      "kicker": "Regra 3",
+      "title": "Definir fallback",
+      "description": "O sistema precisa dizer quando sabe, quando recupera e quando deve pedir ajuda."
+    },
+    {
+      "kicker": "Regra 4",
+      "title": "Escolher pela taxa de mudanca da base",
+      "description": "Se o corpus muda muito e precisa servir muitos fluxos, o custo de manter RAG proprio passa a fazer sentido."
+    }
+  ],
+  "system_views": [
+    {
+      "title": "RAG local",
+      "summary": "Controle de chunking, retrieval e citacao por arquivo e linha para operacao auditavel.",
+      "buttons": [
+        {
+          "label": "Abrir knowledge index",
+          "href": "/artifacts/files/knowledge_index.json",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "title": "NotebookLM",
+      "summary": "Pesquisa grounded, manifesto das fontes e estudo exportado para consolidacao rapida.",
+      "buttons": [
+        {
+          "label": "Abrir manifesto",
+          "href": "/artifacts/files/notebook_manifest.json",
+          "variant": "primary"
+        },
+        {
+          "label": "Abrir study guide",
+          "href": "/artifacts/files/study_guide.md",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "title": "Playbook de decisao",
+      "summary": "Documento operacional com a regra rapida para escolher a estrategia certa de contexto.",
+      "buttons": [
+        {
+          "label": "Abrir playbook",
+          "href": "/artifacts/files/playbook_long_context_vs_notebooklm_vs_projects_vs_vector_rag.md",
+          "variant": "primary"
+        }
+      ]
+    }
+  ],
+  "anti_patterns": [
+    "Jogar toda a base historica em uma unica conversa e chamar isso de estrategia.",
+    "Tratar texto bonito como evidência suficiente.",
+    "Misturar pesquisa exploratoria com acao irreversivel sem log e approval.",
+    "Criar pipeline de RAG proprio cedo demais quando long context ou NotebookLM resolveriam."
+  ]
+}

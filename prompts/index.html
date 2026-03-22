@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prompt Studio | AI Operating System do PO Salesforce</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body data-page="prompts">
+    <a class="skip-link" href="#content">Pular para o conteudo</a>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar"></aside>
+      <div class="content-shell">
+        <header class="topbar" id="topbar"></header>
+        <main class="page" id="content">
+          <section class="page-hero compact">
+            <div class="hero-copy">
+              <span class="eyebrow">Prompt Studio</span>
+              <h1>Aprenda prompting como design de sistema, nao como truque.</h1>
+              <p class="lead">
+                Esta nova aba organiza prompting em niveis de maturidade,
+                anatomia, criterio e limites. O foco aqui e ensinar como
+                escrever melhor, quando parar de mexer no prompt e quando subir
+                para schema, RAG, tools ou workflow.
+              </p>
+              <div class="hero-actions">
+                <a class="button" href="#biblioteca">Ir para biblioteca</a>
+                <a class="button secondary" href="../jornada/">Ver Jornada</a>
+                <a class="button secondary" href="../matriz/">Cruzar com Matriz</a>
+                <a class="button secondary" href="../rag/">Cruzar com RAG</a>
+              </div>
+            </div>
+            <aside class="callout-panel">
+              <span class="eyebrow">Tese da fase 2</span>
+              <h3>Agora o mapa virou biblioteca didatica.</h3>
+              <p>
+                Esta fase pega os fundamentos da fase 1 e transforma em exemplos
+                progressivos, comentados e reutilizaveis, sem perder criterio e
+                sem tratar template como verdade pronta.
+              </p>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="metric-grid" id="prompts-orientation"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Niveis de maturidade</span>
+              <h2>Basico, intermediario e avancado</h2>
+              <p>
+                A ideia aqui nao e decorar frases prontas. E entender como a
+                qualidade do prompt cresce conforme a tarefa exige mais controle.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-3" id="prompts-levels"></div>
+          </section>
+
+          <section class="section" id="biblioteca">
+            <div class="section-header">
+              <span class="eyebrow">Biblioteca didatica</span>
+              <h2>Exemplos progressivos para estudar de verdade</h2>
+              <p>
+                Cada exemplo abaixo mostra objetivo, prompt, blocos explicados,
+                quando usar, quando nao usar, erro comum e materiais oficiais de
+                apoio.
+              </p>
+            </div>
+            <div class="metric-grid" id="prompt-library-overview"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Como usar a biblioteca</span>
+                <h2>Estude os exemplos como design, nao como atalho</h2>
+                <p>
+                  O ganho desta fase nao e copiar um prompt. E aprender a
+                  enxergar por que ele funciona, quando falha e como adaptar ao
+                  seu contexto.
+                </p>
+              </div>
+              <div class="cards-grid cards-grid-3" id="prompt-library-level-summaries"></div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Regras de estudo</span>
+              <ul class="resource-list" id="prompt-library-rules"></ul>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Nivel basico</span>
+              <h2>Prompts para clareza e controle minimo</h2>
+              <p>
+                Aqui entram prompts de baixo risco que ja melhoram a qualidade
+                da resposta quando objetivo, contexto e formato aparecem com
+                nitidez.
+              </p>
+            </div>
+            <div class="prompt-example-stack" id="prompt-basic-library"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Nivel intermediario</span>
+              <h2>Prompts com criterio de aceite e estrutura previsivel</h2>
+              <p>
+                Esta camada ja exige contratos melhores: criterios, schema,
+                saida reutilizavel e fallback mais explicito.
+              </p>
+            </div>
+            <div class="prompt-example-stack" id="prompt-intermediate-library"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Nivel avancado</span>
+              <h2>Prompts como parte de um sistema maior</h2>
+              <p>
+                Few-shot, gates, escalada para RAG ou tools e politicas de
+                decisao entram aqui para formar criterio operacional.
+              </p>
+            </div>
+            <div class="prompt-example-stack" id="prompt-advanced-library"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Anatomia</span>
+                <h2>As camadas que formam um prompt forte</h2>
+                <p>
+                  Um prompt profissional normalmente fica melhor quando papel,
+                  tarefa, contexto, restricoes, criterio e formato aparecem de
+                  forma explicita e em ordem.
+                </p>
+              </div>
+              <div class="cards-grid cards-grid-2" id="prompts-anatomy"></div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Escalada correta</span>
+              <h3>Quando prompt basta e quando nao basta</h3>
+              <p>
+                Esta secao existe para evitar a armadilha de tentar resolver
+                tudo com texto quando o problema real pede arquitetura melhor.
+              </p>
+              <div class="prompt-decision-block">
+                <strong>Prompt sozinho costuma bastar quando:</strong>
+                <ul class="resource-list" id="prompts-prompt-alone"></ul>
+              </div>
+              <div class="prompt-decision-block">
+                <strong>Voce deve subir de nivel quando:</strong>
+                <ul class="resource-list" id="prompts-prompt-upgrade"></ul>
+              </div>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Formula base</span>
+              <h2>Um esqueleto simples para pensar melhor</h2>
+              <p>
+                Este esqueleto nao e um prompt universal. Ele funciona como mapa
+                visual para voce entender os blocos essenciais antes de adaptar
+                ao seu caso real.
+              </p>
+            </div>
+            <div class="data-panel prompt-formula-panel">
+              <pre class="prompt-skeleton" id="prompt-skeleton"></pre>
+            </div>
+            <div class="cards-grid cards-grid-3" id="prompts-formula-notes"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Documentacao oficial</span>
+              <h2>Materiais para aprofundar com seguranca</h2>
+              <p>
+                Cada fornecedor trata prompting com nuances diferentes. Por
+                isso, esta aba liga as explicacoes do portal a fontes oficiais
+                sempre que possivel.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-2" id="prompts-official-materials"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Antipadroes</span>
+                <h2>Erros que fazem prompting parecer melhor do que realmente e</h2>
+                <p>
+                  Esta lista ajuda a criar criterio. Em contexto profissional,
+                  prompt bonito sem controle ainda e fragilidade operacional.
+                </p>
+              </div>
+              <div class="cards-grid cards-grid-2" id="prompts-anti-patterns"></div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Limites da fase 1</span>
+              <ul class="resource-list" id="prompts-phase-boundary"></ul>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Proximas fases</span>
+              <h2>O que vem depois deste fundamento</h2>
+              <p>
+                Esta fase abre o mapa. As proximas entregas vao transformar esse
+                mapa em biblioteca, builder, overlays por fornecedor e
+                laboratorio de qualidade.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-3" id="prompts-next-steps"></div>
+          </section>
+        </main>
+        <footer class="footer" id="portal-footer"></footer>
+      </div>
+    </div>
+    <script src="../assets/app.js"></script>
+  </body>
+</html>

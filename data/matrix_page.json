@@ -1,0 +1,111 @@
+{
+  "decision_flow": [
+    {
+      "kicker": "Passo 1",
+      "title": "Comece pelo caso de uso",
+      "description": "Nao escolha modelo por hype. Escolha pela tarefa real que precisa de apoio no seu fluxo."
+    },
+    {
+      "kicker": "Passo 2",
+      "title": "Leia a rubrica antes do ranking",
+      "description": "O score nasce de pesos. Sem entender a rubrica, o ranking vira um numero sem contexto."
+    },
+    {
+      "kicker": "Passo 3",
+      "title": "Cruze desempenho com risco",
+      "description": "Modelos bons em sintese nem sempre sao os melhores para governanca, citacao ou controle operacional."
+    },
+    {
+      "kicker": "Passo 4",
+      "title": "So promova para operacao depois do harness",
+      "description": "Radar de mercado sugere teste. Matriz operacional exige evidencia reproduzivel."
+    }
+  ],
+  "metric_meta": [
+    {
+      "id": "precision",
+      "label": "Precisao",
+      "description": "Capacidade de responder corretamente sem distorcer regras, fatos ou contexto.",
+      "question": "Se este criterio falhar, qual retrabalho ou erro operacional aparece?"
+    },
+    {
+      "id": "citation",
+      "label": "Citacao",
+      "description": "Qualidade da recuperacao e da sustentacao da resposta em fontes, trechos e evidencias.",
+      "question": "O modelo deixa claro de onde tirou a resposta ou apenas soa convincente?"
+    },
+    {
+      "id": "cost_efficiency",
+      "label": "Custo x valor",
+      "description": "Relacao entre qualidade entregue e custo estimado para uso recorrente no fluxo.",
+      "question": "Faz sentido pagar este nivel de modelo para a frequencia da tarefa?"
+    },
+    {
+      "id": "latency",
+      "label": "Latencia",
+      "description": "Tempo de resposta percebido para operacao assistida e para rotinas de uso frequente.",
+      "question": "A resposta precisa chegar no ritmo do trabalho ou pode demorar mais?"
+    },
+    {
+      "id": "control",
+      "label": "Controle",
+      "description": "Facilidade de impor schema, formato, contratos de saida e integracao com ferramentas.",
+      "question": "Quao importante e obter saida previsivel e estruturada neste caso?"
+    },
+    {
+      "id": "risk_management",
+      "label": "Gestao de risco",
+      "description": "Comportamento do modelo quando ha ambiguidade, necessidade de cautela e impacto de erro.",
+      "question": "Quando o modelo nao sabe, ele tende a sinalizar limite ou a improvisar?"
+    }
+  ],
+  "use_case_meta": [
+    {
+      "id": "auditoria_leads",
+      "title": "Auditoria de leads",
+      "description": "Lotes, regras, sinais de qualidade e risco para saneamento com governanca.",
+      "decision_note": "Precisao, controle e gestao de risco pesam mais que velocidade pura.",
+      "watch_for": "Modelos que resumem bem, mas deixam passar duplicidade, SLA e roteamento."
+    },
+    {
+      "id": "validacao_requisitos",
+      "title": "Validacao de requisitos",
+      "description": "Criterios de aceite, cobertura de testes e prontidao para build ou homologacao.",
+      "decision_note": "Consistencia de instrucao e saida estruturada valem mais do que estilo de escrita.",
+      "watch_for": "Modelos que produzem texto elegante, mas fraco em rastreabilidade e cobertura."
+    },
+    {
+      "id": "analise_comercial",
+      "title": "Analise comercial",
+      "description": "Sintese executiva, leitura de KPI e apoio para diagnostico de funil e acao.",
+      "decision_note": "Boa interpretacao executiva precisa vir junto com capacidade de sustentar recomendacoes.",
+      "watch_for": "Modelos que soam estrategicos, mas nao deixam claro criterio e evidencias."
+    },
+    {
+      "id": "sintese_reunioes",
+      "title": "Sintese de reunioes",
+      "description": "Follow-up, resumo, decisoes e proxima acao em ritmo rapido.",
+      "decision_note": "Fluidez e latencia contam, mas a clareza da proxima acao continua critica.",
+      "watch_for": "Modelos que resumem bonito, mas escondem pendencias ou ambiguidade."
+    },
+    {
+      "id": "qa_documentos_longos",
+      "title": "QA em documentos longos",
+      "description": "Leitura extensa, comparacao de trechos, grounding e verificacao documental.",
+      "decision_note": "Citacao, precisao e gestao de risco formam o nucleo da decisao.",
+      "watch_for": "Modelos fortes em resumo curto, mas fracos em navegar corpus longo com fidelidade."
+    }
+  ],
+  "freshness_notes": [
+    "Data da matriz operacional: 2026-03-21.",
+    "Cobertura atual: 4 modelos avaliados em 5 casos de uso reais do projeto.",
+    "A calibracao seed combina documentacao oficial com criterio operacional do sistema.",
+    "Modelos mais recentes do mercado continuam no radar, mas nao entram na matriz sem teste reproduzivel."
+  ],
+  "boundary_notes": [
+    "Matriz operacional mostra apenas o que ja foi calibrado e comparado no harness do projeto.",
+    "Radar de mercado acompanha lancamentos e familias promissoras, mas isso nao equivale a aprovacao operacional.",
+    "Claims de benchmark dos fornecedores devem ser lidos como claims atribuidos a fonte oficial.",
+    "Quando um modelo parece muito forte no mercado, o proximo passo correto e testar no seu caso de uso."
+  ]
+}

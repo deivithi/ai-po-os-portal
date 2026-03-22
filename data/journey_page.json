@@ -1,0 +1,479 @@
+{
+  "orientation": [
+    {
+      "badge": "Compromisso",
+      "status_class": "status-done",
+      "title": "90 horas em 30 dias",
+      "body": "3h por dia em media",
+      "note": "Se voce tiver menos tempo, use a sessao curta de 90 minutos e alongue o plano. Se tiver mais tempo, use a sessao intensiva para acelerar o capstone."
+    },
+    {
+      "badge": "Objetivo",
+      "status_class": "status-done",
+      "title": "Nivel senior aplicado",
+      "body": "Nao e pesquisa frontier; e dominio pratico",
+      "note": "A meta realista aqui e sair do uso generico e chegar a um nivel forte de escolha de modelos, contexto, RAG, memoria de trabalho, workflows e governanca."
+    },
+    {
+      "badge": "Regra central",
+      "status_class": "status-next",
+      "title": "Uma pagina, um experimento, uma nota",
+      "body": "Nunca estude sem produzir",
+      "note": "Cada sessao deve terminar com um artefato: comparativo, run, checklist, resumo de falha, notebook ou decisao registrada."
+    },
+    {
+      "badge": "Uso ideal",
+      "status_class": "status-done",
+      "title": "Portal como sistema operacional de estudo",
+      "body": "Ler, testar, registrar e iterar",
+      "note": "A aplicacao nao foi feita para leitura passiva. Ela funciona melhor quando cada rota do portal vira um bloco de trabalho real."
+    }
+  ],
+  "navigation_path": [
+    {
+      "badge": "Passo 1",
+      "status_class": "status-done",
+      "title": "Comece por Jornada",
+      "description": "Entenda a carga horaria, a sequencia de estudo, a sessao padrao e os entregaveis de cada semana antes de mergulhar no conteudo tecnico.",
+      "time_box": "45 min no Dia 1",
+      "buttons": [
+        {
+          "label": "Esta pagina",
+          "href": "/jornada/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "badge": "Passo 2",
+      "status_class": "status-done",
+      "title": "Passe pelo Prompt Studio",
+      "description": "Use a nova aba Prompts para dominar anatomia, niveis de maturidade e limites do prompting antes de mergulhar em comparacao de modelos ou desenho de contexto.",
+      "time_box": "4h a 5h na Semana 1",
+      "buttons": [
+        {
+          "label": "Abrir Prompts",
+          "href": "/prompts/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Passo 3",
+      "status_class": "status-done",
+      "title": "Leia a Matriz como criterio",
+      "description": "Use a Matriz para aprender como comparar familias de modelos, quando confiar no score e como separar snapshot operacional de mercado atual.",
+      "time_box": "4h a 6h na Semana 1",
+      "buttons": [
+        {
+          "label": "Abrir Matriz",
+          "href": "/matriz/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Passo 4",
+      "status_class": "status-done",
+      "title": "Use Artefatos como material de apoio",
+      "description": "Abra o radar de LLMs, a matriz em Markdown, o playbook de contexto e os runs para transformar teoria em referencia de consulta rapida.",
+      "time_box": "2h a 3h por semana",
+      "buttons": [
+        {
+          "label": "Abrir Artefatos",
+          "href": "/artefatos/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Passo 5",
+      "status_class": "status-done",
+      "title": "Construa base forte em RAG e contexto",
+      "description": "A pagina RAG deve ser estudada com calma. Ela organiza long context, grounding, NotebookLM, vector RAG e memoria de trabalho no mesmo mapa mental.",
+      "time_box": "6h a 8h na Semana 2",
+      "buttons": [
+        {
+          "label": "Abrir RAG",
+          "href": "/rag/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Passo 6",
+      "status_class": "status-done",
+      "title": "Transforme conhecimento em operacao",
+      "description": "A pagina Workflows mostra como IA vira rotina auditavel com approval humano, risco, logs e proxima acao. E aqui que a especializacao fica pratica.",
+      "time_box": "6h a 8h na Semana 3 e 4",
+      "buttons": [
+        {
+          "label": "Abrir Workflows",
+          "href": "/workflows/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "badge": "Passo 7",
+      "status_class": "status-done",
+      "title": "Feche ciclos no Roadmap",
+      "description": "Use o Roadmap para revisar progresso, checar o que falta e decidir a proxima alavanca de aprendizado sem se perder em conteudo demais.",
+      "time_box": "30 min por semana",
+      "buttons": [
+        {
+          "label": "Abrir Roadmap",
+          "href": "/roadmap/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "rules": [
+    "Nao leia duas rotas seguidas sem produzir um artefato real.",
+    "Toda semana compare pelo menos dois modelos para o mesmo caso de uso.",
+    "Toda semana revise pelo menos um prompt e explique por que ele ficou melhor ou pior.",
+    "Toda resposta boa precisa ser acompanhada de fonte, risco e proxima acao.",
+    "RAG so fica forte quando voce mede retrieval, citacao e falha.",
+    "Memoria deve ser tratada como design de sistema, nao como magia do modelo."
+  ],
+  "hours_by_route": [
+    {
+      "title": "Jornada",
+      "hours": "6h",
+      "description": "Planejar a trilha, revisar os blocos, ajustar o ritmo e decidir no que focar em seguida.",
+      "output": "Plano pessoal de 30 dias e check-in semanal.",
+      "buttons": [
+        {
+          "label": "Ir para Jornada",
+          "href": "/jornada/",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "title": "Prompts",
+      "hours": "10h",
+      "description": "Dominar anatomia do prompt, niveis de maturidade, criterio de qualidade e o momento certo de escalar para schema, RAG ou tools.",
+      "output": "Biblioteca pessoal de prompts revisados e notas de estrutura.",
+      "buttons": [
+        {
+          "label": "Ir para Prompts",
+          "href": "/prompts/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "title": "Matriz",
+      "hours": "14h",
+      "description": "Aprender modelos, fornecedores, trade-offs de custo, controle, risco e adequacao por caso de uso.",
+      "output": "Caderno de comparativos e criterio de escolha.",
+      "buttons": [
+        {
+          "label": "Ir para Matriz",
+          "href": "/matriz/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "title": "RAG",
+      "hours": "20h",
+      "description": "Consolidar contexto, grounding, long context, NotebookLM, vector RAG e limites de memoria de trabalho.",
+      "output": "Tabela de decisao de contexto e conjunto de perguntas com citacao.",
+      "buttons": [
+        {
+          "label": "Ir para RAG",
+          "href": "/rag/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "title": "Workflows",
+      "hours": "16h",
+      "description": "Entender como IA vira processo auditavel, com schema, approval, risco e observabilidade.",
+      "output": "Run comentado e checklist de operacao segura.",
+      "buttons": [
+        {
+          "label": "Ir para Workflows",
+          "href": "/workflows/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "title": "Artefatos",
+      "hours": "10h",
+      "description": "Usar radar, playbooks, guia mestre, runs e evidencias como material de consolidacao e revisao.",
+      "output": "Biblioteca pessoal de referencias e highlights.",
+      "buttons": [
+        {
+          "label": "Ir para Artefatos",
+          "href": "/artefatos/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "title": "Roadmap",
+      "hours": "4h",
+      "description": "Revisar maturidade, fechar ciclos e priorizar os proximos experimentos de forma disciplinada.",
+      "output": "Retro semanal e proxima alavanca definida.",
+      "buttons": [
+        {
+          "label": "Ir para Roadmap",
+          "href": "/roadmap/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "title": "Laboratorio aplicado",
+      "hours": "10h",
+      "description": "Tempo reservado para amarrar o que foi estudado em Prompts, Matriz, RAG e Workflows em testes reais, comparativos e pequenas demos.",
+      "output": "Evals, logs de falha e uma mini demo capstone.",
+      "buttons": [
+        {
+          "label": "Usar o portal como base",
+          "href": "/",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "session_templates": [
+    {
+      "badge": "Sessao curta",
+      "status_class": "status-next",
+      "title": "90 minutos",
+      "description": "Boa para dias apertados, sem quebrar consistencia.",
+      "blocks": [
+        "10 min: revisar a meta da semana e abrir a rota certa.",
+        "25 min: estudar uma secao do portal e anotar 3 aprendizados.",
+        "35 min: executar um micro experimento ou comparar dois modelos.",
+        "15 min: registrar riscos, falhas e proximos passos.",
+        "5 min: decidir a proxima sessao."
+      ]
+    },
+    {
+      "badge": "Sessao padrao",
+      "status_class": "status-done",
+      "title": "180 minutos",
+      "description": "Formato recomendado para cumprir o plano em 30 dias.",
+      "blocks": [
+        "20 min: revisar objetivo, artefato da sessao anterior e abrir as fontes oficiais.",
+        "40 min: estudar uma pagina do portal com leitura ativa.",
+        "60 min: executar um laboratorio real no projeto ou com dados sinteticos.",
+        "35 min: ler docs oficiais e comparar com o que o portal ensinou.",
+        "15 min: registrar caderno de achados.",
+        "10 min: definir proxima acao."
+      ]
+    },
+    {
+      "badge": "Sessao intensiva",
+      "status_class": "status-in-progress",
+      "title": "300 minutos",
+      "description": "Use quando quiser fechar uma semana mais cedo ou construir uma demo de verdade.",
+      "blocks": [
+        "30 min: alinhamento do objetivo e leitura do Roadmap.",
+        "60 min: estudo orientado no portal e nos artefatos.",
+        "120 min: implementacao, evals, comparativos e revisao de falhas.",
+        "45 min: leitura de documentacao oficial e refinamento do criterio.",
+        "30 min: write-up da sessao.",
+        "15 min: planejar a proxima imersao."
+      ]
+    }
+  ],
+  "weekly_sprints": [
+    {
+      "window": "Semana 1",
+      "title": "Modelos, prompting e contratos de saida",
+      "hours": "21h",
+      "description": "Aprender a ler o mercado atual, comparar modelos com criterio e sair do prompt solto para contratos mais controlados.",
+      "deliverables": [
+        "Tabela pessoal comparando 4 familias de modelos.",
+        "Primeira biblioteca pessoal de prompts revisados.",
+        "Biblioteca de prompts com schema de saida.",
+        "Resumo claro da diferenca entre snapshot operacional e radar de mercado."
+      ],
+      "focus_routes": [
+        "Jornada",
+        "Prompts",
+        "Matriz",
+        "Artefatos"
+      ]
+    },
+    {
+      "window": "Semana 2",
+      "title": "Contexto, grounding, NotebookLM e memoria de trabalho",
+      "hours": "24h",
+      "description": "Consolidar o que e contexto bom, como grounding reduz erro e onde NotebookLM, Projects e memoria scoped entram na arquitetura.",
+      "deliverables": [
+        "Tabela de decisao entre long context, NotebookLM, Projects e vector RAG.",
+        "Um notebook de estudo com perguntas grounded.",
+        "Resumo sobre o que memoria resolve e o que ela nao resolve."
+      ],
+      "focus_routes": [
+        "Jornada",
+        "RAG",
+        "Artefatos"
+      ]
+    },
+    {
+      "window": "Semana 3",
+      "title": "Retrieval, citacao, evals e falhas",
+      "hours": "24h",
+      "description": "Sair do RAG bonito e entrar em RAG verificavel: retrieval, perguntas de teste, falhas, citacao e criterio de qualidade.",
+      "deliverables": [
+        "Conjunto de 10 perguntas de avaliacao com resposta esperada.",
+        "Log de falhas de retrieval e hipoteses de correcao.",
+        "Comparativo de pelo menos dois modelos em uma tarefa de contexto."
+      ],
+      "focus_routes": [
+        "RAG",
+        "Matriz",
+        "Workflows"
+      ]
+    },
+    {
+      "window": "Semana 4",
+      "title": "Workflows, MCP, memory operacional e capstone",
+      "hours": "21h",
+      "description": "Fechar o ciclo transformando o conhecimento em operacao: tools, approval humano, governanca, memoria de trabalho e uma mini demonstracao.",
+      "deliverables": [
+        "Uma review de workflow com risco, approval e proxima acao.",
+        "Uma mini demo capstone conectando modelo, contexto e operacao.",
+        "Retro de 30 dias com proximo plano de aprofundamento."
+      ],
+      "focus_routes": [
+        "Workflows",
+        "Roadmap",
+        "Artefatos"
+      ]
+    }
+  ],
+  "support_materials": [
+    {
+      "category": "OpenAI",
+      "title": "Models e recursos de construcao",
+      "summary": "Use as docs de modelos para entender as familias atuais e combine com Structured Outputs para sair do texto livre e entrar em contratos de saida.",
+      "buttons": [
+        {
+          "label": "OpenAI models",
+          "href": "https://developers.openai.com/api/docs/models",
+          "variant": "primary"
+        },
+        {
+          "label": "Structured outputs",
+          "href": "https://developers.openai.com/api/docs/guides/structured-outputs",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "category": "Anthropic",
+      "title": "Models overview e prompt engineering",
+      "summary": "A combinacao ideal para estudar como escolher Claude 4.6 e como pensar melhor prompts, tool use e comportamento de modelos.",
+      "buttons": [
+        {
+          "label": "Models overview",
+          "href": "https://platform.claude.com/docs/en/about-claude/models/overview",
+          "variant": "primary"
+        },
+        {
+          "label": "Prompt engineering",
+          "href": "https://docs.anthropic.com/en/docs/prompt-engineering",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "category": "Google",
+      "title": "Long context e grounding",
+      "summary": "Estude estes dois materiais em conjunto para entender por que contexto longo sem grounding ainda nao basta para respostas confiaveis.",
+      "buttons": [
+        {
+          "label": "Long context",
+          "href": "https://ai.google.dev/gemini-api/docs/long-context",
+          "variant": "primary"
+        },
+        {
+          "label": "Grounding API",
+          "href": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/model-reference/grounding",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "category": "NotebookLM",
+      "title": "Criar notebook e adicionar fontes",
+      "summary": "Bom material para transformar a trilha de estudo em corpus guiado, com fontes, resumos e perguntas grounded.",
+      "buttons": [
+        {
+          "label": "Criar notebook",
+          "href": "https://support.google.com/notebooklm/answer/16206563",
+          "variant": "primary"
+        },
+        {
+          "label": "Adicionar fontes",
+          "href": "https://support.google.com/notebooklm/answer/16215270",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "category": "MCP",
+      "title": "Arquitetura do Model Context Protocol",
+      "summary": "Use este material para entender a ponte entre modelos, ferramentas, memoria operacional e sistemas compostos.",
+      "buttons": [
+        {
+          "label": "MCP architecture",
+          "href": "https://modelcontextprotocol.io/specification/2024-11-05/architecture/index",
+          "variant": "primary"
+        }
+      ]
+    }
+  ],
+  "outcomes": [
+    {
+      "badge": "Ao final dos 30 dias",
+      "status_class": "status-done",
+      "title": "Voce deve sair com criterio de modelo",
+      "description": "Saber explicar por que escolher um fornecedor, uma familia e um modo de uso para cada problema, sem cair em benchmark vazio.",
+      "points": [
+        "Comparar custo, latencia, controle, risco e adequacao.",
+        "Separar o que e hype do que realmente entra em operacao."
+      ]
+    },
+    {
+      "badge": "Ao final dos 30 dias",
+      "status_class": "status-done",
+      "title": "Voce deve sair com base forte em contexto e RAG",
+      "description": "Entender quando usar long context, grounding, NotebookLM, Projects, vector RAG e memoria scoped.",
+      "points": [
+        "Pedir citacao, testar retrieval e identificar falhas.",
+        "Explicar por que uma resposta grounded e mais confiavel."
+      ]
+    },
+    {
+      "badge": "Ao final dos 30 dias",
+      "status_class": "status-in-progress",
+      "title": "Voce deve sair com operacao auditavel",
+      "description": "Saber desenhar um workflow com schema, approval, risco, logs e proxima acao, que e o que diferencia curiosidade de maturidade aplicada.",
+      "points": [
+        "Aplicar ferramentas, MCP e memoria de trabalho em sistemas compostos.",
+        "Fechar um capstone pequeno, mas demonstravel."
+      ]
+    }
+  ],
+  "checklist": [
+    "Conclui pelo menos 4 comparativos reais entre modelos.",
+    "Montou ou revisou pelo menos 1 notebook no NotebookLM.",
+    "Executou 1 conjunto de perguntas grounded com citacao.",
+    "Registrou 1 log de falhas e 1 plano de correcao.",
+    "Fez 1 review de workflow com approval e risco.",
+    "Terminou o periodo com 1 mini demo capstone."
+  ]
+}

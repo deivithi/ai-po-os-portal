@@ -1,0 +1,21 @@
+model_id,vendor,model,use_case_id,use_case,precision,citation,cost_efficiency,latency,control,risk_management,weighted_total,rationale
+claude_sonnet_4_6,Anthropic,Claude Sonnet 4.6,auditoria_leads,Auditoria de leads,4.7,4.4,3.7,4.0,4.6,4.4,4.41,"Bom equilíbrio entre análise minuciosa, consistência e uso em workflows operacionais."
+claude_sonnet_4_6,Anthropic,Claude Sonnet 4.6,validacao_requisitos,Validação de requisitos,4.8,4.4,3.7,4.0,4.6,4.5,4.455,"Muito forte em consistência de instrução, crítica de requisitos e raciocínio sobre regras."
+claude_sonnet_4_6,Anthropic,Claude Sonnet 4.6,analise_comercial,Análise comercial,4.6,4.2,3.7,4.0,4.4,4.3,4.295,Tende a produzir síntese executiva clara com boa estrutura de decisão.
+claude_sonnet_4_6,Anthropic,Claude Sonnet 4.6,sintese_reunioes,Síntese de reuniões,4.5,4.0,3.7,4.2,4.3,4.2,4.215,"Boa fluidez para reuniões e follow-up, com risco baixo de resposta confusa."
+claude_sonnet_4_6,Anthropic,Claude Sonnet 4.6,qa_documentos_longos,QA em documentos longos,4.8,4.6,3.5,3.9,4.6,4.5,4.465,Excelente para leitura de documentos e recuperação fiel em tarefas complexas.
+gemini_2_5_pro,Google,Gemini 2.5 Pro,auditoria_leads,Auditoria de leads,4.5,4.5,4.0,4.1,4.2,4.2,4.32,Long context e grounding ajudam bastante em diagnóstico com base de documentos extensa.
+gemini_2_5_pro,Google,Gemini 2.5 Pro,validacao_requisitos,Validação de requisitos,4.5,4.5,4.0,4.0,4.2,4.1,4.295,Muito competente para comparar critérios e checar completude contra bases longas.
+gemini_2_5_pro,Google,Gemini 2.5 Pro,analise_comercial,Análise comercial,4.4,4.3,4.0,4.0,4.1,4.0,4.195,"Forte para síntese com grounding, especialmente no ecossistema Google."
+gemini_2_5_pro,Google,Gemini 2.5 Pro,sintese_reunioes,Síntese de reuniões,4.3,4.2,4.0,4.1,4.0,3.9,4.125,Bom custo-benefício para sumarização recorrente e material de apoio.
+gemini_2_5_pro,Google,Gemini 2.5 Pro,qa_documentos_longos,QA em documentos longos,4.8,4.7,4.0,3.9,4.2,4.3,4.445,Uma das melhores opções para QA em documentos longos e grounding com Search.
+gpt_5_1,OpenAI,GPT-5.1,auditoria_leads,Auditoria de leads,4.6,4.1,3.8,4.1,4.7,4.3,4.34,"Muito forte em orquestração agentic, respostas estruturadas e controle via API."
+gpt_5_1,OpenAI,GPT-5.1,validacao_requisitos,Validação de requisitos,4.6,4.1,3.8,4.0,4.7,4.3,4.33,"Muito bom para contratos de saída, validação estruturada e integração com ferramentas."
+gpt_5_1,OpenAI,GPT-5.1,analise_comercial,Análise comercial,4.5,4.0,3.8,4.1,4.6,4.2,4.26,Bom equilíbrio para análise executiva e workflows assistidos.
+gpt_5_1,OpenAI,GPT-5.1,sintese_reunioes,Síntese de reuniões,4.5,3.9,3.8,4.2,4.5,4.1,4.22,"Entrega síntese muito boa, especialmente quando há schema e formato exigido."
+gpt_5_1,OpenAI,GPT-5.1,qa_documentos_longos,QA em documentos longos,4.5,4.1,3.7,4.0,4.6,4.2,4.26,"Muito forte de forma geral, mas a vantagem em grounding depende mais do sistema do que do modelo sozinho."
+gemma_3_4b_it,Google,Gemma 3 4B IT,auditoria_leads,Auditoria de leads,3.1,2.4,5.0,4.5,4.8,4.6,3.77,"Excelente privacidade e custo, mas requer guardrails e verificação forte."
+gemma_3_4b_it,Google,Gemma 3 4B IT,validacao_requisitos,Validação de requisitos,3.0,2.3,5.0,4.5,4.8,4.5,3.705,"Bom para drafts internos, mas ainda fica atrás em rigor analítico."
+gemma_3_4b_it,Google,Gemma 3 4B IT,analise_comercial,Análise comercial,3.2,2.3,5.0,4.6,4.8,4.5,3.775,"Útil para privacidade e baixo custo, com limitação em nuance executiva."
+gemma_3_4b_it,Google,Gemma 3 4B IT,sintese_reunioes,Síntese de reuniões,3.4,2.2,5.0,4.7,4.8,4.5,3.825,"Bom para sumarização rápida local, desde que haja revisão humana."
+gemma_3_4b_it,Google,Gemma 3 4B IT,qa_documentos_longos,QA em documentos longos,2.9,2.2,5.0,4.4,4.8,4.6,3.66,A limitação principal aparece em QA documental mais profundo.

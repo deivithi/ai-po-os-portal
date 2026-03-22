@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matriz | AI Operating System do PO Salesforce</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body data-page="matriz">
+    <a class="skip-link" href="#content">Pular para o conteudo</a>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar"></aside>
+      <div class="content-shell">
+        <header class="topbar" id="topbar"></header>
+        <main class="page" id="content">
+          <section class="page-hero compact">
+            <div class="hero-copy">
+              <span class="eyebrow">Comparacao de modelos</span>
+              <h1>Matriz pensada para aprender e decidir melhor.</h1>
+              <p class="lead">
+                Esta pagina traduz scorecards em leitura pratica: o que o modelo
+                faz bem, quando usar e como interpretar a diferenca entre
+                ranking e adequacao real ao caso.
+              </p>
+            </div>
+            <aside class="callout-panel">
+              <span class="eyebrow">Como estudar esta pagina</span>
+              <ol class="step-list">
+                <li>Leia o destaque do top model.</li>
+                <li>Compare a tabela completa por score.</li>
+                <li>Revise fontes e notas antes de concluir.</li>
+              </ol>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="metric-grid" id="matrix-orientation"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Rubrica da matriz</span>
+                <h2>O que cada criterio mede e quanto pesa</h2>
+                <p>
+                  A mesma tabela pode induzir decisoes ruins quando os pesos nao
+                  ficam visiveis. Aqui a rubrica aparece por extenso para voce
+                  entender o racional do score.
+                </p>
+              </div>
+              <div class="cards-grid cards-grid-2" id="matrix-rubric"></div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Limites da leitura</span>
+              <ul class="resource-list" id="matrix-freshness"></ul>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Comparacao guiada</span>
+              <h2>Quem lidera em cada caso de uso real do projeto</h2>
+              <p>
+                Em vez de olhar apenas o ranking medio, leia a matriz por
+                tarefa operacional. E assim que o score vira decisao.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-2" id="matrix-usecases"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Perfis dos modelos</span>
+                <h2>Forcas, limites e melhor encaixe</h2>
+                <p>
+                  Cada modelo recebe um perfil didatico: onde tende a encaixar
+                  melhor, onde exige mais cautela e por que o ranking sozinho
+                  nao basta.
+                </p>
+              </div>
+              <div class="cards-grid cards-grid-2" id="matrix-model-profiles"></div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Fontes oficiais da matriz</span>
+              <ul class="resource-list" id="matrix-sources"></ul>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Tabela completa</span>
+              <h2>Ranking e leitura comparativa</h2>
+              <p>
+                A tabela mostra o score medio, mas a interpretacao correta
+                depende de contexto, custo, controle e risco.
+              </p>
+            </div>
+            <div class="data-panel">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Modelo</th>
+                    <th>Score medio</th>
+                    <th>Melhor caso</th>
+                    <th>Maior forca</th>
+                    <th>Atencao</th>
+                  </tr>
+                </thead>
+                <tbody id="matrix-ranking"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Regras de escolha</span>
+                <h2>Como transformar a matriz em criterio de decisao</h2>
+              </div>
+              <div class="cards-grid cards-grid-3" id="matrix-questions"></div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Matriz x radar</span>
+              <ul class="resource-list" id="matrix-boundary"></ul>
+              <div class="button-group">
+                  <a class="button secondary" href="../artifacts/files/model_matrix_2026-03-21.md">Abrir resumo da matriz</a>
+                  <a class="button secondary" href="../artefatos/#llm-landscape">Ver radar de mercado</a>
+              </div>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Radar atual</span>
+              <h2>Modelos recentes para observar fora da matriz seed</h2>
+              <p>
+                Esta faixa nao substitui a matriz operacional do projeto. Ela
+                existe para acompanhar o mercado e registrar o que merece teste
+                futuro no harness.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-3" id="matrix-llm-watchlist"></div>
+          </section>
+        </main>
+        <footer class="footer" id="portal-footer"></footer>
+      </div>
+    </div>
+    <script src="../assets/app.js"></script>
+  </body>
+</html>

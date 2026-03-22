@@ -1,0 +1,45 @@
+{
+  "provider": "openai_via_codex_auth",
+  "model": "gpt-5.4",
+  "reasoning_effort": "medium",
+  "use_case_id": "auditoria_leads",
+  "generated_at": "2026-03-22T02:48:25+00:00",
+  "codex_login_status": "Logged in using ChatGPT",
+  "analysis": {
+    "executive_summary": "Foram identificados 6 achados operacionais no dataset: 2 casos de duplicidade, 2 leads com campos obrigatorios ausentes, 3 estouros de SLA em leads de alta intencao e 2 desvios de roteamento. Os registros mais criticos combinam impacto comercial com quebra de governanca: L002, L003 e L008.",
+    "findings": [
+      {
+        "title": "Duplicidade primaria por email e complementar por CPF entre L001 e L002",
+        "severity": "high",
+        "evidence": "L001 e L002 possuem o mesmo email (ana@febracis.com) e o mesmo CPF (11111111111). Pela governanca, email e CPF configuram duplicidade a ser priorizada antes de redistribuicao de owner."
+      },
+      {
+        "title": "Duplicidade secundaria por telefone entre L006 e L007",
+        "severity": "medium",
+        "evidence": "L006 e L007 compartilham o telefone 85999990006. Pela regra de deduplicacao secundaria por phone, ha indicio objetivo de duplicidade e o caso exige revisao humana antes de qualquer consolidacao."
+      },
+      {
+        "title": "Campos obrigatorios ausentes em L003 e L005",
+        "severity": "high",
+        "evidence": "L003 esta sem campaign. L005 esta sem email. Pela governanca, sem campos minimos obrigatorios o lead nao deve entrar em automacoes criticas nem em filas de cobranca por performance."
+      },
+      {
+        "title": "Estouro de SLA por ausencia de primeira resposta em L002",
+        "severity": "high",
+        "evidence": "L002 tem source Evento, created_at 2026-03-18T09:10:00 e first_response_at vazio. Pela regra, lead de evento sem first_response_at conta como SLA estourado."
+      },
+      {
+        "title": "Estouro de SLA por tempo acima de 2 horas em L003 e L008",
+        "severity": "high",
+        "evidence": "L003 (Midia Paga) recebeu primeira resposta em 3h15, de 2026-03-18T10:15:00 a 2026-03-18T13:30:00. L008 (Evento) recebeu primeira resposta em 2h30, de 2026-03-18T14:10:00 a 2026-03-18T16:40:00. Ambos excedem o SLA de 2 horas."
+      },
+      {
+        "title": "Problemas de roteamento em owners transitorios L002 e L004",
+        "severity": "high",
+        "evidence": "L002 esta com owner fila-geral e L004 com owner unassigned. Pela governanca, ambos sao estados transitorios e nunca destino final; configuram desvio operacional de roteamento."
+      }
+    ],
+    "risk_summary": "O risco operacional e alto: ha possibilidade de contato duplicado, perda de rastreabilidade, quebra de automacoes criticas por campos obrigatorios ausentes, atraso no atendimento de leads de alta intencao e permanencia indevida em roteamento transitorio. Deduplicacao em massa e reatribuicao em lote exigem revisao e aprovacao humana antes de qualquer acao irreversivel.",
+    "recommended_next_action": "Priorizar uma triagem em 3 frentes: 1) bloquear tratamento automatizado de L003 e L005 ate saneamento de campos obrigatorios; 2) abrir revisao humana dos pares L001-L002 e L006-L007 antes de qualquer deduplicacao ou redistribuicao; 3) corrigir imediatamente o roteamento de L002 e L004 com registro de evidencia, e revisar a causa dos estouros de SLA em L002, L003 e L008."
+  }
+}

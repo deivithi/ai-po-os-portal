@@ -1,0 +1,1469 @@
+﻿{
+    "created_at":  "2026-03-21T23:32:12",
+    "notebook_id":  "0b5f8048-c480-473c-b015-cf47248f050d",
+    "title":  "AI OS PO Salesforce - 30 dias",
+    "sources":  [
+                    {
+                        "id":  "de365872-4046-49f6-8d28-ed68393e49df",
+                        "title":  "Prompt engineering overview - Claude API Docs",
+                        "type":  "SourceType.WEB_PAGE",
+                        "url":  "https://docs.anthropic.com/en/docs/prompt-engineering"
+                    },
+                    {
+                        "id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                        "title":  "Long context | Gemini API | Google AI for Developers",
+                        "type":  "SourceType.WEB_PAGE",
+                        "url":  "https://ai.google.dev/gemini-api/docs/long-context"
+                    },
+                    {
+                        "id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                        "title":  "Models | OpenAI API",
+                        "type":  "SourceType.WEB_PAGE",
+                        "url":  "https://platform.openai.com/docs/models/overview"
+                    },
+                    {
+                        "id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                        "title":  "guia_mestre_ia_aplicada_po_salesforce.md",
+                        "type":  "SourceType.UNKNOWN",
+                        "url":  null
+                    },
+                    {
+                        "id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                        "title":  "playbook_long_context_vs_notebooklm_vs_projects_vs_vector_rag.md",
+                        "type":  "SourceType.UNKNOWN",
+                        "url":  null
+                    }
+                ],
+    "grounded_question":  {
+                              "answer":  "Para um Product Owner (PO) Salesforce, o diferencial no uso de IA não está em ter o melhor prompt, mas em operar um sistema que utilize a abordagem de contexto e o modelo corretos para cada tarefa específica [1]. \n\nAbaixo está a comparação de quando utilizar cada estratégia no seu dia a dia:\n\n**1. Long Context (Contexto Longo)**\n* **Quando usar:** É ideal para análises pontuais envolvendo poucos documentos e com baixa necessidade de reuso posterior [2]. Funciona perfeitamente quando toda a informação necessária cabe na janela de contexto do modelo de IA [2], que em modelos modernos (como Gemini e GPT-5.4) pode chegar a 1 milhão de tokens (o equivalente a dezenas de milhares de linhas de código ou dezenas de transcrições longas) [3-5]. \n* **Aplicação para o PO Salesforce:** Excelente para pedir o resumo de uma transcrição completa de uma reunião de refinamento ou analisar um documento extenso de requisitos específicos de uma única vez. No entanto, lembre-se do antipadrão: evite jogar toda a base histórica do seu produto em uma única conversa de contexto longo, pois isso não é eficiente a longo prazo [6].\n\n**2. NotebookLM**\n* **Quando usar:** Deve ser a sua principal escolha para pesquisa assistida, síntese, estudo e exploração de materiais [2]. Se o seu objetivo é entender e aprender rapidamente a partir de fontes específicas, comece pelo NotebookLM [2].\n* **Aplicação para o PO Salesforce:** É a ferramenta ideal para realizar pesquisas rápidas e fundamentadas (*grounded*) com citações explícitas [1, 2]. Você pode utilizá-lo para carregar *Release Notes* complexas do Salesforce, manuais de processos de negócio da empresa ou transcrições de entrevistas com usuários para cruzar informações e gerar resumos confiáveis antes de escrever épicos e histórias.\n\n**3. Vector RAG (Geração Aumentada por Recuperação com Vetores)**\n* **Quando usar:** Destinado a cenários de produção auditável, onde há a necessidade de reutilizar a base de conhecimento através de múltiplos fluxos de trabalho (*workflows*) e ter um controle estrito de como a informação é processada (*chunking*) [2]. É a arquitetura definitiva quando a mesma base precisa alimentar agentes autônomos, automações e dashboards [2].\n* **Aplicação para o PO Salesforce:** É a infraestrutura para transformar a IA em uma ferramenta operacional real [7]. Um RAG local permite que você tenha citações exatas por arquivo e linha [1]. Isso é útil para automatizar auditorias repetíveis, garantir que novos requisitos conversem com a documentação técnica existente do Salesforce, e transformar anotações soltas em artefatos verificáveis com esquemas de saída padronizados [1, 7]. \n\n**Resumo da Regra de Decisão [2]:**\n* **Aprender e entender rápido a partir de fontes:** NotebookLM.\n* **Análise pontual que cabe na janela do modelo:** Long Context.\n* **Alimentar automações, agentes e fluxos recorrentes:** Vector RAG.\n\n**Atenção:** Nunca misture pesquisa exploratória (onde NotebookLM ou Long Context brilham) com automações operacionais críticas e irreversíveis (que exigem Vector RAG, logs estruturados e aprovação humana) [6].",
+                              "conversation_id":  "0d6845b6-34b5-4955-9460-c001d1bd1dca",
+                              "turn_number":  1,
+                              "is_follow_up":  true,
+                              "references":  [
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  1,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "3c73b73d-e8d2-46d5-9ef7-1cb711254569"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  2,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "b6ea6fde-ec7a-46a1-bff6-928caa861855"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  3,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "44fb577a-8cac-4ece-bf3a-4790c30a80b0"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  4,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "95bf06ee-72d1-4322-a78f-8201519410c7"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  5,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "7c8be17b-5743-468a-a090-fb0169bb1ff5"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  6,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "52e6fb18-8cdc-4d36-8d0b-fb82b6c9c7a2"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  7,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "563bdb43-68b6-4613-aa7e-98f01af29a50"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  8,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "6a5ad7d3-d44b-40d7-89b3-552cae7fe25e"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  9,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "ec9ae472-7599-4012-99c1-8cdc0ab4c67d"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  10,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "2f061cfb-85f4-4434-8540-2a6b58a6a736"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  11,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "ca91ed36-6991-4a97-861e-1a7be1a1c068"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  12,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "73ca95be-faa9-4839-9df0-74d1b1fa9fd9"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  13,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "87965b83-a517-4af8-9164-561cdb483399"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  14,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "b7835c6b-8d2a-4ba4-b947-d3fbe7078363"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  15,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "8b9edf5b-f4f1-437a-a0d0-f855e1d2ec69"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  16,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "29e224c8-c302-4e83-9636-226d4dae9b42"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  17,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "61941c44-a9dd-4a10-8cb8-113e2eaedc03"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  18,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "be870dd6-6fb6-4ca0-9efa-816b79ba2e0a"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  19,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "d0b3037b-8554-4ce4-9fa0-c6f22e06ff12"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  20,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "6be42280-c401-47d0-9a2b-2cd1f3915e50"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  21,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "bfc3ad71-6a87-4115-96a9-cc53dce680d7"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  22,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "6d21f3a2-0eae-43ef-96e0-e7ea11c377c7"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  23,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "5c05f9c0-0032-48a3-b111-4cdac6ea05f3"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  24,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "e8e78153-2873-4d8a-b2d9-5dbc12652168"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  25,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "6627a94e-0856-4697-939e-ac1ccbed4e87"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  26,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "ac151b03-57be-4592-81b7-2c30fbf8933f"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  27,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "cc78bf92-e44d-4fd8-bf1c-73e6802d8b0b"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  28,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "3425b2fa-e6b9-4525-8086-12b038861ca9"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  29,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "ac529c6b-b83b-4b4e-ac5a-80628858bf14"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  30,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "4d516074-21c3-49b5-90ac-b819262c1224"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  31,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "912c2ae8-7d19-4e7d-8c58-7ab412bcaa8e"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  32,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "d3807acd-a427-4c32-ab4d-26954ae5ca0b"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  33,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "bc13eab1-fdca-4a6b-864f-aafe1a2f6f0e"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  34,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "3f49fd4e-5113-406c-a536-d68a318764ea"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  35,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "cc2ae2e4-60fb-4ae1-b508-1a445a4a5b5b"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  36,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "3d9bd8a1-785f-4719-9baa-32ff3f8ea616"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  37,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "e623280a-28a1-4bab-b768-0b6e12439f3a"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  38,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "16b0a3c3-3344-46ea-970b-ac2ea5d5e622"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  39,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "ede83f1f-ef6d-4e70-adc4-c8cb458dda49"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  40,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "14e09a37-9ec7-45c0-92d6-701fdab69b59"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  41,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "4a4f6a01-f328-4d41-9f3e-8ea11aa88cac"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  42,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "45121c73-ea80-4b62-8577-cfd9d0eb80f0"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  43,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "a7852e74-74f4-4a82-a39e-5000f43b6d81"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  44,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "e44f88d4-dd6a-43d9-9e21-ad275c62f534"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  45,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "2939ccf5-6239-4f55-bf7e-51000959369b"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  46,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "2c542041-dfe7-4d4a-a9ff-220bafd63bd3"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  47,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "84edea4a-52e2-462c-883c-035dd1d2b9b3"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  48,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "fe84f8d8-6a2d-43e5-86e3-068be173215d"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  49,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "59cdf3e2-fc7a-4d10-97e5-a0224026b198"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  50,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "15c1a489-4fb8-48ac-8bb3-9b559f0e62a5"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  51,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "6607277d-5c2f-4258-a3ed-738a748732a4"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  52,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "bbb30dce-bf18-4ede-b7f7-49fcdcffd689"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  53,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "b3b8ca9a-72bd-49d4-9c3f-d03845c3be84"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  54,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "930eeff9-bc96-46fa-a4b1-f2996b05b774"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  55,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "928a70d4-091c-4861-9442-2670511d908f"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  56,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "8209a3da-e49a-4b77-8fb5-7182c552baed"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  57,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "72cb46c3-ec6f-48f4-85d2-b9662c8ebee3"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  58,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "cf58648a-e02a-4f0b-b063-79f5a7733999"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  59,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "51d48061-2286-45e1-a49e-21b15bc9abaf"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  60,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "873c01e1-3e54-4d83-87c6-8bac2047117f"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  61,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "2cb1966e-9977-4869-aa31-266101c3b481"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  62,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "81f17883-02fb-417f-9b0c-1c2cf9c1d9f6"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  63,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "8b5cd956-3e19-4c41-9071-a3cf3db7c78f"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  64,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "f4ae4d86-1ed6-41f3-b471-04d8f4f9ce81"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  65,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "a60fb3e3-a6dc-4c91-a5fb-e4459bc99322"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  66,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "e5744379-7efd-403f-9af0-03ead4a16f5e"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  67,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "b3b453e9-06cd-4013-a261-9ffc5fe741ab"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  68,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "20716318-789a-459a-bbc6-c12761709d99"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  69,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "f17bc922-44a6-4e2b-af48-bceaf05575c2"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  70,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "99f33d01-c88f-4971-9466-52350c74c17a"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  71,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "55b1a451-47fc-44d8-b8a8-619c72886ea4"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  72,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "da5b684f-42b4-480a-8694-331be1d23314"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  73,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "bedd35d6-dc95-4e2b-bba7-f31deddb3beb"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  74,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "1583c2c1-de12-48ba-bca1-1762c47ca0f3"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  75,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "09cee7c9-f358-4035-9400-b77b1763c106"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  76,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "61164f36-efef-41e2-9f43-f139094a414c"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  77,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "73807bc9-2734-4a90-bd89-aff1ed487ac2"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  78,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "7d9aba3d-3302-4e1b-afc3-daeaebfb782a"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  79,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "d4137261-30dc-4b56-8718-72d49f72a269"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  80,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "8c36f9d2-4cc5-49df-ae0b-c75886b40d18"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  81,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "31d3f519-f198-466c-9644-64f6b621520b"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  82,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "3069b571-36c1-4096-9131-8d12fe98c6b6"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  83,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "197e0a6b-3acc-42a3-9410-3d1130026856"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  84,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "56a83832-fc91-45ed-9a7d-33023f9f5625"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  85,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "90fe19a8-538a-4f08-b820-1d46208b3c19"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  86,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "76b9b21f-d96e-48d7-b5dd-4de0f1b1084a"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  87,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "41ba8187-aca4-4f75-8aec-0ff91d3cfd19"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  88,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "f4d9f114-2466-4539-9df7-dc38baf7896e"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  89,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "67158cbd-686c-422d-9b65-dc97fc3ea6ae"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  90,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "53d2ece1-47b8-401c-a477-62e703271c56"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  91,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "8fb87246-7e4d-45df-9e2d-dd29c429ea94"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  92,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "c285ff33-541f-437d-800b-204bb0b5cfab"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  93,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "9d48f7ae-64d4-4fe5-a7d4-df3284cf06f9"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  94,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "9a0315f6-111d-447c-b453-12b087434390"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  95,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "89d34d59-3cf2-4e13-a397-801e5bd3152e"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  96,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "3a27b9f2-7f6d-486d-adec-a3fb3bec341f"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  97,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "1cfed089-e63b-48cd-8ef5-1465558c82b6"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  98,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "2cf1db0e-9ed3-4152-8501-adf3158d14db"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  99,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "36645777-510f-4cad-abc2-3f8f4f95eb8c"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  100,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "6c422482-709c-4967-83e2-7ef9a72e406b"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  101,
+                                                     "cited_text":  "Como isso muda sua rotina",
+                                                     "start_char":  558,
+                                                     "end_char":  583,
+                                                     "chunk_id":  "584eb922-ff40-4163-8969-5dfbbd97e992"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  102,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "848f05f8-283b-4e31-a7ea-d9c3f6fb3ed0"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  103,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "7b9c4882-d03a-4c84-a445-daebf011cc14"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  104,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "4a556de2-6792-4a37-81fd-1eb76b25d7b0"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  105,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "0fb03a76-603b-41c1-b62d-e70839bd3794"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  106,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "b6266763-9f41-4c8b-a9f9-cd7cb48eea9d"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  107,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "6c0b784f-080b-419d-9b47-372b68b0d5a7"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  108,
+                                                     "cited_text":  "Como isso muda sua rotina",
+                                                     "start_char":  558,
+                                                     "end_char":  583,
+                                                     "chunk_id":  "df16543e-985f-40fc-931f-d66be2843ce2"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  109,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "1693c337-418a-412d-a973-37845c8f305a"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  110,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "8803a03d-7715-4115-8ce3-1410fd902aaf"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  111,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "29763f19-8b16-4686-a615-2123a43d0d8b"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  112,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "5d8ba560-5ad5-442f-8748-e25191ef985a"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  113,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "f90dde98-b986-4007-8d0a-42534d14cb66"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  114,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "06433339-2285-4254-9bbf-947a5d91147c"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  115,
+                                                     "cited_text":  "Como isso muda sua rotina",
+                                                     "start_char":  558,
+                                                     "end_char":  583,
+                                                     "chunk_id":  "420af8df-d2a6-4863-a148-3ab1a6f322e4"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  116,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "64745d47-ad57-4717-adcd-3573236ecda5"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  117,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "93bb59c0-1062-424a-b28f-711b155d636e"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  118,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "fd3087bb-4219-4ccc-8903-7765efa5583e"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  119,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "8c60cdff-3a1c-42a1-a2bf-aa7f32c00f68"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  120,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "a810871a-2b27-42bb-b4a9-8eb716969f11"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  121,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "7f3d9642-9bf2-4ed0-94f6-3153b728a45a"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  122,
+                                                     "cited_text":  "Como isso muda sua rotina",
+                                                     "start_char":  558,
+                                                     "end_char":  583,
+                                                     "chunk_id":  "6cecc195-dd02-4218-abe3-26b0ef69922a"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  123,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "fd4f165e-d844-4953-aabe-bbca60362a58"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  124,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "a1461eff-e6e3-42fa-b970-e5d81b2cb2e6"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  125,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "e6e6f5a3-522e-40f1-b1ac-931481f24c32"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  126,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "23b97251-2457-4d0b-8b4e-7fdacc487116"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  127,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "1b8dcf06-db32-466b-94a3-b80d60915015"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  128,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "d41f8792-acff-48be-afe5-7a17ef806124"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  129,
+                                                     "cited_text":  "Como isso muda sua rotina",
+                                                     "start_char":  558,
+                                                     "end_char":  583,
+                                                     "chunk_id":  "e88c8dc5-9bcf-4b2d-b307-aba468df679b"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  130,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "5c7e5912-5dd0-4ee0-b625-5d4002597d48"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  131,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "640fd564-9097-46dd-b8f1-24c3c4c34535"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  132,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "f3a089b7-b1c4-498a-925b-b774357d2a11"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  133,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "075968cb-32bb-4ca7-95ac-af82b6b0b649"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  134,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "115b8706-06d9-496f-a2e8-7e9cf5353914"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  135,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "cce3b060-495e-4925-a55c-ca3fb5c94cf3"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  136,
+                                                     "cited_text":  "Como isso muda sua rotina",
+                                                     "start_char":  558,
+                                                     "end_char":  583,
+                                                     "chunk_id":  "6acd300f-3a17-43d1-977c-630c4f9d4402"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  137,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "499f640e-be36-4a33-8507-cb583a9bbf05"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  138,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "6debb581-7a92-423e-9b51-e2344fa1f06f"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  139,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "9882c714-619f-4d03-898b-5d581ef4be4b"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  140,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "b1d8b779-2880-4189-afaf-379033b7d619"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  141,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "fd8e5a56-fd92-4d37-8f74-8521166ec701"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  142,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "23b6ce54-ab80-4dc1-a3cc-da87ef91fdad"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  143,
+                                                     "cited_text":  "Como isso muda sua rotina",
+                                                     "start_char":  558,
+                                                     "end_char":  583,
+                                                     "chunk_id":  "e7e2afba-3701-410e-b357-0f00ce8f4d8a"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  144,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "7367d04c-6317-4292-a9cd-054a5d8be7a0"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  145,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "199ce7d0-10c5-44cf-8158-b900d559baef"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  146,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "0b24abd2-48fa-46ba-affc-fd56c7fc0f0e"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  147,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "fb0c2c6f-96d5-4645-b159-28bcdb963e80"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  148,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "2d1b05db-dab5-4546-bd7c-e71889470e35"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  149,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "03451407-19e1-4f26-a1e0-4bda7444f398"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  150,
+                                                     "cited_text":  "Como isso muda sua rotina",
+                                                     "start_char":  558,
+                                                     "end_char":  583,
+                                                     "chunk_id":  "fe592b83-462a-4900-8fa5-10def1518052"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  151,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "1a288769-378b-4f01-a983-4b4fdd10fff6"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  152,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "ed75eb68-f9e1-475d-a954-5d419fc83dd3"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  153,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "5c7e1c76-55a4-4c03-ae5d-81bfb2133f76"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  154,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "967c51f1-f96e-4fc0-9a99-6a1a429535ef"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  155,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "768361e7-7dd6-4987-a6b6-a3a02270654a"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  156,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "a5c31538-f74e-4123-9cc6-58f635fb2e4d"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  157,
+                                                     "cited_text":  "Como isso muda sua rotina",
+                                                     "start_char":  558,
+                                                     "end_char":  583,
+                                                     "chunk_id":  "a8180527-ac18-4446-bec2-328468c319d8"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  158,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "63a71e5d-3306-4ffc-bef1-551c23c639c2"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  159,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "5acdf166-247d-4f25-b45f-04833b7b6ea8"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  160,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "e0c30bbe-3916-4c18-96e3-861c5b076b75"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  161,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "d323dfe8-86f0-4b46-84ec-7510bb9ecb86"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  162,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "b2955879-33a5-4216-a972-bc7c46b3c9b2"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  163,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "665a544e-30f6-4a4e-8b1f-faa4858acb3e"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  164,
+                                                     "cited_text":  "Como isso muda sua rotina",
+                                                     "start_char":  558,
+                                                     "end_char":  583,
+                                                     "chunk_id":  "4ee4ad3c-3cb4-4fe6-b334-f1641c78d433"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  165,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "63a71e5d-3306-4ffc-bef1-551c23c639c2"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  166,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "5acdf166-247d-4f25-b45f-04833b7b6ea8"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  167,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "e0c30bbe-3916-4c18-96e3-861c5b076b75"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  168,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "d323dfe8-86f0-4b46-84ec-7510bb9ecb86"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  169,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "b2955879-33a5-4216-a972-bc7c46b3c9b2"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  170,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "665a544e-30f6-4a4e-8b1f-faa4858acb3e"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  171,
+                                                     "cited_text":  "Como isso muda sua rotina",
+                                                     "start_char":  558,
+                                                     "end_char":  583,
+                                                     "chunk_id":  "4ee4ad3c-3cb4-4fe6-b334-f1641c78d433"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  172,
+                                                     "cited_text":  "Guia Mestre — IA Aplicada para Product Owner Salesforce",
+                                                     "start_char":  0,
+                                                     "end_char":  55,
+                                                     "chunk_id":  "63a71e5d-3306-4ffc-bef1-551c23c639c2"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  173,
+                                                     "cited_text":  "Playbook — Long Context vs NotebookLM vs Projects vs Vector RAG",
+                                                     "start_char":  0,
+                                                     "end_char":  63,
+                                                     "chunk_id":  "5acdf166-247d-4f25-b45f-04833b7b6ea8"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  174,
+                                                     "cited_text":  "Many Gemini models come with large context windows of 1 million or more tokens. Historically, large language models (LLMs) were significantly limited by the amount of text (or tokens) that could be passed to the model at one time. The Gemini long context window unlocks many new use cases and developer paradigms.",
+                                                     "start_char":  3007,
+                                                     "end_char":  3320,
+                                                     "chunk_id":  "e0c30bbe-3916-4c18-96e3-861c5b076b75"
+                                                 },
+                                                 {
+                                                     "source_id":  "b3fa96b7-b436-426d-b722-13a7211c3272",
+                                                     "citation_number":  175,
+                                                     "cited_text":  "Getting started with long context",
+                                                     "start_char":  4276,
+                                                     "end_char":  4309,
+                                                     "chunk_id":  "d323dfe8-86f0-4b46-84ec-7510bb9ecb86"
+                                                 },
+                                                 {
+                                                     "source_id":  "a79fab3d-b875-49cf-8330-b5803b922e8d",
+                                                     "citation_number":  176,
+                                                     "cited_text":  "Output price",
+                                                     "start_char":  7464,
+                                                     "end_char":  7476,
+                                                     "chunk_id":  "b2955879-33a5-4216-a972-bc7c46b3c9b2"
+                                                 },
+                                                 {
+                                                     "source_id":  "875b6f94-2a96-49f6-969a-e168361e9d33",
+                                                     "citation_number":  177,
+                                                     "cited_text":  "Antipadrões",
+                                                     "start_char":  779,
+                                                     "end_char":  790,
+                                                     "chunk_id":  "665a544e-30f6-4a4e-8b1f-faa4858acb3e"
+                                                 },
+                                                 {
+                                                     "source_id":  "0333df51-e43a-437d-96bc-768d0a8d1732",
+                                                     "citation_number":  178,
+                                                     "cited_text":  "Como isso muda sua rotina",
+                                                     "start_char":  558,
+                                                     "end_char":  583,
+                                                     "chunk_id":  "4ee4ad3c-3cb4-4fe6-b334-f1641c78d433"
+                                                 }
+                                             ]
+                          }
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RAG | AI Operating System do PO Salesforce</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body data-page="rag">
+    <a class="skip-link" href="#content">Pular para o conteudo</a>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar"></aside>
+      <div class="content-shell">
+        <header class="topbar" id="topbar"></header>
+        <main class="page" id="content">
+          <section class="page-hero compact">
+            <div class="hero-copy">
+              <span class="eyebrow">Conhecimento e grounding</span>
+              <h1>RAG explicado de forma tecnica e didatica.</h1>
+              <p class="lead">
+                Esta pagina organiza a camada de conhecimento para que voce
+                entenda quando usar long context, NotebookLM, Projects ou
+                vector RAG sem virar refem de buzzword.
+              </p>
+            </div>
+            <aside class="callout-panel">
+              <span class="eyebrow">Objetivo de estudo</span>
+              <p>
+                Aprender a diferenca entre armazenar contexto, recuperar
+                evidencias e justificar respostas com citacao.
+              </p>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="metric-grid" id="rag-orientation"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Mapa decisorio</span>
+              <h2>Quatro modos de trabalhar conhecimento</h2>
+              <p>
+                Esta leitura parte do problema. O objetivo nao e defender uma
+                ferramenta, mas escolher a camada certa para cada situacao.
+              </p>
+            </div>
+            <div class="cards-grid cards-grid-2" id="rag-decision-tracks"></div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Modos do sistema</span>
+                <h2>Como o portal organiza as estrategias de conhecimento</h2>
+              </div>
+              <div class="cards-grid cards-grid-2" id="rag-modes"></div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Regra central</span>
+              <p>
+                Resposta boa nao e so texto bom. Precisa mostrar de onde veio,
+                qual evidenca sustenta e quando o sistema deve pedir revisao.
+              </p>
+            </aside>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Contrato de confianca</span>
+                <h2>Como pensar confiabilidade na pratica</h2>
+              </div>
+              <div class="cards-grid cards-grid-2" id="rag-trust-contract"></div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Antipadroes</span>
+              <ul class="resource-list" id="rag-anti-patterns"></ul>
+            </aside>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <span class="eyebrow">Evidencias do projeto</span>
+              <h2>Camadas reais que sustentam a arquitetura de conhecimento</h2>
+            </div>
+            <div class="cards-grid cards-grid-3" id="rag-system-views"></div>
+          </section>
+        </main>
+        <footer class="footer" id="portal-footer"></footer>
+      </div>
+    </div>
+    <script src="../assets/app.js"></script>
+  </body>
+</html>

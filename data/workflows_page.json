@@ -1,0 +1,161 @@
+{
+  "orientation": [
+    {
+      "badge": "Cobertura",
+      "status_class": "status-done",
+      "title": "2 workflows auditaveis",
+      "body": "Operacao + homologacao",
+      "note": "O portal cobre um fluxo de saneamento de leads e um fluxo de prontidao de requisitos."
+    },
+    {
+      "badge": "Gate",
+      "status_class": "status-in-progress",
+      "title": "Approval obrigatorio",
+      "body": "Nenhuma acao irreversivel e automatica",
+      "note": "Toda decisao critica termina em revisao humana, com risco e proxima acao explicitos."
+    },
+    {
+      "badge": "Observabilidade",
+      "status_class": "status-done",
+      "title": "Logs + artefatos",
+      "body": "Runs com JSON e log de execucao",
+      "note": "Cada workflow produz saida estruturada, resumo, risco e link para evidencia auditavel."
+    },
+    {
+      "badge": "Leitura correta",
+      "status_class": "status-next",
+      "title": "Workflow nao e so automacao",
+      "body": "E rotina governada",
+      "note": "A pergunta certa nao e apenas se funciona, mas se explica risco, limite e proxima acao."
+    }
+  ],
+  "anatomy": [
+    {
+      "title": "Entrada",
+      "description": "O workflow recebe um dataset ou requisito bem definido, com contrato claro de entrada.",
+      "points": [
+        "Auditoria de leads recebe CSV sintetico de campanha/evento.",
+        "Validador recebe um requisito markdown com criterio de aceite."
+      ]
+    },
+    {
+      "title": "Leitura e verificacao",
+      "description": "A IA compara o material contra regras documentadas e busca evidencias da base de conhecimento.",
+      "points": [
+        "Toda afirmacao importante precisa de citacao ou evidencias.",
+        "O workflow transforma regra vaga em checagem objetiva."
+      ]
+    },
+    {
+      "title": "Saida estruturada",
+      "description": "Nao sai texto solto: sai resumo, findings, risco, approval e proxima acao.",
+      "points": [
+        "As saídas sao padronizadas em JSON.",
+        "O resumo facilita leitura executiva sem esconder detalhe tecnico."
+      ]
+    },
+    {
+      "title": "Gate humano",
+      "description": "A etapa final e sempre uma decisao humana quando ha impacto operacional real.",
+      "points": [
+        "Nada irreversivel e aplicado automaticamente.",
+        "A aprovacao existe para reduzir retrabalho e erro operacional."
+      ]
+    }
+  ],
+  "run_commentary": [
+    {
+      "run_id": "20260322-022831-auditoria-de-leads",
+      "title": "Auditoria de leads",
+      "workflow": "auditoria_de_leads",
+      "status_label": "pending",
+      "status_class": "status-pending",
+      "why_it_matters": "Saneia base antes de deduplicar, redistribuir ou cobrar performance.",
+      "narrative": "Este run mostra que o workflow nao para na deteccao de duplicidade. Ele cruza campos obrigatorios, SLA e roteamento para evitar a falsa sensacao de base limpa.",
+      "key_findings": [
+        "3 sinais de duplicidade",
+        "2 linhas sem campos minimos",
+        "4 estouros de SLA",
+        "2 problemas de roteamento"
+      ],
+      "next_action": "Revisar achados, priorizar correcoes por impacto e so depois executar mudancas em CRM.",
+      "buttons": [
+        {
+          "label": "Abrir run JSON",
+          "href": "/artifacts/files/live_openai_auditoria_leads.json",
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "run_id": "20260322-022831-validador-de-requisitos-salesforce",
+      "title": "Validador de requisitos Salesforce",
+      "workflow": "validador_de_requisitos_salesforce",
+      "status_label": "pending",
+      "status_class": "status-pending",
+      "why_it_matters": "Evita build ou homologacao com requisito aparentemente bonito, mas fraco em cobertura e rastreabilidade.",
+      "narrative": "Este run mostra um ponto importante para POs: readiness score alto nao significa pronto sem ressalvas. O workflow identifica o que ainda bloqueia uma homologacao segura.",
+      "key_findings": [
+        "Readiness score 90",
+        "Cobertura de testes ainda insuficiente",
+        "Rastreabilidade entre objetos Salesforce fraca"
+      ],
+      "next_action": "Revisar lacunas, ajustar criterios de aceite e atualizar casos de teste antes da homologacao.",
+      "buttons": [
+        {
+          "label": "Abrir run JSON",
+          "href": "/artifacts/files/live_openai_validacao_requisitos.json",
+          "variant": "primary"
+        }
+      ]
+    }
+  ],
+  "approval_protocol": [
+    {
+      "kicker": "Passo 1",
+      "title": "Ler resumo e risco",
+      "description": "A primeira leitura e executiva: o que aconteceu, o que trava e qual e a recomendacao."
+    },
+    {
+      "kicker": "Passo 2",
+      "title": "Abrir evidencias",
+      "description": "Se a decisao tiver impacto real, o operador deve abrir o artefato e revisar o racional do workflow."
+    },
+    {
+      "kicker": "Passo 3",
+      "title": "Decidir com ownership",
+      "description": "Aprovacao humana serve para assumir a decisao e nao apenas confirmar um numero gerado."
+    },
+    {
+      "kicker": "Passo 4",
+      "title": "Executar ou revisar",
+      "description": "Se aprovado, a proxima automacao pode seguir. Se nao, o run vira backlog de correcao."
+    }
+  ],
+  "risk_ladder": [
+    {
+      "title": "Baixo risco",
+      "badge": "Leitura assistida",
+      "status_class": "status-done",
+      "description": "Resumo, sintese e apoio diagnostico sem acao irreversivel."
+    },
+    {
+      "title": "Risco medio",
+      "badge": "Revisao recomendada",
+      "status_class": "status-in-progress",
+      "description": "Achados que afetam decisao operacional e precisam ser verificados pelo responsavel."
+    },
+    {
+      "title": "Alto risco",
+      "badge": "Gate obrigatorio",
+      "status_class": "status-risk",
+      "description": "Deduplicacao, reatribuicao, alteracao em massa ou promocao para build sem revisao sao proibidos."
+    }
+  ],
+  "operator_rules": [
+    "Nao confundir run concluido com acao automaticamente autorizada.",
+    "Quando houver impacto em CRM ou fluxo de homologacao, approval humano e obrigatorio.",
+    "O run precisa apontar proxima acao; se nao aponta, ainda nao esta pronto para operar.",
+    "Sempre que um finding parecer sensivel, abrir o JSON correspondente antes de decidir."
+  ]
+}

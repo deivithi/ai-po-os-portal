@@ -1,0 +1,125 @@
+{
+  "title": "AI Operating System do PO Salesforce",
+  "evaluated_on": "2026-03-21",
+  "market_checked_on": "2026-03-22",
+  "top_model": {
+    "model_id": "claude_sonnet_4_6",
+    "vendor": "Anthropic",
+    "model": "Claude Sonnet 4.6",
+    "market_family": "Claude 4.6",
+    "snapshot_model": "Claude Sonnet 4.6",
+    "average_total": 4.368,
+    "source_urls": [
+      "https://www.anthropic.com/news/claude-sonnet-4-6",
+      "https://docs.anthropic.com/en/docs/prompt-engineering"
+    ],
+    "notes": "Muito forte em conhecimento de trabalho, planejamento de agentes e QA documental.",
+    "snapshot_note": "Lider do harness calibrado do projeto.",
+    "market_note": "A familia atual a estudar continua sendo Claude 4.6, com Sonnet 4.6 para operacao diaria e Opus 4.6 para tarefas mais pesadas.",
+    "market_source_url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+    "market_source_label": "Anthropic models overview"
+  },
+  "ranking": [
+    {
+      "model_id": "claude_sonnet_4_6",
+      "vendor": "Anthropic",
+      "model": "Claude Sonnet 4.6",
+      "market_family": "Claude 4.6",
+      "snapshot_model": "Claude Sonnet 4.6",
+      "average_total": 4.368,
+      "source_urls": [
+        "https://www.anthropic.com/news/claude-sonnet-4-6",
+        "https://docs.anthropic.com/en/docs/prompt-engineering"
+      ],
+      "notes": "Muito forte em conhecimento de trabalho, planejamento de agentes e QA documental.",
+      "snapshot_note": "Score vindo de Claude Sonnet 4.6 no harness seed.",
+      "market_note": "A familia atual da Anthropic segue em Claude 4.6; estude Sonnet 4.6 para operacao diaria e Opus 4.6 para tarefas complexas.",
+      "study_now": "Estude Sonnet 4.6 para fluxo diario e Opus 4.6 para tarefas de maior profundidade.",
+      "market_source_url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+      "market_source_label": "Anthropic models overview"
+    },
+    {
+      "model_id": "gpt_5_1",
+      "vendor": "OpenAI",
+      "model": "GPT-5.1",
+      "market_family": "GPT-5.4 / GPT-5.4 pro",
+      "snapshot_model": "GPT-5.1",
+      "average_total": 4.282,
+      "source_urls": [
+        "https://platform.openai.com/docs/models",
+        "https://platform.openai.com/docs/guides/structured-outputs?api-mode=responses"
+      ],
+      "notes": "Otimo equilibrio para tarefas agentic e forte controle via stack da API.",
+      "snapshot_note": "Score ainda baseado no seed GPT-5.1 do projeto.",
+      "market_note": "As docs atuais da OpenAI recomendam gpt-5.4 como flagship e gpt-5-mini quando a prioridade e custo e latencia.",
+      "study_now": "Estude gpt-5.4 como flagship e gpt-5-mini para trade-off de custo e latencia.",
+      "market_source_url": "https://developers.openai.com/api/docs/models",
+      "market_source_label": "OpenAI models"
+    },
+    {
+      "model_id": "gemini_2_5_pro",
+      "vendor": "Google",
+      "model": "Gemini 2.5 Pro",
+      "market_family": "Gemini 3.1 Pro / Gemini 3 Pro",
+      "snapshot_model": "Gemini 2.5 Pro",
+      "average_total": 4.276,
+      "source_urls": [
+        "https://ai.google.dev/gemini-api/docs/long-context",
+        "https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/grounding"
+      ],
+      "notes": "Muito forte em long context, grounding e integracao com ecossistema Google.",
+      "snapshot_note": "Score ainda baseado no seed Gemini 2.5 Pro do projeto.",
+      "market_note": "O catalogo atual do Vertex destaca Gemini 3.1 Pro como reasoning-first e Gemini 3 Pro como familia de ponta para agentic e multimodal.",
+      "study_now": "Estude Gemini 3.1 Pro e Gemini 3 Pro; use Gemini 2.5 Pro como referencia de continuidade operacional.",
+      "market_source_url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models",
+      "market_source_label": "Google models"
+    },
+    {
+      "model_id": "gemma_3_4b_it",
+      "vendor": "Google",
+      "model": "Gemma 3 4B IT",
+      "market_family": "Gemma 3n / Gemma 3",
+      "snapshot_model": "Gemma 3 4B IT",
+      "average_total": 3.747,
+      "source_urls": [
+        "https://blog.google/innovation-and-ai/technology/developers-tools/gemma-3/",
+        "https://ai.google.dev/gemma/docs/core/model_card_3"
+      ],
+      "notes": "Opcao local de baixo custo e alta privacidade, mas com precisao inferior aos frontier models.",
+      "snapshot_note": "Score ainda vem da seed local Gemma 3 4B IT.",
+      "market_note": "Para estudo atual de open weights, a leitura mais util e combinar Gemma 3n para edge/on-device com Gemma 3 para multimodal e function calling.",
+      "study_now": "Estude Gemma 3n para edge/on-device e Gemma 3 para open multimodal.",
+      "market_source_url": "https://ai.google.dev/gemma/docs/gemma-3n",
+      "market_source_label": "Gemma 3n overview"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "20260322-022831-validador-de-requisitos-salesforce",
+      "workflow": "validador_de_requisitos_salesforce",
+      "generated_at": "2026-03-22T02:28:31+00:00",
+      "summary": {
+        "readiness_score": 90,
+        "missing_sections": 0,
+        "test_cases_listed": 2,
+        "acceptance_pattern_hits": 6
+      },
+      "approval_status": "pending",
+      "risk_summary": "Nao promover para build ou Flow definitivo sem fechar gaps de criterios, testes e rastreabilidade."
+    },
+    {
+      "run_id": "20260322-022831-auditoria-de-leads",
+      "workflow": "auditoria_de_leads",
+      "generated_at": "2026-03-22T02:28:31+00:00",
+      "summary": {
+        "total_rows": 8,
+        "duplicate_signals": 3,
+        "missing_required_rows": 2,
+        "sla_breaches": 4,
+        "routing_issues": 2
+      },
+      "approval_status": "pending",
+      "risk_summary": "Requer revisao humana antes de qualquer atualizacao em massa, deduplicacao ou reatribuicao."
+    }
+  ]
+}

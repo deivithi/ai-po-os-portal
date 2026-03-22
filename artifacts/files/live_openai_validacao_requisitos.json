@@ -1,0 +1,45 @@
+{
+  "provider": "openai_via_codex_auth",
+  "model": "gpt-5.4",
+  "reasoning_effort": "medium",
+  "use_case_id": "validacao_requisitos",
+  "generated_at": "2026-03-22T02:48:18+00:00",
+  "codex_login_status": "Logged in using ChatGPT",
+  "analysis": {
+    "executive_summary": "O requisito RF-042 atende a estrutura minima do padrao, mas nao esta pronto para homologacao. Ha gaps objetivos em rastreabilidade de objetos, cobertura de criterios de aceite e suficiência de testes para um fluxo com Lead, Campaign, Task e atribuicao automatizada.",
+    "findings": [
+      {
+        "title": "Criterios de aceite nao cobrem integracao exigida pelo padrao",
+        "severity": "high",
+        "evidence": "O padrao exige cobertura de cenario feliz, excecao e integracao. O requisito traz 2 criterios em DADO/QUANDO/ENTAO: atribuicao de owner e envio para fila de saneamento. Nao ha criterio verificavel para integracao envolvendo Campaign, Task ou atualizacao de Lead.Status, embora o requisito declare Flow na criacao, Task automatica e update de status para Working."
+      },
+      {
+        "title": "Casos de teste abaixo do minimo e sem validacao de integracao",
+        "severity": "high",
+        "evidence": "O padrao exige minimo de 3 casos por requisito relevante, com ao menos 1 negativo e validacao de integracao quando houver Flow, Apex, Campaign ou Task. O requisito lista apenas 2 casos: lead elegivel e lead sem telefone. Nao ha teste explicito para score inferior a 40, criacao de Task, vinculacao com Campaign/MCIS ou atualizacao de Lead.Status."
+      },
+      {
+        "title": "Rastreabilidade de objetos esta incompleta para captacao e atribuicao",
+        "severity": "high",
+        "evidence": "O requisito lista apenas Lead e Task como objetos impactados. Porem as regras e campos referenciam Campaign.Name e o padrao informa que, quando o requisito mexe com captacao ou atribuicao, Lead e Campaign normalmente precisam estar rastreados. Campaign aparece em campos/validacoes, mas nao em Objetos Salesforce impactados."
+      },
+      {
+        "title": "Regra de atribuicao por praca e capacidade nao esta suficientemente especificada",
+        "severity": "medium",
+        "evidence": "O objetivo fala em prioridade por praca e capacidade, e as dependencias citam tabela de capacidade do time SDR e regra de praca definida por marketing regional. Contudo, nao ha regra de negocio explicitando como praca e capacidade determinam o owner, nem criterio objetivo para 'owner disponivel da praca correta'."
+      },
+      {
+        "title": "Excecao de owner indisponivel foi citada em campos/validacoes e riscos, mas nao foi convertida em criterio de aceite ou teste",
+        "severity": "medium",
+        "evidence": "Em Campos e validacoes consta 'Validar telefone preenchido e owner disponivel'. Em Riscos consta falha na disponibilidade do owner. Mesmo assim, nao existe criterio de aceite nem caso de teste para comportamento quando nao houver owner disponivel."
+      },
+      {
+        "title": "Rastreabilidade entre areas esta parcial",
+        "severity": "medium",
+        "evidence": "O padrao pede mapear dependencias entre Marketing, Vendas e Operacoes. O requisito cita Marketing regional e time SDR, mas nao explicita Operacoes na malha de dependencia, apesar de haver fila manual atual, fila de saneamento e necessidade de distribuicao automatica."
+      }
+    ],
+    "risk_summary": "O principal risco de homologar no estado atual e aprovar um requisito com automacao parcialmente especificada: Campaign nao rastreada como objeto impactado, ausencia de criterio de integracao e cobertura de testes insuficiente para Flow, Task e update de status. Isso aumenta risco de divergencia funcional entre Marketing, Vendas e Operacoes e de falhas nao detectadas no roteamento e na distribuicao de leads.",
+    "recommended_next_action": "Classificar como nao pronto para homologacao e revisar o requisito com foco em 4 ajustes objetivos: incluir Campaign em objetos impactados; adicionar criterio de aceite de integracao para Task e Lead.Status; elevar os casos de teste para no minimo 3 com caso negativo e integracao; explicitar a regra operacional de praca/capacidade e o tratamento quando nao houver owner disponivel."
+  }
+}
