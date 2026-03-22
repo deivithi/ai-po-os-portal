@@ -125,6 +125,12 @@
       "focus": "Prompt Studio fase 3",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino E",
+      "focus": "Prompt Studio fase 4",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/commit/68b96e266f0c83cbb8c648404429a98f9a3c3f6a",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }
   ],
   "phase_rules": [
