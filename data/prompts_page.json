@@ -19,14 +19,14 @@
       "status_class": "status-in-progress",
       "title": "Prompt sozinho nao substitui sistema",
       "body": "Schema, RAG e tools entram quando preciso",
-      "note": "Quando a tarefa exige memoria confiavel, citações, integracao com ferramentas ou governanca, o salto correto nao e 'mais prompt', e sim arquitetura melhor."
+      "note": "Quando a tarefa exige memoria confiavel, citacoes, integracao com ferramentas ou governanca, o salto correto nao e 'mais prompt', e sim arquitetura melhor."
     },
     {
       "badge": "Fase atual",
-      "status_class": "status-next",
-      "title": "Prompt Studio fase 2",
-      "body": "Biblioteca didatica em producao",
-      "note": "Nesta fase, a pagina sai do mapa conceitual e entra em exemplos progressivos. O builder orientado por contexto entra na proxima fase."
+      "status_class": "status-done",
+      "title": "Prompt Studio fase 3",
+      "body": "Builder orientado por contexto em producao",
+      "note": "A aba agora nao so ensina exemplos: ela monta um prompt final com base no seu contexto e diagnostica quando voce deve escalar para schema, RAG, tools ou workflow."
     }
   ],
   "maturity_levels": [
@@ -134,7 +134,7 @@
       },
       {
         "title": "Criterio",
-        "description": "Esse trecho ensina ao modelo o que conta como resposta boa. Ele vale mais do que frases genéricas como 'seja excelente'."
+        "description": "Esse trecho ensina ao modelo o que conta como resposta boa. Ele vale mais do que frases genericas como 'seja excelente'."
       },
       {
         "title": "Formato",
@@ -187,8 +187,8 @@
       "summary": "Google ajuda muito a enxergar prompting como parte de um sistema maior: design de prompt, contexto longo, grounding e output estruturado.",
       "buttons": [
         {
-          "label": "Prompt design strategies",
-          "href": "https://cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/prompt-design-strategies",
+          "label": "Prompt design introduction",
+          "href": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/introduction-prompt-design",
           "variant": "primary"
         },
         {
@@ -210,7 +210,7 @@
         },
         {
           "label": "Structured outputs",
-          "href": "https://docs.x.ai/docs/guides/structured-outputs",
+          "href": "https://docs.x.ai/developers/model-capabilities/text/structured-outputs",
           "variant": "secondary"
         }
       ]
@@ -244,7 +244,7 @@
       "badge": "Erro comum",
       "status_class": "status-risk",
       "title": "Mandar o modelo 'pensar melhor'",
-      "description": "Sem objetivo, criterio e contexto, frases genéricas raramente melhoram a resposta de forma consistente."
+      "description": "Sem objetivo, criterio e contexto, frases genericas raramente melhoram a resposta de forma consistente."
     },
     {
       "badge": "Erro comum",
@@ -260,24 +260,24 @@
     }
   ],
   "phase_boundary": [
-    "Esta fase ja entrega biblioteca comentada de exemplos progressivos.",
-    "Os prompts ainda sao exemplos didaticos, nao templates adaptativos com input do usuario.",
-    "Builder com contexto do usuario entra na Fase 3.",
+    "Esta fase ja entrega builder com contexto do usuario e prompt final montado em tempo real.",
+    "O builder ainda trabalha com logica universal de prompt, nao com overlays detalhados por fornecedor.",
     "Comparacao profunda por fornecedor entra na Fase 4.",
-    "Laboratorio de qualidade de prompt entra na Fase 5."
+    "Laboratorio de qualidade de prompt entra na Fase 5.",
+    "Arquitetura premium e productizacao futura entram na Fase 6."
   ],
   "next_steps": [
     {
       "badge": "Depois desta fase",
       "status_class": "status-next",
-      "title": "Construir o Prompt Builder",
-      "description": "A proxima entrega natural e permitir que a pessoa injete objetivo, contexto, restricoes e formato para gerar um prompt final a partir da biblioteca."
+      "title": "Aprofundar overlays por fornecedor",
+      "description": "A proxima entrega mais valiosa agora e comparar como o mesmo prompt deve ser ajustado entre OpenAI, Anthropic, Google e xAI com base em documentacao oficial."
     },
     {
       "badge": "Depois desta fase",
       "status_class": "status-next",
-      "title": "Aprofundar overlays por fornecedor",
-      "description": "A biblioteca ja aponta fontes oficiais, mas a comparacao do mesmo prompt por OpenAI, Anthropic, Google e xAI entra na fase seguinte do roadmap."
+      "title": "Ensinar qualidade de prompt",
+      "description": "Depois do builder, o portal deve ajudar o usuario a avaliar o proprio prompt com rubrica, antes/depois e antipadroes."
     },
     {
       "badge": "Depois desta fase",

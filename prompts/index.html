@@ -25,25 +25,134 @@
                 para schema, RAG, tools ou workflow.
               </p>
               <div class="hero-actions">
-                <a class="button" href="#biblioteca">Ir para biblioteca</a>
+                <a class="button" href="#builder">Abrir builder</a>
                 <a class="button secondary" href="../jornada/">Ver Jornada</a>
                 <a class="button secondary" href="../matriz/">Cruzar com Matriz</a>
                 <a class="button secondary" href="../rag/">Cruzar com RAG</a>
               </div>
             </div>
             <aside class="callout-panel">
-              <span class="eyebrow">Tese da fase 2</span>
-              <h3>Agora o mapa virou biblioteca didatica.</h3>
+              <span class="eyebrow">Tese da fase 3</span>
+              <h3>Agora a biblioteca virou bancada de montagem.</h3>
               <p>
-                Esta fase pega os fundamentos da fase 1 e transforma em exemplos
-                progressivos, comentados e reutilizaveis, sem perder criterio e
-                sem tratar template como verdade pronta.
+                Esta fase pega os exemplos da fase 2 e transforma em um builder
+                que monta prompts em tempo real, mostra lacunas e avisa quando
+                a tarefa pede mais do que prompting puro.
               </p>
             </aside>
           </section>
 
           <section class="section">
             <div class="metric-grid" id="prompts-orientation"></div>
+          </section>
+
+          <section class="section" id="builder">
+            <div class="section-header">
+              <span class="eyebrow">Prompt Builder</span>
+              <h2>Monte um prompt forte a partir do seu contexto</h2>
+              <p>
+                Escolha um template base, preencha os blocos essenciais e veja
+                o prompt final nascer em tempo real. A bancada tambem aponta
+                quando voce deve escalar para schema, RAG, tools ou workflow.
+              </p>
+            </div>
+            <div class="metric-grid" id="prompt-builder-overview"></div>
+            <div class="builder-workbench">
+              <section class="builder-panel">
+                <div class="builder-toolbar">
+                  <div>
+                    <span class="label">Modo</span>
+                    <div class="builder-mode-group" id="prompt-builder-modes"></div>
+                  </div>
+                  <div>
+                    <span class="label">Template base</span>
+                    <div class="builder-template-group" id="prompt-builder-templates"></div>
+                  </div>
+                </div>
+
+                <div class="builder-grid">
+                  <label class="builder-field">
+                    <span class="builder-field-label">Papel</span>
+                    <textarea id="builder-role" rows="3" placeholder="Quem o modelo deve ser neste contexto?"></textarea>
+                  </label>
+                  <label class="builder-field">
+                    <span class="builder-field-label">Objetivo</span>
+                    <textarea id="builder-objective" rows="3" placeholder="Qual trabalho o modelo precisa executar?"></textarea>
+                  </label>
+                  <label class="builder-field builder-field-full">
+                    <span class="builder-field-label">Contexto</span>
+                    <textarea id="builder-context" rows="6" placeholder="Cole aqui os fatos, dados, documento ou briefing que realmente mudam a resposta."></textarea>
+                  </label>
+                  <label class="builder-field">
+                    <span class="builder-field-label">Restricoes</span>
+                    <textarea id="builder-constraints" rows="5" placeholder="- Nao invente fatos&#10;- Priorize clareza&#10;- Limite de tom ou risco"></textarea>
+                  </label>
+                  <label class="builder-field">
+                    <span class="builder-field-label">Criterio de aceite</span>
+                    <textarea id="builder-acceptance" rows="5" placeholder="- O que precisa aparecer&#10;- O que seria erro&#10;- O que define resposta boa"></textarea>
+                  </label>
+                  <label class="builder-field">
+                    <span class="builder-field-label">Formato de saida</span>
+                    <textarea id="builder-output-format" rows="5" placeholder="1. Resumo&#10;2. Evidencias&#10;3. Proxima acao"></textarea>
+                  </label>
+                  <label class="builder-field">
+                    <span class="builder-field-label">Fallback e exemplos opcionais</span>
+                    <textarea id="builder-examples" rows="5" placeholder="Exemplos bons, categorias validas, mini few-shot ou bloco extra de contexto."></textarea>
+                  </label>
+                  <label class="builder-field builder-field-full">
+                    <span class="builder-field-label">Instrucao de fallback</span>
+                    <textarea id="builder-fallback" rows="3" placeholder="O que o modelo deve fazer se o contexto nao bastar?"></textarea>
+                  </label>
+                </div>
+
+                <div class="builder-flags" id="prompt-builder-flags"></div>
+                <div class="builder-controls">
+                  <button class="button" type="button" id="prompt-builder-copy">Copiar prompt</button>
+                  <button class="button secondary" type="button" id="prompt-builder-reset">Resetar template</button>
+                  <span class="builder-copy-feedback" id="prompt-builder-feedback" aria-live="polite"></span>
+                </div>
+              </section>
+
+              <aside class="builder-preview-panel">
+                <div class="builder-preview-head">
+                  <div>
+                    <span class="eyebrow">Preview em tempo real</span>
+                    <h3 id="prompt-builder-title">Carregando template...</h3>
+                    <p class="metric-note" id="prompt-builder-summary"></p>
+                  </div>
+                  <div class="builder-badges">
+                    <span class="status-badge status-done" id="prompt-builder-level"></span>
+                    <span class="status-badge status-next" id="prompt-builder-mode-badge"></span>
+                  </div>
+                </div>
+
+                <div class="data-panel prompt-formula-panel builder-preview-shell">
+                  <pre class="prompt-skeleton builder-output" id="prompt-builder-output"></pre>
+                </div>
+
+                <div class="metric-grid" id="prompt-builder-diagnostics"></div>
+                <div class="cards-grid cards-grid-2" id="prompt-builder-officials"></div>
+              </aside>
+            </div>
+          </section>
+
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Como preencher bem</span>
+                <h2>Os campos do builder existem para formar criterio</h2>
+                <p>
+                  Preencher bem os blocos abaixo importa mais do que escolher
+                  palavras bonitas. O builder foi desenhado para ensinar esse
+                  raciocinio enquanto voce monta o prompt final.
+                </p>
+              </div>
+              <div class="cards-grid cards-grid-3" id="prompt-builder-guides"></div>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Escalada orientada</span>
+              <div class="cards-grid" id="prompt-builder-escalations"></div>
+            </aside>
           </section>
 
           <section class="section">
@@ -200,7 +309,7 @@
               <div class="cards-grid cards-grid-2" id="prompts-anti-patterns"></div>
             </div>
             <aside class="evidence-panel">
-              <span class="eyebrow">Limites da fase 1</span>
+              <span class="eyebrow">Limites da fase 3</span>
               <ul class="resource-list" id="prompts-phase-boundary"></ul>
             </aside>
           </section>

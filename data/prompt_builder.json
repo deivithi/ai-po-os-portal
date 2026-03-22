@@ -1,0 +1,306 @@
+{
+  "overview": [
+    {
+      "badge": "Fase 3",
+      "status_class": "status-done",
+      "title": "Prompt Builder em producao",
+      "body": "Da teoria para um prompt usavel",
+      "note": "A bancada abaixo transforma a biblioteca em montagem guiada. O objetivo agora e sair com um prompt adaptado ao seu contexto, nao apenas entender templates."
+    },
+    {
+      "badge": "Modo de uso",
+      "status_class": "status-done",
+      "title": "Estudo e Operacao",
+      "body": "Dois ritmos para a mesma estrutura",
+      "note": "Modo Estudo enfatiza criterio e blocos explicitos. Modo Operacao limpa o texto para uso mais direto, mantendo os limites importantes."
+    },
+    {
+      "badge": "Regra central",
+      "status_class": "status-in-progress",
+      "title": "Builder nao substitui arquitetura",
+      "body": "Ele ajuda a montar melhor e a escalar com clareza",
+      "note": "O builder tambem te diz quando o problema deixou de ser apenas prompt e passou a exigir schema, RAG, tools ou workflow."
+    }
+  ],
+  "modes": [
+    {
+      "id": "study",
+      "label": "Modo Estudo",
+      "summary": "Mantem blocos mais explicitos e um fechamento que ajuda a revisar lacunas antes de rodar.",
+      "status_class": "status-done",
+      "closing_instruction": "Antes de responder, confira se os blocos acima bastam para executar a tarefa. Se algum bloco estiver ambiguo ou incompleto, diga exatamente o que precisa ser ajustado antes de continuar."
+    },
+    {
+      "id": "operation",
+      "label": "Modo Operacao",
+      "summary": "Entrega uma versao mais enxuta e pronta para colar em uso real, sem perder guardrails essenciais.",
+      "status_class": "status-in-progress",
+      "closing_instruction": "Execute a tarefa usando apenas o contexto acima. Entregue somente o formato solicitado e evite prefacios, floreios ou texto fora do escopo."
+    }
+  ],
+  "toggles": [
+    {
+      "id": "requires_citations",
+      "label": "Preciso de citacoes ou fonte verificavel",
+      "description": "Ative quando a resposta precisar mostrar origem documental ou trechos sustentaveis."
+    },
+    {
+      "id": "requires_schema",
+      "label": "Preciso de formato previsivel ou integravel",
+      "description": "Ative quando a resposta for para JSON, tabela ou consumo por outra automacao."
+    },
+    {
+      "id": "requires_tools",
+      "label": "A tarefa depende de busca, calculo ou acao externa",
+      "description": "Ative quando o modelo nao puder resolver so com o contexto recebido."
+    },
+    {
+      "id": "high_risk",
+      "label": "Existe risco alto ou decisao sensivel",
+      "description": "Ative quando houver impacto financeiro, juridico, operacional ou decisao irreversivel."
+    }
+  ],
+  "templates": [
+    {
+      "id": "executive-summary",
+      "level_label": "Basico",
+      "status_class": "status-done",
+      "title": "Resumo executivo guiado",
+      "summary": "Bom para transformar email, nota de reuniao ou documento curto em leitura clara para decisao.",
+      "best_for": "Sintese com baixo risco e contexto curto confiavel.",
+      "recommended_mode": "study",
+      "default_flags": {
+        "requires_citations": false,
+        "requires_schema": false,
+        "requires_tools": false,
+        "high_risk": false
+      },
+      "defaults": {
+        "role": "Voce e um assistente de sintese executiva focado em clareza, objetividade e proxima acao.",
+        "objective": "Ler o contexto abaixo e produzir um resumo realmente util para decisao.",
+        "context": "",
+        "constraints": "- Nao invente fatos.\n- Se faltar informacao, diga isso explicitamente.\n- Nao repita o texto original em bloco corrido.",
+        "acceptance": "- Mostrar conclusao clara.\n- Destacar pendencias relevantes.\n- Indicar uma proxima acao recomendada.",
+        "output_format": "1. Resumo executivo em 5 bullets\n2. Pendencias\n3. Proxima acao recomendada",
+        "examples": "",
+        "fallback": "Se o contexto estiver fragmentado ou insuficiente, diga exatamente o que falta antes de responder."
+      },
+      "official_buttons": [
+        {
+          "label": "OpenAI resources",
+          "href": "https://developers.openai.com/resources/",
+          "variant": "secondary"
+        },
+        {
+          "label": "Anthropic prompt overview",
+          "href": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "operational-classifier",
+      "level_label": "Basico",
+      "status_class": "status-done",
+      "title": "Classificador operacional",
+      "summary": "Forca saida curta com rotulos fechados para triagem e priorizacao rapida.",
+      "best_for": "Classificacao simples, backlog, fila de atendimento e triagem de itens.",
+      "recommended_mode": "operation",
+      "default_flags": {
+        "requires_citations": false,
+        "requires_schema": false,
+        "requires_tools": false,
+        "high_risk": false
+      },
+      "defaults": {
+        "role": "Voce e um classificador operacional que decide apenas entre categorias validas.",
+        "objective": "Classificar o item abaixo em apenas uma categoria valida, com justificativa objetiva.",
+        "context": "",
+        "constraints": "- Use apenas categorias validas.\n- Se nao houver base suficiente, retorne inconclusivo.\n- Nao crie subcategorias nem justificativa longa.",
+        "acceptance": "- Escolher exatamente uma categoria.\n- Justificar em uma frase observavel.\n- Sinalizar inconclusivo quando faltar base.",
+        "output_format": "Categoria: <uma categoria valida>\nJustificativa: <1 frase objetiva>",
+        "examples": "Categorias validas:\n- urgente\n- revisar\n- informativo\n- inconclusivo",
+        "fallback": "Se o contexto nao sustentar classificacao segura, retorne inconclusivo e explique em uma frase por que faltou base."
+      },
+      "official_buttons": [
+        {
+          "label": "OpenAI structured outputs",
+          "href": "https://platform.openai.com/docs/guides/structured-outputs",
+          "variant": "secondary"
+        },
+        {
+          "label": "Google controlled output",
+          "href": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/multimodal/control-generated-output",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "requirements-review",
+      "level_label": "Intermediario",
+      "status_class": "status-done",
+      "title": "Revisor de requisito",
+      "summary": "Traduz historia, especificacao ou criterio de aceite em prontidao, lacuna e proxima acao.",
+      "best_for": "Refinamento, homologacao e validacao funcional antes de build.",
+      "recommended_mode": "study",
+      "default_flags": {
+        "requires_citations": false,
+        "requires_schema": false,
+        "requires_tools": false,
+        "high_risk": true
+      },
+      "defaults": {
+        "role": "Voce e um Product Owner senior revisando requisitos antes de build ou homologacao.",
+        "objective": "Avaliar o requisito abaixo e apontar se ele esta pronto, incompleto ou arriscado.",
+        "context": "",
+        "constraints": "- Nao invente dependencias nem impactos nao citados.\n- Se algum criterio nao puder ser avaliado, diga isso explicitamente.\n- Priorize clareza operacional, nao opiniao vaga.",
+        "acceptance": "- Classificar status: pronto, incompleto ou arriscado.\n- Mostrar pontos fortes e lacunas.\n- Explicar riscos e proxima acao objetiva.",
+        "output_format": "1. Status: pronto | incompleto | arriscado\n2. Pontos fortes\n3. Lacunas\n4. Riscos\n5. Proxima acao",
+        "examples": "Criterios sugeridos:\n- Objetivo de negocio claro\n- Criterios de aceite testaveis\n- Dependencias explicitadas\n- Ambiguidades que possam gerar retrabalho",
+        "fallback": "Se o material nao trouxer base para avaliar algum criterio, diga exatamente qual criterio ficou sem sustentacao."
+      },
+      "official_buttons": [
+        {
+          "label": "Anthropic multishot",
+          "href": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/multishot-prompting",
+          "variant": "secondary"
+        },
+        {
+          "label": "OpenAI prompt resources",
+          "href": "https://developers.openai.com/resources/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "structured-extraction",
+      "level_label": "Intermediario",
+      "status_class": "status-done",
+      "title": "Extracao estruturada",
+      "summary": "Monta prompts para extrair dados reutilizaveis com null, campos fechados e formato previsivel.",
+      "best_for": "JSON, campos operacionais, integracao com planilha ou automacao.",
+      "recommended_mode": "operation",
+      "default_flags": {
+        "requires_citations": false,
+        "requires_schema": true,
+        "requires_tools": false,
+        "high_risk": false
+      },
+      "defaults": {
+        "role": "Voce e um extrator de dados que deve respeitar rigorosamente o contrato de saida.",
+        "objective": "Ler o texto abaixo e devolver apenas os campos pedidos, sem inventar valores.",
+        "context": "",
+        "constraints": "- Nao invente campos nem valores.\n- Se um valor nao aparecer no texto, use null.\n- Nao escreva nenhuma explicacao fora do formato pedido.",
+        "acceptance": "- Respeitar o schema integralmente.\n- Usar null quando faltar informacao.\n- Entregar formato limpo e pronto para reutilizacao.",
+        "output_format": "{\n  \"campo_1\": string | null,\n  \"campo_2\": string | null,\n  \"campo_3\": string | null\n}",
+        "examples": "",
+        "fallback": "Se o formato pedido for insuficiente para representar a informacao, diga qual ajuste de schema seria necessario antes de responder."
+      },
+      "official_buttons": [
+        {
+          "label": "OpenAI structured outputs",
+          "href": "https://platform.openai.com/docs/guides/structured-outputs",
+          "variant": "secondary"
+        },
+        {
+          "label": "xAI structured outputs",
+          "href": "https://docs.x.ai/developers/model-capabilities/text/structured-outputs",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "context-gate",
+      "level_label": "Avancado",
+      "status_class": "status-in-progress",
+      "title": "Gate de contexto e escalada",
+      "summary": "Em vez de responder por reflexo, decide se a pergunta pede prompt direto, contexto extra, RAG ou tools.",
+      "best_for": "Assistentes que precisam escolher o proximo caminho com governanca.",
+      "recommended_mode": "study",
+      "default_flags": {
+        "requires_citations": true,
+        "requires_schema": false,
+        "requires_tools": true,
+        "high_risk": true
+      },
+      "defaults": {
+        "role": "Voce e um orquestrador de resposta que decide o caminho mais seguro antes de responder.",
+        "objective": "Analisar a pergunta e escolher se a melhor acao e responder direto, pedir contexto, recomendar RAG ou recomendar tool.",
+        "context": "",
+        "constraints": "- Nao responda diretamente se faltar contexto critico.\n- Nao finja que RAG ou tool nao sao necessarios quando a tarefa depende deles.\n- Trate risco alto com recomendacao de validacao humana.",
+        "acceptance": "- Escolher apenas um caminho principal.\n- Justificar a decisao de forma objetiva.\n- Indicar proxima acao executavel.",
+        "output_format": "Modo: responder_direto | pedir_contexto | recomendar_rag | recomendar_tool\nJustificativa: <2 frases>\nProxima acao: <o que fazer agora>",
+        "examples": "Pergunta do usuario:\n[cole aqui a pergunta]\n\nContexto disponivel:\n[cole aqui o contexto atual]",
+        "fallback": "Se a pergunta estiver ambigua demais para escolher um caminho com seguranca, diga o que precisa ser esclarecido antes da decisao."
+      },
+      "official_buttons": [
+        {
+          "label": "Google prompt design",
+          "href": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/introduction-prompt-design",
+          "variant": "secondary"
+        },
+        {
+          "label": "xAI remote MCP tools",
+          "href": "https://docs.x.ai/docs/guides/tools/remote-mcp-tools",
+          "variant": "secondary"
+        }
+      ]
+    }
+  ],
+  "field_guides": [
+    {
+      "kicker": "Campo 1",
+      "title": "Objetivo",
+      "description": "Escreva o verbo principal da tarefa e o que precisa existir ao final. Se o objetivo ficar vago, o prompt inteiro fica mole.",
+      "example": "Exemplo forte: avaliar o requisito e decidir se ele esta pronto, incompleto ou arriscado."
+    },
+    {
+      "kicker": "Campo 2",
+      "title": "Contexto",
+      "description": "Cole apenas o material que realmente muda a decisao. Contexto demais sem organizacao vira ruido; contexto de menos vira resposta rasa.",
+      "example": "Exemplo forte: historia do usuario, criterio de aceite, dependencia e observacao relevante."
+    },
+    {
+      "kicker": "Campo 3",
+      "title": "Restricoes",
+      "description": "Use este bloco para dizer o que o modelo nao pode fazer, o que deve priorizar e qual o limite de risco ou de tom.",
+      "example": "Exemplo forte: nao invente fatos, use null se faltar dado, pare e sinalize risco quando o contexto nao bastar."
+    },
+    {
+      "kicker": "Campo 4",
+      "title": "Criterio de aceite",
+      "description": "Esse e o bloco que mais diferencia um prompt profissional. Ele define como voce reconhece uma boa resposta.",
+      "example": "Exemplo forte: classificar status, apontar lacunas, mostrar riscos e recomendar proxima acao."
+    },
+    {
+      "kicker": "Campo 5",
+      "title": "Formato de saida",
+      "description": "Transforme expectativa em contrato. Quando o resultado sera reutilizado, o formato deixa de ser detalhe e vira parte da tarefa.",
+      "example": "Exemplo forte: JSON valido, checklist numerado ou tabela curta com colunas fechadas."
+    },
+    {
+      "kicker": "Campo 6",
+      "title": "Fallback e exemplos",
+      "description": "Fallback reduz improviso quando falta contexto. Exemplos ajudam quando voce quer consistencia, mas so funcionam se forem realmente bons.",
+      "example": "Exemplo forte: se algum criterio nao puder ser avaliado, diga qual criterio ficou sem sustentacao."
+    }
+  ],
+  "escalation_notes": [
+    {
+      "title": "Schema",
+      "description": "Ative quando o prompt precisar produzir saida previsivel e integravel, como JSON, tabela ou payload."
+    },
+    {
+      "title": "RAG",
+      "description": "Ative quando a resposta depender de base documental citavel, grande ou mutavel."
+    },
+    {
+      "title": "Tools",
+      "description": "Ative quando a tarefa envolver busca, consulta externa, calculo, chamada de sistema ou acao real."
+    },
+    {
+      "title": "Workflow",
+      "description": "Ative quando houver risco alto, approval humano, logs ou proxima acao governada."
+    }
+  ]
+}

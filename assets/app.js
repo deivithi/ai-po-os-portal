@@ -4,6 +4,7 @@ const DATA_PATHS = {
   artifacts: "/data/artifacts.json",
   promptsGuide: "/data/prompts_page.json",
   promptLibrary: "/data/prompt_library.json",
+  promptBuilder: "/data/prompt_builder.json",
   matrixGuide: "/data/matrix_page.json",
   matrixArtifact: "/artifacts/files/model_matrix.json",
   journeyGuide: "/data/journey_page.json",
@@ -16,7 +17,7 @@ const DATA_PATHS = {
 const PAGE_DATA_KEYS = {
   home: ["overview", "artifacts"],
   jornada: ["journeyGuide"],
-  prompts: ["promptsGuide", "promptLibrary"],
+  prompts: ["promptsGuide", "promptLibrary", "promptBuilder"],
   matriz: ["overview", "artifacts", "matrixGuide", "matrixArtifact"],
   workflows: ["overview", "workflowsGuide"],
   rag: ["ragGuide"],
@@ -1329,7 +1330,489 @@ function renderPromptLibrary(containerId, examples) {
     .join("");
 }
 
-function renderPrompts(promptsGuide, promptLibrary) {
+function toCleanLines(value) {
+  return String(value || "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function formatPromptSection(title, value) {
+  const content = String(value || "").trim();
+  if (!content) {
+    return null;
+  }
+
+  return `${title}:\n${content}`;
+}
+
+function formatPromptBulletSection(title, value) {
+  const lines = toCleanLines(value).map((line) =>
+    /^[-*•]|\d+\./.test(line) || line.startsWith("{") || line.startsWith("<") ? line : `- ${line}`,
+  );
+
+  if (lines.length === 0) {
+    return null;
+  }
+
+  return `${title}:\n${lines.join("\n")}`;
+}
+
+function computePromptBuilderEscalation(flags) {
+  const actions = [];
+
+  if (flags.requires_schema) {
+    actions.push({
+      label: "Schema",
+      reason: "A saida precisa ser previsivel e pronta para integracao.",
+    });
+  }
+
+  if (flags.requires_citations) {
+    actions.push({
+      label: "RAG",
+      reason: "A resposta precisa de fonte verificavel ou base documental citavel.",
+    });
+  }
+
+  if (flags.requires_tools) {
+    actions.push({
+      label: "Tools",
+      reason: "A tarefa depende de busca, calculo, consulta externa ou acao real.",
+    });
+  }
+
+  if (flags.high_risk) {
+    actions.push({
+      label: "Workflow",
+      reason: "Existe risco alto e a tarefa pede validacao humana ou governanca adicional.",
+    });
+  }
+
+  return actions;
+}
+
+function buildPromptBuilderPrompt(template, mode, values, flags) {
+  const escalation = computePromptBuilderEscalation(flags);
+  const sections = [
+    formatPromptSection("Papel", values.role),
+    formatPromptSection("Objetivo", values.objective),
+    formatPromptSection("Contexto", values.context),
+    formatPromptBulletSection("Restricoes", values.constraints),
+    formatPromptBulletSection("Criterio de aceite", values.acceptance),
+    formatPromptSection("Formato de saida", values.outputFormat),
+    formatPromptSection("Exemplos ou referencias opcionais", values.examples),
+    formatPromptSection("Fallback quando faltar contexto", values.fallback),
+    escalation.length > 0
+      ? formatPromptBulletSection(
+          "Escalada recomendada antes de responder",
+          escalation.map((item) => `${item.label}: ${item.reason}`).join("\n"),
+        )
+      : null,
+    formatPromptSection(
+      mode.id === "study" ? "Regra final de revisao" : "Regra final de execucao",
+      mode.closing_instruction,
+    ),
+  ].filter(Boolean);
+
+  return sections.join("\n\n");
+}
+
+function computePromptBuilderDiagnostics(template, mode, values, flags) {
+  const requiredBlocks = [
+    { key: "role", label: "Papel" },
+    { key: "objective", label: "Objetivo" },
+    { key: "context", label: "Contexto" },
+    { key: "acceptance", label: "Criterio de aceite" },
+    { key: "outputFormat", label: "Formato de saida" },
+  ];
+
+  const completedBlocks = requiredBlocks.filter((item) => String(values[item.key] || "").trim()).length;
+  const completenessRatio = completedBlocks / requiredBlocks.length;
+  const firstMissing = requiredBlocks.find((item) => !String(values[item.key] || "").trim());
+  const escalation = computePromptBuilderEscalation(flags);
+
+  const readiness =
+    completenessRatio === 1 ? "Pronto para testar" : completenessRatio >= 0.6 ? "Quase pronto" : "Ainda generico";
+  const readinessClass =
+    completenessRatio === 1 ? "status-done" : completenessRatio >= 0.6 ? "status-in-progress" : "status-risk";
+
+  return [
+    {
+      badge: "Prontidao",
+      status_class: readinessClass,
+      title: readiness,
+      value: `${completedBlocks}/${requiredBlocks.length}`,
+      note: firstMissing ? `Falta reforcar: ${firstMissing.label}.` : "Todos os blocos criticos estao preenchidos.",
+    },
+    {
+      badge: "Escalada",
+      status_class: escalation.length > 0 ? "status-in-progress" : "status-done",
+      title: escalation.length > 0 ? escalation.map((item) => item.label).join(" + ") : "Prompt puro ainda basta",
+      value: escalation.length > 0 ? String(escalation.length) : "0",
+      note:
+        escalation.length > 0
+          ? escalation[0].reason
+          : "Sem sinais fortes de schema, RAG, tools ou workflow no estado atual.",
+    },
+    {
+      badge: "Modo",
+      status_class: mode.status_class || "status-done",
+      title: mode.label,
+      value: template.level_label,
+      note: mode.summary,
+    },
+    {
+      badge: "Template",
+      status_class: template.status_class || "status-done",
+      title: template.title,
+      value: template.best_for,
+      note: template.summary,
+    },
+  ];
+}
+
+function renderPromptBuilder(promptBuilder) {
+  if (!promptBuilder) {
+    return;
+  }
+
+  renderCards(
+    "prompt-builder-overview",
+    promptBuilder.overview || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="metric-value">${escapeHtml(item.body)}</p>
+        <p class="metric-note">${escapeHtml(item.note)}</p>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "prompt-builder-guides",
+    promptBuilder.field_guides || [],
+    (item) => `
+      <article class="study-card compact-card">
+        <span class="label">${escapeHtml(item.kicker)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+        <p class="metric-note">${escapeHtml(item.example)}</p>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "prompt-builder-escalations",
+    promptBuilder.escalation_notes || [],
+    (item) => `
+      <article class="study-card compact-card builder-escalation-card">
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description)}</p>
+      </article>
+    `,
+  );
+
+  const templates = Array.isArray(promptBuilder.templates) ? promptBuilder.templates : [];
+  const modes = Array.isArray(promptBuilder.modes) ? promptBuilder.modes : [];
+
+  if (templates.length === 0 || modes.length === 0) {
+    return;
+  }
+
+  const builderElements = {
+    modeGroup: document.getElementById("prompt-builder-modes"),
+    templateGroup: document.getElementById("prompt-builder-templates"),
+    flags: document.getElementById("prompt-builder-flags"),
+    title: document.getElementById("prompt-builder-title"),
+    summary: document.getElementById("prompt-builder-summary"),
+    level: document.getElementById("prompt-builder-level"),
+    modeBadge: document.getElementById("prompt-builder-mode-badge"),
+    output: document.getElementById("prompt-builder-output"),
+    diagnostics: document.getElementById("prompt-builder-diagnostics"),
+    officials: document.getElementById("prompt-builder-officials"),
+    feedback: document.getElementById("prompt-builder-feedback"),
+    copyButton: document.getElementById("prompt-builder-copy"),
+    resetButton: document.getElementById("prompt-builder-reset"),
+    inputs: {
+      role: document.getElementById("builder-role"),
+      objective: document.getElementById("builder-objective"),
+      context: document.getElementById("builder-context"),
+      constraints: document.getElementById("builder-constraints"),
+      acceptance: document.getElementById("builder-acceptance"),
+      outputFormat: document.getElementById("builder-output-format"),
+      examples: document.getElementById("builder-examples"),
+      fallback: document.getElementById("builder-fallback"),
+    },
+  };
+
+  let activeTemplateId = templates[0].id;
+  let activeModeId = templates[0].recommended_mode || modes[0].id;
+  let feedbackTimer = null;
+
+  function getActiveTemplate() {
+    return templates.find((item) => item.id === activeTemplateId) || templates[0];
+  }
+
+  function getActiveMode() {
+    return modes.find((item) => item.id === activeModeId) || modes[0];
+  }
+
+  function setFieldValue(fieldKey, value) {
+    const element = builderElements.inputs[fieldKey];
+    if (!element) {
+      return;
+    }
+
+    element.value = value || "";
+  }
+
+  function readBuilderValues() {
+    return Object.fromEntries(
+      Object.entries(builderElements.inputs).map(([key, element]) => [key, element ? element.value : ""]),
+    );
+  }
+
+  function readBuilderFlags() {
+    return Object.fromEntries(
+      (promptBuilder.toggles || []).map((item) => [
+        item.id,
+        Boolean(document.getElementById(`builder-flag-${item.id}`)?.checked),
+      ]),
+    );
+  }
+
+  function renderModes() {
+    if (!builderElements.modeGroup) {
+      return;
+    }
+
+    builderElements.modeGroup.innerHTML = modes
+      .map(
+        (mode) => `
+          <button
+            class="builder-chip ${mode.id === activeModeId ? "active" : ""}"
+            type="button"
+            data-builder-mode="${escapeHtml(mode.id)}"
+          >
+            <span>
+              <strong>${escapeHtml(mode.label)}</strong>
+              <small>${escapeHtml(mode.summary)}</small>
+            </span>
+          </button>
+        `,
+      )
+      .join("");
+
+    builderElements.modeGroup.querySelectorAll("[data-builder-mode]").forEach((button) => {
+      button.addEventListener("click", () => {
+        activeModeId = button.getAttribute("data-builder-mode");
+        renderModes();
+        updateBuilderPreview();
+      });
+    });
+  }
+
+  function renderTemplates() {
+    if (!builderElements.templateGroup) {
+      return;
+    }
+
+    builderElements.templateGroup.innerHTML = templates
+      .map(
+        (template) => `
+          <button
+            class="builder-chip ${template.id === activeTemplateId ? "active" : ""}"
+            type="button"
+            data-builder-template="${escapeHtml(template.id)}"
+          >
+            <span>
+              <strong>${escapeHtml(template.title)}</strong>
+              <small>${escapeHtml(template.best_for)}</small>
+            </span>
+          </button>
+        `,
+      )
+      .join("");
+
+    builderElements.templateGroup.querySelectorAll("[data-builder-template]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextTemplate = templates.find((item) => item.id === button.getAttribute("data-builder-template"));
+        if (!nextTemplate) {
+          return;
+        }
+
+        applyTemplateDefaults(nextTemplate, false);
+      });
+    });
+  }
+
+  function renderFlags(template) {
+    if (!builderElements.flags) {
+      return;
+    }
+
+    builderElements.flags.innerHTML = (promptBuilder.toggles || [])
+      .map((toggle) => {
+        const checked = template.default_flags?.[toggle.id] ? "checked" : "";
+        return `
+          <label class="builder-flag">
+            <input type="checkbox" id="builder-flag-${escapeHtml(toggle.id)}" ${checked} />
+            <span>
+              <strong>${escapeHtml(toggle.label)}</strong>
+              <small>${escapeHtml(toggle.description)}</small>
+            </span>
+          </label>
+        `;
+      })
+      .join("");
+
+    builderElements.flags.querySelectorAll("input[type='checkbox']").forEach((element) => {
+      element.addEventListener("change", updateBuilderPreview);
+    });
+  }
+
+  function renderOfficials(template) {
+    renderCards(
+      "prompt-builder-officials",
+      (template.official_buttons || []).map((button) => ({
+        title: button.label,
+        summary: template.best_for,
+        buttons: [button],
+      })),
+      (item) => `
+        <article class="artifact-card compact-card">
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="card-copy">${escapeHtml(item.summary)}</p>
+          ${renderButtonList(item.buttons)}
+        </article>
+      `,
+    );
+  }
+
+  function updateBuilderPreview() {
+    const template = getActiveTemplate();
+    const mode = getActiveMode();
+    const values = readBuilderValues();
+    const flags = readBuilderFlags();
+
+    if (builderElements.title) {
+      builderElements.title.textContent = template.title;
+    }
+
+    if (builderElements.summary) {
+      builderElements.summary.textContent = template.summary;
+    }
+
+    if (builderElements.level) {
+      builderElements.level.textContent = template.level_label;
+      builderElements.level.className = `status-badge ${template.status_class || "status-done"}`;
+    }
+
+    if (builderElements.modeBadge) {
+      builderElements.modeBadge.textContent = mode.label;
+      builderElements.modeBadge.className = `status-badge ${mode.status_class || "status-done"}`;
+    }
+
+    if (builderElements.output) {
+      builderElements.output.textContent = buildPromptBuilderPrompt(template, mode, values, flags);
+    }
+
+    renderCards(
+      "prompt-builder-diagnostics",
+      computePromptBuilderDiagnostics(template, mode, values, flags),
+      (item) => `
+        <article class="metric-card builder-diagnostic-card">
+          <span class="status-badge ${escapeHtml(item.status_class)}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="builder-diagnostic-value">${escapeHtml(item.value)}</p>
+          <p class="metric-note">${escapeHtml(item.note)}</p>
+        </article>
+      `,
+    );
+
+    renderOfficials(template);
+  }
+
+  function applyTemplateDefaults(template, preserveMode = false) {
+    activeTemplateId = template.id;
+
+    if (!preserveMode) {
+      activeModeId = template.recommended_mode || modes[0].id;
+    }
+
+    setFieldValue("role", template.defaults?.role);
+    setFieldValue("objective", template.defaults?.objective);
+    setFieldValue("context", template.defaults?.context);
+    setFieldValue("constraints", template.defaults?.constraints);
+    setFieldValue("acceptance", template.defaults?.acceptance);
+    setFieldValue("outputFormat", template.defaults?.output_format);
+    setFieldValue("examples", template.defaults?.examples);
+    setFieldValue("fallback", template.defaults?.fallback);
+
+    renderModes();
+    renderTemplates();
+    renderFlags(template);
+    updateBuilderPreview();
+  }
+
+  Object.values(builderElements.inputs).forEach((element) => {
+    if (!element) {
+      return;
+    }
+
+    element.addEventListener("input", updateBuilderPreview);
+  });
+
+  if (builderElements.copyButton) {
+    builderElements.copyButton.addEventListener("click", async () => {
+      if (!builderElements.output?.textContent) {
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(builderElements.output.textContent);
+        if (builderElements.feedback) {
+          builderElements.feedback.textContent = "Prompt copiado.";
+        }
+      } catch (_error) {
+        if (builderElements.feedback) {
+          builderElements.feedback.textContent = "Nao foi possivel copiar automaticamente.";
+        }
+      }
+
+      if (feedbackTimer) {
+        window.clearTimeout(feedbackTimer);
+      }
+
+      feedbackTimer = window.setTimeout(() => {
+        if (builderElements.feedback) {
+          builderElements.feedback.textContent = "";
+        }
+      }, 2400);
+    });
+  }
+
+  if (builderElements.resetButton) {
+    builderElements.resetButton.addEventListener("click", () => {
+      applyTemplateDefaults(getActiveTemplate(), true);
+      if (builderElements.feedback) {
+        builderElements.feedback.textContent = "Template resetado.";
+        if (feedbackTimer) {
+          window.clearTimeout(feedbackTimer);
+        }
+        feedbackTimer = window.setTimeout(() => {
+          builderElements.feedback.textContent = "";
+        }, 2400);
+      }
+    });
+  }
+
+  applyTemplateDefaults(getActiveTemplate());
+}
+
+function renderPrompts(promptsGuide, promptLibrary, promptBuilder) {
   renderCards(
     "prompts-orientation",
     promptsGuide.orientation || [],
@@ -1370,6 +1853,8 @@ function renderPrompts(promptsGuide, promptLibrary) {
       </article>
     `,
   );
+
+  renderPromptBuilder(promptBuilder);
 
   renderCards(
     "prompt-library-level-summaries",
@@ -1642,6 +2127,7 @@ async function init() {
       artifacts,
       promptsGuide,
       promptLibrary,
+      promptBuilder,
       matrixGuide,
       matrixArtifact,
       journeyGuide,
@@ -1656,7 +2142,7 @@ async function init() {
     const renderers = {
       home: () => renderHome(portal, overview, artifacts),
       jornada: () => renderJourney(journeyGuide),
-      prompts: () => renderPrompts(promptsGuide, promptLibrary),
+      prompts: () => renderPrompts(promptsGuide, promptLibrary, promptBuilder),
       matriz: () => renderMatrix(portal, overview, artifacts, matrixGuide, matrixArtifact),
       workflows: () => renderWorkflows(portal, overview, workflowsGuide),
       rag: () => renderRag(portal, ragGuide, releaseManifest),

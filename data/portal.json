@@ -4,10 +4,10 @@
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
     "phase_label": "Refinamento ativo",
-    "phase_focus": "Prompt Studio fase 2",
-    "phase_summary": "O portal agora evoluiu o Prompt Studio para uma biblioteca didatica de exemplos progressivos, explicados em estrutura, limites, erro comum e materiais oficiais.",
-    "next_phase": "Prompt Studio fase 3",
-    "next_phase_summary": "O proximo passo mais valioso e construir o builder orientado por contexto para transformar a biblioteca em geracao assistida de prompts.",
+    "phase_focus": "Prompt Studio fase 3",
+    "phase_summary": "O portal agora evoluiu o Prompt Studio para uma bancada orientada por contexto, com templates, modos de uso, diagnostico de escalada e prompt final montado em tempo real.",
+    "next_phase": "Prompt Studio fase 4",
+    "next_phase_summary": "O proximo passo mais valioso e construir overlays por fornecedor para mostrar como OpenAI, Anthropic, Google e xAI pedem ajustes especificos no mesmo prompt.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
@@ -34,7 +34,7 @@
     "prompts": {
       "title": "Prompt Studio",
       "nav_label": "Prompts",
-      "summary": "Fundamentos, biblioteca didatica e criterio de prompting para sair do improviso e entrar em design de tarefa."
+      "summary": "Fundamentos, biblioteca didatica e builder orientado por contexto para sair do improviso e entrar em design de tarefa."
     },
     "matriz": {
       "title": "Matriz",

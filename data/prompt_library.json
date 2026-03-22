@@ -356,7 +356,7 @@
         },
         {
           "label": "Google prompt design strategies",
-          "href": "https://cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/prompt-design-strategies",
+          "href": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/introduction-prompt-design",
           "variant": "secondary"
         },
         {

@@ -3,16 +3,16 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "10 ciclos publicados",
+      "title": "11 ciclos publicados",
       "body": "Portal completo e em expansao didatica",
-      "note": "O sistema fechou o ciclo base do portal e agora esta expandindo o Prompt Studio por fases, sem perder disciplina de release."
+      "note": "O sistema fechou o ciclo base do portal e agora esta expandindo o Prompt Studio por fases, sem perder disciplina de release nem clareza de estudo."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Prompt Studio fase 2",
-      "body": "Biblioteca didatica publicada",
-      "note": "O portal agora tem exemplos basicos, intermediarios e avancados explicados por estrutura. O foco seguinte passa a ser o builder orientado por contexto."
+      "title": "Prompt Studio fase 3",
+      "body": "Builder orientado por contexto publicado",
+      "note": "O portal agora combina fundamentos, biblioteca e uma bancada que monta o prompt final, alterna modo de uso e diagnostica quando voce precisa escalar para schema, RAG, tools ou workflow."
     },
     {
       "badge": "Plano de 30 dias",
@@ -119,6 +119,12 @@
       "focus": "Prompt Studio fase 2",
       "preview_url": "https://69c0024d0dd859a8f636204b--ai-po-os-deivithi-20260321.netlify.app",
       "production_url": "https://ai-po-os-deivithi-20260321.netlify.app"
+    },
+    {
+      "phase": "Refino D",
+      "focus": "Prompt Studio fase 3",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }
   ],
   "phase_rules": [
