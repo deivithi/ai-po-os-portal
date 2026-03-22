@@ -3,23 +3,23 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "24 ciclos publicados",
-      "body": "Portal completo com Radar Vivo, Trilha, camada senior, Progresso, Guia, Labs, Analytics e Lancamentos publicados",
-      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint, leitura de uso real, fechamento premium e aprofundamento senior sem depender de estudo passivo."
+      "title": "25 ciclos publicados",
+      "body": "Portal completo com Radar Vivo, Trilha, camada senior, Progresso, Guia, Labs, Analytics, Lancamentos e retomada persistente publicados",
+      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint, leitura de uso real, fechamento premium, retomada real e aprofundamento senior sem depender de estudo passivo."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Refino Q concluido",
-      "body": "Fechamento premium e launchboard publicados",
-      "note": "A plataforma agora mostra o que ja esta launch-ready, a proxima onda e a tese premium atual do sistema."
+      "title": "Refino R concluido",
+      "body": "Fluidez visual e retomada persistente publicadas",
+      "note": "A plataforma agora responde melhor ao uso recorrente, lembra o ponto exato de estudo e deixa a navegacao mais tecnologica sem perder leveza."
     },
     {
       "badge": "Plano de 30 dias",
       "status_class": "status-done",
       "title": "Base funcional, adaptativa, ativada, pratica e observavel",
-      "body": "30D-A, 30D-B, Radar Vivo, Trilha, Senior, Progresso, Guia, Labs, Analytics e Lancamentos ja conversam entre si",
-      "note": "A partir daqui o trabalho migra para refresh tecnico das rotas em revisao, capstone demonstravel e productizacao mais avancada."
+      "body": "30D-A, 30D-B, Radar Vivo, Trilha, Senior, Progresso, Guia, Labs, Analytics, Lancamentos e retomada persistente ja conversam entre si",
+      "note": "A partir daqui o trabalho migra para sessao de hoje inteligente, refresh tecnico das rotas em revisao, capstone demonstravel e productizacao mais avancada."
     },
     {
       "badge": "Regra",
@@ -201,6 +201,12 @@
     {
       "phase": "Refino Q",
       "focus": "Fechamento premium e launchboard",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino R",
+      "focus": "Fluidez visual e retomada persistente",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }

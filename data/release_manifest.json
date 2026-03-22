@@ -51,6 +51,10 @@
     {
       "title": "Fechamento premium e features launch-ready",
       "description": "Sempre que o portal se apresentar como produto, a pagina precisa mostrar o que ja esta pronto para lancar, o que entra na fila curta e quais acoes de exportar ou compartilhar realmente funcionam."
+    },
+    {
+      "title": "Fluidez visual e retomada persistente",
+      "description": "Sempre que o usuario voltar ao portal, a plataforma precisa manter o ponto de retomada da trilha e do progresso e aplicar motion leve, responsivo e compativel com prefers-reduced-motion."
     }
   ],
   "qa_targets": [

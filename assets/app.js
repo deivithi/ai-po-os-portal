@@ -96,10 +96,29 @@ const ADAPTIVE_PATH_STORAGE_KEY = "ai-po-os::adaptive-path::v1";
 const STUDY_PROGRESS_STORAGE_KEY = "ai-po-os::study-progress::v1";
 const LABS_FILTER_STORAGE_KEY = "ai-po-os::labs-filters::v1";
 const STUDY_ANALYTICS_STORAGE_KEY = "ai-po-os::study-analytics::v1";
+const RESUME_STATE_STORAGE_KEY = "ai-po-os::resume-state::v1";
 const memoryCache = new Map();
 const prefetchedRoutes = new Set();
 const SITE_BASE_PATH = detectSiteBasePath();
 let studyAnalyticsRuntime = null;
+let resumeStateRuntime = null;
+
+const STUDY_ROUTE_IDS = new Set([
+  "guia",
+  "jornada",
+  "trilha",
+  "progresso",
+  "labs",
+  "analytics",
+  "prompts",
+  "matriz",
+  "workflows",
+  "rag",
+  "senior",
+  "roadmap",
+  "artefatos",
+  "lancamentos",
+]);
 
 const pageId = document.body.dataset.page || "home";
 const MATRIX_METRIC_ORDER = [
@@ -221,6 +240,23 @@ function formatShortDate(value) {
       month: "2-digit",
       year: "numeric",
     }).format(new Date(`${value}T00:00:00`));
+  } catch (_error) {
+    return value;
+  }
+}
+
+function formatDateTimeCompact(value) {
+  if (!value) {
+    return "n/a";
+  }
+
+  try {
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(new Date(value));
   } catch (_error) {
     return value;
   }
@@ -498,6 +534,149 @@ function persistStudyProgressState(state) {
   } catch (_error) {
     // Keep runtime-only state if storage is unavailable.
   }
+}
+
+function createDefaultResumeState() {
+  return {
+    version: 1,
+    updated_at: null,
+    last_route: null,
+    last_study_route: null,
+    study: null,
+    trilha: null,
+    progresso: null,
+  };
+}
+
+function loadResumeState() {
+  const defaultState = createDefaultResumeState();
+
+  try {
+    const raw = window.localStorage.getItem(RESUME_STATE_STORAGE_KEY);
+    if (!raw) {
+      return defaultState;
+    }
+
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaultState,
+      ...(parsed && typeof parsed === "object" ? parsed : {}),
+      last_route: parsed?.last_route && typeof parsed.last_route === "object" ? parsed.last_route : null,
+      last_study_route:
+        parsed?.last_study_route && typeof parsed.last_study_route === "object" ? parsed.last_study_route : null,
+      study: parsed?.study && typeof parsed.study === "object" ? parsed.study : null,
+      trilha: parsed?.trilha && typeof parsed.trilha === "object" ? parsed.trilha : null,
+      progresso: parsed?.progresso && typeof parsed.progresso === "object" ? parsed.progresso : null,
+    };
+  } catch (_error) {
+    return defaultState;
+  }
+}
+
+function persistResumeState(state) {
+  resumeStateRuntime = state;
+
+  try {
+    window.localStorage.setItem(RESUME_STATE_STORAGE_KEY, JSON.stringify(state));
+  } catch (_error) {
+    // Keep runtime-only state if storage is unavailable.
+  }
+
+  document.dispatchEvent(
+    new CustomEvent("study-resume:updated", {
+      detail: state,
+    }),
+  );
+}
+
+function ensureResumeState() {
+  const state = resumeStateRuntime || loadResumeState();
+  resumeStateRuntime = state;
+  return state;
+}
+
+function mergeResumeNode(currentNode, patchNode, nowIso) {
+  if (!patchNode || typeof patchNode !== "object") {
+    return currentNode || null;
+  }
+
+  return {
+    ...(currentNode && typeof currentNode === "object" ? currentNode : {}),
+    ...patchNode,
+    updated_at: patchNode.updated_at || nowIso,
+  };
+}
+
+function persistResumePatch(patch) {
+  const current = ensureResumeState();
+  const nowIso = new Date().toISOString();
+
+  const next = {
+    ...createDefaultResumeState(),
+    ...current,
+    updated_at: nowIso,
+    last_route: mergeResumeNode(current.last_route, patch?.last_route, nowIso),
+    last_study_route: mergeResumeNode(current.last_study_route, patch?.last_study_route, nowIso),
+    study: mergeResumeNode(current.study, patch?.study, nowIso),
+    trilha: mergeResumeNode(current.trilha, patch?.trilha, nowIso),
+    progresso: mergeResumeNode(current.progresso, patch?.progresso, nowIso),
+  };
+
+  persistResumeState(next);
+  return next;
+}
+
+function getPortalNavigationEntry(portal, targetPageId = pageId) {
+  return (portal?.navigation || []).find((item) => item.id === targetPageId) || null;
+}
+
+function buildRouteResumeMeta(portal, targetPageId = pageId, extra = {}) {
+  const pageMeta = portal?.pages?.[targetPageId] || {};
+  const navigationEntry = getPortalNavigationEntry(portal, targetPageId);
+
+  return {
+    page_id: targetPageId,
+    href: extra.href || navigationEntry?.href || "/",
+    label: extra.label || pageMeta.nav_label || pageMeta.title || navigationEntry?.label || titleCase(targetPageId),
+    summary: extra.summary || pageMeta.summary || navigationEntry?.description || "",
+    unit_id: extra.unit_id || null,
+    unit_title: extra.unit_title || null,
+    cue: extra.cue || "",
+    updated_at: extra.updated_at || null,
+  };
+}
+
+function rememberRouteVisit(portal, targetPageId = pageId) {
+  const routeMeta = buildRouteResumeMeta(portal, targetPageId);
+  const patch = {
+    last_route: routeMeta,
+  };
+
+  if (STUDY_ROUTE_IDS.has(targetPageId)) {
+    patch.last_study_route = routeMeta;
+  }
+
+  persistResumePatch(patch);
+}
+
+function getPrimaryResumeTarget(portal) {
+  const resumeState = ensureResumeState();
+  const candidate = resumeState.study || resumeState.last_study_route || resumeState.last_route;
+
+  if (!candidate?.href) {
+    return null;
+  }
+
+  const merged = buildRouteResumeMeta(portal, candidate.page_id || "home", candidate);
+  return {
+    ...merged,
+    action_label: candidate.unit_title ? "Continuar estudo" : "Retomar rota",
+    title: candidate.unit_title || merged.label,
+    description:
+      candidate.cue ||
+      merged.summary ||
+      "A plataforma manteve o ultimo ponto de estudo para voce retomar sem recomecar.",
+  };
 }
 
 function createDefaultStudyAnalyticsState() {
@@ -998,6 +1177,11 @@ function renderShell(portal, freshnessStatus) {
   const footer = document.getElementById("portal-footer");
   const pageFreshness = findFreshnessPage(freshnessStatus);
   const stripMeta = freshnessStatus?.strip || null;
+  const currentPageIsStudyRoute = STUDY_ROUTE_IDS.has(pageId);
+
+  rememberRouteVisit(portal, pageId);
+  const resumeTarget = getPrimaryResumeTarget(portal);
+  const canShowResumeAction = resumeTarget && (!currentPageIsStudyRoute || resumeTarget.page_id !== pageId);
 
   if (sidebar) {
     sidebar.innerHTML = `
@@ -1024,6 +1208,18 @@ function renderShell(portal, freshnessStatus) {
           Leia, compare e aplique. Este portal foi desenhado para ensinar e
           tambem para operar.
         </p>
+        ${
+          resumeTarget
+            ? `
+              <div class="sidebar-resume">
+                <span class="label">Retomada salva</span>
+                <strong>${escapeHtml(resumeTarget.title)}</strong>
+                <p class="brand-copy">${escapeHtml(resumeTarget.description)}</p>
+                <a class="button ghost" href="${resolveUrl(resumeTarget.href)}">${escapeHtml(resumeTarget.action_label)}</a>
+              </div>
+            `
+            : ""
+        }
       </div>
     `;
   }
@@ -1043,6 +1239,11 @@ function renderShell(portal, freshnessStatus) {
         ${
           pageFreshness
             ? `<span class="status-badge ${escapeHtml(pageFreshness.status_class)}">${escapeHtml(pageFreshness.status_label)}</span>`
+            : ""
+        }
+        ${
+          canShowResumeAction
+            ? `<a class="button secondary" href="${resolveUrl(resumeTarget.href)}">${escapeHtml(resumeTarget.action_label)}</a>`
             : ""
         }
         <button class="mobile-nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">
@@ -1293,7 +1494,11 @@ function buildMatrixInsights(matrixArtifact, matrixGuide, overview) {
 function renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap) {
   const phaseFocus = document.getElementById("phase-focus");
   const phaseSummary = document.getElementById("phase-summary");
+  const resumeTitle = document.getElementById("resume-title");
+  const resumeCopy = document.getElementById("resume-copy");
+  const resumeAction = document.getElementById("resume-action");
   const sourceLookup = buildSourceLookup(vendorSources);
+  const resumeTarget = getPrimaryResumeTarget(portal);
 
   if (phaseFocus) {
     phaseFocus.textContent = `${portal.site.phase_label} - ${portal.site.phase_focus}`;
@@ -1301,6 +1506,22 @@ function renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates,
 
   if (phaseSummary) {
     phaseSummary.textContent = portal.site.phase_summary;
+  }
+
+  if (resumeTitle) {
+    resumeTitle.textContent = resumeTarget ? resumeTarget.title : "Nenhuma retomada salva ainda";
+  }
+
+  if (resumeCopy) {
+    resumeCopy.textContent = resumeTarget
+      ? `${resumeTarget.description} Ultima atualizacao: ${formatDateTimeCompact(resumeTarget.updated_at || ensureResumeState().updated_at)}.`
+      : "Monte a trilha uma vez e o portal passa a lembrar seu foco, sua configuracao e o ponto exato da retomada.";
+  }
+
+  if (resumeAction) {
+    resumeAction.innerHTML = resumeTarget
+      ? `<a class="button" href="${resolveUrl(resumeTarget.href)}">${escapeHtml(resumeTarget.action_label)}</a>`
+      : `<a class="button" href="${resolveUrl("/trilha/")}">Montar trilha agora</a>`;
   }
 
   renderCards(
@@ -4580,7 +4801,8 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
   const feedback = document.getElementById("trilha-feedback");
   const pageContent = document.getElementById("content");
   const sourceLookup = buildSourceLookup(vendorSources);
-  let activeUnitId = null;
+  const resumeState = ensureResumeState();
+  let activeUnitId = resumeState?.trilha?.active_unit_id || resumeState?.study?.unit_id || null;
   let currentPlan = null;
 
   fillSelectOptions(hoursPerDay, adaptivePathRules.hours_per_day_options || []);
@@ -4652,6 +4874,26 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
     const unitSessions = plan.sessions.filter((session) => session.unit_id === currentUnit.id);
     const firstUnitSession = unitSessions[0];
     const lastUnitSession = unitSessions[unitSessions.length - 1];
+
+    persistResumePatch({
+      study: {
+        page_id: "trilha",
+        href: "/trilha/",
+        label: "Trilha",
+        summary: currentUnit.summary,
+        unit_id: currentUnit.id,
+        unit_title: currentUnit.title,
+        cue: nextUnit
+          ? `Continue por ${currentUnit.title} e depois avance para ${nextUnit.title}.`
+          : `Continue por ${currentUnit.title} e feche este ciclo no Roadmap.`,
+      },
+      trilha: {
+        active_unit_id: currentUnit.id,
+        unit_title: currentUnit.title,
+        portal_href: currentUnit.portal_href || "/trilha/",
+        preferences: plan.preferences,
+      },
+    });
 
     nav.innerHTML = plan.scaledUnits
       .map(
@@ -5095,7 +5337,8 @@ function renderProgress(progressGuide, studyUnits, learningPathTemplates, adapti
   const defaults = adaptivePathRules.defaults || {};
   const savedAdaptivePreferences = loadAdaptivePathPreferences(defaults);
   let progressState = loadStudyProgressState();
-  let activeUnitId = null;
+  const resumeState = ensureResumeState();
+  let activeUnitId = resumeState?.progresso?.active_unit_id || resumeState?.study?.unit_id || null;
   let currentSnapshot = null;
 
   const hoursPerDay = document.getElementById("progress-hours-per-day");
@@ -5191,6 +5434,26 @@ function renderProgress(progressGuide, studyUnits, learningPathTemplates, adapti
       snapshot.planUnits.find(
         (unit) => unit.id !== currentUnit.id && unit.progress_status.id !== "mastered",
       ) || null;
+
+    persistResumePatch({
+      study: {
+        page_id: "progresso",
+        href: "/progresso/",
+        label: "Progresso",
+        summary: currentUnit.summary,
+        unit_id: currentUnit.id,
+        unit_title: currentUnit.title,
+        cue: nextUnit
+          ? `Retome o checkpoint de ${currentUnit.title} e depois avance para ${nextUnit.title}.`
+          : `Retome ${currentUnit.title} e feche o ciclo atual no Roadmap quando concluir.`,
+      },
+      progresso: {
+        active_unit_id: currentUnit.id,
+        unit_title: currentUnit.title,
+        status_id: currentUnit.progress_status.id,
+        status_label: currentUnit.progress_status.label,
+      },
+    });
 
     focusPanel.innerHTML = `
       <div class="adaptive-unit-header">
