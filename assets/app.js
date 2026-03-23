@@ -2096,7 +2096,12 @@ function sanitizeInternalHref(value) {
 }
 
 function buildIdentityEntryHref(options = {}) {
-  const nextHref = sanitizeInternalHref(options.nextHref || getCurrentInternalHref()) || "/trilha/";
+  const enterPageNextHref =
+    pageId === "entrar"
+      ? sanitizeInternalHref(new URLSearchParams(window.location.search).get("next"))
+      : null;
+  const nextHref =
+    sanitizeInternalHref(options.nextHref || enterPageNextHref || getCurrentInternalHref()) || "/trilha/";
   return buildInternalHref("/entrar/", {
     next: nextHref,
     from: options.from || pageId,
