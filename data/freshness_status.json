@@ -27,15 +27,15 @@
         "badge": "Fila editorial",
         "status_class": "status-next",
         "title": "Nova frente ativa",
-        "value": "Trilha conectada fase 1",
-        "note": "Com a espinha dorsal tecnica estabilizada, o foco agora sobe para um percurso visual conectado, mais memoravel e mais guiado."
+        "value": "Trilha conectada fase 2",
+        "note": "Com a espinha dorsal tecnica estabilizada, o foco agora sobe para navegacao guiada por node, retomada mais inteligente e entrada sem friccao na rota certa."
       }
     ]
   },
   "strip": {
     "eyebrow": "Radar Vivo",
-    "title": "Mercado atual conferido; trilha conectada em construcao premium",
-    "summary": "Use esta barra para distinguir mercado atual, snapshot operacional e rotas verificadas. Agora o foco principal do portal sobe para a camada de percurso visual e progressao conectada.",
+    "title": "Mercado atual conferido; trilha conectada sobe para navegacao guiada",
+    "summary": "Use esta barra para distinguir mercado atual, snapshot operacional e rotas verificadas. Agora o foco principal do portal sobe para a camada de percurso visual com entrada guiada por unidade.",
     "metrics": [
       {
         "label": "Mercado",
@@ -143,8 +143,8 @@
       "status_label": "Verificado hoje",
       "status_class": "status-done",
       "checked_on": "2026-03-22",
-      "summary": "A rota agora monta o plano e tambem o transforma em uma learning path view conectada, com rail visual, nodes em estado real e inspector de node.",
-      "note": "Boa pagina para sentir o caminho, ver o proximo salto e transformar estudo em percurso memoravel e verificavel.",
+      "summary": "A rota agora monta o plano, transforma a jornada em learning path view conectada e gera navegacao guiada por unidade para a rota certa.",
+      "note": "Boa pagina para sentir o caminho, entrar no node certo sem dispersao e manter retomada real entre uma rota e outra.",
       "action_href": "/trilha/",
       "action_label": "Abrir Trilha"
     },

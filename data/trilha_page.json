@@ -3,16 +3,16 @@
     {
       "badge": "Entrada nova",
       "status_class": "status-done",
-      "title": "A trilha agora monta o plano por voce",
-      "body": "Horas, foco, nivel e objetivo viram um cronograma de verdade",
-      "note": "Em vez de navegar por intuicao, voce passa a seguir uma rota pensada para o seu ritmo real."
+      "title": "A trilha agora te entrega o plano e o primeiro clique certo",
+      "body": "Horas, foco, nivel e objetivo viram um cronograma com rota guiada por node",
+      "note": "Em vez de navegar por intuicao, voce passa a seguir uma rota pensada para o seu ritmo real e ja entra no ponto certo do portal."
     },
     {
       "badge": "Regra central",
       "status_class": "status-done",
-      "title": "Uma configuracao, varias semanas claras",
-      "body": "A pagina devolve proximo bloco, semanas, materiais e entregaveis",
-      "note": "A Trilha precisa ser a pagina que te impede de estudar de forma fragmentada."
+      "title": "Um node, uma rota, uma proxima acao",
+      "body": "A pagina devolve proximo bloco, semanas, materiais, entregaveis e CTA de entrada",
+      "note": "A Trilha precisa ser a pagina que te impede de estudar de forma fragmentada e te coloca no lugar certo sem ruidao."
     },
     {
       "badge": "Honestidade",
@@ -24,9 +24,9 @@
     {
       "badge": "Resultado esperado",
       "status_class": "status-done",
-      "title": "Menos leitura solta, mais dominio operacional",
-      "body": "Cada bloco aponta para uma pagina, uma fonte oficial e um entregavel",
-      "note": "A meta aqui e aproximar o estudo de um sistema de treinamento profissional."
+      "title": "Menos leitura solta, mais navegacao intencional",
+      "body": "Cada bloco aponta para a pagina certa, com retomada, contexto e proximo passo",
+      "note": "A meta aqui e aproximar o estudo de um sistema de treinamento profissional, nao de uma colecao de links."
     }
   ],
   "configuration_tips": [

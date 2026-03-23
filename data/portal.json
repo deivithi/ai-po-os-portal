@@ -3,11 +3,11 @@
     "title": "AI Operating System do PO Salesforce",
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
-    "phase_label": "Learning Path View",
-    "phase_focus": "Trilha conectada fase 1",
-    "phase_summary": "A rota Trilha agora troca a leitura em lista por um percurso visual conectado, com rail continua, nodes em estado real, inspector forte e uma narrativa de caminho muito mais clara.",
-    "next_phase": "Navegacao guiada por node",
-    "next_phase_summary": "Com a trilha visual conectada no ar, a proxima frente natural e fazer cada node levar exatamente para a rota certa, com CTAs de comecar, continuar e proximo passo sem friccao.",
+    "phase_label": "Node Navigation",
+    "phase_focus": "Trilha conectada fase 2",
+    "phase_summary": "A rota Trilha agora nao apenas mostra o caminho: cada node gera CTA guiado, alimenta a retomada do portal e abre a rota certa ja com contexto da unidade.",
+    "next_phase": "Login por e-mail",
+    "next_phase_summary": "Com a navegacao guiada fechada, a proxima frente natural e dar identidade persistente ao usuario com entrada por e-mail, sessao salva e reconhecimento real entre retornos.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
@@ -52,7 +52,7 @@
     "trilha": {
       "title": "Trilha",
       "nav_label": "Trilha",
-      "summary": "Adaptive Study Path: percurso visual conectado com rail continua, nodes em estado real, inspector de node e plano adaptativo por horas, foco, nivel e objetivo."
+      "summary": "Adaptive Study Path: percurso visual conectado com rail continua, nodes em estado real, inspector forte e navegacao guiada por unidade para a rota certa."
     },
     "progresso": {
       "title": "Progresso",
@@ -185,7 +185,7 @@
     },
     {
       "title": "Montar a trilha adaptativa",
-      "description": "Abra Trilha para transformar sua disponibilidade real de horas em um caminho visual conectado, com nodes, estados, inspector e proximo bloco claro.",
+      "description": "Abra Trilha para transformar sua disponibilidade real de horas em um caminho visual conectado, com nodes, estados, inspector e links guiados para comecar, continuar e avancar sem friccao.",
       "href": "/trilha/",
       "badge": "Nova porta de entrada",
       "status_class": "status-done"

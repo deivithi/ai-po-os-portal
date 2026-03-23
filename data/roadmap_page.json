@@ -3,16 +3,16 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "29 ciclos publicados",
-      "body": "Portal completo com Radar Vivo, Trilha conectada fase 1, camada senior, Progresso, Guia, Labs, Analytics, Lancamentos, retomada persistente, Mission Control educacional, Sessao de hoje e refresh tecnico premium publicados",
-      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint, leitura de uso real, missao diaria, percurso visual conectado, fechamento premium, retomada real, fila de revisao e aprofundamento senior sem depender de estudo passivo."
+      "title": "30 ciclos publicados",
+      "body": "Portal completo com Radar Vivo, Trilha conectada fase 2, camada senior, Progresso, Guia, Labs, Analytics, Lancamentos, retomada persistente, Mission Control educacional, Sessao de hoje e refresh tecnico premium publicados",
+      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint, leitura de uso real, missao diaria, percurso visual conectado, navegacao guiada, fechamento premium, retomada real, fila de revisao e aprofundamento senior sem depender de estudo passivo."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Refino V concluido",
-      "body": "Learning Path View conectada publicada na Trilha",
-      "note": "A trilha agora ganha rail continua, nodes em estado real e inspector forte, elevando muito a clareza de percurso e o valor percebido do produto."
+      "title": "Refino W concluido",
+      "body": "Navegacao guiada por node publicada na Trilha",
+      "note": "A trilha agora nao so mostra o caminho: cada unidade abre a rota certa com contexto, retomada mais inteligente e proximo passo muito mais claro."
     },
     {
       "badge": "Plano de 30 dias",
@@ -56,7 +56,7 @@
       "title": "Capstone e productizacao",
       "status_label": "Em evolucao",
       "status_class": "status-in-progress",
-      "description": "Portal publico, narrativa executiva, onboarding/ativacao, labs praticos, launchboard premium, trilha conectada, ativos de autoridade e governanca de release."
+      "description": "Portal publico, narrativa executiva, onboarding/ativacao, labs praticos, launchboard premium, trilha conectada, navegacao guiada, ativos de autoridade e governanca de release."
     }
   ],
   "portal_release_history": [
@@ -231,6 +231,12 @@
     {
       "phase": "Refino V",
       "focus": "Learning Path View conectada",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino W",
+      "focus": "Navegacao guiada por node",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }

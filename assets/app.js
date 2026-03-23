@@ -1806,15 +1806,7 @@ function renderButtonList(buttons) {
 
   return `
     <div class="button-group">
-      ${buttons
-        .map(
-          (button) => `
-            <a class="button ${button.variant === "secondary" ? "secondary" : ""}" href="${resolveUrl(button.href)}">
-              ${escapeHtml(button.label)}
-            </a>
-          `,
-        )
-        .join("")}
+      ${buttons.map((button) => renderActionLink(button)).join("")}
     </div>
   `;
 }
@@ -1838,6 +1830,165 @@ function buildSourceButtons(sourceLookup, sourceIds, limit = 2) {
       href: source.url,
       variant: "secondary",
     }));
+}
+
+function findStudyUnit(studyUnits, unitId) {
+  return (studyUnits?.units || []).find((unit) => unit.id === unitId) || null;
+}
+
+function buildInternalHref(pathname, searchParams = {}) {
+  const normalizedPath = normalizeInternalPath(pathname) || "/";
+  const search = new URLSearchParams();
+
+  Object.entries(searchParams || {}).forEach(([key, value]) => {
+    if (value === null || value === undefined || value === "") {
+      return;
+    }
+
+    search.set(key, String(value));
+  });
+
+  const query = search.toString();
+  return `${normalizedPath}${query ? `?${query}` : ""}`;
+}
+
+function getCurrentInternalHref() {
+  const normalizedPath = normalizeInternalPath(window.location.pathname) || "/";
+  const search = window.location.search || "";
+  const hash = window.location.hash || "";
+  return `${normalizedPath}${search}${hash}`;
+}
+
+function resolveStudyUnitPageId(portal, unit) {
+  return findPageIdByPath(portal, normalizeInternalPath(unit?.portal_href || "/") || "/") || "home";
+}
+
+function resolveStudyIntentMode(stateId, preferredMode) {
+  if (preferredMode) {
+    return preferredMode;
+  }
+
+  if (stateId === "active") {
+    return "continue";
+  }
+
+  if (stateId === "mastered") {
+    return "review";
+  }
+
+  if (stateId === "locked") {
+    return "preview";
+  }
+
+  return "start";
+}
+
+function resolveStudyIntentLabel(mode, routeLabel) {
+  switch (mode) {
+    case "continue":
+      return `Continuar em ${routeLabel}`;
+    case "review":
+      return `Revisar em ${routeLabel}`;
+    case "next":
+      return "Abrir proximo passo";
+    case "preview":
+      return `Abrir ${routeLabel}`;
+    case "start":
+    default:
+      return `Comecar em ${routeLabel}`;
+  }
+}
+
+function buildStudyIntentCue(unit, nextUnit, mode = "start", routeLabel = "a rota certa") {
+  const currentLabel = routeLabel || "a rota certa";
+  const nextLabel = nextUnit?.title || "o proximo bloco";
+
+  switch (mode) {
+    case "continue":
+      return `Continue em ${currentLabel} com foco em ${unit.title} e feche este bloco antes de subir para ${nextLabel}.`;
+    case "review":
+      return `Revise ${unit.title} em ${currentLabel} para consolidar criterio e decidir se a energia ja pode subir para ${nextLabel}.`;
+    case "next":
+      return `Ao terminar este bloco, avance direto para ${nextLabel} sem voltar a navegar por tentativa e erro.`;
+    case "preview":
+      return `Use ${currentLabel} para enxergar o contexto, mas mantenha a energia principal no node ativo antes de investir pesado aqui.`;
+    case "start":
+    default:
+      return `Comece em ${currentLabel} com foco total em ${unit.title} e siga para ${nextLabel} quando fechar as evidencias deste node.`;
+  }
+}
+
+function buildStudyIntentHref(unit, options = {}) {
+  return buildInternalHref(unit?.portal_href || "/", {
+    unit: unit?.id || null,
+    from: options.from || null,
+    mode: options.mode || null,
+    next: options.nextUnitId || null,
+  });
+}
+
+function buildStudyIntentAction(portal, unit, options = {}) {
+  if (!unit) {
+    return null;
+  }
+
+  const nextUnit = options.nextUnit || null;
+  const mode = resolveStudyIntentMode(options.stateId, options.mode);
+  const pageIdForUnit = resolveStudyUnitPageId(portal, unit);
+  const routeLabel =
+    portal?.pages?.[pageIdForUnit]?.nav_label ||
+    portal?.pages?.[pageIdForUnit]?.title ||
+    unit.portal_label ||
+    titleCase(pageIdForUnit);
+  const cue = options.cue || buildStudyIntentCue(unit, nextUnit, mode, routeLabel);
+  const href = buildStudyIntentHref(unit, {
+    from: options.from || "trilha",
+    mode,
+    nextUnitId: options.nextUnitId || nextUnit?.id || null,
+  });
+
+  return {
+    label: options.label || resolveStudyIntentLabel(mode, routeLabel),
+    href,
+    variant: options.variant || "primary",
+    attrs: {
+      "data-study-intent": "true",
+      "data-study-page-id": pageIdForUnit,
+      "data-study-route-label": routeLabel,
+      "data-study-href": href,
+      "data-study-unit-id": unit.id,
+      "data-study-unit-title": unit.title,
+      "data-study-summary": unit.summary,
+      "data-study-cue": cue,
+      "data-study-mode": mode,
+      "data-study-from": options.from || "trilha",
+    },
+  };
+}
+
+function renderActionLink(button) {
+  if (!button?.href || !button?.label) {
+    return "";
+  }
+
+  const className = ["button"];
+  if (button.variant === "secondary") {
+    className.push("secondary");
+  }
+  if (button.variant === "ghost") {
+    className.push("ghost");
+  }
+
+  const attrs = Object.entries(button.attrs || {})
+    .filter(([, value]) => value !== undefined && value !== null && value !== "")
+    .map(([name, value]) => `${name}="${escapeHtml(String(value))}"`)
+    .join(" ");
+
+  return `
+    <a class="${className.join(" ")}" href="${resolveUrl(button.href)}" ${attrs}>
+      ${escapeHtml(button.label)}
+    </a>
+  `;
 }
 
 function renderTagList(tags) {
@@ -2034,6 +2185,180 @@ function renderMissionControlSurface(prefix, snapshot) {
       `,
     );
   }
+}
+
+function setupStudyIntentPersistence() {
+  if (document.body.dataset.studyIntentBound === "true") {
+    return;
+  }
+
+  document.addEventListener(
+    "click",
+    (event) => {
+      const action = event.target.closest("a[data-study-intent]");
+      if (!action) {
+        return;
+      }
+
+      const dataset = action.dataset || {};
+      const studyHref = dataset.studyHref || action.getAttribute("href") || null;
+      const studyPageId = dataset.studyPageId || pageId;
+      const studyRouteLabel = dataset.studyRouteLabel || titleCase(studyPageId);
+      const unitId = dataset.studyUnitId || null;
+      const unitTitle = dataset.studyUnitTitle || null;
+      const studyCue = dataset.studyCue || "";
+
+      persistResumePatch({
+        study: {
+          page_id: studyPageId,
+          href: studyHref,
+          label: studyRouteLabel,
+          summary: dataset.studySummary || "",
+          unit_id: unitId,
+          unit_title: unitTitle,
+          cue: studyCue,
+        },
+        trilha:
+          dataset.studyFrom === "trilha" && unitId
+            ? {
+                active_unit_id: unitId,
+                unit_title: unitTitle,
+                portal_href: normalizeInternalPath(studyHref) || "/trilha/",
+              }
+            : undefined,
+      });
+
+      trackStudyAnalyticsEvent("guided_study_navigation", {
+        page_id: pageId,
+        target_page_id: studyPageId,
+        unit_id: unitId || "",
+        mode: dataset.studyMode || "",
+      });
+    },
+    { capture: true },
+  );
+
+  document.body.dataset.studyIntentBound = "true";
+}
+
+async function renderStudyIntentSurface(portal, studyUnits) {
+  if (pageId === "trilha") {
+    return;
+  }
+
+  const url = new URL(window.location.href);
+  const unitId = url.searchParams.get("unit");
+  if (!unitId) {
+    return;
+  }
+
+  const loadedStudyUnits = studyUnits || (await fetchJson(DATA_PATHS.studyUnits).catch(() => null));
+  const unit = findStudyUnit(loadedStudyUnits, unitId);
+  if (!unit) {
+    return;
+  }
+
+  const targetPageId = resolveStudyUnitPageId(portal, unit);
+  if (targetPageId !== pageId) {
+    return;
+  }
+
+  const nextUnit =
+    findStudyUnit(loadedStudyUnits, url.searchParams.get("next")) ||
+    findStudyUnit(loadedStudyUnits, unit.next_unit_id);
+  const mode = resolveStudyIntentMode(null, url.searchParams.get("mode") || "start");
+  const page = portal?.pages?.[pageId] || {};
+  const currentRouteLabel = page.nav_label || page.title || titleCase(pageId);
+  const main = document.getElementById("content");
+  if (!main || document.getElementById("study-intent-surface")) {
+    return;
+  }
+
+  const primaryAction = buildStudyIntentAction(portal, unit, {
+    from: pageId,
+    mode,
+    nextUnit,
+    label: resolveStudyIntentLabel(mode, currentRouteLabel),
+    variant: "secondary",
+  });
+  const nextAction = nextUnit
+    ? buildStudyIntentAction(portal, nextUnit, {
+        from: pageId,
+        mode: "next",
+        nextUnit: findStudyUnit(loadedStudyUnits, nextUnit.next_unit_id),
+        label: "Abrir proximo passo",
+      })
+    : null;
+
+  const section = document.createElement("section");
+  section.id = "study-intent-surface";
+  section.className = "section study-intent-section";
+  section.innerHTML = `
+    <div class="study-intent-panel">
+      <div class="study-intent-shell">
+        <div class="study-intent-main">
+          <span class="eyebrow">Missao da trilha</span>
+          <h2>${escapeHtml(unit.title)}</h2>
+          <p class="lead">${escapeHtml(unit.summary)}</p>
+          <div class="study-intent-flow">
+            <article class="study-intent-card">
+              <span class="label">Modo de entrada</span>
+              <strong>${escapeHtml(resolveStudyIntentLabel(mode, currentRouteLabel))}</strong>
+              <p>${escapeHtml(buildStudyIntentCue(unit, nextUnit, mode, currentRouteLabel))}</p>
+            </article>
+            <article class="study-intent-card">
+              <span class="label">O que provar aqui</span>
+              <strong>${escapeHtml(unit.deliverable)}</strong>
+              <p>${escapeHtml(unit.exercise)}</p>
+            </article>
+            <article class="study-intent-card">
+              <span class="label">Depois daqui</span>
+              <strong>${escapeHtml(nextUnit?.title || "Fechar o ciclo no Roadmap")}</strong>
+              <p>${escapeHtml(nextUnit ? nextUnit.summary : "Quando este node fechar, use o Roadmap e o Progresso para consolidar o aprendizado e decidir a proxima alavanca.")}</p>
+            </article>
+          </div>
+          <div class="button-group study-intent-actions">
+            ${renderActionLink(primaryAction)}
+            ${nextAction ? renderActionLink({ ...nextAction, variant: "secondary" }) : `<a class="button secondary" href="${resolveUrl("/roadmap/")}">Fechar ciclo no Roadmap</a>`}
+            <a class="button ghost" href="${resolveUrl("/trilha/")}">Voltar para a trilha</a>
+          </div>
+        </div>
+        <aside class="study-intent-side">
+          <article class="study-intent-side-card">
+            <span class="label">Leitura desta rota</span>
+            <strong>${escapeHtml(page.nav_label || page.title || titleCase(pageId))}</strong>
+            <p>${escapeHtml(unit.concept || unit.summary)}</p>
+          </article>
+          <article class="study-intent-side-card">
+            <span class="label">Sinal de dominio</span>
+            <strong>${escapeHtml(unit.mastery)}</strong>
+            <ul class="summary-list">
+              ${(unit.evidence_examples || []).slice(0, 2).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+            </ul>
+          </article>
+        </aside>
+      </div>
+    </div>
+  `;
+
+  const anchor = main.querySelector(".page-hero");
+  if (anchor) {
+    anchor.insertAdjacentElement("afterend", section);
+  } else {
+    main.prepend(section);
+  }
+
+  persistResumePatch({
+    study: {
+      ...buildRouteResumeMeta(portal, pageId, {
+        href: getCurrentInternalHref(),
+        unit_id: unit.id,
+        unit_title: unit.title,
+        summary: unit.summary,
+        cue: buildStudyIntentCue(unit, nextUnit, mode, currentRouteLabel),
+      }),
+    },
+  });
 }
 
 function buildMatrixInsights(matrixArtifact, matrixGuide, overview) {
@@ -5980,7 +6305,7 @@ function renderAnalytics(
   renderSnapshot();
 }
 
-function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources) {
+function renderTrilha(portal, trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources) {
   renderCards(
     "trilha-orientation",
     trilhaGuide.orientation || [],
@@ -6110,6 +6435,21 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
     return null;
   }
 
+  function buildPlanUnitAction(unit, options = {}) {
+    if (!unit) {
+      return null;
+    }
+
+    return buildStudyIntentAction(portal, unit, {
+      from: "trilha",
+      nextUnit: options.nextUnit || resolveNextPlanUnit(currentPlan || { scaledUnits: [] }, unit.id),
+      stateId: options.stateId,
+      mode: options.mode,
+      label: options.label,
+      variant: options.variant,
+    });
+  }
+
   function renderUnitExplorer(plan) {
     const pathOverview = document.getElementById("trilha-path-overview");
     const pathTrack = document.getElementById("trilha-learning-path");
@@ -6143,18 +6483,47 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
     const masteredCount = journeyNodes.filter((unit) => unit.state.id === "mastered").length;
     const flaggedCount = journeyNodes.filter((unit) => unit.flagged).length;
     const remainingCount = Math.max(0, journeyNodes.length - masteredCount - 1);
+    const currentAction = buildPlanUnitAction(currentUnit, {
+      nextUnit,
+      stateId: currentNode?.state.id,
+    });
+    const nextAction = nextUnit
+      ? buildPlanUnitAction(nextUnit, {
+          nextUnit: resolveNextPlanUnit(plan, nextUnit.id),
+          mode: "next",
+          label: "Abrir proximo passo",
+          variant: "secondary",
+        })
+      : null;
+    const currentTargetPageId = resolveStudyUnitPageId(portal, currentUnit);
 
     persistResumePatch({
       study: {
-        page_id: "trilha",
-        href: "/trilha/",
-        label: "Trilha",
+        ...buildRouteResumeMeta(portal, currentTargetPageId, {
+          href: currentAction?.href || currentUnit.portal_href || "/trilha/",
+          label: currentUnit.portal_label || portal?.pages?.[currentTargetPageId]?.nav_label || "Trilha",
+          summary: currentUnit.summary,
+          unit_id: currentUnit.id,
+          unit_title: currentUnit.title,
+          cue: currentAction?.attrs?.["data-study-cue"] ||
+            (nextUnit
+              ? `Continue por ${currentUnit.title} e depois avance para ${nextUnit.title}.`
+              : `Continue por ${currentUnit.title} e feche este ciclo no Roadmap.`),
+        }),
+      },
+      last_study_route: {
+        ...buildRouteResumeMeta(portal, currentTargetPageId, {
+          href: currentAction?.href || currentUnit.portal_href || "/trilha/",
+          label: currentUnit.portal_label || portal?.pages?.[currentTargetPageId]?.nav_label || "Trilha",
         summary: currentUnit.summary,
         unit_id: currentUnit.id,
         unit_title: currentUnit.title,
-        cue: nextUnit
-          ? `Continue por ${currentUnit.title} e depois avance para ${nextUnit.title}.`
-          : `Continue por ${currentUnit.title} e feche este ciclo no Roadmap.`,
+          cue:
+            currentAction?.attrs?.["data-study-cue"] ||
+            (nextUnit
+              ? `Continue por ${currentUnit.title} e depois avance para ${nextUnit.title}.`
+              : `Continue por ${currentUnit.title} e feche este ciclo no Roadmap.`),
+        }),
       },
       trilha: {
         active_unit_id: currentUnit.id,
@@ -6317,11 +6686,12 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
         </ul>
       </section>
       <div class="button-group adaptive-unit-actions">
-        <a class="button" href="${resolveUrl(currentUnit.portal_href || "/")}">${escapeHtml(currentUnit.portal_label || "Abrir rota")}</a>
+        ${currentAction ? renderActionLink(currentAction) : ""}
+        ${nextAction ? renderActionLink(nextAction) : `<a class="button secondary" href="${resolveUrl("/roadmap/")}">Fechar trilha no Roadmap</a>`}
         ${
           nextUnit
-            ? `<button class="button secondary" type="button" data-unit-focus="${escapeHtml(nextUnit.id)}">Ver proximo node</button>`
-            : `<a class="button secondary" href="${resolveUrl("/roadmap/")}">Fechar trilha no Roadmap</a>`
+            ? `<button class="button ghost" type="button" data-unit-focus="${escapeHtml(nextUnit.id)}">Ver proximo node</button>`
+            : ""
         }
         ${buildFlagToggleButton("unit", {
           id: currentUnit.id,
@@ -6431,13 +6801,18 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
               description: `Dia ${plan.firstSession.calendar_day} | ${formatNumber(plan.firstSession.hours, 1)}h`,
               note: plan.firstSession.exercise,
               buttons: [
-                {
-                  label: plan.firstSession.portal_label || "Abrir rota",
-                  href: plan.firstSession.portal_href || "/",
-                },
-                ...buildSourceButtons(sourceLookup, plan.firstSession.official_resource_ids, 1),
-              ],
-              unit_id: plan.firstSession.unit_id,
+            {
+              ...(buildPlanUnitAction(resolvePlanUnit(plan, plan.firstSession.unit_id), {
+                nextUnit: resolveNextPlanUnit(plan, plan.firstSession.unit_id),
+                mode: "start",
+              }) || {
+                label: plan.firstSession.portal_label || "Abrir rota",
+                href: plan.firstSession.portal_href || "/",
+              }),
+            },
+            ...buildSourceButtons(sourceLookup, plan.firstSession.official_resource_ids, 1),
+          ],
+          unit_id: plan.firstSession.unit_id,
             }
           : null,
         plan.nextDistinctSession
@@ -6449,9 +6824,16 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
               note: plan.nextDistinctSession.deliverable,
               buttons: [
                 {
-                  label: plan.nextDistinctSession.portal_label || "Abrir rota",
-                  href: plan.nextDistinctSession.portal_href || "/",
-                  variant: "secondary",
+                  ...(buildPlanUnitAction(resolvePlanUnit(plan, plan.nextDistinctSession.unit_id), {
+                    nextUnit: resolveNextPlanUnit(plan, plan.nextDistinctSession.unit_id),
+                    mode: "next",
+                    label: "Abrir proximo passo",
+                    variant: "secondary",
+                  }) || {
+                    label: plan.nextDistinctSession.portal_label || "Abrir rota",
+                    href: plan.nextDistinctSession.portal_href || "/",
+                    variant: "secondary",
+                  }),
                 },
                 ...buildSourceButtons(sourceLookup, plan.nextDistinctSession.official_resource_ids, 1),
               ],
@@ -6554,13 +6936,19 @@ function renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePa
           <h3>${escapeHtml(session.unit_title)}</h3>
           <p class="card-copy">Semana ${escapeHtml(session.week_number)} | Sessao ${escapeHtml(session.study_session)} | ${escapeHtml(formatNumber(session.hours, 1))}h</p>
           <p class="metric-note">${escapeHtml(session.exercise)}</p>
-          ${renderButtonList([
-            {
-              label: session.portal_label || "Abrir rota",
-              href: session.portal_href || "/",
-              variant: "secondary",
-            },
-          ])}
+          ${renderButtonList(
+            [
+              buildPlanUnitAction(resolvePlanUnit(plan, session.unit_id), {
+                nextUnit: resolveNextPlanUnit(plan, session.unit_id),
+                mode: session.unit_id === activeUnitId ? "continue" : "start",
+                variant: "secondary",
+              }) || {
+                label: session.portal_label || "Abrir rota",
+                href: session.portal_href || "/",
+                variant: "secondary",
+              },
+            ].filter(Boolean),
+          )}
           <div class="button-group">
             <button class="button ghost" type="button" data-unit-focus="${escapeHtml(session.unit_id)}">Ver unidade</button>
           </div>
@@ -9788,6 +10176,7 @@ async function init() {
 
     renderShell(portal, freshnessStatus);
     setupStudyAnalytics();
+    setupStudyIntentPersistence();
 
       const renderers = {
         home: () =>
@@ -9830,7 +10219,7 @@ async function init() {
           freshnessStatus,
         ),
       jornada: () => renderJourney(journeyGuide),
-      trilha: () => renderTrilha(trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),
+      trilha: () => renderTrilha(portal, trilhaGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),
       progresso: () => renderProgress(progressGuide, studyUnits, learningPathTemplates, adaptivePathRules, vendorSources),
       prompts: () =>
         renderPrompts(
@@ -9853,6 +10242,8 @@ async function init() {
     if (renderer) {
       renderer();
     }
+
+    await renderStudyIntentSurface(portal, studyUnits);
 
     setupNavigationPrefetch(portal);
   } catch (error) {

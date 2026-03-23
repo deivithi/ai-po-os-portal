@@ -71,6 +71,10 @@
     {
       "title": "Learning Path View conectada",
       "description": "Sempre que a Trilha montar um caminho, a pagina precisa mostrar rail continua, nodes com estado, inspector forte e progressao clara sem parecer uma lista de cards soltos."
+    },
+    {
+      "title": "Navegacao guiada por node",
+      "description": "Sempre que uma unidade da Trilha for escolhida, o portal precisa gerar o link certo para comecar, continuar ou avancar, alimentar a retomada e abrir a rota com contexto da missao."
     }
   ],
   "qa_targets": [
