@@ -1,0 +1,58 @@
+{
+  "orientation": [
+    {
+      "badge": "Fase 3",
+      "status_class": "status-done",
+      "title": "Identidade local por e-mail",
+      "body": "O portal passa a reconhecer o aluno por e-mail neste navegador, sem perder a leveza do produto estatico.",
+      "note": "A meta aqui e persistencia de identidade e retomada real. O sync entre dispositivos entra na fase seguinte."
+    },
+    {
+      "badge": "Resultado imediato",
+      "status_class": "status-done",
+      "title": "Retomada mais humana",
+      "body": "A jornada deixa de ser um estado anonimo e passa a ter um dono claro dentro do navegador.",
+      "note": "Home, Trilha e shell reconhecem quem esta estudando e apontam o proximo passo com muito menos friccao."
+    },
+    {
+      "badge": "Arquitetura",
+      "status_class": "status-in-progress",
+      "title": "Local-first, cloud-ready",
+      "body": "A identidade fica salva em storage local agora, mas a UX e os contratos ja nascem prontos para subir para auth real e sync.",
+      "note": "Isso evita retrabalho quando o provedor de auth entrar na proxima macrofase."
+    },
+    {
+      "badge": "Regra central",
+      "status_class": "status-done",
+      "title": "Entrar deve reduzir friccao",
+      "body": "A tela de entrada existe para devolver voce ao node certo, nao para virar um beco sem saida.",
+      "note": "Se a pagina nao te devolve rapido para o estudo, ela falhou."
+    }
+  ],
+  "benefits": [
+    {
+      "badge": "Persistencia",
+      "status_class": "status-done",
+      "title": "Reconhecimento consistente",
+      "description": "Ao voltar para o portal, o sistema identifica seu e-mail salvo neste navegador e reapresenta sua jornada como algo seu."
+    },
+    {
+      "badge": "Retomada",
+      "status_class": "status-done",
+      "title": "Proximo estudo mais claro",
+      "description": "A retomada deixa de ser so uma memoria da aplicacao e passa a estar ligada a uma identidade salva."
+    },
+    {
+      "badge": "Preparacao",
+      "status_class": "status-in-progress",
+      "title": "Pronto para sync em nuvem",
+      "description": "A mesma experiencia ja nasce preparada para subir depois para auth por OTP/magic link e continuidade entre dispositivos."
+    }
+  ],
+  "rules": [
+    "Use seu e-mail principal para o portal te reconhecer de forma consistente neste navegador.",
+    "Esta fase nao apaga sua trilha local; ela apenas liga a jornada a uma identidade visivel.",
+    "A proxima macrofase sobe essa identidade para sync em nuvem e continuidade entre dispositivos.",
+    "Entrar precisa sempre devolver voce ao node certo ou a proxima rota certa."
+  ]
+}

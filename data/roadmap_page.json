@@ -3,23 +3,23 @@
     {
       "badge": "Estado atual",
       "status_class": "status-done",
-      "title": "30 ciclos publicados",
-      "body": "Portal completo com Radar Vivo, Trilha conectada fase 2, camada senior, Progresso, Guia, Labs, Analytics, Lancamentos, retomada persistente, Mission Control educacional, Sessao de hoje e refresh tecnico premium publicados",
-      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint, leitura de uso real, missao diaria, percurso visual conectado, navegacao guiada, fechamento premium, retomada real, fila de revisao e aprofundamento senior sem depender de estudo passivo."
+      "title": "31 ciclos publicados",
+      "body": "Portal completo com Radar Vivo, identidade persistente local por e-mail, Trilha conectada fase 3, camada senior, Progresso, Guia, Labs, Analytics, Lancamentos, Mission Control educacional, Sessao de hoje e refresh tecnico premium publicados",
+      "note": "O sistema agora fecha o ciclo entre orientacao, plano, pratica, checkpoint, leitura de uso real, missao diaria, percurso visual conectado, navegacao guiada, identidade do aluno, fila de revisao e aprofundamento senior sem depender de estudo passivo."
     },
     {
       "badge": "Pronto agora",
       "status_class": "status-done",
-      "title": "Refino W concluido",
-      "body": "Navegacao guiada por node publicada na Trilha",
-      "note": "A trilha agora nao so mostra o caminho: cada unidade abre a rota certa com contexto, retomada mais inteligente e proximo passo muito mais claro."
+      "title": "Refino X concluido",
+      "body": "Identidade persistente local por e-mail publicada",
+      "note": "O portal agora reconhece o aluno neste navegador, liga a retomada a uma identidade visivel e prepara a subida para sync em nuvem."
     },
     {
       "badge": "Plano de 30 dias",
       "status_class": "status-done",
       "title": "Base funcional, adaptativa, ativada, pratica e observavel",
-      "body": "30D-A, 30D-B, Radar Vivo, Trilha, Senior, Progresso, Guia, Labs, Analytics, Lancamentos, Sessao de hoje e refresh tecnico premium ja conversam entre si",
-      "note": "A partir daqui o trabalho migra para capstone demonstravel, onboarding mais vendavel e productizacao mais avancada."
+      "body": "30D-A, 30D-B, Radar Vivo, Entrar, Trilha, Senior, Progresso, Guia, Labs, Analytics, Lancamentos, Sessao de hoje e refresh tecnico premium ja conversam entre si",
+      "note": "A partir daqui o trabalho migra para sync em nuvem, capstone demonstravel, onboarding mais vendavel e productizacao mais avancada."
     },
     {
       "badge": "Regra",
@@ -56,7 +56,7 @@
       "title": "Capstone e productizacao",
       "status_label": "Em evolucao",
       "status_class": "status-in-progress",
-      "description": "Portal publico, narrativa executiva, onboarding/ativacao, labs praticos, launchboard premium, trilha conectada, navegacao guiada, ativos de autoridade e governanca de release."
+      "description": "Portal publico, narrativa executiva, onboarding/ativacao, labs praticos, launchboard premium, trilha conectada, navegacao guiada, identidade persistente, ativos de autoridade e governanca de release."
     }
   ],
   "portal_release_history": [
@@ -237,6 +237,12 @@
     {
       "phase": "Refino W",
       "focus": "Navegacao guiada por node",
+      "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
+      "production_url": "https://deivithi.github.io/ai-po-os-portal/"
+    },
+    {
+      "phase": "Refino X",
+      "focus": "Identidade persistente por e-mail",
       "preview_url": "https://github.com/deivithi/ai-po-os-portal/actions",
       "production_url": "https://deivithi.github.io/ai-po-os-portal/"
     }

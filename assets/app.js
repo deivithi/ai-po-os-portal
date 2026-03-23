@@ -16,6 +16,8 @@
   matrixArtifact: "/artifacts/files/model_matrix.json",
   guideGuide: "/data/guide_page.json",
   todayGuide: "/data/today_page.json",
+  enterGuide: "/data/enter_page.json",
+  authProvider: "/data/auth_provider.json",
   labsGuide: "/data/labs_page.json",
   analyticsGuide: "/data/analytics_page.json",
   analyticsRules: "/data/analytics_rules.json",
@@ -35,6 +37,7 @@
 
 const PAGE_DATA_KEYS = {
   home: ["overview", "artifacts", "freshnessStatus", "vendorSources", "vendorUpdates", "domainMap", "studyUnits"],
+  entrar: ["enterGuide", "authProvider", "studyUnits", "freshnessStatus"],
   hoje: [
     "todayGuide",
     "analyticsGuide",
@@ -85,7 +88,8 @@ const PAGE_DATA_KEYS = {
 };
 
 const PREFETCH_ROUTE_MAP = {
-  home: ["/hoje/", "/trilha/", "/analytics/"],
+  home: ["/hoje/", "/trilha/", "/entrar/"],
+  entrar: ["/trilha/", "/hoje/", "/analytics/"],
   hoje: ["/trilha/", "/progresso/", "/labs/"],
   guia: ["/trilha/", "/analytics/", "/labs/"],
   labs: ["/analytics/", "/progresso/", "/senior/"],
@@ -113,6 +117,7 @@ const TODAY_SESSION_STORAGE_KEY = "ai-po-os::today-session::v1";
 const LABS_FILTER_STORAGE_KEY = "ai-po-os::labs-filters::v1";
 const STUDY_ANALYTICS_STORAGE_KEY = "ai-po-os::study-analytics::v1";
 const RESUME_STATE_STORAGE_KEY = "ai-po-os::resume-state::v1";
+const IDENTITY_STATE_STORAGE_KEY = "ai-po-os::identity-state::v1";
 const memoryCache = new Map();
 const prefetchedRoutes = new Set();
 const SITE_BASE_PATH = detectSiteBasePath();
@@ -877,6 +882,10 @@ function buildRouteResumeMeta(portal, targetPageId = pageId, extra = {}) {
 }
 
 function rememberRouteVisit(portal, targetPageId = pageId) {
+  if (targetPageId === "entrar") {
+    return ensureResumeState();
+  }
+
   const routeMeta = buildRouteResumeMeta(portal, targetPageId);
   const patch = {
     last_route: routeMeta,
@@ -890,6 +899,23 @@ function rememberRouteVisit(portal, targetPageId = pageId) {
 }
 
 function getPrimaryResumeTarget(portal) {
+  if (pageId === "entrar") {
+    const nextHref = sanitizeInternalHref(new URLSearchParams(window.location.search).get("next"));
+    if (nextHref) {
+      const nextPageId = findPageIdByPath(portal, normalizeInternalPath(nextHref) || "/") || "trilha";
+      const routeMeta = buildRouteResumeMeta(portal, nextPageId, {
+        href: nextHref,
+      });
+
+      return {
+        ...routeMeta,
+        action_label: "Continuar estudo",
+        title: routeMeta.label,
+        description: `Depois de entrar, o portal te devolve para ${routeMeta.label} sem te fazer remontar a trilha.`,
+      };
+    }
+  }
+
   const resumeState = ensureResumeState();
   const candidate = resumeState.study || resumeState.last_study_route || resumeState.last_route;
 
@@ -907,6 +933,171 @@ function getPrimaryResumeTarget(portal) {
       merged.summary ||
       "A plataforma manteve o ultimo ponto de estudo para voce retomar sem recomecar.",
   };
+}
+
+function createDefaultIdentityState() {
+  return {
+    version: 1,
+    mode: "local_email_identity",
+    updated_at: null,
+    active_profile: null,
+  };
+}
+
+function normalizeEmail(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizeEmail(value));
+}
+
+function normalizeDisplayName(value, fallbackEmail = "") {
+  const cleaned = String(value || "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .slice(0, 60);
+
+  if (cleaned) {
+    return cleaned;
+  }
+
+  const email = normalizeEmail(fallbackEmail);
+  if (!email) {
+    return "Aluno";
+  }
+
+  const [localPart = "Aluno"] = email.split("@");
+  return localPart
+    .split(/[._-]+/)
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ");
+}
+
+function loadIdentityState() {
+  const defaultState = createDefaultIdentityState();
+
+  try {
+    const raw = window.localStorage.getItem(IDENTITY_STATE_STORAGE_KEY);
+    if (!raw) {
+      return defaultState;
+    }
+
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaultState,
+      ...(parsed && typeof parsed === "object" ? parsed : {}),
+      active_profile:
+        parsed?.active_profile && typeof parsed.active_profile === "object" ? parsed.active_profile : null,
+    };
+  } catch (_error) {
+    return defaultState;
+  }
+}
+
+function persistIdentityState(state) {
+  try {
+    window.localStorage.setItem(IDENTITY_STATE_STORAGE_KEY, JSON.stringify(state));
+  } catch (_error) {
+    // Keep runtime-only identity if storage is unavailable.
+  }
+
+  document.dispatchEvent(
+    new CustomEvent("study-identity:updated", {
+      detail: state,
+    }),
+  );
+}
+
+function getActiveIdentityProfile() {
+  return loadIdentityState().active_profile || null;
+}
+
+function deriveIdentityLabel(profile) {
+  if (!profile) {
+    return "Sem identidade";
+  }
+
+  return profile.display_name || normalizeDisplayName("", profile.email || "");
+}
+
+function upsertLocalIdentityProfile(payload = {}) {
+  const email = normalizeEmail(payload.email);
+  if (!isValidEmail(email)) {
+    throw new Error("Informe um e-mail valido para salvar sua identidade neste navegador.");
+  }
+
+  const current = loadIdentityState();
+  const nowIso = new Date().toISOString();
+  const previousProfile = current.active_profile || null;
+  const nextProfile = {
+    email,
+    display_name: normalizeDisplayName(payload.name, email),
+    auth_mode: "local_email_identity",
+    status: "active",
+    created_at: previousProfile?.created_at || nowIso,
+    updated_at: nowIso,
+    last_seen_at: nowIso,
+    journey_snapshot:
+      previousProfile?.journey_snapshot && typeof previousProfile.journey_snapshot === "object"
+        ? previousProfile.journey_snapshot
+        : null,
+  };
+
+  const nextState = {
+    ...createDefaultIdentityState(),
+    ...current,
+    updated_at: nowIso,
+    active_profile: nextProfile,
+  };
+
+  persistIdentityState(nextState);
+  return nextProfile;
+}
+
+function clearIdentityProfile() {
+  const nextState = createDefaultIdentityState();
+  nextState.updated_at = new Date().toISOString();
+  persistIdentityState(nextState);
+}
+
+function syncActiveIdentityJourney(portal, studyUnits = []) {
+  const current = loadIdentityState();
+  if (!current.active_profile?.email) {
+    return null;
+  }
+
+  const snapshot = buildLearningMissionSnapshot(portal, studyUnits);
+  const nowIso = new Date().toISOString();
+  const journeySnapshot = {
+    route_id: pageId,
+    route_label: portal?.pages?.[pageId]?.nav_label || portal?.pages?.[pageId]?.title || titleCase(pageId),
+    current_href: getCurrentInternalHref(),
+    resume_title: snapshot.resumeTarget?.title || "Sem retomada explicita",
+    resume_href: snapshot.resumeTarget?.href || "/trilha/",
+    resume_label: snapshot.resumeTarget?.action_label || "Continuar estudo",
+    progress_percent: snapshot.progressPercent,
+    streak_days: snapshot.streakDays,
+    xp_total: snapshot.xpTotal,
+    mastered_count: snapshot.masteredCount,
+    total_units: snapshot.totalUnits,
+    updated_at: nowIso,
+  };
+
+  const nextState = {
+    ...current,
+    updated_at: nowIso,
+    active_profile: {
+      ...current.active_profile,
+      updated_at: nowIso,
+      last_seen_at: nowIso,
+      journey_snapshot: journeySnapshot,
+    },
+  };
+
+  persistIdentityState(nextState);
+  return nextState.active_profile;
 }
 
 function normalizeIsoDateKey(value) {
@@ -1650,6 +1841,11 @@ function renderShell(portal, freshnessStatus) {
   rememberRouteVisit(portal, pageId);
   const resumeTarget = getPrimaryResumeTarget(portal);
   const canShowResumeAction = resumeTarget && (!currentPageIsStudyRoute || resumeTarget.page_id !== pageId);
+  const identityProfile = getActiveIdentityProfile();
+  const identityEntryHref = buildIdentityEntryHref();
+  const identityDescription = identityProfile?.journey_snapshot?.resume_title
+    ? `Continuar em ${identityProfile.journey_snapshot.resume_title} sem remontar a trilha.`
+    : "Salve seu e-mail neste navegador para o portal te reconhecer sempre que voce voltar.";
 
   if (sidebar) {
     sidebar.innerHTML = `
@@ -1676,6 +1872,18 @@ function renderShell(portal, freshnessStatus) {
           Leia, compare e aplique. Este portal foi desenhado para ensinar e
           tambem para operar.
         </p>
+        <div class="sidebar-identity ${identityProfile ? "active" : "empty"}">
+          <span class="label">${identityProfile ? "Identidade salva" : "Entrar com e-mail"}</span>
+          <strong>${escapeHtml(identityProfile ? deriveIdentityLabel(identityProfile) : "Ative sua identidade local")}</strong>
+          <p class="brand-copy">
+            ${
+              identityProfile
+                ? `${escapeHtml(identityProfile.email || "")} · Local neste navegador`
+                : escapeHtml(identityDescription)
+            }
+          </p>
+          <a class="button ghost" href="${resolveUrl(identityEntryHref)}">${escapeHtml(identityProfile ? "Gerenciar entrada" : "Entrar")}</a>
+        </div>
         ${
           resumeTarget
             ? `
@@ -1708,6 +1916,11 @@ function renderShell(portal, freshnessStatus) {
           pageFreshness
             ? `<span class="status-badge ${escapeHtml(pageFreshness.status_class)}">${escapeHtml(pageFreshness.status_label)}</span>`
             : ""
+        }
+        ${
+          identityProfile
+            ? `<a class="button ghost topbar-identity" href="${resolveUrl(identityEntryHref)}"><span class="topbar-identity-mode">Local</span>${escapeHtml(deriveIdentityLabel(identityProfile))}</a>`
+            : `<a class="button secondary" href="${resolveUrl(identityEntryHref)}">Entrar com e-mail</a>`
         }
         ${
           canShowResumeAction
@@ -1857,6 +2070,32 @@ function getCurrentInternalHref() {
   const search = window.location.search || "";
   const hash = window.location.hash || "";
   return `${normalizedPath}${search}${hash}`;
+}
+
+function sanitizeInternalHref(value) {
+  if (!value) {
+    return null;
+  }
+
+  try {
+    const url = new URL(resolveUrl(value), window.location.origin);
+    if (url.origin !== window.location.origin) {
+      return null;
+    }
+
+    const normalizedPath = stripBasePath(url.pathname) || "/";
+    return `${normalizedPath}${url.search || ""}${url.hash || ""}`;
+  } catch (_error) {
+    return null;
+  }
+}
+
+function buildIdentityEntryHref(options = {}) {
+  const nextHref = sanitizeInternalHref(options.nextHref || getCurrentInternalHref()) || "/trilha/";
+  return buildInternalHref("/entrar/", {
+    next: nextHref,
+    from: options.from || pageId,
+  });
 }
 
 function resolveStudyUnitPageId(portal, unit) {
@@ -3329,6 +3568,193 @@ function renderJourney(journeyGuide) {
       .map((item) => `<li>${escapeHtml(item)}</li>`)
       .join("");
   }
+}
+
+function renderEnter(portal, enterGuide, authProvider, studyUnits) {
+  const identity = getActiveIdentityProfile();
+  const missionSnapshot = buildLearningMissionSnapshot(portal, studyUnits);
+  const searchParams = new URLSearchParams(window.location.search);
+  const nextHref = sanitizeInternalHref(searchParams.get("next")) || missionSnapshot.resumeTarget?.href || "/trilha/";
+  const nextPath = normalizeInternalPath(nextHref) || "/trilha/";
+  const nextPageId = findPageIdByPath(portal, nextPath) || "trilha";
+  const nextPage = portal?.pages?.[nextPageId] || {};
+  const nextLabel = nextPage.nav_label || nextPage.title || "Trilha";
+  const continuityTitle = pageId === "entrar" ? nextLabel : missionSnapshot.resumeTarget?.title || "Montar a trilha";
+
+  renderCards(
+    "enter-orientation",
+    enterGuide.orientation || [],
+    (item) => `
+      <article class="metric-card">
+        <span class="status-badge ${escapeHtml(item.status_class || "status-done")}">${escapeHtml(item.badge || "Entrada")}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.body || "")}</p>
+        <p class="metric-note">${escapeHtml(item.note || "")}</p>
+      </article>
+    `,
+  );
+
+  const runtimePanel = document.getElementById("enter-runtime-status");
+  if (runtimePanel) {
+    runtimePanel.innerHTML = `
+      <div class="identity-runtime-shell">
+        <div class="identity-runtime-main">
+          <span class="eyebrow">${escapeHtml(authProvider.status_label || "Identidade local")}</span>
+          <h2>${escapeHtml(authProvider.runtime?.title || "Reconhecimento persistente neste navegador")}</h2>
+          <p>${escapeHtml(authProvider.runtime?.summary || "O portal salva seu e-mail localmente, reconhece quem voce e e liga sua retomada a esse perfil neste dispositivo.")}</p>
+          <div class="chip-list">
+            ${renderTagList(authProvider.runtime?.pills || []).replace('<div class="chip-list">', "").replace("</div>", "")}
+          </div>
+        </div>
+        <aside class="identity-runtime-side">
+          <div class="identity-status-card">
+            <span class="label">${identity ? "Identidade ativa" : "Sem identidade ativa"}</span>
+            <strong>${escapeHtml(identity ? deriveIdentityLabel(identity) : "Entre com seu e-mail para ser reconhecido")}</strong>
+            <p class="brand-copy">${escapeHtml(identity ? `${identity.email} · Local neste navegador` : "Sua trilha continua salva aqui, mas ainda sem um e-mail associado.")}</p>
+            <div class="summary-list">
+              <div><strong>Proxima rota:</strong> ${escapeHtml(nextLabel)}</div>
+              <div><strong>Retomada:</strong> ${escapeHtml(continuityTitle)}</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    `;
+  }
+
+  const continuity = document.getElementById("enter-continuity");
+  if (continuity) {
+    continuity.innerHTML = `
+      <article class="study-intent-panel identity-continuity-panel">
+        <div class="study-intent-shell">
+          <div class="study-intent-main">
+            <span class="eyebrow">Seus dados de estudo</span>
+            <h2>${escapeHtml(identity ? "O portal ja sabe quem voce e neste navegador." : "Entre agora e amarre sua jornada ao seu e-mail.")}</h2>
+            <p>${escapeHtml(identity ? "Sua retomada fica ligada ao seu e-mail local, o que torna a jornada mais clara e prepara a subida para sync em nuvem." : "Ao salvar seu e-mail, o portal passa a tratar sua retomada, badges, streak e progresso como a sua jornada neste dispositivo.")}</p>
+            <div class="button-group">
+              ${renderActionLink({
+                label: identity ? `Continuar em ${nextLabel}` : `Salvar e seguir para ${nextLabel}`,
+                href: nextHref,
+                variant: "secondary",
+              })}
+              ${renderActionLink({
+                label: "Abrir Trilha",
+                href: "/trilha/",
+                variant: "ghost",
+              })}
+            </div>
+          </div>
+          <aside class="study-intent-side">
+            <article class="study-intent-side-card">
+              <span class="eyebrow">Resumo da jornada</span>
+              <ul class="summary-list">
+                <li><strong>Dominio:</strong> ${escapeHtml(String(missionSnapshot.progressPercent))}%</li>
+                <li><strong>XP:</strong> ${escapeHtml(String(missionSnapshot.xpTotal))}</li>
+                <li><strong>Streak:</strong> ${escapeHtml(String(missionSnapshot.streakDays))} dia(s)</li>
+                <li><strong>Retomada:</strong> ${escapeHtml(continuityTitle)}</li>
+              </ul>
+            </article>
+          </aside>
+        </div>
+      </article>
+    `;
+  }
+
+  renderCards(
+    "enter-benefits",
+    enterGuide.benefits || [],
+    (item) => `
+      <article class="study-card">
+        <span class="status-badge ${escapeHtml(item.status_class || "status-done")}">${escapeHtml(item.badge || "Beneficio")}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description || "")}</p>
+      </article>
+    `,
+  );
+
+  renderCards(
+    "enter-officials",
+    authProvider.future_provider?.docs || [],
+    (item) => `
+      <article class="artifact-card">
+        <span class="status-badge status-in-progress">${escapeHtml(item.badge || "Fonte oficial")}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="card-copy">${escapeHtml(item.description || "")}</p>
+        <div class="button-group">
+          <a class="button secondary" href="${item.url}">Abrir fonte oficial</a>
+        </div>
+      </article>
+    `,
+  );
+
+  const rulesTarget = document.getElementById("enter-rules");
+  if (rulesTarget) {
+    rulesTarget.innerHTML = (enterGuide.rules || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+  }
+
+  const emailInput = document.getElementById("enter-email");
+  const nameInput = document.getElementById("enter-name");
+  const helper = document.getElementById("enter-helper");
+  const feedback = document.getElementById("enter-feedback");
+  const form = document.getElementById("enter-identity-form");
+  const continueButton = document.getElementById("enter-continue");
+  const clearButton = document.getElementById("enter-clear");
+
+  if (emailInput) {
+    emailInput.value = identity?.email || "";
+  }
+
+  if (nameInput) {
+    nameInput.value = identity?.display_name || "";
+  }
+
+  if (helper) {
+    helper.textContent = `Depois de salvar seu e-mail, o portal te devolve para ${nextLabel} sem perder a retomada.`;
+  }
+
+  const setFeedback = (message, tone = "neutral") => {
+    if (!feedback) {
+      return;
+    }
+
+    feedback.textContent = message;
+    feedback.dataset.tone = tone;
+  };
+
+  if (continueButton) {
+    continueButton.setAttribute("href", resolveUrl(nextHref));
+  }
+
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const email = emailInput?.value || "";
+    const name = nameInput?.value || "";
+
+    if (!isValidEmail(email)) {
+      setFeedback("Informe um e-mail valido para ativar sua identidade neste navegador.", "danger");
+      emailInput?.focus();
+      return;
+    }
+
+    const profile = upsertLocalIdentityProfile({ email, name });
+    syncActiveIdentityJourney(portal, studyUnits);
+    setFeedback(`Identidade salva para ${profile.email}. Redirecionando para ${nextLabel}...`, "success");
+
+    window.setTimeout(() => {
+      window.location.href = resolveUrl(nextHref);
+    }, 280);
+  });
+
+  clearButton?.addEventListener("click", () => {
+    clearIdentityProfile();
+    setFeedback("Identidade removida deste navegador. Sua trilha local continua preservada.", "neutral");
+
+    window.setTimeout(() => {
+      window.location.reload();
+    }, 260);
+  });
 }
 
 function renderGuide(guideGuide, vendorSources) {
@@ -10155,9 +10581,11 @@ async function init() {
       promptProductization,
         matrixGuide,
         matrixArtifact,
-        guideGuide,
-        todayGuide,
-        labsGuide,
+      guideGuide,
+      todayGuide,
+      enterGuide,
+      authProvider,
+      labsGuide,
         analyticsGuide,
       analyticsRules,
       launchGuide,
@@ -10181,6 +10609,7 @@ async function init() {
       const renderers = {
         home: () =>
           renderHome(portal, overview, artifacts, freshnessStatus, vendorUpdates, vendorSources, domainMap, studyUnits),
+        entrar: () => renderEnter(portal, enterGuide, authProvider, studyUnits),
         hoje: () =>
           renderToday(
             todayGuide,
@@ -10243,6 +10672,7 @@ async function init() {
       renderer();
     }
 
+    syncActiveIdentityJourney(portal, studyUnits);
     await renderStudyIntentSurface(portal, studyUnits);
 
     setupNavigationPrefetch(portal);

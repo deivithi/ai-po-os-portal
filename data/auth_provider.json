@@ -1,0 +1,39 @@
+{
+  "checked_on": "2026-03-22",
+  "status_label": "Identidade persistente ativa",
+  "status_class": "status-done",
+  "mode": "local_email_identity",
+  "runtime": {
+    "title": "Modo atual: identidade local neste navegador",
+    "summary": "O portal salva seu e-mail localmente, reconhece sua jornada e mantem a retomada viva sem depender de backend para esta fase.",
+    "pills": [
+      "Local-first",
+      "Retomada vinculada",
+      "Cloud-ready"
+    ]
+  },
+  "future_provider": {
+    "title": "Proxima fase: auth real e sync em nuvem",
+    "summary": "Quando a camada de sync entrar, a mesma UX sobe para email OTP ou magic link, redirect URLs permitidas e sessao persistida entre dispositivos.",
+    "docs": [
+      {
+        "badge": "Supabase Auth",
+        "title": "Email (Magic Link ou OTP)",
+        "description": "Fluxos oficiais de autenticacao por email, com OTP e magic link, para a camada de login real da proxima fase.",
+        "url": "https://supabase.com/docs/guides/auth/auth-email-passwordless"
+      },
+      {
+        "badge": "Supabase Auth",
+        "title": "Redirect URLs",
+        "description": "Configuracao oficial de redirect URLs, incluindo Site URL e allow-list, essencial para a subida para GitHub Pages ou dominios proprios.",
+        "url": "https://supabase.com/docs/guides/auth/redirect-urls"
+      },
+      {
+        "badge": "MDN",
+        "title": "localStorage",
+        "description": "Referencia oficial do storage local que sustenta a persistencia desta fase e o modo local-first do portal.",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
+      }
+    ]
+  }
+}

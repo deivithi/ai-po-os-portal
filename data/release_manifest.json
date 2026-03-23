@@ -75,10 +75,15 @@
     {
       "title": "Navegacao guiada por node",
       "description": "Sempre que uma unidade da Trilha for escolhida, o portal precisa gerar o link certo para comecar, continuar ou avancar, alimentar a retomada e abrir a rota com contexto da missao."
+    },
+    {
+      "title": "Identidade persistente por e-mail",
+      "description": "Sempre que o usuario entrar com seu e-mail, o portal precisa reconhece-lo neste navegador, ligar a retomada ao perfil e manter o caminho pronto para sync em nuvem."
     }
   ],
   "qa_targets": [
     "/",
+    "/entrar/",
     "/hoje/",
     "/guia/",
     "/labs/",
@@ -96,6 +101,8 @@
     "/artefatos/",
     "/data/overview.json",
     "/data/portal.json",
+    "/data/enter_page.json",
+    "/data/auth_provider.json",
     "/data/today_page.json",
     "/data/artifacts.json",
     "/data/prompt_productization.json",
