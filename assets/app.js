@@ -1702,7 +1702,12 @@ function normalizeInternalPath(value) {
   }
 
   try {
-    const url = new URL(resolveUrl(value), window.location.origin);
+    const stringValue = String(value);
+    const directCandidate =
+      /^(?:[a-z]+:)?\/\//i.test(stringValue) ||
+      stringValue.startsWith(SITE_BASE_PATH) ||
+      stringValue === SITE_BASE_PATH.slice(0, -1);
+    const url = new URL(directCandidate ? stringValue : resolveUrl(stringValue), window.location.origin);
     if (url.origin !== window.location.origin) {
       return null;
     }
