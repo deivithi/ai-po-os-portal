@@ -1,58 +1,59 @@
 {
   "orientation": [
     {
-      "badge": "Fase 3",
+      "badge": "Fase 4",
       "status_class": "status-done",
-      "title": "Identidade local por e-mail",
-      "body": "O portal passa a reconhecer o aluno por e-mail neste navegador, sem perder a leveza do produto estatico.",
-      "note": "A meta aqui e persistencia de identidade e retomada real. O sync entre dispositivos entra na fase seguinte."
+      "title": "Sync em nuvem configuravel",
+      "body": "A rota Entrar agora continua leve, mas ja sobe para uma camada real de nuvem quando voce conecta um projeto Supabase.",
+      "note": "O portal segue local-first por padrao, so que agora voce pode ativar continuidade entre dispositivos sem reescrever a aplicacao."
     },
     {
       "badge": "Resultado imediato",
       "status_class": "status-done",
-      "title": "Retomada mais humana",
-      "body": "A jornada deixa de ser um estado anonimo e passa a ter um dono claro dentro do navegador.",
-      "note": "Home, Trilha e shell reconhecem quem esta estudando e apontam o proximo passo com muito menos friccao."
+      "title": "Retomada entre dispositivos",
+      "body": "Depois de configurar o provider e autenticar por e-mail, a jornada deixa de morar apenas neste navegador.",
+      "note": "Trilha, flags, XP, progresso, analytics, sessao do dia e retomada passam a ter um snapshot persistente em nuvem."
     },
     {
       "badge": "Arquitetura",
-      "status_class": "status-in-progress",
-      "title": "Local-first, cloud-ready",
-      "body": "A identidade fica salva em storage local agora, mas a UX e os contratos ja nascem prontos para subir para auth real e sync.",
-      "note": "Isso evita retrabalho quando o provedor de auth entrar na proxima macrofase."
+      "status_class": "status-done",
+      "title": "Local-first, cloud-sync when ready",
+      "body": "Nada quebra se o provider nao estiver configurado. O portal continua funcional localmente e so sobe para a nuvem quando voce quiser.",
+      "note": "Isso preserva performance, reduz dependencia de backend e deixa o setup mais profissional."
     },
     {
       "badge": "Regra central",
       "status_class": "status-done",
-      "title": "Entrar deve reduzir friccao",
-      "body": "A tela de entrada existe para devolver voce ao node certo, nao para virar um beco sem saida.",
-      "note": "Se a pagina nao te devolve rapido para o estudo, ela falhou."
+      "title": "Entrar deve reduzir friccao, nao adicionar atrito",
+      "body": "A pagina de entrada existe para devolver voce ao node certo e, agora, para sincronizar esse percurso sem confundir o aluno.",
+      "note": "Se a rota nao te devolve rapido para o estudo com o estado certo, ela falhou."
     }
   ],
   "benefits": [
     {
       "badge": "Persistencia",
       "status_class": "status-done",
-      "title": "Reconhecimento consistente",
-      "description": "Ao voltar para o portal, o sistema identifica seu e-mail salvo neste navegador e reapresenta sua jornada como algo seu."
+      "title": "Identidade + nuvem",
+      "description": "Seu e-mail continua sendo o rosto da jornada, mas agora pode virar a chave de sincronizacao do sistema inteiro."
     },
     {
       "badge": "Retomada",
       "status_class": "status-done",
-      "title": "Proximo estudo mais claro",
-      "description": "A retomada deixa de ser so uma memoria da aplicacao e passa a estar ligada a uma identidade salva."
+      "title": "Continuar sem remontar a trilha",
+      "description": "Ao autenticar a sessao de nuvem, o portal consegue reencontrar seu snapshot e reapresentar o proximo estudo mesmo em outro dispositivo."
     },
     {
-      "badge": "Preparacao",
-      "status_class": "status-in-progress",
-      "title": "Pronto para sync em nuvem",
-      "description": "A mesma experiencia ja nasce preparada para subir depois para auth por OTP/magic link e continuidade entre dispositivos."
+      "badge": "Controle",
+      "status_class": "status-done",
+      "title": "Merge, pull e push explicitos",
+      "description": "A UX deixa claro quando voce quer apenas puxar a nuvem, enviar o local ou fazer merge inteligente entre os dois estados."
     }
   ],
   "rules": [
-    "Use seu e-mail principal para o portal te reconhecer de forma consistente neste navegador.",
-    "Esta fase nao apaga sua trilha local; ela apenas liga a jornada a uma identidade visivel.",
-    "A proxima macrofase sobe essa identidade para sync em nuvem e continuidade entre dispositivos.",
-    "Entrar precisa sempre devolver voce ao node certo ou a proxima rota certa."
+    "Comece salvando ou confirmando seu e-mail local antes de ativar a nuvem.",
+    "Cole apenas a Project URL e a anon key publica do Supabase; o portal nao depende de service role key no navegador.",
+    "Adicione a URL `https://deivithi.github.io/ai-po-os-portal/entrar/` na allow-list de redirect do Supabase antes de validar o login.",
+    "Use merge como padrao. So use pull ou push manual quando souber que um dos lados esta mais confiavel.",
+    "Se o provider nao estiver configurado, a plataforma continua 100% funcional em modo local-first."
   ]
 }

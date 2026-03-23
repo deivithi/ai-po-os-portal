@@ -118,11 +118,18 @@ const LABS_FILTER_STORAGE_KEY = "ai-po-os::labs-filters::v1";
 const STUDY_ANALYTICS_STORAGE_KEY = "ai-po-os::study-analytics::v1";
 const RESUME_STATE_STORAGE_KEY = "ai-po-os::resume-state::v1";
 const IDENTITY_STATE_STORAGE_KEY = "ai-po-os::identity-state::v1";
+const CLOUD_SYNC_CONFIG_STORAGE_KEY = "ai-po-os::cloud-sync-config::v1";
+const CLOUD_SYNC_STATE_STORAGE_KEY = "ai-po-os::cloud-sync-state::v1";
+const SUPABASE_BROWSER_MODULE_URL = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 const memoryCache = new Map();
 const prefetchedRoutes = new Set();
 const SITE_BASE_PATH = detectSiteBasePath();
 let studyAnalyticsRuntime = null;
 let resumeStateRuntime = null;
+let cloudSyncClientPromise = null;
+let cloudSyncRuntimeState = null;
+let cloudSyncAutoPushTimer = null;
+let cloudSyncAutoPushInFlight = null;
 
 const STUDY_ROUTE_IDS = new Set([
   "guia",
@@ -485,11 +492,24 @@ function loadAdaptivePathPreferences(defaults = {}) {
 }
 
 function persistAdaptivePathPreferences(preferences) {
+  const nextPreferences = {
+    ...(preferences && typeof preferences === "object" ? preferences : {}),
+    updated_at: preferences?.updated_at || new Date().toISOString(),
+  };
+
   try {
-    window.localStorage.setItem(ADAPTIVE_PATH_STORAGE_KEY, JSON.stringify(preferences));
+    window.localStorage.setItem(ADAPTIVE_PATH_STORAGE_KEY, JSON.stringify(nextPreferences));
   } catch (_error) {
     // Keep runtime-only state if storage is unavailable.
   }
+
+  document.dispatchEvent(
+    new CustomEvent("adaptive-path:updated", {
+      detail: nextPreferences,
+    }),
+  );
+
+  return nextPreferences;
 }
 
 function loadLabsPreferences(defaults = {}) {
@@ -556,6 +576,12 @@ function persistStudyProgressState(state) {
   } catch (_error) {
     // Keep runtime-only state if storage is unavailable.
   }
+
+  document.dispatchEvent(
+    new CustomEvent("study-progress:updated", {
+      detail: state,
+    }),
+  );
 }
 
 function createDefaultStudyFlagsState() {
@@ -1098,6 +1124,742 @@ function syncActiveIdentityJourney(portal, studyUnits = []) {
 
   persistIdentityState(nextState);
   return nextState.active_profile;
+}
+
+function buildDefaultCloudRedirectUrl() {
+  return `${window.location.origin}${resolveUrl("/entrar/")}`;
+}
+
+function sanitizeSupabaseProjectUrl(value) {
+  const raw = String(value || "").trim();
+  if (!raw) {
+    return "";
+  }
+
+  try {
+    const url = new URL(raw);
+    if (!/^https:$/.test(url.protocol)) {
+      return "";
+    }
+
+    return url.origin;
+  } catch (_error) {
+    return "";
+  }
+}
+
+function normalizeCloudAnonKey(value) {
+  return String(value || "").trim();
+}
+
+function createDefaultCloudSyncConfig() {
+  return {
+    version: 1,
+    provider: "supabase",
+    project_url: "",
+    anon_key: "",
+    redirect_url: buildDefaultCloudRedirectUrl(),
+    updated_at: null,
+  };
+}
+
+function loadCloudSyncConfig() {
+  const defaultConfig = createDefaultCloudSyncConfig();
+
+  try {
+    const raw = window.localStorage.getItem(CLOUD_SYNC_CONFIG_STORAGE_KEY);
+    if (!raw) {
+      return defaultConfig;
+    }
+
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaultConfig,
+      ...(parsed && typeof parsed === "object" ? parsed : {}),
+      project_url: sanitizeSupabaseProjectUrl(parsed?.project_url),
+      anon_key: normalizeCloudAnonKey(parsed?.anon_key),
+      redirect_url: String(parsed?.redirect_url || defaultConfig.redirect_url),
+    };
+  } catch (_error) {
+    return defaultConfig;
+  }
+}
+
+function persistCloudSyncConfig(config) {
+  const nextConfig = {
+    ...createDefaultCloudSyncConfig(),
+    ...(config && typeof config === "object" ? config : {}),
+    project_url: sanitizeSupabaseProjectUrl(config?.project_url),
+    anon_key: normalizeCloudAnonKey(config?.anon_key),
+    redirect_url: String(config?.redirect_url || buildDefaultCloudRedirectUrl()),
+    updated_at: config?.updated_at || new Date().toISOString(),
+  };
+
+  cloudSyncClientPromise = null;
+
+  try {
+    window.localStorage.setItem(CLOUD_SYNC_CONFIG_STORAGE_KEY, JSON.stringify(nextConfig));
+  } catch (_error) {
+    // Keep runtime-only config if storage is unavailable.
+  }
+
+  document.dispatchEvent(
+    new CustomEvent("study-cloud-config:updated", {
+      detail: nextConfig,
+    }),
+  );
+
+  return nextConfig;
+}
+
+function clearCloudSyncConfig() {
+  cloudSyncClientPromise = null;
+
+  try {
+    window.localStorage.removeItem(CLOUD_SYNC_CONFIG_STORAGE_KEY);
+  } catch (_error) {
+    // Ignore storage clear failures.
+  }
+
+  document.dispatchEvent(
+    new CustomEvent("study-cloud-config:updated", {
+      detail: createDefaultCloudSyncConfig(),
+    }),
+  );
+}
+
+function hasCloudSyncConfig(config = loadCloudSyncConfig()) {
+  return Boolean(config.project_url && config.anon_key);
+}
+
+function createDefaultCloudSyncState() {
+  return {
+    version: 1,
+    provider: "supabase",
+    status: "local_only",
+    setup_status: "not_configured",
+    session_email: null,
+    user_id: null,
+    updated_at: null,
+    last_synced_at: null,
+    last_pulled_at: null,
+    last_pushed_at: null,
+    error_message: "",
+    sync_scope: [
+      "adaptive_path",
+      "study_progress",
+      "study_flags",
+      "today_session",
+      "study_analytics",
+      "resume_state",
+      "identity_state",
+    ],
+  };
+}
+
+function loadCloudSyncState() {
+  const defaultState = createDefaultCloudSyncState();
+
+  try {
+    const raw = window.localStorage.getItem(CLOUD_SYNC_STATE_STORAGE_KEY);
+    if (!raw) {
+      return defaultState;
+    }
+
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaultState,
+      ...(parsed && typeof parsed === "object" ? parsed : {}),
+      sync_scope: Array.isArray(parsed?.sync_scope) ? parsed.sync_scope : defaultState.sync_scope,
+    };
+  } catch (_error) {
+    return defaultState;
+  }
+}
+
+function persistCloudSyncState(state) {
+  const nextState = {
+    ...createDefaultCloudSyncState(),
+    ...(state && typeof state === "object" ? state : {}),
+    updated_at: state?.updated_at || new Date().toISOString(),
+    sync_scope: Array.isArray(state?.sync_scope) ? state.sync_scope : createDefaultCloudSyncState().sync_scope,
+  };
+
+  cloudSyncRuntimeState = nextState;
+
+  try {
+    window.localStorage.setItem(CLOUD_SYNC_STATE_STORAGE_KEY, JSON.stringify(nextState));
+  } catch (_error) {
+    // Keep runtime-only state if storage is unavailable.
+  }
+
+  document.dispatchEvent(
+    new CustomEvent("study-cloud-sync:updated", {
+      detail: nextState,
+    }),
+  );
+
+  return nextState;
+}
+
+function ensureCloudSyncState() {
+  const state = cloudSyncRuntimeState || loadCloudSyncState();
+  cloudSyncRuntimeState = state;
+  return state;
+}
+
+function maskCloudProjectUrl(projectUrl) {
+  const sanitized = sanitizeSupabaseProjectUrl(projectUrl);
+  if (!sanitized) {
+    return "Nao configurado";
+  }
+
+  try {
+    const url = new URL(sanitized);
+    return url.host;
+  } catch (_error) {
+    return sanitized;
+  }
+}
+
+function maskCloudAnonKey(value) {
+  const normalized = normalizeCloudAnonKey(value);
+  if (!normalized) {
+    return "Nao configurada";
+  }
+
+  if (normalized.length <= 16) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, 6)}...${normalized.slice(-6)}`;
+}
+
+function normalizeCloudSyncError(error) {
+  const message = String(error?.message || error?.error_description || error || "").trim();
+  const lowered = message.toLowerCase();
+
+  if (error?.code === "42P01" || lowered.includes("learner_profiles") || lowered.includes("learner_sync_state")) {
+    return "As tabelas do sync ainda nao existem no projeto Supabase. Rode o SQL do kit de setup antes de sincronizar.";
+  }
+
+  if (lowered.includes("invalid login credentials") || lowered.includes("otp")) {
+    return "O codigo OTP nao foi validado. Gere um novo codigo e tente novamente.";
+  }
+
+  if (lowered.includes("fetch failed") || lowered.includes("failed to fetch") || lowered.includes("networkerror")) {
+    return "Nao foi possivel falar com o projeto Supabase agora. Revise a URL, sua conexao e tente de novo.";
+  }
+
+  if (lowered.includes("jwt") || lowered.includes("token")) {
+    return "A sessao de nuvem nao esta valida neste momento. Entre novamente com o codigo enviado por e-mail.";
+  }
+
+  return message || "A camada de sync em nuvem encontrou um erro nao classificado.";
+}
+
+function buildCloudSyncSnapshot(portal, studyUnits = []) {
+  const missionSnapshot = portal ? buildLearningMissionSnapshot(portal, studyUnits) : null;
+
+  return {
+    version: 1,
+    updated_at: new Date().toISOString(),
+    route_id: pageId,
+    current_href: getCurrentInternalHref(),
+    mission_summary: missionSnapshot
+      ? {
+          progress_percent: missionSnapshot.progressPercent,
+          xp_total: missionSnapshot.xpTotal,
+          streak_days: missionSnapshot.streakDays,
+          mastered_count: missionSnapshot.masteredCount,
+          total_units: missionSnapshot.totalUnits,
+          resume_title: missionSnapshot.resumeTarget?.title || "",
+          resume_href: missionSnapshot.resumeTarget?.href || "/trilha/",
+        }
+      : null,
+    data: {
+      adaptive_path: loadAdaptivePathPreferences({}),
+      study_progress: loadStudyProgressState(),
+      study_flags: loadStudyFlagsState(),
+      today_session: loadTodaySessionState(),
+      study_analytics: loadStudyAnalyticsState(),
+      resume_state: loadResumeState(),
+      identity_state: loadIdentityState(),
+    },
+  };
+}
+
+function applyCloudSyncSnapshot(snapshot) {
+  const data = snapshot?.data && typeof snapshot.data === "object" ? snapshot.data : {};
+
+  if (data.adaptive_path && typeof data.adaptive_path === "object") {
+    try {
+      window.localStorage.setItem(ADAPTIVE_PATH_STORAGE_KEY, JSON.stringify(data.adaptive_path));
+    } catch (_error) {
+      // Ignore storage write failures.
+    }
+    document.dispatchEvent(
+      new CustomEvent("adaptive-path:updated", {
+        detail: data.adaptive_path,
+      }),
+    );
+  }
+
+  if (data.study_progress && typeof data.study_progress === "object") {
+    persistStudyProgressState(data.study_progress);
+  }
+
+  if (data.study_flags && typeof data.study_flags === "object") {
+    persistStudyFlagsState(data.study_flags);
+  }
+
+  if (data.today_session && typeof data.today_session === "object") {
+    persistTodaySessionState(data.today_session);
+  }
+
+  if (data.study_analytics && typeof data.study_analytics === "object") {
+    persistStudyAnalyticsState(data.study_analytics);
+  }
+
+  if (data.resume_state && typeof data.resume_state === "object") {
+    persistResumeState(data.resume_state);
+  }
+
+  if (data.identity_state && typeof data.identity_state === "object") {
+    persistIdentityState(data.identity_state);
+  }
+}
+
+function compareIsoDateTime(left, right) {
+  return String(left || "").localeCompare(String(right || ""));
+}
+
+function loadSupabaseBrowserModule() {
+  return import(SUPABASE_BROWSER_MODULE_URL);
+}
+
+async function getCloudSyncClient() {
+  const config = loadCloudSyncConfig();
+  if (!hasCloudSyncConfig(config)) {
+    throw new Error("Salve a URL e a anon key do seu projeto Supabase antes de ativar o sync em nuvem.");
+  }
+
+  if (!cloudSyncClientPromise) {
+    cloudSyncClientPromise = (async () => {
+      const module = await loadSupabaseBrowserModule();
+      if (typeof module.createClient !== "function") {
+        throw new Error("O client do Supabase nao foi carregado corretamente no navegador.");
+      }
+
+      return module.createClient(config.project_url, config.anon_key, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+        },
+        global: {
+          headers: {
+            "x-client-info": "ai-po-os-portal/cloud-sync-v1",
+          },
+        },
+      });
+    })();
+  }
+
+  return cloudSyncClientPromise;
+}
+
+function bindIdentityProfileToCloudUser(user) {
+  if (!user) {
+    return null;
+  }
+
+  const currentState = loadIdentityState();
+  const currentProfile = currentState.active_profile || null;
+  const email = normalizeEmail(user.email || currentProfile?.email || "");
+  if (!email) {
+    return currentProfile;
+  }
+
+  const nowIso = new Date().toISOString();
+  const nextState = {
+    ...createDefaultIdentityState(),
+    ...currentState,
+    mode: "cloud_email_identity",
+    updated_at: nowIso,
+    active_profile: {
+      ...(currentProfile && typeof currentProfile === "object" ? currentProfile : {}),
+      email,
+      display_name: normalizeDisplayName(
+        currentProfile?.display_name || user?.user_metadata?.display_name || user?.user_metadata?.name,
+        email,
+      ),
+      auth_mode: "supabase_email_otp",
+      status: "cloud_authenticated",
+      user_id: user.id,
+      created_at: currentProfile?.created_at || nowIso,
+      updated_at: nowIso,
+      last_seen_at: nowIso,
+      journey_snapshot:
+        currentProfile?.journey_snapshot && typeof currentProfile.journey_snapshot === "object"
+          ? currentProfile.journey_snapshot
+          : null,
+    },
+  };
+
+  persistIdentityState(nextState);
+  return nextState.active_profile;
+}
+
+function downgradeIdentityProfileToLocal() {
+  const currentState = loadIdentityState();
+  if (!currentState.active_profile) {
+    return null;
+  }
+
+  const nowIso = new Date().toISOString();
+  const nextState = {
+    ...currentState,
+    mode: "local_email_identity",
+    updated_at: nowIso,
+    active_profile: {
+      ...currentState.active_profile,
+      auth_mode: "local_email_identity",
+      status: "active",
+      user_id: null,
+      updated_at: nowIso,
+      last_seen_at: nowIso,
+    },
+  };
+
+  persistIdentityState(nextState);
+  return nextState.active_profile;
+}
+
+async function ensureCloudProfileRow(client, user, portal, studyUnits = []) {
+  const missionSnapshot = buildLearningMissionSnapshot(portal, studyUnits);
+  const adaptivePreferences = loadAdaptivePathPreferences({});
+  const identityProfile = getActiveIdentityProfile();
+  const payload = {
+    id: user.id,
+    email: normalizeEmail(user.email || identityProfile?.email || ""),
+    display_name: normalizeDisplayName(identityProfile?.display_name || user?.user_metadata?.name, user.email || ""),
+    auth_mode: "supabase_email_otp",
+    current_level: missionSnapshot.level?.title || null,
+    preferred_focus: adaptivePreferences.focus || null,
+    target_role: adaptivePreferences.objective || "especialista senior em IA aplicada",
+    updated_at: new Date().toISOString(),
+  };
+
+  const { error } = await client.from("learner_profiles").upsert(payload, {
+    onConflict: "id",
+  });
+
+  if (error) {
+    throw error;
+  }
+}
+
+async function fetchRemoteCloudSnapshot(client, userId) {
+  const { data, error } = await client
+    .from("learner_sync_state")
+    .select("learner_id, snapshot, updated_at, last_pull_at, last_push_at, client_version")
+    .eq("learner_id", userId)
+    .maybeSingle();
+
+  if (error && error.code !== "PGRST116") {
+    throw error;
+  }
+
+  return data || null;
+}
+
+async function pushRemoteCloudSnapshot(client, userId, snapshot) {
+  const nowIso = new Date().toISOString();
+  const payload = {
+    learner_id: userId,
+    snapshot,
+    updated_at: snapshot?.updated_at || nowIso,
+    last_push_at: nowIso,
+    client_version: "cloud-sync-v1",
+  };
+
+  const { error } = await client.from("learner_sync_state").upsert(payload, {
+    onConflict: "learner_id",
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return payload;
+}
+
+async function syncCloudState(portal, studyUnits = [], options = {}) {
+  const config = loadCloudSyncConfig();
+  if (!hasCloudSyncConfig(config)) {
+    return persistCloudSyncState({
+      ...ensureCloudSyncState(),
+      status: "local_only",
+      setup_status: "not_configured",
+      error_message: "",
+      session_email: null,
+      user_id: null,
+    });
+  }
+
+  const nowIso = new Date().toISOString();
+
+  try {
+    const client = await getCloudSyncClient();
+    const {
+      data: { session },
+      error: sessionError,
+    } = await client.auth.getSession();
+
+    if (sessionError) {
+      throw sessionError;
+    }
+
+    if (!session?.user) {
+      return persistCloudSyncState({
+        ...ensureCloudSyncState(),
+        status: "configured",
+        setup_status: "configured",
+        updated_at: nowIso,
+        error_message: "",
+        session_email: null,
+        user_id: null,
+      });
+    }
+
+    bindIdentityProfileToCloudUser(session.user);
+
+    persistCloudSyncState({
+      ...ensureCloudSyncState(),
+      status: "syncing",
+      setup_status: "authenticated",
+      updated_at: nowIso,
+      session_email: normalizeEmail(session.user.email || ""),
+      user_id: session.user.id,
+      error_message: "",
+    });
+
+    await ensureCloudProfileRow(client, session.user, portal, studyUnits);
+
+    const localSnapshot = buildCloudSyncSnapshot(portal, studyUnits);
+    const remoteRow = await fetchRemoteCloudSnapshot(client, session.user.id);
+    const remoteSnapshot = remoteRow?.snapshot && typeof remoteRow.snapshot === "object" ? remoteRow.snapshot : null;
+    const direction = options.direction || "merge";
+
+    if (!remoteSnapshot || direction === "push") {
+      await pushRemoteCloudSnapshot(client, session.user.id, localSnapshot);
+      return persistCloudSyncState({
+        ...ensureCloudSyncState(),
+        status: "synced",
+        setup_status: "authenticated",
+        updated_at: nowIso,
+        session_email: normalizeEmail(session.user.email || ""),
+        user_id: session.user.id,
+        last_synced_at: nowIso,
+        last_pushed_at: nowIso,
+        error_message: "",
+      });
+    }
+
+    if (direction === "pull" || compareIsoDateTime(remoteSnapshot.updated_at, localSnapshot.updated_at) > 0) {
+      applyCloudSyncSnapshot(remoteSnapshot);
+      bindIdentityProfileToCloudUser(session.user);
+      syncActiveIdentityJourney(portal, studyUnits);
+
+      return persistCloudSyncState({
+        ...ensureCloudSyncState(),
+        status: "synced",
+        setup_status: "authenticated",
+        updated_at: nowIso,
+        session_email: normalizeEmail(session.user.email || ""),
+        user_id: session.user.id,
+        last_synced_at: nowIso,
+        last_pulled_at: nowIso,
+        error_message: "",
+      });
+    }
+
+    await pushRemoteCloudSnapshot(client, session.user.id, localSnapshot);
+    return persistCloudSyncState({
+      ...ensureCloudSyncState(),
+      status: "synced",
+      setup_status: "authenticated",
+      updated_at: nowIso,
+      session_email: normalizeEmail(session.user.email || ""),
+      user_id: session.user.id,
+      last_synced_at: nowIso,
+      last_pushed_at: nowIso,
+      error_message: "",
+    });
+  } catch (error) {
+    return persistCloudSyncState({
+      ...ensureCloudSyncState(),
+      status: "error",
+      setup_status: hasCloudSyncConfig(config) ? "configured" : "not_configured",
+      updated_at: nowIso,
+      error_message: normalizeCloudSyncError(error),
+    });
+  }
+}
+
+async function sendCloudEmailOtp(email) {
+  const normalizedEmail = normalizeEmail(email);
+  if (!isValidEmail(normalizedEmail)) {
+    throw new Error("Informe um e-mail valido para receber o codigo OTP.");
+  }
+
+  const client = await getCloudSyncClient();
+  const config = loadCloudSyncConfig();
+  const { error } = await client.auth.signInWithOtp({
+    email: normalizedEmail,
+    options: {
+      shouldCreateUser: true,
+      emailRedirectTo: config.redirect_url || buildDefaultCloudRedirectUrl(),
+    },
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  persistCloudSyncState({
+    ...ensureCloudSyncState(),
+    status: "pending_otp",
+    setup_status: "configured",
+    session_email: normalizedEmail,
+    error_message: "",
+  });
+
+  return normalizedEmail;
+}
+
+async function verifyCloudEmailOtp(email, token, portal, studyUnits = []) {
+  const normalizedEmail = normalizeEmail(email);
+  const normalizedToken = String(token || "").trim();
+
+  if (!isValidEmail(normalizedEmail)) {
+    throw new Error("Informe um e-mail valido antes de verificar o codigo.");
+  }
+
+  if (normalizedToken.length < 6) {
+    throw new Error("Informe o codigo OTP enviado para o seu e-mail.");
+  }
+
+  const client = await getCloudSyncClient();
+  const { data, error } = await client.auth.verifyOtp({
+    email: normalizedEmail,
+    token: normalizedToken,
+    type: "email",
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  if (data?.session?.user) {
+    bindIdentityProfileToCloudUser(data.session.user);
+  }
+
+  return syncCloudState(portal, studyUnits, {
+    direction: "merge",
+    reason: "otp_verify",
+  });
+}
+
+async function signOutCloudSync() {
+  const config = loadCloudSyncConfig();
+
+  try {
+    if (hasCloudSyncConfig(config)) {
+      const client = await getCloudSyncClient();
+      const { error } = await client.auth.signOut();
+      if (error) {
+        throw error;
+      }
+    }
+  } finally {
+    downgradeIdentityProfileToLocal();
+    persistCloudSyncState({
+      ...ensureCloudSyncState(),
+      status: hasCloudSyncConfig(config) ? "configured" : "local_only",
+      setup_status: hasCloudSyncConfig(config) ? "configured" : "not_configured",
+      session_email: null,
+      user_id: null,
+      error_message: "",
+    });
+  }
+}
+
+async function bootstrapCloudSync(portal, studyUnits = []) {
+  const config = loadCloudSyncConfig();
+  if (!hasCloudSyncConfig(config)) {
+    persistCloudSyncState({
+      ...ensureCloudSyncState(),
+      status: "local_only",
+      setup_status: "not_configured",
+      error_message: "",
+      session_email: null,
+      user_id: null,
+    });
+    return ensureCloudSyncState();
+  }
+
+  const bootstrapState = await syncCloudState(portal, studyUnits, {
+    direction: "merge",
+    reason: "bootstrap",
+  });
+
+  return bootstrapState;
+}
+
+function setupCloudSyncAutoPush(portal, studyUnits = []) {
+  if (window.__cloudSyncAutoPushBound) {
+    return;
+  }
+
+  window.__cloudSyncAutoPushBound = true;
+
+  const schedulePush = (reason = "study_change") => {
+    window.clearTimeout(cloudSyncAutoPushTimer);
+    cloudSyncAutoPushTimer = window.setTimeout(async () => {
+      if (cloudSyncAutoPushInFlight) {
+        return;
+      }
+
+      cloudSyncAutoPushInFlight = syncCloudState(portal, studyUnits, {
+        direction: "push",
+        reason,
+      });
+
+      try {
+        await cloudSyncAutoPushInFlight;
+      } finally {
+        cloudSyncAutoPushInFlight = null;
+      }
+    }, 1800);
+  };
+
+  [
+    "study-identity:updated",
+    "study-resume:updated",
+    "study-flags:updated",
+    "today-session:updated",
+    "study-progress:updated",
+    "adaptive-path:updated",
+  ].forEach((eventName) => {
+    document.addEventListener(eventName, () => {
+      const cloudState = ensureCloudSyncState();
+      if (cloudState.setup_status === "authenticated") {
+        schedulePush(eventName);
+      }
+    });
+  });
 }
 
 function normalizeIsoDateKey(value) {
@@ -1834,6 +2596,56 @@ async function loadPageData() {
   return data;
 }
 
+function buildCloudSyncShellMeta() {
+  const config = loadCloudSyncConfig();
+  const state = ensureCloudSyncState();
+
+  if (!hasCloudSyncConfig(config)) {
+    return {
+      label: "Local-first",
+      status_class: "status-next",
+      summary: "Sem provider configurado ainda. O portal continua leve e funcional neste navegador.",
+      mode_label: "Local",
+    };
+  }
+
+  if (state.status === "error") {
+    return {
+      label: "Sync com erro",
+      status_class: "status-risk",
+      summary: state.error_message || "O provider foi configurado, mas a sincronizacao precisa de revisao.",
+      mode_label: "Nuvem",
+    };
+  }
+
+  if (state.setup_status === "authenticated" && state.status === "synced") {
+    return {
+      label: "Nuvem sincronizada",
+      status_class: "status-done",
+      summary: state.last_synced_at
+        ? `Ultima sincronizacao: ${formatDateTimeCompact(state.last_synced_at)}.`
+        : "Sessao autenticada e continuidade entre dispositivos ativa.",
+      mode_label: "Nuvem",
+    };
+  }
+
+  if (state.status === "pending_otp") {
+    return {
+      label: "OTP pendente",
+      status_class: "status-in-progress",
+      summary: "O projeto ja esta configurado. Falta validar o codigo enviado por e-mail para ativar a nuvem.",
+      mode_label: "OTP",
+    };
+  }
+
+  return {
+    label: "Provider configurado",
+    status_class: "status-in-progress",
+    summary: "O projeto Supabase ja esta salvo. Falta autenticar a sessao para subir a jornada para a nuvem.",
+    mode_label: "Setup",
+  };
+}
+
 function renderShell(portal, freshnessStatus) {
   const page = portal.pages[pageId] || portal.pages.home;
   const sidebar = document.getElementById("sidebar");
@@ -1847,6 +2659,7 @@ function renderShell(portal, freshnessStatus) {
   const resumeTarget = getPrimaryResumeTarget(portal);
   const canShowResumeAction = resumeTarget && (!currentPageIsStudyRoute || resumeTarget.page_id !== pageId);
   const identityProfile = getActiveIdentityProfile();
+  const cloudMeta = buildCloudSyncShellMeta();
   const identityEntryHref = buildIdentityEntryHref();
   const identityDescription = identityProfile?.journey_snapshot?.resume_title
     ? `Continuar em ${identityProfile.journey_snapshot.resume_title} sem remontar a trilha.`
@@ -1887,6 +2700,8 @@ function renderShell(portal, freshnessStatus) {
                 : escapeHtml(identityDescription)
             }
           </p>
+          <span class="status-badge ${escapeHtml(cloudMeta.status_class)}">${escapeHtml(cloudMeta.label)}</span>
+          <p class="brand-copy sidebar-identity-meta">${escapeHtml(cloudMeta.summary)}</p>
           <a class="button ghost" href="${resolveUrl(identityEntryHref)}">${escapeHtml(identityProfile ? "Gerenciar entrada" : "Entrar")}</a>
         </div>
         ${
@@ -1924,7 +2739,7 @@ function renderShell(portal, freshnessStatus) {
         }
         ${
           identityProfile
-            ? `<a class="button ghost topbar-identity" href="${resolveUrl(identityEntryHref)}"><span class="topbar-identity-mode">Local</span>${escapeHtml(deriveIdentityLabel(identityProfile))}</a>`
+            ? `<a class="button ghost topbar-identity" href="${resolveUrl(identityEntryHref)}"><span class="topbar-identity-mode">${escapeHtml(cloudMeta.mode_label)}</span>${escapeHtml(deriveIdentityLabel(identityProfile))}</a>`
             : `<a class="button secondary" href="${resolveUrl(identityEntryHref)}">Entrar com e-mail</a>`
         }
         ${
@@ -3582,6 +4397,10 @@ function renderJourney(journeyGuide) {
 
 function renderEnter(portal, enterGuide, authProvider, studyUnits) {
   const identity = getActiveIdentityProfile();
+  const cloudConfig = loadCloudSyncConfig();
+  const cloudState = ensureCloudSyncState();
+  const cloudConfigured = hasCloudSyncConfig(cloudConfig);
+  const cloudMeta = buildCloudSyncShellMeta();
   const missionSnapshot = buildLearningMissionSnapshot(portal, studyUnits);
   const searchParams = new URLSearchParams(window.location.search);
   const nextHref = sanitizeInternalHref(searchParams.get("next")) || missionSnapshot.resumeTarget?.href || "/trilha/";
@@ -3590,6 +4409,11 @@ function renderEnter(portal, enterGuide, authProvider, studyUnits) {
   const nextPage = portal?.pages?.[nextPageId] || {};
   const nextLabel = nextPage.nav_label || nextPage.title || "Trilha";
   const continuityTitle = pageId === "entrar" ? nextLabel : missionSnapshot.resumeTarget?.title || "Montar a trilha";
+  const cloudScope = authProvider.cloud_provider?.sync_scope || cloudState.sync_scope || [];
+  const cloudDocs = [
+    ...(authProvider.cloud_provider?.artifacts || []),
+    ...(authProvider.cloud_provider?.docs || authProvider.future_provider?.docs || []),
+  ];
 
   renderCards(
     "enter-orientation",
@@ -3609,7 +4433,7 @@ function renderEnter(portal, enterGuide, authProvider, studyUnits) {
     runtimePanel.innerHTML = `
       <div class="identity-runtime-shell">
         <div class="identity-runtime-main">
-          <span class="eyebrow">${escapeHtml(authProvider.status_label || "Identidade local")}</span>
+          <span class="eyebrow">${escapeHtml(authProvider.status_label || "Identidade persistente")}</span>
           <h2>${escapeHtml(authProvider.runtime?.title || "Reconhecimento persistente neste navegador")}</h2>
           <p>${escapeHtml(authProvider.runtime?.summary || "O portal salva seu e-mail localmente, reconhece quem voce e e liga sua retomada a esse perfil neste dispositivo.")}</p>
           <div class="chip-list">
@@ -3621,6 +4445,8 @@ function renderEnter(portal, enterGuide, authProvider, studyUnits) {
             <span class="label">${identity ? "Identidade ativa" : "Sem identidade ativa"}</span>
             <strong>${escapeHtml(identity ? deriveIdentityLabel(identity) : "Entre com seu e-mail para ser reconhecido")}</strong>
             <p class="brand-copy">${escapeHtml(identity ? `${identity.email} · Local neste navegador` : "Sua trilha continua salva aqui, mas ainda sem um e-mail associado.")}</p>
+            <span class="status-badge ${escapeHtml(cloudMeta.status_class)}">${escapeHtml(cloudMeta.label)}</span>
+            <p class="metric-note">${escapeHtml(cloudMeta.summary)}</p>
             <div class="summary-list">
               <div><strong>Proxima rota:</strong> ${escapeHtml(nextLabel)}</div>
               <div><strong>Retomada:</strong> ${escapeHtml(continuityTitle)}</div>
@@ -3683,14 +4509,14 @@ function renderEnter(portal, enterGuide, authProvider, studyUnits) {
 
   renderCards(
     "enter-officials",
-    authProvider.future_provider?.docs || [],
+    cloudDocs,
     (item) => `
       <article class="artifact-card">
-        <span class="status-badge status-in-progress">${escapeHtml(item.badge || "Fonte oficial")}</span>
+        <span class="status-badge ${escapeHtml(item.status_class || "status-in-progress")}">${escapeHtml(item.badge || "Fonte oficial")}</span>
         <h3>${escapeHtml(item.title)}</h3>
-        <p class="card-copy">${escapeHtml(item.description || "")}</p>
+        <p class="card-copy">${escapeHtml(item.description || item.summary || "")}</p>
         <div class="button-group">
-          <a class="button secondary" href="${item.url}">Abrir fonte oficial</a>
+          <a class="button secondary" href="${resolveUrl(item.url || item.href || "/")}">${escapeHtml(item.label || (item.url ? "Abrir recurso" : "Abrir artefato"))}</a>
         </div>
       </article>
     `,
@@ -3703,6 +4529,58 @@ function renderEnter(portal, enterGuide, authProvider, studyUnits) {
       .join("");
   }
 
+  const cloudRuntime = document.getElementById("enter-cloud-runtime");
+  if (cloudRuntime) {
+    cloudRuntime.innerHTML = `
+      <div class="cloud-sync-shell">
+        <div class="cloud-sync-main">
+          <span class="eyebrow">${escapeHtml(authProvider.cloud_provider?.eyebrow || "Cloud sync")}</span>
+          <h2>${escapeHtml(authProvider.cloud_provider?.title || "Supabase OTP + sync do estado do aluno")}</h2>
+          <p>${escapeHtml(authProvider.cloud_provider?.summary || "Configure um projeto Supabase, valide seu e-mail por OTP e deixe a jornada continuar em qualquer dispositivo.")}</p>
+          <div class="chip-list">
+            ${renderTagList(authProvider.cloud_provider?.pills || ["Supabase", "OTP", "GitHub Pages", "Cross-device"]).replace('<div class="chip-list">', "").replace("</div>", "")}
+          </div>
+          <ul class="summary-list">
+            <li><strong>Projeto:</strong> ${escapeHtml(maskCloudProjectUrl(cloudConfig.project_url))}</li>
+            <li><strong>Anon key:</strong> ${escapeHtml(maskCloudAnonKey(cloudConfig.anon_key))}</li>
+            <li><strong>Redirect URL:</strong> ${escapeHtml(cloudConfig.redirect_url || buildDefaultCloudRedirectUrl())}</li>
+            <li><strong>Escopo:</strong> ${escapeHtml(cloudScope.join(", "))}</li>
+          </ul>
+        </div>
+        <aside class="cloud-sync-actions">
+          <article class="identity-status-card">
+            <span class="label">Status da sincronizacao</span>
+            <strong>${escapeHtml(cloudMeta.label)}</strong>
+            <p class="brand-copy">${escapeHtml(cloudMeta.summary)}</p>
+            <div class="button-group">
+              <button class="button secondary" id="cloud-sync-now" type="button">Sincronizar agora</button>
+              <button class="button ghost" id="cloud-pull-now" type="button">Puxar nuvem</button>
+              <button class="button ghost" id="cloud-push-now" type="button">Enviar local</button>
+            </div>
+          </article>
+        </aside>
+      </div>
+    `;
+  }
+
+  const cloudStatus = document.getElementById("enter-cloud-status");
+  if (cloudStatus) {
+    cloudStatus.innerHTML = `
+      <article class="identity-status-card cloud-status-panel">
+        <span class="status-badge ${escapeHtml(cloudMeta.status_class)}">${escapeHtml(cloudMeta.label)}</span>
+        <h3>${escapeHtml(cloudState.setup_status === "authenticated" ? "Sessao de nuvem ativa" : "Modo cloud-ready")}</h3>
+        <p class="card-copy">${escapeHtml(cloudState.error_message || cloudMeta.summary)}</p>
+        <ul class="summary-list">
+          <li><strong>E-mail da sessao:</strong> ${escapeHtml(cloudState.session_email || identity?.email || "Nao autenticado")}</li>
+          <li><strong>User ID:</strong> ${escapeHtml(cloudState.user_id || "Aguardando login")}</li>
+          <li><strong>Ultimo pull:</strong> ${escapeHtml(cloudState.last_pulled_at ? formatDateTimeCompact(cloudState.last_pulled_at) : "Nao executado")}</li>
+          <li><strong>Ultimo push:</strong> ${escapeHtml(cloudState.last_pushed_at ? formatDateTimeCompact(cloudState.last_pushed_at) : "Nao executado")}</li>
+          <li><strong>Ultimo sync:</strong> ${escapeHtml(cloudState.last_synced_at ? formatDateTimeCompact(cloudState.last_synced_at) : "Ainda nao sincronizado")}</li>
+        </ul>
+      </article>
+    `;
+  }
+
   const emailInput = document.getElementById("enter-email");
   const nameInput = document.getElementById("enter-name");
   const helper = document.getElementById("enter-helper");
@@ -3710,6 +4588,23 @@ function renderEnter(portal, enterGuide, authProvider, studyUnits) {
   const form = document.getElementById("enter-identity-form");
   const continueButton = document.getElementById("enter-continue");
   const clearButton = document.getElementById("enter-clear");
+
+  const cloudConfigForm = document.getElementById("enter-cloud-config-form");
+  const cloudProjectUrlInput = document.getElementById("cloud-project-url");
+  const cloudAnonKeyInput = document.getElementById("cloud-anon-key");
+  const cloudConfigHelper = document.getElementById("cloud-config-helper");
+  const cloudConfigFeedback = document.getElementById("cloud-config-feedback");
+  const cloudConfigClear = document.getElementById("cloud-config-clear");
+
+  const cloudAuthEmailInput = document.getElementById("cloud-auth-email");
+  const cloudAuthOtpInput = document.getElementById("cloud-auth-otp");
+  const cloudAuthFeedback = document.getElementById("cloud-auth-feedback");
+  const cloudSendOtpButton = document.getElementById("cloud-send-otp");
+  const cloudVerifyOtpButton = document.getElementById("cloud-verify-otp");
+  const cloudSignOutButton = document.getElementById("cloud-sign-out");
+  const cloudSyncNowButton = document.getElementById("cloud-sync-now");
+  const cloudPullNowButton = document.getElementById("cloud-pull-now");
+  const cloudPushNowButton = document.getElementById("cloud-push-now");
 
   if (emailInput) {
     emailInput.value = identity?.email || "";
@@ -3719,8 +4614,24 @@ function renderEnter(portal, enterGuide, authProvider, studyUnits) {
     nameInput.value = identity?.display_name || "";
   }
 
+  if (cloudProjectUrlInput) {
+    cloudProjectUrlInput.value = cloudConfig.project_url || "";
+  }
+
+  if (cloudAnonKeyInput) {
+    cloudAnonKeyInput.value = cloudConfig.anon_key || "";
+  }
+
+  if (cloudAuthEmailInput) {
+    cloudAuthEmailInput.value = cloudState.session_email || identity?.email || "";
+  }
+
   if (helper) {
     helper.textContent = `Depois de salvar seu e-mail, o portal te devolve para ${nextLabel} sem perder a retomada.`;
+  }
+
+  if (cloudConfigHelper) {
+    cloudConfigHelper.textContent = `Use a redirect URL ${cloudConfig.redirect_url || buildDefaultCloudRedirectUrl()} na allow-list do Supabase antes de validar o login.`;
   }
 
   const setFeedback = (message, tone = "neutral") => {
@@ -3730,6 +4641,24 @@ function renderEnter(portal, enterGuide, authProvider, studyUnits) {
 
     feedback.textContent = message;
     feedback.dataset.tone = tone;
+  };
+
+  const setCloudConfigMessage = (message, tone = "neutral") => {
+    if (!cloudConfigFeedback) {
+      return;
+    }
+
+    cloudConfigFeedback.textContent = message;
+    cloudConfigFeedback.dataset.tone = tone;
+  };
+
+  const setCloudAuthMessage = (message, tone = "neutral") => {
+    if (!cloudAuthFeedback) {
+      return;
+    }
+
+    cloudAuthFeedback.textContent = message;
+    cloudAuthFeedback.dataset.tone = tone;
   };
 
   if (continueButton) {
@@ -3764,6 +4693,155 @@ function renderEnter(portal, enterGuide, authProvider, studyUnits) {
     window.setTimeout(() => {
       window.location.reload();
     }, 260);
+  });
+
+  cloudConfigForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const projectUrl = sanitizeSupabaseProjectUrl(cloudProjectUrlInput?.value || "");
+    const anonKey = normalizeCloudAnonKey(cloudAnonKeyInput?.value || "");
+
+    if (!projectUrl) {
+      setCloudConfigMessage("Informe uma Project URL valida do Supabase.", "danger");
+      cloudProjectUrlInput?.focus();
+      return;
+    }
+
+    if (!anonKey) {
+      setCloudConfigMessage("Cole a anon key publica do projeto para ativar o provider de nuvem.", "danger");
+      cloudAnonKeyInput?.focus();
+      return;
+    }
+
+    persistCloudSyncConfig({
+      project_url: projectUrl,
+      anon_key: anonKey,
+      redirect_url: buildDefaultCloudRedirectUrl(),
+    });
+    persistCloudSyncState({
+      ...ensureCloudSyncState(),
+      status: "configured",
+      setup_status: "configured",
+      error_message: "",
+    });
+    setCloudConfigMessage("Configuracao salva. Agora envie o codigo OTP para ativar a sessao em nuvem.", "success");
+
+    window.setTimeout(() => {
+      window.location.reload();
+    }, 320);
+  });
+
+  cloudConfigClear?.addEventListener("click", async () => {
+    try {
+      if (cloudState.setup_status === "authenticated") {
+        await signOutCloudSync();
+      }
+      clearCloudSyncConfig();
+      persistCloudSyncState({
+        ...createDefaultCloudSyncState(),
+        status: "local_only",
+        setup_status: "not_configured",
+      });
+      setCloudConfigMessage("Configuracao removida. O portal segue funcionando em modo local-first.", "neutral");
+
+      window.setTimeout(() => {
+        window.location.reload();
+      }, 260);
+    } catch (error) {
+      setCloudConfigMessage(normalizeCloudSyncError(error), "danger");
+    }
+  });
+
+  cloudSendOtpButton?.addEventListener("click", async () => {
+    try {
+      const email = cloudAuthEmailInput?.value || emailInput?.value || "";
+      const sentTo = await sendCloudEmailOtp(email);
+      setCloudAuthMessage(`Codigo enviado para ${sentTo}. Verifique seu e-mail e cole o OTP para concluir o login.`, "success");
+    } catch (error) {
+      setCloudAuthMessage(normalizeCloudSyncError(error), "danger");
+    }
+  });
+
+  cloudVerifyOtpButton?.addEventListener("click", async () => {
+    try {
+      const email = cloudAuthEmailInput?.value || emailInput?.value || "";
+      const token = cloudAuthOtpInput?.value || "";
+      await verifyCloudEmailOtp(email, token, portal, studyUnits);
+      setCloudAuthMessage(`Sessao autenticada e jornada sincronizada. Redirecionando para ${nextLabel}...`, "success");
+
+      window.setTimeout(() => {
+        window.location.href = resolveUrl(nextHref);
+      }, 380);
+    } catch (error) {
+      setCloudAuthMessage(normalizeCloudSyncError(error), "danger");
+    }
+  });
+
+  cloudSignOutButton?.addEventListener("click", async () => {
+    try {
+      await signOutCloudSync();
+      setCloudAuthMessage("Sessao de nuvem encerrada. O portal voltou para o modo local-first neste navegador.", "neutral");
+
+      window.setTimeout(() => {
+        window.location.reload();
+      }, 260);
+    } catch (error) {
+      setCloudAuthMessage(normalizeCloudSyncError(error), "danger");
+    }
+  });
+
+  cloudSyncNowButton?.addEventListener("click", async () => {
+    try {
+      const result = await syncCloudState(portal, studyUnits, {
+        direction: "merge",
+        reason: "manual_sync",
+      });
+      if (result?.status === "error") {
+        throw new Error(result.error_message);
+      }
+      setCloudAuthMessage("Sincronizacao executada com sucesso. Recarregando o estado atual do portal...", "success");
+      window.setTimeout(() => {
+        window.location.reload();
+      }, 260);
+    } catch (error) {
+      setCloudAuthMessage(normalizeCloudSyncError(error), "danger");
+    }
+  });
+
+  cloudPullNowButton?.addEventListener("click", async () => {
+    try {
+      const result = await syncCloudState(portal, studyUnits, {
+        direction: "pull",
+        reason: "manual_pull",
+      });
+      if (result?.status === "error") {
+        throw new Error(result.error_message);
+      }
+      setCloudAuthMessage("Estado remoto puxado com sucesso. Recarregando o portal no ultimo snapshot sincronizado...", "success");
+      window.setTimeout(() => {
+        window.location.reload();
+      }, 260);
+    } catch (error) {
+      setCloudAuthMessage(normalizeCloudSyncError(error), "danger");
+    }
+  });
+
+  cloudPushNowButton?.addEventListener("click", async () => {
+    try {
+      const result = await syncCloudState(portal, studyUnits, {
+        direction: "push",
+        reason: "manual_push",
+      });
+      if (result?.status === "error") {
+        throw new Error(result.error_message);
+      }
+      setCloudAuthMessage("Estado local enviado para a nuvem com sucesso.", "success");
+      window.setTimeout(() => {
+        window.location.reload();
+      }, 260);
+    } catch (error) {
+      setCloudAuthMessage(normalizeCloudSyncError(error), "danger");
+    }
   });
 }
 
@@ -10612,6 +11690,7 @@ async function init() {
       releaseManifest,
     } = data;
 
+    await bootstrapCloudSync(portal, studyUnits);
     renderShell(portal, freshnessStatus);
     setupStudyAnalytics();
     setupStudyIntentPersistence();
@@ -10685,6 +11764,7 @@ async function init() {
     syncActiveIdentityJourney(portal, studyUnits);
     await renderStudyIntentSurface(portal, studyUnits);
 
+    setupCloudSyncAutoPush(portal, studyUnits);
     setupNavigationPrefetch(portal);
   } catch (error) {
     if (content) {

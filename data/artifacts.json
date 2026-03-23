@@ -1,6 +1,31 @@
 {
   "featured_artifacts": [
     {
+      "id": "supabase-cloud-sync-kit",
+      "title": "Kit de setup do sync em nuvem",
+      "category": "Infraestrutura",
+      "summary": "SQL, RLS e passo a passo para ligar GitHub Pages ao Supabase e sincronizar trilha, flags, XP, progresso, analytics, sessao do dia e retomada.",
+      "study_tip": "Use este kit quando quiser sair do modo local-first e ativar continuidade real entre dispositivos sem reescrever o portal.",
+      "tags": ["Supabase", "OTP", "RLS", "Cross-device"],
+      "buttons": [
+        {
+          "label": "Abrir guia",
+          "href": "/artifacts/files/supabase_cloud_sync_setup.md",
+          "variant": "primary"
+        },
+        {
+          "label": "Abrir SQL",
+          "href": "/artifacts/files/supabase_cloud_sync_setup.sql",
+          "variant": "secondary"
+        },
+        {
+          "label": "Abrir Entrar",
+          "href": "/entrar/",
+          "variant": "secondary"
+        }
+      ]
+    },
+    {
       "id": "llm-landscape",
       "title": "Radar de LLMs 2026-03-22",
       "category": "Curadoria",

@@ -3,16 +3,16 @@
     "title": "AI Operating System do PO Salesforce",
     "tagline": "Portal tecnico, didatico e visual para estudar IA aplicada em Product Operations.",
     "updated_on": "2026-03-22",
-    "phase_label": "Email Identity",
-    "phase_focus": "Trilha conectada fase 3",
-    "phase_summary": "O portal agora reconhece o aluno por e-mail neste navegador, liga a retomada a uma identidade visivel e prepara a mesma experiencia para auth real e sync em nuvem.",
-    "next_phase": "Sync em nuvem",
-    "next_phase_summary": "Com a identidade local fechada, a proxima frente natural e subir trilha, flags, XP e progresso para uma camada de sincronizacao real entre dispositivos.",
+    "phase_label": "Cloud Sync",
+    "phase_focus": "Trilha conectada fase 4",
+    "phase_summary": "O portal continua local-first, mas agora ja permite configurar Supabase, autenticar por e-mail e sincronizar trilha, flags, XP, progresso, analytics, sessao do dia e retomada entre dispositivos.",
+    "next_phase": "Gamificacao forte e productizacao",
+    "next_phase_summary": "Com o sync em nuvem pronto, a proxima frente natural e transformar checkpoints, boss nodes, milestones e onboarding em uma camada ainda mais memoravel e vendavel.",
     "deploy_url": "https://deivithi.github.io/ai-po-os-portal/"
   },
   "navigation": [
     { "id": "home", "label": "Home", "description": "Mapa de estudo e visao executiva", "href": "/" },
-    { "id": "entrar", "label": "Entrar", "description": "Identidade persistente e retomada pessoal", "href": "/entrar/" },
+    { "id": "entrar", "label": "Entrar", "description": "Identidade, OTP e sync em nuvem", "href": "/entrar/" },
     { "id": "hoje", "label": "Hoje", "description": "Sessao inteligente com a melhor acao do dia", "href": "/hoje/" },
     { "id": "guia", "label": "Guia", "description": "Como extrair o melhor da plataforma", "href": "/guia/" },
     { "id": "jornada", "label": "Jornada", "description": "Como usar o portal em 30 dias", "href": "/jornada/" },
@@ -38,7 +38,7 @@
     "entrar": {
       "title": "Entrar",
       "nav_label": "Entrar",
-      "summary": "Camada de identidade persistente: o portal reconhece seu e-mail neste navegador, amarra a retomada ao seu perfil e prepara a subida para sync em nuvem."
+      "summary": "Camada de identidade e continuidade: o portal reconhece seu e-mail, permite configurar Supabase com OTP e sobe a jornada para sync em nuvem sem abandonar o modo local-first."
     },
     "hoje": {
       "title": "Hoje",
@@ -191,9 +191,9 @@
     },
     {
       "title": "Salvar sua identidade no navegador",
-      "description": "Use Entrar para ligar a jornada ao seu e-mail, deixar a retomada mais humana e preparar o terreno para continuidade entre dispositivos na proxima fase.",
+      "description": "Use Entrar para ligar a jornada ao seu e-mail, configurar o provider Supabase, validar o OTP e sincronizar a retomada entre dispositivos quando quiser subir para a nuvem.",
       "href": "/entrar/",
-      "badge": "Identidade persistente",
+      "badge": "Identidade + nuvem",
       "status_class": "status-done"
     },
     {

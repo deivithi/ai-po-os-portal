@@ -79,6 +79,10 @@
     {
       "title": "Identidade persistente por e-mail",
       "description": "Sempre que o usuario entrar com seu e-mail, o portal precisa reconhece-lo neste navegador, ligar a retomada ao perfil e manter o caminho pronto para sync em nuvem."
+    },
+    {
+      "title": "Sync em nuvem configuravel",
+      "description": "Sempre que a nuvem for ativada, o portal precisa aceitar Project URL e anon key do Supabase, autenticar por e-mail e sincronizar trilha, flags, XP, progresso, analytics, sessao do dia e retomada sem quebrar o modo local-first."
     }
   ],
   "qa_targets": [
@@ -124,6 +128,8 @@
     "/data/labs_page.json",
     "/data/analytics_page.json",
     "/data/analytics_rules.json",
-    "/data/launch_page.json"
+    "/data/launch_page.json",
+    "/artifacts/files/supabase_cloud_sync_setup.sql",
+    "/artifacts/files/supabase_cloud_sync_setup.md"
   ]
 }

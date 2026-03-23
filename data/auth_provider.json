@@ -1,37 +1,90 @@
 {
   "checked_on": "2026-03-22",
-  "status_label": "Identidade persistente ativa",
+  "status_label": "Sync em nuvem cloud-ready",
   "status_class": "status-done",
-  "mode": "local_email_identity",
+  "mode": "supabase_email_otp",
   "runtime": {
-    "title": "Modo atual: identidade local neste navegador",
-    "summary": "O portal salva seu e-mail localmente, reconhece sua jornada e mantem a retomada viva sem depender de backend para esta fase.",
+    "title": "Modo atual: identidade local + provider de nuvem configuravel",
+    "summary": "O portal continua local-first para nao perder leveza, mas agora ja aceita projeto Supabase, autenticacao por e-mail e sincronizacao do estado de estudo entre dispositivos.",
     "pills": [
       "Local-first",
-      "Retomada vinculada",
-      "Cloud-ready"
+      "Supabase OTP",
+      "Sessao persistente",
+      "Cross-device"
     ]
   },
-  "future_provider": {
-    "title": "Proxima fase: auth real e sync em nuvem",
-    "summary": "Quando a camada de sync entrar, a mesma UX sobe para email OTP ou magic link, redirect URLs permitidas e sessao persistida entre dispositivos.",
+  "cloud_provider": {
+    "eyebrow": "Sync em nuvem",
+    "title": "Supabase OTP + continuidade entre dispositivos",
+    "summary": "Cole a Project URL e a anon key do seu projeto, envie o codigo por e-mail e sincronize trilha, flags, XP, progresso, analytics, sessao do dia e retomada entre dispositivos.",
+    "pills": [
+      "Supabase",
+      "OTP por e-mail",
+      "GitHub Pages",
+      "Merge local + nuvem"
+    ],
+    "sync_scope": [
+      "trilha",
+      "flags",
+      "XP",
+      "progresso",
+      "analytics",
+      "sessao de hoje",
+      "retomada"
+    ],
+    "artifacts": [
+      {
+        "badge": "Setup kit",
+        "status_class": "status-done",
+        "title": "SQL do sync em nuvem",
+        "description": "Cria tabelas, RLS e policies do portal no Supabase para manter cada aluno vendo apenas os proprios dados.",
+        "href": "/artifacts/files/supabase_cloud_sync_setup.sql",
+        "label": "Abrir SQL"
+      },
+      {
+        "badge": "Setup kit",
+        "status_class": "status-done",
+        "title": "Guia de configuracao do Supabase",
+        "description": "Passo a passo para habilitar OTP, adicionar redirect URLs do GitHub Pages, executar o SQL e ligar a rota Entrar ao sync em nuvem.",
+        "href": "/artifacts/files/supabase_cloud_sync_setup.md",
+        "label": "Abrir guia"
+      }
+    ],
     "docs": [
       {
         "badge": "Supabase Auth",
-        "title": "Email (Magic Link ou OTP)",
-        "description": "Fluxos oficiais de autenticacao por email, com OTP e magic link, para a camada de login real da proxima fase.",
+        "title": "Email passwordless (OTP ou magic link)",
+        "description": "Fluxo oficial de autenticacao por e-mail no Supabase, cobrindo OTP, magic link, `shouldCreateUser` e a UX certa para apps web.",
         "url": "https://supabase.com/docs/guides/auth/auth-email-passwordless"
       },
       {
         "badge": "Supabase Auth",
         "title": "Redirect URLs",
-        "description": "Configuracao oficial de redirect URLs, incluindo Site URL e allow-list, essencial para a subida para GitHub Pages ou dominios proprios.",
+        "description": "Configuracao oficial da Site URL e da allow-list de redirects para GitHub Pages, dominios proprios e ambientes futuros.",
         "url": "https://supabase.com/docs/guides/auth/redirect-urls"
       },
       {
+        "badge": "Supabase Auth",
+        "title": "Managing user data",
+        "description": "Boas praticas oficiais para relacionar `auth.users` a tabelas de perfil e manter ownership claro dos dados do usuario.",
+        "url": "https://supabase.com/docs/guides/auth/managing-user-data"
+      },
+      {
+        "badge": "Supabase Database",
+        "title": "Row Level Security",
+        "description": "Referencia oficial de RLS usada para isolar o snapshot de cada aluno no banco de dados do sync em nuvem.",
+        "url": "https://supabase.com/docs/guides/database/postgres/row-level-security"
+      }
+    ]
+  },
+  "future_provider": {
+    "title": "Proxima fase: gamificacao forte e onboarding vendavel",
+    "summary": "Com o sync em nuvem pronto, a proxima frente natural e transformar checkpoints, boss nodes, milestones e onboarding em um produto ainda mais vendavel e memoravel.",
+    "docs": [
+      {
         "badge": "MDN",
         "title": "localStorage",
-        "description": "Referencia oficial do storage local que sustenta a persistencia desta fase e o modo local-first do portal.",
+        "description": "Referencia oficial do storage local que continua servindo como camada de cache, fallback e resiliencia para o portal.",
         "url": "https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
       }
     ]

@@ -27,15 +27,15 @@
         "badge": "Fila editorial",
         "status_class": "status-next",
         "title": "Nova frente ativa",
-        "value": "Trilha conectada fase 3",
-        "note": "Com a navegacao guiada fechada, o foco agora sobe para identidade persistente por e-mail neste navegador e preparacao da experiencia para sync em nuvem."
+        "value": "Trilha conectada fase 4",
+        "note": "Com a identidade local fechada, o foco agora sobe para sync em nuvem configuravel, continuidade entre dispositivos e base pronta para gamificacao forte."
       }
     ]
   },
   "strip": {
     "eyebrow": "Radar Vivo",
-    "title": "Mercado atual conferido; trilha conectada sobe para identidade persistente",
-    "summary": "Use esta barra para distinguir mercado atual, snapshot operacional e rotas verificadas. Agora o foco principal do portal sobe para a camada de identidade por e-mail e continuidade da jornada.",
+    "title": "Mercado atual conferido; trilha conectada sobe para sync em nuvem",
+    "summary": "Use esta barra para distinguir mercado atual, snapshot operacional e rotas verificadas. Agora o foco principal do portal sobe para a continuidade entre dispositivos e ao setup cloud-ready da jornada.",
     "metrics": [
       {
         "label": "Mercado",
@@ -110,8 +110,8 @@
       "status_label": "Verificado hoje",
       "status_class": "status-done",
       "checked_on": "2026-03-22",
-      "summary": "A rota nova liga e-mail local, retomada e identidade do aluno sem quebrar a leveza do portal estatico.",
-      "note": "Boa pagina para deixar a jornada menos anonima e preparar o sistema para sync em nuvem.",
+        "summary": "A rota agora liga e-mail local, setup de provider Supabase, OTP por e-mail e sincronizacao do snapshot do aluno sem quebrar a leveza do portal estatico.",
+        "note": "Boa pagina para deixar a jornada menos anonima, configurar a nuvem e manter a continuidade entre dispositivos.",
       "action_href": "/entrar/",
       "action_label": "Abrir Entrar"
     },

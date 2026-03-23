@@ -107,13 +107,91 @@
             </aside>
           </section>
 
+          <section class="section split-section">
+            <div class="split-main">
+              <div class="section-header">
+                <span class="eyebrow">Sync em nuvem</span>
+                <h2>Conecte um provedor real e leve sua jornada para qualquer dispositivo</h2>
+                <p>
+                  Esta camada sobe a identidade local para auth real por e-mail,
+                  sessao persistida e sincronizacao de trilha, progresso, flags,
+                  analytics e retomada.
+                </p>
+              </div>
+              <article class="data-panel" id="enter-cloud-runtime"></article>
+
+              <form class="data-panel identity-form-panel" id="enter-cloud-config-form">
+                <div class="identity-form-shell">
+                  <div class="section-header compact">
+                    <span class="eyebrow">Passo 1</span>
+                    <h3>Salvar a configuracao do projeto</h3>
+                    <p>
+                      Cole a URL e a anon key do seu projeto Supabase. A anon key
+                      e publica; nunca use service role aqui.
+                    </p>
+                  </div>
+                  <div class="identity-form-grid">
+                    <label class="identity-field">
+                      <span class="builder-field-label">Project URL</span>
+                      <input id="cloud-project-url" type="url" placeholder="https://seu-projeto.supabase.co" />
+                    </label>
+                    <label class="identity-field">
+                      <span class="builder-field-label">Anon key</span>
+                      <input id="cloud-anon-key" type="password" placeholder="eyJ..." />
+                    </label>
+                  </div>
+                  <p class="metric-note" id="cloud-config-helper"></p>
+                  <div class="button-group">
+                    <button class="button" type="submit">Salvar configuracao</button>
+                    <button class="button ghost" id="cloud-config-clear" type="button">Limpar configuracao</button>
+                  </div>
+                  <p class="metric-note identity-feedback" id="cloud-config-feedback"></p>
+                </div>
+              </form>
+
+              <form class="data-panel identity-form-panel" id="enter-cloud-auth-form">
+                <div class="identity-form-shell">
+                  <div class="section-header compact">
+                    <span class="eyebrow">Passo 2</span>
+                    <h3>Entrar com codigo por e-mail</h3>
+                    <p>
+                      Com a configuracao salva, envie um codigo OTP para o seu e-mail
+                      e valide a sessao sem sair do portal.
+                    </p>
+                  </div>
+                  <div class="identity-form-grid">
+                    <label class="identity-field">
+                      <span class="builder-field-label">E-mail para login</span>
+                      <input id="cloud-auth-email" type="email" placeholder="voce@empresa.com" />
+                    </label>
+                    <label class="identity-field">
+                      <span class="builder-field-label">Codigo OTP</span>
+                      <input id="cloud-auth-otp" type="text" inputmode="numeric" placeholder="123456" />
+                    </label>
+                  </div>
+                  <div class="button-group">
+                    <button class="button secondary" id="cloud-send-otp" type="button">Enviar codigo</button>
+                    <button class="button" id="cloud-verify-otp" type="button">Verificar codigo</button>
+                    <button class="button ghost" id="cloud-sign-out" type="button">Sair da nuvem</button>
+                  </div>
+                  <p class="metric-note identity-feedback" id="cloud-auth-feedback"></p>
+                </div>
+              </form>
+            </div>
+            <aside class="evidence-panel">
+              <span class="eyebrow">Estado da nuvem</span>
+              <div id="enter-cloud-status"></div>
+            </aside>
+          </section>
+
           <section class="section">
             <div class="section-header">
-              <span class="eyebrow">Proxima camada</span>
-              <h2>Base pronta para auth real e sync em nuvem</h2>
+              <span class="eyebrow">Docs e setup</span>
+              <h2>Kit de implantacao do sync em nuvem</h2>
               <p>
-                Estas fontes oficiais guiam a proxima subida: email OTP ou magic
-                link, redirect URLs e persistencia segura de sessao.
+                Estas fontes e artefatos deixam a camada de nuvem pronta para
+                subir com auth real, redirect URLs corretas, SQL e politicas de
+                acesso por usuario.
               </p>
             </div>
             <div class="cards-grid cards-grid-3" id="enter-officials"></div>
