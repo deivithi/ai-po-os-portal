@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-04-02T11:57:19Z",
+  "generated_at": "2026-04-03T11:52:40Z",
   "automation_mode": "monitoring_only",
   "editorial_note": "Esta automacao monitora disponibilidade, cabecalhos e sinais tecnicos das fontes. Ela nao reescreve conclusoes semanticas do portal sem revisao editorial humana.",
   "summary": {
     "total_sources": 24,
     "healthy_sources": 24,
     "failing_sources": 0,
-    "sources_with_change_hints": 9,
+    "sources_with_change_hints": 6,
     "verified_pages": 17,
     "pages_due_review": 17,
     "stale_review_days": 7
@@ -16,103 +16,103 @@
       "title": "Home",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Entrar",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Hoje",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Guia",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Jornada",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Trilha",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Progresso",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Labs",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Analytics",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Lancamentos",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Prompt Studio",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Senior",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Matriz",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Workflows",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "RAG",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Roadmap",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     },
     {
       "title": "Artefatos",
       "status_label": "Verificado hoje",
       "checked_on": "2026-03-22",
-      "age_days": 11
+      "age_days": 12
     }
   ],
   "sources": [
@@ -122,7 +122,7 @@
       "title": "OpenAI Models",
       "scope": "Model lineup e familias atuais",
       "url": "https://developers.openai.com/api/docs/models",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://developers.openai.com/api/docs/models",
@@ -137,12 +137,12 @@
       "title": "OpenAI Resources",
       "scope": "Guias, patterns e materiais oficiais",
       "url": "https://developers.openai.com/resources/",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://developers.openai.com/resources",
       "etag": "\"1a31cf54fc7d64aa76830f49fa785bd6\"",
-      "last_modified": "2026-04-02T08:42:18Z",
+      "last_modified": "2026-04-02T23:49:54Z",
       "change_hints": [
         "last_modified_changed"
       ],
@@ -154,12 +154,12 @@
       "title": "Conversation state",
       "scope": "Memoria de conversa e estado",
       "url": "https://developers.openai.com/api/docs/guides/conversation-state",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://developers.openai.com/api/docs/guides/conversation-state",
       "etag": "\"873425d634677a9680a71636f0676ebb\"",
-      "last_modified": "2026-04-02T08:10:32Z",
+      "last_modified": "2026-04-02T22:18:44Z",
       "change_hints": [
         "last_modified_changed"
       ],
@@ -171,12 +171,12 @@
       "title": "Prompt caching",
       "scope": "Cache de contexto e reducao de custo/latencia",
       "url": "https://developers.openai.com/api/docs/guides/prompt-caching",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://developers.openai.com/api/docs/guides/prompt-caching",
       "etag": "\"1bb835e4861ac4463a6d3ded8d78cff1\"",
-      "last_modified": "2026-04-02T08:12:40Z",
+      "last_modified": "2026-04-02T22:19:38Z",
       "change_hints": [
         "last_modified_changed"
       ],
@@ -188,12 +188,12 @@
       "title": "Working with evals",
       "scope": "Comparacao, regressao e avaliacao estruturada",
       "url": "https://developers.openai.com/api/docs/guides/evals",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://developers.openai.com/api/docs/guides/evals",
       "etag": "\"2f832f4d1ed254465d0fa4b21c36a56a\"",
-      "last_modified": "2026-04-02T08:11:38Z",
+      "last_modified": "2026-04-03T05:48:02Z",
       "change_hints": [
         "last_modified_changed"
       ],
@@ -205,12 +205,12 @@
       "title": "Graders",
       "scope": "Critica automatica e avaliacao orientada por rubrica",
       "url": "https://developers.openai.com/api/docs/guides/graders",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://developers.openai.com/api/docs/guides/graders",
       "etag": "\"7290a021d58eef495578023a2c0e9c64\"",
-      "last_modified": "2026-04-02T08:10:47Z",
+      "last_modified": "2026-04-03T07:15:11Z",
       "change_hints": [
         "last_modified_changed"
       ],
@@ -222,7 +222,7 @@
       "title": "Claude models overview",
       "scope": "Lineup atual e diferenca entre Sonnet e Opus",
       "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://platform.claude.com/docs/en/about-claude/models/overview",
@@ -237,7 +237,7 @@
       "title": "Prompt engineering overview",
       "scope": "Prompting, contexto e testes",
       "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview",
@@ -252,7 +252,7 @@
       "title": "Develop tests",
       "scope": "Testes, avaliacoes e desenvolvimento orientado a comparacao",
       "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
@@ -267,7 +267,7 @@
       "title": "Prompt caching",
       "scope": "Cache de prompt e reaproveitamento de contexto",
       "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
@@ -282,12 +282,12 @@
       "title": "Vertex AI models",
       "scope": "Gemini, open models e lineup atual",
       "url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models",
       "etag": null,
-      "last_modified": "2026-04-01T13:44:59Z",
+      "last_modified": "2026-04-02T16:03:09Z",
       "change_hints": [
         "last_modified_changed"
       ],
@@ -299,15 +299,13 @@
       "title": "Vertex AI release notes",
       "scope": "Mudancas recentes no ecossistema Google",
       "url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/release-notes",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/release-notes",
       "etag": null,
       "last_modified": "2026-04-01T13:44:59Z",
-      "change_hints": [
-        "last_modified_changed"
-      ],
+      "change_hints": [],
       "monitoring_note": "Fonte acessivel."
     },
     {
@@ -316,15 +314,13 @@
       "title": "Prompt design introduction",
       "scope": "Estruturacao de prompt no ecossistema Google",
       "url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/introduction-prompt-design",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/introduction-prompt-design",
       "etag": null,
       "last_modified": "2026-04-01T13:44:59Z",
-      "change_hints": [
-        "last_modified_changed"
-      ],
+      "change_hints": [],
       "monitoring_note": "Fonte acessivel."
     },
     {
@@ -333,7 +329,7 @@
       "title": "Long context guide",
       "scope": "Context window e leitura de documentos grandes",
       "url": "https://ai.google.dev/gemini-api/docs/long-context",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://ai.google.dev/gemini-api/docs/long-context",
@@ -348,15 +344,13 @@
       "title": "Grounding guide",
       "scope": "Grounding, citacao e resposta ancorada em fonte",
       "url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/model-reference/grounding",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/model-reference/grounding",
       "etag": null,
       "last_modified": "2026-04-01T17:56:42Z",
-      "change_hints": [
-        "last_modified_changed"
-      ],
+      "change_hints": [],
       "monitoring_note": "Fonte acessivel."
     },
     {
@@ -365,7 +359,7 @@
       "title": "xAI models",
       "scope": "Grok, lineup e capacidades",
       "url": "https://docs.x.ai/docs/models",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://docs.x.ai/developers/models",
@@ -380,7 +374,7 @@
       "title": "Structured outputs",
       "scope": "Saidas estruturadas e controle",
       "url": "https://docs.x.ai/developers/model-capabilities/text/structured-outputs",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://docs.x.ai/developers/model-capabilities/text/structured-outputs",
@@ -395,7 +389,7 @@
       "title": "Remote MCP tools",
       "scope": "Conexao remota de MCP tools no ecossistema xAI",
       "url": "https://docs.x.ai/developers/tools/remote-mcp",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://docs.x.ai/developers/tools/remote-mcp",
@@ -410,7 +404,7 @@
       "title": "MiniMax M2.7 model page",
       "scope": "Catalogo atual e posicionamento oficial do MiniMax M2.7",
       "url": "https://www.minimax.io/models/text/m27",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://www.minimax.io/models/text/m27",
@@ -425,7 +419,7 @@
       "title": "MiniMax API docs",
       "scope": "Hub oficial da API com referencia atual a M2.7",
       "url": "https://platform.minimax.io/docs/faq/about-apis",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://platform.minimax.io/docs/faq/about-apis",
@@ -440,7 +434,7 @@
       "title": "Qwen documentation",
       "scope": "Documentacao oficial da familia Qwen",
       "url": "https://qwen.readthedocs.io/en/stable/",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://qwen.readthedocs.io/en/stable/",
@@ -455,7 +449,7 @@
       "title": "DeepSeek documentation",
       "scope": "API docs e noticias oficiais",
       "url": "https://api-docs.deepseek.com/",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://api-docs.deepseek.com/",
@@ -470,7 +464,7 @@
       "title": "Create a notebook in NotebookLM",
       "scope": "Fluxo oficial de notebook e adicao de fontes",
       "url": "https://support.google.com/notebooklm/answer/16206563",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://support.google.com/notebooklm/answer/16206563",
@@ -485,7 +479,7 @@
       "title": "MCP architecture",
       "scope": "Arquitetura base para tools e integrações",
       "url": "https://modelcontextprotocol.io/docs/learn/architecture",
-      "checked_at": "2026-04-02T11:57:19Z",
+      "checked_at": "2026-04-03T11:52:40Z",
       "status_code": 200,
       "available": true,
       "final_url": "https://modelcontextprotocol.io/docs/learn/architecture",
