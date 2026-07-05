@@ -74,4 +74,5 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           python scripts/deploy_pages.py \
-            --artifact-id "${{ steps.artifact.outputs.artifact-id }}"
+            --artifact-id "${{ steps.artifact.outputs.artifact-id }}" \
+            --build-version "$(git rev-parse HEAD)"
