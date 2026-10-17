@@ -1,0 +1,16 @@
+name: regression-guard
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Correção traz teste de regressão
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: python3 scripts/regression_guard.py --base origin/${{ github.base_ref }} --title "$PR_TITLE"
