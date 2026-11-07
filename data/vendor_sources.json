@@ -192,6 +192,38 @@
       "short_label": "Architecture",
       "url": "https://modelcontextprotocol.io/docs/learn/architecture",
       "scope": "Arquitetura base para tools e integrações"
+    },
+    {
+      "id": "claude-code-context7",
+      "vendor": "Claude Code",
+      "title": "Context7 (Upstash)",
+      "short_label": "Context7",
+      "url": "https://github.com/upstash/context7",
+      "scope": "MCP de documentação atualizada por versão de biblioteca"
+    },
+    {
+      "id": "claude-code-graphify",
+      "vendor": "Claude Code",
+      "title": "Graphify",
+      "short_label": "Graphify",
+      "url": "https://github.com/safishamsi/graphify",
+      "scope": "Grafo de conhecimento do codebase (há repositórios homônimos: conferir origem)"
+    },
+    {
+      "id": "claude-code-21st-magic",
+      "vendor": "Claude Code",
+      "title": "21st.dev Magic MCP",
+      "short_label": "21st Magic",
+      "url": "https://github.com/21st-dev/magic-mcp",
+      "scope": "Geração de componentes React/shadcn via prompt (exige API key)"
+    },
+    {
+      "id": "claude-code-strix",
+      "vendor": "Claude Code",
+      "title": "Strix (AI pentester)",
+      "short_label": "Strix",
+      "url": "https://github.com/usestrix/strix",
+      "scope": "Pentest autônomo open source; usar só em apps próprios ou autorizados"
     }
   ]
 }
