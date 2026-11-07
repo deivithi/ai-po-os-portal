@@ -117,6 +117,24 @@
       "route_href": "/roadmap/",
       "route_label": "Acompanhar no Roadmap",
       "source_ids": ["mcp-architecture"]
+    },
+    {
+      "vendor": "Claude Code",
+      "status_label": "Em radar",
+      "status_class": "status-in-progress",
+      "checked_on": "2026-11-07",
+      "headline": "Ecossistema de MCPs para Claude Code: Context7, Graphify, 21st Magic e Strix circulam como 'kit sênior'.",
+      "summary": "Origem: post de @suraj_sharma14 (05/11/2026), sem fontes. As quatro ferramentas existem; 'grátis' tem ressalvas (21st exige API key; Strix consome tokens do LLM) e Graphify tem repositórios homônimos. 'Agent Skills' não foi identificado com precisão.",
+      "study_now": "Priorize Context7 (código menos desatualizado) e Strix só em homologação autorizada. Avalie custo de contexto, dados que saem da máquina e permissões antes de instalar qualquer MCP.",
+      "portal_hook": "Workflows e Roadmap são as rotas para decidir adoção com governança.",
+      "route_href": "/workflows/",
+      "route_label": "Avaliar em Workflows",
+      "source_ids": [
+        "claude-code-context7",
+        "claude-code-graphify",
+        "claude-code-21st-magic",
+        "claude-code-strix"
+      ]
     }
   ]
 }
